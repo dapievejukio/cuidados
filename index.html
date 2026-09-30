@@ -5,14 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Cuidados — Limpeza & Zeladoria</title>
+    <title>CUIDADOS — Limpeza & Zeladoria</title>
 
-    <meta
-        name="description"
-        content="Plataforma de gestão de limpeza, zeladoria e ocorrências."
-    >
+    <meta name="theme-color" content="#12355b">
 
     <style>
+
         :root {
             --primary: #12355b;
             --primary-dark: #0b2745;
@@ -20,9 +18,6 @@
 
             --green: #178c58;
             --green-light: #e8f6ef;
-
-            --yellow: #d89b19;
-            --yellow-light: #fff5d9;
 
             --red: #d94b4b;
             --red-light: #fdecec;
@@ -32,20 +27,18 @@
 
             --background: #f4f7fa;
             --card: #ffffff;
-
             --border: #e2e8ef;
 
-            --shadow:
-                0 10px 30px rgba(20, 45, 75, 0.08);
-
-            --radius: 20px;
+            --shadow: 0 14px 40px rgba(20,45,75,.10);
         }
+
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
+
 
         body {
             font-family:
@@ -59,153 +52,166 @@
 
             background: var(--background);
             color: var(--text);
+
+            min-height: 100vh;
         }
 
-        button {
+
+        button,
+        input {
             font-family: inherit;
         }
 
-        /* =========================
+
+        /* ==============================
            HEADER
-        ========================= */
+        ============================== */
 
         header {
+            min-height: 330px;
+
             background:
                 linear-gradient(
-                    135deg,
+                    145deg,
                     var(--primary-dark),
                     var(--primary)
                 );
 
             color: white;
-            padding: 18px 20px 32px;
+
+            padding:
+                calc(25px + env(safe-area-inset-top))
+                22px
+                75px;
         }
 
+
         .header-content {
-            max-width: 1180px;
+            max-width: 500px;
             margin: auto;
         }
 
-        .topbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-        }
 
         .brand {
             display: flex;
             align-items: center;
+
             gap: 12px;
         }
 
-        .brand-icon {
-            width: 46px;
-            height: 46px;
-            border-radius: 14px;
+
+        .logo {
+            width: 52px;
+            height: 52px;
+
+            border-radius: 16px;
 
             display: flex;
             align-items: center;
             justify-content: center;
 
-            background: rgba(255,255,255,.13);
+            background: rgba(255,255,255,.14);
 
-            font-size: 24px;
+            font-size: 26px;
+            font-weight: 800;
         }
 
-        .brand h1 {
-            font-size: 23px;
-            letter-spacing: .5px;
+
+        .brand-text h1 {
+            font-size: 21px;
+
+            letter-spacing: 1px;
         }
 
-        .brand p {
-            font-size: 12px;
-            opacity: .75;
+
+        .brand-text span {
+            display: block;
+
             margin-top: 2px;
+
+            opacity: .68;
+
+            font-size: 11px;
         }
 
-        .profile {
-            width: 42px;
-            height: 42px;
-
-            border-radius: 50%;
-
-            background: rgba(255,255,255,.15);
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            font-size: 19px;
-        }
 
         .welcome {
-            margin-top: 30px;
+            margin-top: 46px;
         }
 
-        .welcome-small {
-            font-size: 13px;
+
+        .welcome small {
+            font-size: 12px;
+
+            opacity: .7;
+        }
+
+
+        .welcome h2 {
+            margin-top: 5px;
+
+            font-size: 29px;
+
+            line-height: 1.15;
+        }
+
+
+        .welcome p {
+            margin-top: 9px;
+
+            max-width: 340px;
+
+            font-size: 12px;
+
+            line-height: 1.6;
+
             opacity: .72;
         }
 
-        .welcome h2 {
-            font-size: 28px;
-            margin-top: 4px;
-        }
 
-        .welcome p {
-            margin-top: 6px;
-            opacity: .78;
-            font-size: 14px;
-        }
-
-        /* =========================
+        /* ==============================
            MAIN
-        ========================= */
+        ============================== */
 
         main {
-            max-width: 1180px;
-            margin: -16px auto 80px;
-            padding: 0 18px;
+            max-width: 500px;
+
+            margin: -54px auto 40px;
+
+            padding: 0 16px;
         }
 
-        /* =========================
-           ACTION BUTTON
-        ========================= */
 
-        .report-button {
-            width: 100%;
-            border: none;
-            cursor: pointer;
+        /* ==============================
+           LOGIN
+        ============================== */
 
+        .login-card {
             background: white;
 
-            padding: 18px;
+            border-radius: 23px;
 
-            border-radius: var(--radius);
-
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            padding: 23px;
 
             box-shadow: var(--shadow);
-
-            color: var(--text);
         }
 
-        .report-left {
+
+        .login-header {
             display: flex;
             align-items: center;
-            gap: 14px;
-            text-align: left;
+
+            gap: 13px;
+
+            margin-bottom: 22px;
         }
 
-        .report-icon {
-            width: 50px;
-            height: 50px;
 
-            background: var(--red-light);
-            color: var(--red);
+        .login-icon {
+            width: 48px;
+            height: 48px;
+
+            flex-shrink: 0;
 
             border-radius: 15px;
 
@@ -213,438 +219,413 @@
             align-items: center;
             justify-content: center;
 
-            font-size: 23px;
+            background: var(--primary-light);
+
+            font-size: 22px;
         }
 
-        .report-button strong {
+
+        .login-header strong {
             display: block;
-            font-size: 15px;
-        }
 
-        .report-button small {
-            display: block;
-            color: var(--muted);
-            margin-top: 4px;
-        }
-
-        /* =========================
-           STATS
-        ========================= */
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(4,1fr);
-            gap: 14px;
-            margin-top: 20px;
-        }
-
-        .stat {
-            background: white;
-            border-radius: 18px;
-            padding: 18px;
-            box-shadow: var(--shadow);
-        }
-
-        .stat-label {
-            font-size: 12px;
-            color: var(--muted);
-        }
-
-        .stat-number {
-            font-size: 27px;
-            font-weight: 700;
-            margin-top: 6px;
-        }
-
-        .green { color: var(--green); }
-        .yellow { color: var(--yellow); }
-        .red { color: var(--red); }
-
-        /* =========================
-           PROGRESS
-        ========================= */
-
-        .progress-card {
-            background: white;
-            border-radius: var(--radius);
-
-            margin-top: 18px;
-            padding: 20px;
-
-            box-shadow: var(--shadow);
-        }
-
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .progress-header h3 {
             font-size: 16px;
         }
 
-        .progress-header strong {
-            color: var(--green);
+
+        .login-header span {
+            display: block;
+
+            margin-top: 3px;
+
+            color: var(--muted);
+
+            font-size: 10px;
         }
 
-        .progress {
+
+        /* ==============================
+           FORM
+        ============================== */
+
+        .field {
+            margin-bottom: 14px;
+        }
+
+
+        .field label {
+            display: block;
+
+            margin-bottom: 6px;
+
+            color: var(--muted);
+
+            font-size: 10px;
+            font-weight: 650;
+        }
+
+
+        .input-wrapper {
+            position: relative;
+        }
+
+
+        .input-icon {
+            position: absolute;
+
+            left: 13px;
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            font-size: 16px;
+
+            pointer-events: none;
+        }
+
+
+        .field input {
             width: 100%;
-            height: 9px;
 
-            background: #e9edf2;
+            height: 51px;
 
-            border-radius: 10px;
+            padding:
+                0
+                45px
+                0
+                42px;
 
-            margin-top: 15px;
-            overflow: hidden;
+            border: 1px solid var(--border);
+
+            border-radius: 14px;
+
+            outline: none;
+
+            background: #fafbfc;
+
+            color: var(--text);
+
+            font-size: 14px;
+
+            transition: .2s;
         }
 
-        .progress-fill {
-            width: 78%;
-            height: 100%;
-            background: var(--green);
-            border-radius: 10px;
-        }
 
-        .progress-info {
-            display: flex;
-            justify-content: space-between;
+        .field input:focus {
+            border-color: #9eb6cd;
 
-            color: var(--muted);
-            font-size: 12px;
-
-            margin-top: 10px;
-        }
-
-        /* =========================
-           SECTIONS
-        ========================= */
-
-        .section {
-            margin-top: 28px;
-        }
-
-        .section-title {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-
-            margin-bottom: 13px;
-        }
-
-        .section-title h3 {
-            font-size: 18px;
-        }
-
-        .section-title span {
-            font-size: 12px;
-            color: var(--muted);
-        }
-
-        /* =========================
-           TOWERS
-        ========================= */
-
-        .tower-grid {
-            display: grid;
-            grid-template-columns: repeat(5,1fr);
-            gap: 12px;
-        }
-
-        .tower {
             background: white;
-            border-radius: 18px;
-            padding: 18px 12px;
+
+            box-shadow:
+                0 0 0 3px rgba(18,53,91,.06);
+        }
+
+
+        .show-pin {
+            position: absolute;
+
+            right: 8px;
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            width: 36px;
+            height: 36px;
+
+            border: 0;
+
+            border-radius: 10px;
+
+            background: transparent;
+
+            cursor: pointer;
+
+            font-size: 15px;
+        }
+
+
+        /* ==============================
+           ERROR
+        ============================== */
+
+        .error {
+            display: none;
+
+            margin-bottom: 14px;
+
+            padding: 11px 12px;
+
+            border-radius: 12px;
+
+            background: var(--red-light);
+
+            color: #a83030;
+
+            font-size: 10px;
+
+            line-height: 1.5;
+        }
+
+
+        /* ==============================
+           BUTTON
+        ============================== */
+
+        .login-button {
+            width: 100%;
+
+            height: 52px;
+
+            margin-top: 3px;
+
+            border: 0;
+
+            border-radius: 15px;
+
+            background: var(--primary);
+            color: white;
+
+            font-size: 12px;
+            font-weight: 750;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 9px 22px rgba(18,53,91,.18);
+
+            transition: .15s;
+        }
+
+
+        .login-button:active {
+            transform: scale(.99);
+        }
+
+
+        /* ==============================
+           TEST INFO
+        ============================== */
+
+        .test-info {
+            margin-top: 15px;
+
+            padding: 11px;
+
+            border-radius: 12px;
+
+            background: #f5f7f9;
+
+            color: var(--muted);
 
             text-align: center;
 
-            box-shadow: var(--shadow);
+            font-size: 9px;
 
-            cursor: pointer;
-
-            border: 2px solid transparent;
-
-            transition: .2s;
+            line-height: 1.6;
         }
 
-        .tower:hover {
-            transform: translateY(-3px);
-            border-color: var(--primary-light);
+
+        .test-info strong {
+            color: var(--text);
         }
 
-        .tower-icon {
-            font-size: 28px;
-        }
 
-        .tower strong {
-            display: block;
-            margin-top: 8px;
-        }
+        /* ==============================
+           DIVIDER
+        ============================== */
 
-        .tower small {
-            color: var(--muted);
-            display: block;
-            margin-top: 4px;
-        }
-
-        .status {
-            display: inline-flex;
+        .divider {
+            display: flex;
             align-items: center;
-            gap: 5px;
 
-            margin-top: 10px;
+            gap: 10px;
 
-            padding: 5px 9px;
+            margin: 23px 0;
+        }
+
+
+        .divider::before,
+        .divider::after {
+            content: "";
+
+            flex: 1;
+
+            height: 1px;
+
+            background: var(--border);
+        }
+
+
+        .divider span {
+            color: var(--muted);
+
+            font-size: 9px;
+        }
+
+
+        /* ==============================
+           PUBLIC REPORT
+        ============================== */
+
+        .public-card {
+            background: white;
 
             border-radius: 20px;
 
-            font-size: 11px;
-            font-weight: 600;
+            padding: 19px;
+
+            box-shadow:
+                0 8px 28px rgba(20,45,75,.07);
         }
 
-        .status-ok {
-            background: var(--green-light);
-            color: var(--green);
-        }
 
-        .status-pending {
-            background: var(--yellow-light);
-            color: #a66d00;
-        }
-
-        .status-alert {
-            background: var(--red-light);
-            color: var(--red);
-        }
-
-        /* =========================
-           AREAS
-        ========================= */
-
-        .area-grid {
-            display: grid;
-            grid-template-columns: repeat(3,1fr);
-            gap: 12px;
-        }
-
-        .area-card {
-            background: white;
-
-            border-radius: 18px;
-            padding: 16px;
-
-            box-shadow: var(--shadow);
-
+        .public-top {
             display: flex;
             align-items: center;
+
             gap: 13px;
-
-            cursor: pointer;
-
-            transition: .2s;
         }
 
-        .area-card:hover {
-            transform: translateY(-2px);
-        }
 
-        .area-icon {
-            width: 45px;
-            height: 45px;
+        .public-icon {
+            width: 46px;
+            height: 46px;
 
-            border-radius: 13px;
+            flex-shrink: 0;
 
-            background: var(--primary-light);
+            border-radius: 14px;
 
             display: flex;
             align-items: center;
             justify-content: center;
+
+            background: var(--red-light);
 
             font-size: 21px;
         }
 
-        .area-info {
+
+        .public-text {
             flex: 1;
         }
 
-        .area-info strong {
+
+        .public-text strong {
+            display: block;
+
             font-size: 14px;
-            display: block;
         }
 
-        .area-info small {
+
+        .public-text p {
+            margin-top: 4px;
+
             color: var(--muted);
-            font-size: 11px;
-            display: block;
-            margin-top: 3px;
+
+            font-size: 10px;
+
+            line-height: 1.4;
         }
 
-        .dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-        }
 
-        .dot-green { background: var(--green); }
-        .dot-yellow { background: var(--yellow); }
-        .dot-red { background: var(--red); }
+        .report-button {
+            width: 100%;
 
-        /* =========================
-           OCCURRENCES
-        ========================= */
+            margin-top: 16px;
 
-        .occurrence {
-            background: white;
+            padding: 14px;
 
-            padding: 16px;
+            border: 0;
 
-            border-radius: 18px;
-
-            margin-bottom: 10px;
-
-            display: flex;
-            align-items: center;
-            gap: 13px;
-
-            box-shadow: var(--shadow);
-        }
-
-        .occurrence-icon {
-            width: 44px;
-            height: 44px;
-
-            border-radius: 13px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            border-radius: 14px;
 
             background: var(--red-light);
+            color: var(--red);
+
+            font-size: 11px;
+            font-weight: 700;
+
+            cursor: pointer;
         }
 
-        .occurrence-content {
-            flex: 1;
+
+        /* ==============================
+           FOOTER
+        ============================== */
+
+        footer {
+            max-width: 500px;
+
+            margin: 28px auto;
+
+            padding: 0 20px;
+
+            text-align: center;
+
+            color: #929ca6;
+
+            font-size: 9px;
+
+            line-height: 1.7;
         }
 
-        .occurrence-content strong {
-            display: block;
-            font-size: 14px;
-        }
 
-        .occurrence-content small {
-            display: block;
-            margin-top: 4px;
-            color: var(--muted);
-        }
+        /* ==============================
+           DESKTOP
+        ============================== */
 
-        /* =========================
-           BOTTOM NAV
-        ========================= */
+        @media (min-width: 800px) {
 
-        .bottom-nav {
-            display: none;
-        }
+            body {
+                background:
+                    linear-gradient(
+                        90deg,
+                        #f4f7fa 0%,
+                        #f8fafc 50%,
+                        #f4f7fa 100%
+                    );
+            }
 
-        /* =========================
-           MOBILE
-        ========================= */
-
-        @media (max-width: 700px) {
 
             header {
-                padding-bottom: 28px;
+                min-height: 355px;
             }
+
 
             .welcome h2 {
-                font-size: 23px;
+                font-size: 32px;
             }
 
-            main {
-                margin-bottom: 100px;
-            }
-
-            .stats {
-                grid-template-columns: repeat(2,1fr);
-            }
-
-            .tower-grid {
-                grid-template-columns:
-                    repeat(3,1fr);
-            }
-
-            .area-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .tower {
-                padding: 15px 8px;
-            }
-
-            .bottom-nav {
-                position: fixed;
-
-                bottom: 0;
-                left: 0;
-                right: 0;
-
-                height: 70px;
-
-                background: white;
-
-                display: flex;
-                justify-content: space-around;
-                align-items: center;
-
-                border-top: 1px solid var(--border);
-
-                z-index: 50;
-            }
-
-            .nav-item {
-                color: var(--muted);
-                font-size: 10px;
-                text-align: center;
-            }
-
-            .nav-icon {
-                font-size: 21px;
-                display: block;
-                margin-bottom: 3px;
-            }
-
-            .nav-active {
-                color: var(--primary);
-                font-weight: 600;
-            }
         }
 
     </style>
+
 </head>
 
+
 <body>
+
 
 <header>
 
     <div class="header-content">
 
-        <div class="topbar">
+        <div class="brand">
 
-            <div class="brand">
-
-                <div class="brand-icon">
-                    ✓
-                </div>
-
-                <div>
-                    <h1>CUIDADOS</h1>
-                    <p>Limpeza & Zeladoria</p>
-                </div>
-
+            <div class="logo">
+                ✓
             </div>
 
-            <div class="profile">
-                👤
+
+            <div class="brand-text">
+
+                <h1>
+                    CUIDADOS
+                </h1>
+
+                <span>
+                    Limpeza & Zeladoria
+                </span>
+
             </div>
 
         </div>
@@ -652,14 +633,18 @@
 
         <div class="welcome">
 
-            <div class="welcome-small">
+            <small>
                 Reserva Igara
-            </div>
+            </small>
 
-            <h2>Bom dia 👋</h2>
+            <h2>
+                Gestão simples.<br>
+                Trabalho comprovado.
+            </h2>
 
             <p>
-                Acompanhe a operação do condomínio em tempo real.
+                Registro de limpeza, ocorrências
+                e acompanhamento das áreas do condomínio.
             </p>
 
         </div>
@@ -671,413 +656,395 @@
 
 <main>
 
-    <!-- REPORTAR -->
 
-    <button
-        class="report-button"
-        onclick="reportarProblema()"
-    >
+    <!-- LOGIN -->
 
-        <div class="report-left">
+    <section class="login-card">
 
-            <div class="report-icon">
+        <div class="login-header">
+
+            <div class="login-icon">
+                👤
+            </div>
+
+
+            <div>
+
+                <strong>
+                    Acesso do colaborador
+                </strong>
+
+                <span>
+                    Entre para acessar sua rotina de trabalho
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="error"
+            id="loginError"
+        >
+            Matrícula ou PIN incorretos.
+        </div>
+
+
+        <!-- MATRÍCULA -->
+
+        <div class="field">
+
+            <label for="matricula">
+                MATRÍCULA
+            </label>
+
+
+            <div class="input-wrapper">
+
+                <span class="input-icon">
+                    #
+                </span>
+
+                <input
+                    id="matricula"
+                    type="text"
+                    inputmode="numeric"
+                    autocomplete="username"
+                    placeholder="Digite sua matrícula"
+                >
+
+            </div>
+
+        </div>
+
+
+        <!-- PIN -->
+
+        <div class="field">
+
+            <label for="pin">
+                PIN
+            </label>
+
+
+            <div class="input-wrapper">
+
+                <span class="input-icon">
+                    🔒
+                </span>
+
+                <input
+                    id="pin"
+                    type="password"
+                    inputmode="numeric"
+                    autocomplete="current-password"
+                    maxlength="4"
+                    placeholder="••••"
+                >
+
+
+                <button
+                    type="button"
+                    class="show-pin"
+                    onclick="mostrarPin()"
+                    aria-label="Mostrar ou ocultar PIN"
+                >
+                    👁
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="login-button"
+            onclick="entrar()"
+        >
+            ENTRAR
+        </button>
+
+
+        <div class="test-info">
+
+            Acesso de teste<br>
+
+            <strong>
+                Débora — matrícula 0001 • PIN 1234
+            </strong>
+
+        </div>
+
+    </section>
+
+
+    <!-- DIVISOR -->
+
+    <div class="divider">
+
+        <span>
+            OU
+        </span>
+
+    </div>
+
+
+    <!-- ACESSO PÚBLICO -->
+
+    <section class="public-card">
+
+        <div class="public-top">
+
+            <div class="public-icon">
                 📷
             </div>
 
-            <div>
-                <strong>Reportar um problema</strong>
-                <small>
-                    Encontrou algo? Envie uma foto.
-                </small>
-            </div>
 
-        </div>
-
-        <div>
-            ›
-        </div>
-
-    </button>
-
-
-    <!-- INDICADORES -->
-
-    <div class="stats">
-
-        <div class="stat">
-            <div class="stat-label">
-                Locais
-            </div>
-            <div class="stat-number">
-                42
-            </div>
-        </div>
-
-        <div class="stat">
-            <div class="stat-label">
-                Concluídos
-            </div>
-            <div class="stat-number green">
-                33
-            </div>
-        </div>
-
-        <div class="stat">
-            <div class="stat-label">
-                Pendentes
-            </div>
-            <div class="stat-number yellow">
-                7
-            </div>
-        </div>
-
-        <div class="stat">
-            <div class="stat-label">
-                Ocorrências
-            </div>
-            <div class="stat-number red">
-                2
-            </div>
-        </div>
-
-    </div>
-
-
-    <!-- PROGRESSO -->
-
-    <div class="progress-card">
-
-        <div class="progress-header">
-
-            <h3>Rotina de hoje</h3>
-
-            <strong>78%</strong>
-
-        </div>
-
-        <div class="progress">
-            <div class="progress-fill"></div>
-        </div>
-
-        <div class="progress-info">
-
-            <span>
-                33 atividades concluídas
-            </span>
-
-            <span>
-                9 restantes
-            </span>
-
-        </div>
-
-    </div>
-
-
-    <!-- TORRES -->
-
-    <section class="section">
-
-        <div class="section-title">
-
-            <h3>Torres</h3>
-
-            <span>
-                5 torres
-            </span>
-
-        </div>
-
-
-        <div class="tower-grid">
-
-            <div class="tower">
-                <div class="tower-icon">🏢</div>
-                <strong>Torre A</strong>
-                <small>Áreas + lixo</small>
-
-                <span class="status status-ok">
-                    ● Concluída
-                </span>
-            </div>
-
-
-            <div class="tower">
-                <div class="tower-icon">🏢</div>
-                <strong>Torre B</strong>
-                <small>Áreas + lixo</small>
-
-                <span class="status status-ok">
-                    ● Concluída
-                </span>
-            </div>
-
-
-            <div class="tower">
-                <div class="tower-icon">🏢</div>
-                <strong>Torre C</strong>
-                <small>1 ocorrência</small>
-
-                <span class="status status-alert">
-                    ● Alerta
-                </span>
-            </div>
-
-
-            <div class="tower">
-                <div class="tower-icon">🏢</div>
-                <strong>Torre D</strong>
-                <small>Áreas + lixo</small>
-
-                <span class="status status-ok">
-                    ● Concluída
-                </span>
-            </div>
-
-
-            <div class="tower">
-                <div class="tower-icon">🏢</div>
-                <strong>Torre E</strong>
-                <small>Em andamento</small>
-
-                <span class="status status-pending">
-                    ● Pendente
-                </span>
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- ÁREAS COMUNS -->
-
-    <section class="section">
-
-        <div class="section-title">
-
-            <h3>Áreas comuns</h3>
-
-            <span>
-                Ver todas
-            </span>
-
-        </div>
-
-
-        <div class="area-grid">
-
-            <div class="area-card">
-                <div class="area-icon">🚗</div>
-                <div class="area-info">
-                    <strong>Prédio Garagem</strong>
-                    <small>4 andares</small>
-                </div>
-                <div class="dot dot-yellow"></div>
-            </div>
-
-
-            <div class="area-card">
-                <div class="area-icon">🎉</div>
-                <div class="area-info">
-                    <strong>Salão de Festas</strong>
-                    <small>Limpeza pendente</small>
-                </div>
-                <div class="dot dot-yellow"></div>
-            </div>
-
-
-            <div class="area-card">
-                <div class="area-icon">🔥</div>
-                <div class="area-info">
-                    <strong>Quiosque 1</strong>
-                    <small>Limpo hoje</small>
-                </div>
-                <div class="dot dot-green"></div>
-            </div>
-
-
-            <div class="area-card">
-                <div class="area-icon">🔥</div>
-                <div class="area-info">
-                    <strong>Quiosque 2</strong>
-                    <small>Limpo hoje</small>
-                </div>
-                <div class="dot dot-green"></div>
-            </div>
-
-
-            <div class="area-card">
-                <div class="area-icon">🐕</div>
-                <div class="area-info">
-                    <strong>Área Pet</strong>
-                    <small>Limpo hoje</small>
-                </div>
-                <div class="dot dot-green"></div>
-            </div>
-
-
-            <div class="area-card">
-                <div class="area-icon">🛝</div>
-                <div class="area-info">
-                    <strong>Praça Infantil</strong>
-                    <small>Limpo hoje</small>
-                </div>
-                <div class="dot dot-green"></div>
-            </div>
-
-
-            <div class="area-card">
-                <div class="area-icon">🏊</div>
-                <div class="area-info">
-                    <strong>Piscina</strong>
-                    <small>Área + banheiro</small>
-                </div>
-                <div class="dot dot-green"></div>
-            </div>
-
-
-            <div class="area-card">
-                <div class="area-icon">🏋️</div>
-                <div class="area-info">
-                    <strong>Academia</strong>
-                    <small>Área + banheiros</small>
-                </div>
-                <div class="dot dot-red"></div>
-            </div>
-
-
-            <div class="area-card">
-                <div class="area-icon">☕</div>
-                <div class="area-info">
-                    <strong>Copa</strong>
-                    <small>Limpo hoje</small>
-                </div>
-                <div class="dot dot-green"></div>
-            </div>
-
-
-            <div class="area-card">
-                <div class="area-icon">🧉</div>
-                <div class="area-info">
-                    <strong>Chimarródromo</strong>
-                    <small>Limpo hoje</small>
-                </div>
-                <div class="dot dot-green"></div>
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- OCORRÊNCIAS -->
-
-    <section class="section">
-
-        <div class="section-title">
-
-            <h3>Ocorrências abertas</h3>
-
-            <span>
-                2 abertas
-            </span>
-
-        </div>
-
-
-        <div class="occurrence">
-
-            <div class="occurrence-icon">
-                🧹
-            </div>
-
-            <div class="occurrence-content">
+            <div class="public-text">
 
                 <strong>
-                    Piso sujo próximo ao elevador
+                    Encontrou algum problema?
                 </strong>
 
-                <small>
-                    Torre C • 5º andar • há 18 min
-                </small>
+                <p>
+                    Moradores e visitantes podem
+                    registrar uma ocorrência sem login.
+                </p>
 
             </div>
-
-            <span class="status status-alert">
-                Aberta
-            </span>
 
         </div>
 
 
-        <div class="occurrence">
-
-            <div class="occurrence-icon">
-                🚻
-            </div>
-
-            <div class="occurrence-content">
-
-                <strong>
-                    Banheiro precisa de limpeza
-                </strong>
-
-                <small>
-                    Academia • há 32 min
-                </small>
-
-            </div>
-
-            <span class="status status-pending">
-                Atendimento
-            </span>
-
-        </div>
+        <button
+            class="report-button"
+            onclick="reportarProblema()"
+        >
+            ⚠️ REPORTAR UM PROBLEMA
+        </button>
 
     </section>
+
 
 </main>
 
 
-<!-- MENU MOBILE -->
+<footer>
 
-<nav class="bottom-nav">
+    CUIDADOS • Reserva Igara<br>
 
-    <div class="nav-item nav-active">
-        <span class="nav-icon">⌂</span>
-        Início
-    </div>
+    Sistema de limpeza e zeladoria
 
-    <div class="nav-item">
-        <span class="nav-icon">✓</span>
-        Rotina
-    </div>
-
-    <div class="nav-item">
-        <span class="nav-icon">⚠</span>
-        Ocorrências
-    </div>
-
-    <div class="nav-item">
-        <span class="nav-icon">👤</span>
-        Perfil
-    </div>
-
-</nav>
+</footer>
 
 
 <script>
 
+    /* =========================================
+       USUÁRIO DE TESTE
+
+       ATENÇÃO:
+       Isto é somente para desenvolvimento.
+
+       Quando conectarmos o Supabase,
+       matrícula e PIN NÃO ficarão expostos
+       neste arquivo.
+    ========================================= */
+
+    const usuarioTeste = {
+
+        nome: "Débora",
+
+        matricula: "0001",
+
+        pin: "1234",
+
+        cargo: "Auxiliar de Limpeza",
+
+        torre: "Torre E"
+
+    };
+
+
+    /* =========================================
+       LOGIN
+    ========================================= */
+
+    function entrar() {
+
+        const matricula =
+            document
+                .getElementById("matricula")
+                .value
+                .trim();
+
+
+        const pin =
+            document
+                .getElementById("pin")
+                .value
+                .trim();
+
+
+        const error =
+            document
+                .getElementById("loginError");
+
+
+        error.style.display =
+            "none";
+
+
+        if (
+            matricula === usuarioTeste.matricula &&
+            pin === usuarioTeste.pin
+        ) {
+
+            /*
+            Guardamos uma sessão simples
+            apenas para o protótipo.
+            */
+
+            const sessao = {
+
+                nome:
+                    usuarioTeste.nome,
+
+                matricula:
+                    usuarioTeste.matricula,
+
+                cargo:
+                    usuarioTeste.cargo,
+
+                torre:
+                    usuarioTeste.torre,
+
+                loginEm:
+                    new Date().toISOString()
+
+            };
+
+
+            localStorage.setItem(
+                "usuarioLogado",
+                JSON.stringify(sessao)
+            );
+
+
+            localStorage.setItem(
+                "torreSelecionada",
+                usuarioTeste.torre
+            );
+
+
+            window.location.href =
+                "colaborador.html";
+
+
+            return;
+
+        }
+
+
+        error.style.display =
+            "block";
+
+    }
+
+
+    /* =========================================
+       ENTER PARA LOGIN
+    ========================================= */
+
+    document
+        .getElementById("pin")
+        .addEventListener(
+            "keydown",
+            function(event) {
+
+                if (
+                    event.key === "Enter"
+                ) {
+
+                    entrar();
+
+                }
+
+            }
+        );
+
+
+    document
+        .getElementById("matricula")
+        .addEventListener(
+            "keydown",
+            function(event) {
+
+                if (
+                    event.key === "Enter"
+                ) {
+
+                    document
+                        .getElementById("pin")
+                        .focus();
+
+                }
+
+            }
+        );
+
+
+    /* =========================================
+       MOSTRAR PIN
+    ========================================= */
+
+    function mostrarPin() {
+
+        const pin =
+            document
+                .getElementById("pin");
+
+
+        if (
+            pin.type === "password"
+        ) {
+
+            pin.type =
+                "text";
+
+        } else {
+
+            pin.type =
+                "password";
+
+        }
+
+    }
+
+
+    /* =========================================
+       REPORTAR PROBLEMA
+    ========================================= */
+
     function reportarProblema() {
 
+        /*
+        Ainda vamos criar reportar.html.
+
+        Por enquanto impedimos o usuário
+        de cair em uma página inexistente.
+        */
+
         alert(
-            "Na próxima etapa abriremos aqui o formulário de ocorrência com local, foto e descrição."
+            "O formulário de ocorrência será criado na próxima etapa."
         );
 
     }
 
 </script>
 
+
 </body>
+
 </html>
