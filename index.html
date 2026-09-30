@@ -2,602 +2,881 @@
 <html lang="pt-BR">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>CUIDADOS — Limpeza & Zeladoria</title>
+<meta charset="UTF-8">
 
-    <meta name="theme-color" content="#12355b">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
-    <style>
+<title>Reportar problema — CUIDADOS</title>
 
-        :root {
-            --primary: #12355b;
-            --primary-dark: #0b2745;
-            --primary-light: #eaf2fb;
+<meta
+    name="theme-color"
+    content="#12355b"
+>
 
-            --green: #178c58;
-            --green-light: #e8f6ef;
+<style>
 
-            --red: #d94b4b;
-            --red-light: #fdecec;
+:root {
 
-            --text: #17202a;
-            --muted: #687483;
+    --primary:#12355b;
+    --primary-dark:#0b2745;
+    --primary-light:#eaf2fb;
 
-            --background: #f4f7fa;
-            --card: #ffffff;
-            --border: #e2e8ef;
+    --green:#178c58;
+    --green-light:#e8f6ef;
 
-            --shadow: 0 14px 40px rgba(20,45,75,.10);
-        }
+    --red:#d94b4b;
+    --red-light:#fdecec;
 
+    --text:#17202a;
+    --muted:#687483;
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+    --background:#f4f7fa;
+    --card:#ffffff;
+    --border:#e2e8ef;
 
+    --shadow:
+        0 10px 30px
+        rgba(20,45,75,.08);
 
-        body {
-            font-family:
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                Roboto,
-                Helvetica,
-                Arial,
-                sans-serif;
+}
 
-            background: var(--background);
-            color: var(--text);
+* {
 
-            min-height: 100vh;
-        }
+    box-sizing:border-box;
 
+    margin:0;
+    padding:0;
 
-        button,
-        input {
-            font-family: inherit;
-        }
+}
 
+body {
 
-        /* ==============================
-           HEADER
-        ============================== */
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
 
-        header {
-            min-height: 330px;
+    background:
+        var(--background);
 
-            background:
-                linear-gradient(
-                    145deg,
-                    var(--primary-dark),
-                    var(--primary)
-                );
+    color:
+        var(--text);
 
-            color: white;
+    min-height:100vh;
 
-            padding:
-                calc(25px + env(safe-area-inset-top))
-                22px
-                75px;
-        }
+}
 
+button,
+textarea,
+select,
+input {
 
-        .header-content {
-            max-width: 500px;
-            margin: auto;
-        }
+    font-family:inherit;
 
+}
 
-        .brand {
-            display: flex;
-            align-items: center;
 
-            gap: 12px;
-        }
+/* HEADER */
 
+header {
 
-        .logo {
-            width: 52px;
-            height: 52px;
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary-dark),
+            var(--primary)
+        );
 
-            border-radius: 16px;
+    color:white;
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+    padding:
+        calc(
+            15px +
+            env(safe-area-inset-top)
+        )
+        18px
+        35px;
 
-            background: rgba(255,255,255,.14);
+}
 
-            font-size: 26px;
-            font-weight: 800;
-        }
+.header-content {
 
+    max-width:600px;
 
-        .brand-text h1 {
-            font-size: 21px;
+    margin:auto;
 
-            letter-spacing: 1px;
-        }
+}
 
+.topbar {
 
-        .brand-text span {
-            display: block;
+    display:flex;
 
-            margin-top: 2px;
+    align-items:center;
 
-            opacity: .68;
+    justify-content:
+        space-between;
 
-            font-size: 11px;
-        }
+}
 
+.back {
 
-        .welcome {
-            margin-top: 46px;
-        }
+    width:42px;
+    height:42px;
 
+    border:0;
 
-        .welcome small {
-            font-size: 12px;
+    border-radius:13px;
 
-            opacity: .7;
-        }
+    background:
+        rgba(255,255,255,.14);
 
+    color:white;
 
-        .welcome h2 {
-            margin-top: 5px;
+    font-size:22px;
 
-            font-size: 29px;
+    cursor:pointer;
 
-            line-height: 1.15;
-        }
+}
 
+.brand {
 
-        .welcome p {
-            margin-top: 9px;
+    text-align:center;
 
-            max-width: 340px;
+}
 
-            font-size: 12px;
+.brand strong {
 
-            line-height: 1.6;
+    display:block;
 
-            opacity: .72;
-        }
+    font-size:14px;
 
+    letter-spacing:.8px;
 
-        /* ==============================
-           MAIN
-        ============================== */
+}
 
-        main {
-            max-width: 500px;
+.brand small {
 
-            margin: -54px auto 40px;
+    display:block;
 
-            padding: 0 16px;
-        }
+    margin-top:2px;
 
+    opacity:.7;
 
-        /* ==============================
-           LOGIN
-        ============================== */
+    font-size:10px;
 
-        .login-card {
-            background: white;
+}
 
-            border-radius: 23px;
+.public {
 
-            padding: 23px;
+    width:42px;
+    height:42px;
 
-            box-shadow: var(--shadow);
-        }
+    border-radius:50%;
 
+    display:flex;
 
-        .login-header {
-            display: flex;
-            align-items: center;
+    align-items:center;
+    justify-content:center;
 
-            gap: 13px;
+    background:
+        rgba(255,255,255,.14);
 
-            margin-bottom: 22px;
-        }
+}
 
+.intro {
 
-        .login-icon {
-            width: 48px;
-            height: 48px;
+    margin-top:28px;
 
-            flex-shrink: 0;
+}
 
-            border-radius: 15px;
+.intro small {
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+    opacity:.7;
 
-            background: var(--primary-light);
+    font-size:11px;
 
-            font-size: 22px;
-        }
+}
 
+.intro h1 {
 
-        .login-header strong {
-            display: block;
+    margin-top:4px;
 
-            font-size: 16px;
-        }
+    font-size:26px;
 
+}
 
-        .login-header span {
-            display: block;
+.intro p {
 
-            margin-top: 3px;
+    margin-top:7px;
 
-            color: var(--muted);
+    max-width:430px;
 
-            font-size: 10px;
-        }
+    opacity:.75;
 
+    font-size:11px;
 
-        /* ==============================
-           FORM
-        ============================== */
+    line-height:1.55;
 
-        .field {
-            margin-bottom: 14px;
-        }
+}
 
 
-        .field label {
-            display: block;
+/* MAIN */
 
-            margin-bottom: 6px;
+main {
 
-            color: var(--muted);
+    max-width:600px;
 
-            font-size: 10px;
-            font-weight: 650;
-        }
+    margin:-15px auto 50px;
 
+    padding:0 15px;
 
-        .input-wrapper {
-            position: relative;
-        }
+}
 
+.card {
 
-        .input-icon {
-            position: absolute;
+    background:white;
 
-            left: 13px;
-            top: 50%;
+    border-radius:20px;
 
-            transform: translateY(-50%);
+    padding:19px;
 
-            font-size: 16px;
+    margin-bottom:14px;
 
-            pointer-events: none;
-        }
+    box-shadow:
+        var(--shadow);
 
+}
 
-        .field input {
-            width: 100%;
+.title {
 
-            height: 51px;
+    font-size:15px;
 
-            padding:
-                0
-                45px
-                0
-                42px;
+    font-weight:700;
 
-            border: 1px solid var(--border);
+}
 
-            border-radius: 14px;
+.description {
 
-            outline: none;
+    margin-top:4px;
 
-            background: #fafbfc;
+    margin-bottom:14px;
 
-            color: var(--text);
+    color:
+        var(--muted);
 
-            font-size: 14px;
+    font-size:10px;
 
-            transition: .2s;
-        }
+    line-height:1.5;
 
+}
 
-        .field input:focus {
-            border-color: #9eb6cd;
 
-            background: white;
+/* LOCATION */
 
-            box-shadow:
-                0 0 0 3px rgba(18,53,91,.06);
-        }
+.tower {
 
+    display:flex;
 
-        .show-pin {
-            position: absolute;
+    align-items:center;
 
-            right: 8px;
-            top: 50%;
+    gap:12px;
 
-            transform: translateY(-50%);
+    margin-bottom:15px;
 
-            width: 36px;
-            height: 36px;
+    padding:12px;
 
-            border: 0;
+    border-radius:14px;
 
-            border-radius: 10px;
+    background:
+        var(--primary-light);
 
-            background: transparent;
+}
 
-            cursor: pointer;
+.tower-icon {
 
-            font-size: 15px;
-        }
+    width:40px;
+    height:40px;
 
+    border-radius:12px;
 
-        /* ==============================
-           ERROR
-        ============================== */
+    display:flex;
 
-        .error {
-            display: none;
+    align-items:center;
+    justify-content:center;
 
-            margin-bottom: 14px;
+    background:white;
 
-            padding: 11px 12px;
+    font-size:19px;
 
-            border-radius: 12px;
+}
 
-            background: var(--red-light);
+.tower-info small {
 
-            color: #a83030;
+    display:block;
 
-            font-size: 10px;
+    color:
+        var(--muted);
 
-            line-height: 1.5;
-        }
+    font-size:9px;
 
+}
 
-        /* ==============================
-           BUTTON
-        ============================== */
+.tower-info strong {
 
-        .login-button {
-            width: 100%;
+    display:block;
 
-            height: 52px;
+    margin-top:2px;
 
-            margin-top: 3px;
+    font-size:14px;
 
-            border: 0;
+}
 
-            border-radius: 15px;
+select {
 
-            background: var(--primary);
-            color: white;
+    width:100%;
 
-            font-size: 12px;
-            font-weight: 750;
+    height:52px;
 
-            cursor: pointer;
+    padding:0 13px;
 
-            box-shadow:
-                0 9px 22px rgba(18,53,91,.18);
+    border:
+        1px solid
+        var(--border);
 
-            transition: .15s;
-        }
+    border-radius:14px;
 
+    outline:none;
 
-        .login-button:active {
-            transform: scale(.99);
-        }
+    background:#fafbfc;
 
+    color:
+        var(--text);
 
-        /* ==============================
-           TEST INFO
-        ============================== */
+    font-size:13px;
 
-        .test-info {
-            margin-top: 15px;
+}
 
-            padding: 11px;
 
-            border-radius: 12px;
+/* PHOTO */
 
-            background: #f5f7f9;
+.photo-box {
 
-            color: var(--muted);
+    border:
+        2px dashed
+        #cbd6e0;
 
-            text-align: center;
+    border-radius:17px;
 
-            font-size: 9px;
+    padding:24px 15px;
 
-            line-height: 1.6;
-        }
+    text-align:center;
 
+    background:#fafcfd;
 
-        .test-info strong {
-            color: var(--text);
-        }
+    cursor:pointer;
 
+}
 
-        /* ==============================
-           DIVIDER
-        ============================== */
+.photo-icon {
 
-        .divider {
-            display: flex;
-            align-items: center;
+    width:53px;
+    height:53px;
 
-            gap: 10px;
+    margin:auto;
 
-            margin: 23px 0;
-        }
+    border-radius:50%;
 
+    display:flex;
 
-        .divider::before,
-        .divider::after {
-            content: "";
+    align-items:center;
+    justify-content:center;
 
-            flex: 1;
+    background:
+        var(--primary-light);
 
-            height: 1px;
+    font-size:24px;
 
-            background: var(--border);
-        }
+}
 
+.photo-box strong {
 
-        .divider span {
-            color: var(--muted);
+    display:block;
 
-            font-size: 9px;
-        }
+    margin-top:10px;
 
+    font-size:13px;
 
-        /* ==============================
-           PUBLIC REPORT
-        ============================== */
+}
 
-        .public-card {
-            background: white;
+.photo-box span {
 
-            border-radius: 20px;
+    display:block;
 
-            padding: 19px;
+    margin-top:4px;
 
-            box-shadow:
-                0 8px 28px rgba(20,45,75,.07);
-        }
+    color:
+        var(--muted);
 
+    font-size:10px;
 
-        .public-top {
-            display: flex;
-            align-items: center;
+}
 
-            gap: 13px;
-        }
+#photoInput {
 
+    display:none;
 
-        .public-icon {
-            width: 46px;
-            height: 46px;
+}
 
-            flex-shrink: 0;
+.preview {
 
-            border-radius: 14px;
+    display:none;
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+    position:relative;
 
-            background: var(--red-light);
+    margin-top:13px;
 
-            font-size: 21px;
-        }
+}
 
+.preview img {
 
-        .public-text {
-            flex: 1;
-        }
+    width:100%;
 
+    max-height:380px;
 
-        .public-text strong {
-            display: block;
+    object-fit:cover;
 
-            font-size: 14px;
-        }
+    border-radius:16px;
 
+}
 
-        .public-text p {
-            margin-top: 4px;
+.remove {
 
-            color: var(--muted);
+    position:absolute;
 
-            font-size: 10px;
+    top:10px;
+    right:10px;
 
-            line-height: 1.4;
-        }
+    width:35px;
+    height:35px;
 
+    border:0;
 
-        .report-button {
-            width: 100%;
+    border-radius:50%;
 
-            margin-top: 16px;
+    background:
+        rgba(0,0,0,.65);
 
-            padding: 14px;
+    color:white;
 
-            border: 0;
+    font-size:17px;
 
-            border-radius: 14px;
+}
 
-            background: var(--red-light);
-            color: var(--red);
 
-            font-size: 11px;
-            font-weight: 700;
+/* OR */
 
-            cursor: pointer;
-        }
+.or {
 
+    display:flex;
 
-        /* ==============================
-           FOOTER
-        ============================== */
+    align-items:center;
 
-        footer {
-            max-width: 500px;
+    gap:10px;
 
-            margin: 28px auto;
+    margin:19px 0;
 
-            padding: 0 20px;
+}
 
-            text-align: center;
+.or::before,
+.or::after {
 
-            color: #929ca6;
+    content:"";
 
-            font-size: 9px;
+    height:1px;
 
-            line-height: 1.7;
-        }
+    flex:1;
 
+    background:
+        var(--border);
 
-        /* ==============================
-           DESKTOP
-        ============================== */
+}
 
-        @media (min-width: 800px) {
+.or span {
 
-            body {
-                background:
-                    linear-gradient(
-                        90deg,
-                        #f4f7fa 0%,
-                        #f8fafc 50%,
-                        #f4f7fa 100%
-                    );
-            }
+    color:
+        var(--muted);
 
+    font-size:9px;
 
-            header {
-                min-height: 355px;
-            }
+    font-weight:700;
 
+}
 
-            .welcome h2 {
-                font-size: 32px;
-            }
 
-        }
+/* TEXT */
 
-    </style>
+textarea {
+
+    width:100%;
+
+    min-height:120px;
+
+    padding:13px;
+
+    resize:vertical;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:14px;
+
+    outline:none;
+
+    background:#fafbfc;
+
+    color:
+        var(--text);
+
+    font-size:12px;
+
+    line-height:1.5;
+
+}
+
+.counter {
+
+    margin-top:5px;
+
+    text-align:right;
+
+    color:
+        var(--muted);
+
+    font-size:9px;
+
+}
+
+
+/* NOTIFICATION */
+
+.notification-option {
+
+    display:flex;
+
+    align-items:flex-start;
+
+    gap:12px;
+
+    cursor:pointer;
+
+}
+
+.notification-option input {
+
+    width:20px;
+    height:20px;
+
+    margin-top:1px;
+
+    accent-color:
+        var(--primary);
+
+}
+
+.notification-text {
+
+    flex:1;
+
+}
+
+.notification-text strong {
+
+    display:block;
+
+    font-size:12px;
+
+}
+
+.notification-text span {
+
+    display:block;
+
+    margin-top:4px;
+
+    color:
+        var(--muted);
+
+    font-size:9px;
+
+    line-height:1.5;
+
+}
+
+.email-area {
+
+    display:none;
+
+    margin-top:15px;
+
+    padding-top:15px;
+
+    border-top:
+        1px solid
+        var(--border);
+
+}
+
+.email-area label {
+
+    display:block;
+
+    margin-bottom:6px;
+
+    color:
+        var(--muted);
+
+    font-size:9px;
+
+    font-weight:700;
+
+}
+
+.email-area input {
+
+    width:100%;
+
+    height:50px;
+
+    padding:0 13px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:14px;
+
+    outline:none;
+
+    background:#fafbfc;
+
+    font-size:13px;
+
+}
+
+.email-info {
+
+    margin-top:7px;
+
+    color:
+        var(--muted);
+
+    font-size:8px;
+
+    line-height:1.5;
+
+}
+
+
+/* PRIVACY */
+
+.info {
+
+    padding:12px;
+
+    border-radius:13px;
+
+    background:
+        var(--primary-light);
+
+    color:
+        var(--primary);
+
+    font-size:9px;
+
+    line-height:1.55;
+
+}
+
+
+/* ERROR */
+
+.error {
+
+    display:none;
+
+    margin-bottom:13px;
+
+    padding:12px;
+
+    border-radius:13px;
+
+    background:
+        var(--red-light);
+
+    color:#a82d2d;
+
+    font-size:10px;
+
+}
+
+
+/* SEND */
+
+.send {
+
+    width:100%;
+
+    padding:17px;
+
+    border:0;
+
+    border-radius:16px;
+
+    background:
+        var(--primary);
+
+    color:white;
+
+    font-size:12px;
+
+    font-weight:750;
+
+    cursor:pointer;
+
+}
+
+
+/* SUCCESS */
+
+.overlay {
+
+    display:none;
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:999;
+
+    padding:20px;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:
+        rgba(8,28,48,.72);
+
+}
+
+.success {
+
+    width:100%;
+
+    max-width:380px;
+
+    padding:28px 22px;
+
+    border-radius:24px;
+
+    background:white;
+
+    text-align:center;
+
+}
+
+.success-icon {
+
+    width:70px;
+    height:70px;
+
+    margin:auto;
+
+    border-radius:50%;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    background:
+        var(--green-light);
+
+    color:
+        var(--green);
+
+    font-size:31px;
+
+}
+
+.success h2 {
+
+    margin-top:15px;
+
+    font-size:20px;
+
+}
+
+.success p {
+
+    margin-top:8px;
+
+    color:
+        var(--muted);
+
+    font-size:10px;
+
+    line-height:1.55;
+
+}
+
+.protocol {
+
+    margin-top:16px;
+
+    padding:13px;
+
+    border-radius:13px;
+
+    background:#f5f7f9;
+
+    font-size:10px;
+
+    line-height:1.7;
+
+}
+
+.success button {
+
+    width:100%;
+
+    margin-top:18px;
+
+    padding:14px;
+
+    border:0;
+
+    border-radius:14px;
+
+    background:
+        var(--primary);
+
+    color:white;
+
+    font-weight:700;
+
+}
+
+</style>
 
 </head>
 
@@ -607,49 +886,56 @@
 
 <header>
 
-    <div class="header-content">
+<div class="header-content">
+
+    <div class="topbar">
+
+        <button
+            class="back"
+            onclick="voltar()"
+        >
+            ‹
+        </button>
+
 
         <div class="brand">
 
-            <div class="logo">
-                ✓
-            </div>
-
-
-            <div class="brand-text">
-
-                <h1>
-                    CUIDADOS
-                </h1>
-
-                <span>
-                    Limpeza & Zeladoria
-                </span>
-
-            </div>
-
-        </div>
-
-
-        <div class="welcome">
+            <strong>
+                CUIDADOS
+            </strong>
 
             <small>
                 Reserva Igara
             </small>
 
-            <h2>
-                Gestão simples.<br>
-                Trabalho comprovado.
-            </h2>
+        </div>
 
-            <p>
-                Registro de limpeza, ocorrências
-                e acompanhamento das áreas do condomínio.
-            </p>
 
+        <div class="public">
+            ⚠
         </div>
 
     </div>
+
+
+    <div class="intro">
+
+        <small>
+            Comunicação com a equipe
+        </small>
+
+        <h1>
+            Reportar problema
+        </h1>
+
+        <p>
+            Informe onde está o problema
+            e envie uma foto ou uma breve descrição.
+        </p>
+
+    </div>
+
+</div>
 
 </header>
 
@@ -657,393 +943,785 @@
 <main>
 
 
-    <!-- LOGIN -->
-
-    <section class="login-card">
-
-        <div class="login-header">
-
-            <div class="login-icon">
-                👤
-            </div>
+<div
+    class="error"
+    id="error"
+></div>
 
 
-            <div>
+<!-- LOCAL -->
 
-                <strong>
-                    Acesso do colaborador
-                </strong>
+<section class="card">
 
-                <span>
-                    Entre para acessar sua rotina de trabalho
-                </span>
+    <div class="title">
+        Onde está o problema?
+    </div>
 
-            </div>
+    <div class="description">
+        Selecione o andar ou local.
+    </div>
 
+
+    <div class="tower">
+
+        <div class="tower-icon">
+            🏢
         </div>
 
+        <div class="tower-info">
 
-        <div
-            class="error"
-            id="loginError"
-        >
-            Matrícula ou PIN incorretos.
-        </div>
-
-
-        <!-- MATRÍCULA -->
-
-        <div class="field">
-
-            <label for="matricula">
-                MATRÍCULA
-            </label>
-
-
-            <div class="input-wrapper">
-
-                <span class="input-icon">
-                    #
-                </span>
-
-                <input
-                    id="matricula"
-                    type="text"
-                    inputmode="numeric"
-                    autocomplete="username"
-                    placeholder="Digite sua matrícula"
-                >
-
-            </div>
-
-        </div>
-
-
-        <!-- PIN -->
-
-        <div class="field">
-
-            <label for="pin">
-                PIN
-            </label>
-
-
-            <div class="input-wrapper">
-
-                <span class="input-icon">
-                    🔒
-                </span>
-
-                <input
-                    id="pin"
-                    type="password"
-                    inputmode="numeric"
-                    autocomplete="current-password"
-                    maxlength="4"
-                    placeholder="••••"
-                >
-
-
-                <button
-                    type="button"
-                    class="show-pin"
-                    onclick="mostrarPin()"
-                    aria-label="Mostrar ou ocultar PIN"
-                >
-                    👁
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <button
-            class="login-button"
-            onclick="entrar()"
-        >
-            ENTRAR
-        </button>
-
-
-        <div class="test-info">
-
-            Acesso de teste<br>
+            <small>
+                LOCAL
+            </small>
 
             <strong>
-                Débora — matrícula 0001 • PIN 1234
+                Torre E
             </strong>
 
         </div>
 
-    </section>
+    </div>
 
 
-    <!-- DIVISOR -->
+    <select id="local">
 
-    <div class="divider">
+        <option value="">
+            Selecione o andar ou local
+        </option>
+
+        <option>Térreo / Hall de entrada</option>
+
+        <option>1º andar</option>
+        <option>2º andar</option>
+        <option>3º andar</option>
+        <option>4º andar</option>
+        <option>5º andar</option>
+        <option>6º andar</option>
+        <option>7º andar</option>
+        <option>8º andar</option>
+        <option>9º andar</option>
+        <option>10º andar</option>
+        <option>11º andar</option>
+        <option>12º andar</option>
+
+        <option>Escadas</option>
+
+        <option>Elevador 1</option>
+
+        <option>Elevador 2</option>
+
+        <option>Abrigo de resíduos</option>
+
+    </select>
+
+</section>
+
+
+<!-- PROBLEMA -->
+
+<section class="card">
+
+    <div class="title">
+        O que aconteceu?
+    </div>
+
+    <div class="description">
+        Envie uma foto, escreva o problema
+        ou faça os dois.
+    </div>
+
+
+    <label
+        class="photo-box"
+        id="photoBox"
+        for="photoInput"
+    >
+
+        <div class="photo-icon">
+            📷
+        </div>
+
+        <strong>
+            Tirar foto
+        </strong>
 
         <span>
-            OU
+            Abrir câmera ou escolher imagem
         </span>
+
+    </label>
+
+
+    <input
+        type="file"
+        id="photoInput"
+        accept="image/*"
+        capture="environment"
+    >
+
+
+    <div
+        class="preview"
+        id="preview"
+    >
+
+        <img
+            id="photoPreview"
+            alt="Foto da ocorrência"
+        >
+
+        <button
+            type="button"
+            class="remove"
+            onclick="removerFoto()"
+        >
+            ×
+        </button>
 
     </div>
 
 
-    <!-- ACESSO PÚBLICO -->
-
-    <section class="public-card">
-
-        <div class="public-top">
-
-            <div class="public-icon">
-                📷
-            </div>
+    <div class="or">
+        <span>OU</span>
+    </div>
 
 
-            <div class="public-text">
+    <textarea
+        id="descricao"
+        maxlength="300"
+        placeholder="Ex.: piso sujo próximo ao elevador..."
+        oninput="contador()"
+    ></textarea>
 
-                <strong>
-                    Encontrou algum problema?
-                </strong>
 
-                <p>
-                    Moradores e visitantes podem
-                    registrar uma ocorrência sem login.
-                </p>
+    <div class="counter">
 
-            </div>
+        <span id="count">
+            0
+        </span>/300
 
+    </div>
+
+</section>
+
+
+<!-- ACOMPANHAMENTO -->
+
+<section class="card">
+
+    <label class="notification-option">
+
+        <input
+            type="checkbox"
+            id="wantNotification"
+            onchange="alternarEmail()"
+        >
+
+
+        <span class="notification-text">
+
+            <strong>
+                🔔 Quero ser avisado quando for resolvido
+            </strong>
+
+            <span>
+                Opcional. Informe seu e-mail
+                para receber a confirmação da resolução.
+            </span>
+
+        </span>
+
+    </label>
+
+
+    <div
+        class="email-area"
+        id="emailArea"
+    >
+
+        <label for="email">
+            E-MAIL PARA ACOMPANHAMENTO
+        </label>
+
+        <input
+            type="email"
+            id="email"
+            autocomplete="email"
+            placeholder="seuemail@exemplo.com"
+        >
+
+
+        <div class="email-info">
+            O e-mail será associado somente a esta
+            ocorrência para acompanhamento.
         </div>
 
+    </div>
 
-        <button
-            class="report-button"
-            onclick="reportarProblema()"
-        >
-            ⚠️ REPORTAR UM PROBLEMA
-        </button>
+</section>
 
-    </section>
+
+<!-- PRIVACIDADE -->
+
+<section class="card">
+
+    <div class="info">
+
+        🔒 Não é necessário informar nome,
+        apartamento ou telefone.
+
+        O e-mail também é opcional e só é solicitado
+        caso você queira receber a confirmação
+        da resolução.
+
+    </div>
+
+</section>
+
+
+<button
+    class="send"
+    onclick="enviar()"
+>
+    ENVIAR OCORRÊNCIA
+</button>
 
 
 </main>
 
 
-<footer>
+<!-- SUCESSO -->
 
-    CUIDADOS • Reserva Igara<br>
+<div
+    class="overlay"
+    id="successOverlay"
+>
 
-    Sistema de limpeza e zeladoria
+    <div class="success">
 
-</footer>
+        <div class="success-icon">
+            ✓
+        </div>
+
+
+        <h2>
+            Ocorrência enviada
+        </h2>
+
+
+        <p id="successMessage">
+            A equipe responsável recebeu o registro.
+        </p>
+
+
+        <div
+            class="protocol"
+            id="protocol"
+        ></div>
+
+
+        <button onclick="inicio()">
+            CONCLUIR
+        </button>
+
+    </div>
+
+</div>
 
 
 <script>
 
-    /* =========================================
-       USUÁRIO DE TESTE
+/* =============================
+   FOTO
+============================= */
 
-       ATENÇÃO:
-       Isto é somente para desenvolvimento.
-
-       Quando conectarmos o Supabase,
-       matrícula e PIN NÃO ficarão expostos
-       neste arquivo.
-    ========================================= */
-
-    const usuarioTeste = {
-
-        nome: "Débora",
-
-        matricula: "0001",
-
-        pin: "1234",
-
-        cargo: "Auxiliar de Limpeza",
-
-        torre: "Torre E"
-
-    };
+const photoInput =
+    document.getElementById(
+        "photoInput"
+    );
 
 
-    /* =========================================
-       LOGIN
-    ========================================= */
-
-    function entrar() {
-
-        const matricula =
-            document
-                .getElementById("matricula")
-                .value
-                .trim();
+let fotoSelecionada =
+    false;
 
 
-        const pin =
-            document
-                .getElementById("pin")
-                .value
-                .trim();
+photoInput.addEventListener(
+    "change",
+    function() {
+
+        const file =
+            this.files[0];
 
 
-        const error =
-            document
-                .getElementById("loginError");
-
-
-        error.style.display =
-            "none";
+        if (!file) {
+            return;
+        }
 
 
         if (
-            matricula === usuarioTeste.matricula &&
-            pin === usuarioTeste.pin
+            !file.type.startsWith(
+                "image/"
+            )
         ) {
 
-            /*
-            Guardamos uma sessão simples
-            apenas para o protótipo.
-            */
-
-            const sessao = {
-
-                nome:
-                    usuarioTeste.nome,
-
-                matricula:
-                    usuarioTeste.matricula,
-
-                cargo:
-                    usuarioTeste.cargo,
-
-                torre:
-                    usuarioTeste.torre,
-
-                loginEm:
-                    new Date().toISOString()
-
-            };
-
-
-            localStorage.setItem(
-                "usuarioLogado",
-                JSON.stringify(sessao)
+            mostrarErro(
+                "Selecione uma imagem válida."
             );
-
-
-            localStorage.setItem(
-                "torreSelecionada",
-                usuarioTeste.torre
-            );
-
-
-            window.location.href =
-                "colaborador.html";
-
 
             return;
 
         }
 
 
-        error.style.display =
+        const url =
+            URL.createObjectURL(
+                file
+            );
+
+
+        document
+            .getElementById(
+                "photoPreview"
+            )
+            .src =
+                url;
+
+
+        document
+            .getElementById(
+                "photoBox"
+            )
+            .style.display =
+                "none";
+
+
+        document
+            .getElementById(
+                "preview"
+            )
+            .style.display =
+                "block";
+
+
+        fotoSelecionada =
+            true;
+
+
+        esconderErro();
+
+    }
+);
+
+
+function removerFoto() {
+
+    photoInput.value =
+        "";
+
+
+    document
+        .getElementById(
+            "photoPreview"
+        )
+        .src =
+            "";
+
+
+    document
+        .getElementById(
+            "preview"
+        )
+        .style.display =
+            "none";
+
+
+    document
+        .getElementById(
+            "photoBox"
+        )
+        .style.display =
             "block";
 
-    }
+
+    fotoSelecionada =
+        false;
+
+}
 
 
-    /* =========================================
-       ENTER PARA LOGIN
-    ========================================= */
+/* =============================
+   EMAIL
+============================= */
 
-    document
-        .getElementById("pin")
-        .addEventListener(
-            "keydown",
-            function(event) {
+function alternarEmail() {
 
-                if (
-                    event.key === "Enter"
-                ) {
-
-                    entrar();
-
-                }
-
-            }
-        );
+    const marcado =
+        document
+            .getElementById(
+                "wantNotification"
+            )
+            .checked;
 
 
     document
-        .getElementById("matricula")
-        .addEventListener(
-            "keydown",
-            function(event) {
+        .getElementById(
+            "emailArea"
+        )
+        .style.display =
+            marcado
+            ? "block"
+            : "none";
 
-                if (
-                    event.key === "Enter"
-                ) {
 
-                    document
-                        .getElementById("pin")
-                        .focus();
+    if (!marcado) {
 
+        document
+            .getElementById(
+                "email"
+            )
+            .value = "";
+
+    }
+
+}
+
+
+function emailValido(email) {
+
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        .test(email);
+
+}
+
+
+/* =============================
+   CONTADOR
+============================= */
+
+function contador() {
+
+    document
+        .getElementById(
+            "count"
+        )
+        .textContent =
+
+        document
+            .getElementById(
+                "descricao"
+            )
+            .value
+            .length;
+
+}
+
+
+/* =============================
+   ERRO
+============================= */
+
+function mostrarErro(texto) {
+
+    const error =
+        document.getElementById(
+            "error"
+        );
+
+
+    error.textContent =
+        texto;
+
+
+    error.style.display =
+        "block";
+
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+function esconderErro() {
+
+    document
+        .getElementById(
+            "error"
+        )
+        .style.display =
+            "none";
+
+}
+
+
+/* =============================
+   ENVIAR
+============================= */
+
+function enviar() {
+
+    esconderErro();
+
+
+    const local =
+        document
+            .getElementById(
+                "local"
+            )
+            .value;
+
+
+    const descricao =
+        document
+            .getElementById(
+                "descricao"
+            )
+            .value
+            .trim();
+
+
+    const querAviso =
+        document
+            .getElementById(
+                "wantNotification"
+            )
+            .checked;
+
+
+    const email =
+        document
+            .getElementById(
+                "email"
+            )
+            .value
+            .trim()
+            .toLowerCase();
+
+
+    /* LOCAL */
+
+    if (!local) {
+
+        mostrarErro(
+            "Selecione onde está o problema."
+        );
+
+        return;
+
+    }
+
+
+    /* FOTO OU TEXTO */
+
+    if (
+        !fotoSelecionada &&
+        descricao.length === 0
+    ) {
+
+        mostrarErro(
+            "Envie uma foto ou descreva o problema."
+        );
+
+        return;
+
+    }
+
+
+    /* EMAIL */
+
+    if (
+        querAviso &&
+        !email
+    ) {
+
+        mostrarErro(
+            "Informe seu e-mail para receber o aviso de resolução."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        querAviso &&
+        !emailValido(email)
+    ) {
+
+        mostrarErro(
+            "Informe um endereço de e-mail válido."
+        );
+
+        return;
+
+    }
+
+
+    const agora =
+        new Date();
+
+
+    const protocolo =
+        "OC-" +
+        agora
+            .getTime()
+            .toString()
+            .slice(-7);
+
+
+    const ocorrencia = {
+
+        protocolo:
+            protocolo,
+
+        torre:
+            "Torre E",
+
+        local:
+            local,
+
+        descricao:
+            descricao,
+
+        foto:
+            fotoSelecionada,
+
+        status:
+            "Aberta",
+
+        origem:
+            "Morador / visitante",
+
+        querNotificacao:
+            querAviso,
+
+        emailNotificacao:
+            querAviso
+            ? email
+            : "",
+
+        notificacaoEnviada:
+            false,
+
+        data:
+            agora.toLocaleDateString(
+                "pt-BR"
+            ),
+
+        hora:
+            agora.toLocaleTimeString(
+                "pt-BR",
+                {
+                    hour:"2-digit",
+                    minute:"2-digit"
                 }
+            ),
 
-            }
-        );
+        timestamp:
+            agora.toISOString()
 
-
-    /* =========================================
-       MOSTRAR PIN
-    ========================================= */
-
-    function mostrarPin() {
-
-        const pin =
-            document
-                .getElementById("pin");
+    };
 
 
-        if (
-            pin.type === "password"
-        ) {
+    let ocorrencias =
+        JSON.parse(
+            localStorage.getItem(
+                "ocorrencias"
+            )
+        ) || [];
 
-            pin.type =
-                "text";
 
-        } else {
+    ocorrencias.unshift(
+        ocorrencia
+    );
 
-            pin.type =
-                "password";
 
-        }
+    localStorage.setItem(
+        "ocorrencias",
+        JSON.stringify(
+            ocorrencias
+        )
+    );
+
+
+    document
+        .getElementById(
+            "protocol"
+        )
+        .innerHTML = `
+
+            <strong>
+                ${protocolo}
+            </strong>
+
+            <br>
+
+            Torre E • ${local}
+
+            <br>
+
+            ${ocorrencia.data}
+            às
+            ${ocorrencia.hora}
+
+        `;
+
+
+    if (querAviso) {
+
+        document
+            .getElementById(
+                "successMessage"
+            )
+            .textContent =
+
+            "Registro recebido. Você solicitou aviso por e-mail quando a ocorrência for resolvida.";
+
+    } else {
+
+        document
+            .getElementById(
+                "successMessage"
+            )
+            .textContent =
+
+            "A equipe responsável recebeu o registro.";
 
     }
 
 
-    /* =========================================
-       REPORTAR PROBLEMA
-    ========================================= */
+    document
+        .getElementById(
+            "successOverlay"
+        )
+        .style.display =
+            "flex";
 
-    function reportarProblema() {
+}
 
-        /*
-        Ainda vamos criar reportar.html.
 
-        Por enquanto impedimos o usuário
-        de cair em uma página inexistente.
-        */
+/* =============================
+   NAVEGAÇÃO
+============================= */
 
-        alert(
-            "O formulário de ocorrência será criado na próxima etapa."
-        );
+function voltar() {
 
-    }
+    window.location.href =
+        "index.html";
+
+}
+
+
+function inicio() {
+
+    window.location.href =
+        "index.html";
+
+}
 
 </script>
-
 
 </body>
 
