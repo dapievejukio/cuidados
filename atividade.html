@@ -16,6 +16,9 @@
     content="#12355b"
 >
 
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 
 :root {
@@ -62,7 +65,6 @@ body {
 
     background:var(--background);
     color:var(--text);
-
     min-height:100vh;
 }
 
@@ -73,9 +75,7 @@ textarea {
 }
 
 
-/* =========================
-   HEADER
-========================= */
+/* HEADER */
 
 header {
     background:
@@ -111,9 +111,7 @@ header {
     border:0;
     border-radius:13px;
 
-    background:
-        rgba(255,255,255,.14);
-
+    background:rgba(255,255,255,.14);
     color:white;
 
     font-size:20px;
@@ -159,9 +157,7 @@ header {
 }
 
 
-/* =========================
-   MAIN
-========================= */
+/* MAIN */
 
 main {
     max-width:720px;
@@ -170,17 +166,12 @@ main {
 }
 
 
-/* =========================
-   INFO
-========================= */
+/* INFO */
 
 .info-card {
     background:white;
-
     border-radius:19px;
-
     padding:15px;
-
     box-shadow:var(--shadow);
 
     display:flex;
@@ -191,7 +182,6 @@ main {
 .info-icon {
     width:48px;
     height:48px;
-
     flex-shrink:0;
 
     border-radius:15px;
@@ -201,7 +191,6 @@ main {
     justify-content:center;
 
     background:var(--primary-light);
-
     font-size:22px;
 }
 
@@ -217,14 +206,12 @@ main {
 .info-text span {
     display:block;
     margin-top:4px;
-
     color:var(--muted);
     font-size:9px;
 }
 
 .type-tag {
     padding:6px 9px;
-
     border-radius:20px;
 
     background:var(--primary-light);
@@ -235,9 +222,7 @@ main {
 }
 
 
-/* =========================
-   SEÇÕES
-========================= */
+/* SECTION */
 
 .section {
     margin-top:22px;
@@ -253,25 +238,18 @@ main {
 
 .section-title p {
     margin-top:3px;
-
     color:var(--muted);
-
     font-size:9px;
     line-height:1.5;
 }
 
 
-/* =========================
-   CHECKLIST
-========================= */
+/* CHECKLIST */
 
 .checklist {
     background:white;
-
     border-radius:19px;
-
     padding:5px 15px;
-
     box-shadow:var(--shadow);
 }
 
@@ -280,7 +258,6 @@ main {
 
     display:flex;
     align-items:center;
-
     gap:11px;
 
     border-bottom:
@@ -318,20 +295,14 @@ main {
 
     font-size:14px;
     font-weight:800;
-
-    transition:.15s;
 }
 
-.check-item input:checked
-+
-.fake-check {
+.check-item input:checked + .fake-check {
     border-color:var(--green);
     background:var(--green);
 }
 
-.check-item input:checked
-+
-.fake-check::after {
+.check-item input:checked + .fake-check::after {
     content:"✓";
 }
 
@@ -346,19 +317,14 @@ main {
 
 .check-label small {
     display:block;
-
     margin-top:3px;
-
     color:var(--muted);
-
     font-size:8px;
     line-height:1.4;
 }
 
 
-/* =========================
-   ALERTA / INFORMAÇÃO
-========================= */
+/* NOTICE */
 
 .notice {
     padding:13px;
@@ -366,7 +332,6 @@ main {
     border-radius:15px;
 
     background:var(--yellow-light);
-
     color:#7c5b0b;
 
     font-size:9px;
@@ -376,23 +341,18 @@ main {
 }
 
 
-/* =========================
-   FOTO
-========================= */
+/* FOTO */
 
 .photo-card {
     background:white;
-
     border-radius:19px;
-
     padding:15px;
-
     box-shadow:var(--shadow);
 }
 
 .photo-button {
     width:100%;
-    min-height:100px;
+    min-height:105px;
 
     border:
         2px dashed
@@ -411,7 +371,7 @@ main {
 }
 
 .photo-button span {
-    font-size:26px;
+    font-size:27px;
 }
 
 .photo-button strong {
@@ -438,7 +398,7 @@ main {
     display:block;
 
     width:100%;
-    max-height:330px;
+    max-height:360px;
 
     object-fit:cover;
 
@@ -457,9 +417,7 @@ main {
     border:0;
     border-radius:50%;
 
-    background:
-        rgba(0,0,0,.65);
-
+    background:rgba(0,0,0,.65);
     color:white;
 
     font-size:16px;
@@ -467,9 +425,7 @@ main {
 }
 
 
-/* =========================
-   OBSERVAÇÃO
-========================= */
+/* OBSERVAÇÃO */
 
 textarea {
     width:100%;
@@ -509,9 +465,7 @@ textarea:focus {
 }
 
 
-/* =========================
-   OCORRÊNCIA
-========================= */
+/* PROBLEMA */
 
 .problem-button {
     width:100%;
@@ -525,7 +479,6 @@ textarea:focus {
     border-radius:14px;
 
     background:var(--red-light);
-
     color:var(--red);
 
     font-size:9px;
@@ -535,9 +488,7 @@ textarea:focus {
 }
 
 
-/* =========================
-   FINALIZAR
-========================= */
+/* FINALIZAR */
 
 .finish {
     margin-top:22px;
@@ -545,14 +496,12 @@ textarea:focus {
 
 .finish-button {
     width:100%;
-
     min-height:52px;
 
     border:0;
     border-radius:15px;
 
     background:var(--green);
-
     color:white;
 
     font-size:11px;
@@ -566,14 +515,33 @@ textarea:focus {
 }
 
 .finish-button:disabled {
-    opacity:.5;
+    opacity:.55;
     cursor:not-allowed;
 }
 
 
-/* =========================
-   ERRO
-========================= */
+/* STATUS ENVIO */
+
+.upload-status {
+    display:none;
+
+    margin-top:10px;
+
+    padding:12px;
+
+    border-radius:13px;
+
+    background:var(--primary-light);
+    color:var(--primary);
+
+    text-align:center;
+
+    font-size:9px;
+    font-weight:700;
+}
+
+
+/* ERRO */
 
 .error {
     display:none;
@@ -585,22 +553,19 @@ textarea:focus {
     border-radius:13px;
 
     background:var(--red-light);
-
     color:var(--red);
 
     text-align:center;
 
     font-size:9px;
+    line-height:1.5;
 }
 
 
-/* =========================
-   SUCESSO
-========================= */
+/* SUCESSO */
 
 .success-overlay {
     position:fixed;
-
     inset:0;
 
     z-index:999;
@@ -612,11 +577,9 @@ textarea:focus {
 
     padding:20px;
 
-    background:
-        rgba(10,30,50,.70);
+    background:rgba(10,30,50,.70);
 
-    backdrop-filter:
-        blur(5px);
+    backdrop-filter:blur(5px);
 }
 
 .success-card {
@@ -645,7 +608,6 @@ textarea:focus {
     justify-content:center;
 
     background:var(--green-light);
-
     color:var(--green);
 
     font-size:32px;
@@ -659,15 +621,12 @@ textarea:focus {
 
 .success-card p {
     margin-top:8px;
-
     color:var(--muted);
-
     font-size:10px;
     line-height:1.5;
 }
 
 </style>
-
 </head>
 
 
@@ -726,8 +685,6 @@ textarea:focus {
 <main>
 
 
-<!-- COLABORADOR -->
-
 <div class="info-card">
 
     <div
@@ -762,8 +719,6 @@ textarea:focus {
 
 
 
-<!-- CHECKLIST -->
-
 <section class="section">
 
     <div class="section-title">
@@ -772,8 +727,8 @@ textarea:focus {
             Checklist
         </h2>
 
-        <p id="checklistDescription">
-            Marque os itens conforme forem concluídos.
+        <p>
+            Marque todos os itens após executar a atividade.
         </p>
 
     </div>
@@ -795,8 +750,6 @@ textarea:focus {
 
 
 
-<!-- FOTO -->
-
 <section class="section">
 
     <div class="section-title">
@@ -806,8 +759,8 @@ textarea:focus {
         </h2>
 
         <p>
-            Tire uma foto do local após a conclusão.
-            A foto é obrigatória.
+            Tire uma foto após concluir a atividade.
+            A foto será enviada para a gestão.
         </p>
 
     </div>
@@ -830,7 +783,7 @@ textarea:focus {
             </strong>
 
             <small>
-                Registrar situação final do local
+                Foto obrigatória
             </small>
 
         </label>
@@ -870,8 +823,6 @@ textarea:focus {
 
 
 
-<!-- OBSERVAÇÃO -->
-
 <section class="section">
 
     <div class="section-title">
@@ -881,7 +832,7 @@ textarea:focus {
         </h2>
 
         <p>
-            Opcional. Informe algo relevante sobre a atividade.
+            Opcional.
         </p>
 
     </div>
@@ -890,7 +841,7 @@ textarea:focus {
     <textarea
         id="observation"
         maxlength="300"
-        placeholder="Ex.: havia grande quantidade de folhas junto ao acesso..."
+        placeholder="Ex.: havia grande quantidade de folhas no acesso..."
     ></textarea>
 
 
@@ -906,8 +857,6 @@ textarea:focus {
 
 
 
-<!-- PROBLEMA -->
-
 <section class="section">
 
     <button
@@ -922,8 +871,6 @@ textarea:focus {
 
 
 
-<!-- FINALIZAR -->
-
 <div class="finish">
 
     <button
@@ -933,6 +880,14 @@ textarea:focus {
     >
         ✓ CONCLUIR ATIVIDADE
     </button>
+
+
+    <div
+        class="upload-status"
+        id="uploadStatus"
+    >
+        ☁️ Enviando atividade e foto...
+    </div>
 
 
     <div
@@ -947,8 +902,6 @@ textarea:focus {
 
 
 
-<!-- SUCESSO -->
-
 <div
     class="success-overlay"
     id="successOverlay"
@@ -961,11 +914,11 @@ textarea:focus {
         </div>
 
         <h2>
-            Atividade concluída
+            Atividade enviada
         </h2>
 
         <p id="successText">
-            O registro foi salvo com sucesso.
+            A atividade e a foto foram registradas.
         </p>
 
     </div>
@@ -975,6 +928,25 @@ textarea:focus {
 
 
 <script>
+
+/* =====================================================
+   SUPABASE
+===================================================== */
+
+const SUPABASE_URL =
+    "https://rhiosvsohvqqrxzwohqu.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_vcjiMMCTxQJ7ArTGsQ-PuQ_5gaAfoIt";
+
+
+const db =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
 
 /* =====================================================
    SESSÃO
@@ -999,42 +971,25 @@ if (!sessao) {
 
 /* =====================================================
    PERFIS TEMPORÁRIOS
-
-   Depois isso virá do banco.
 ===================================================== */
 
 const perfis = {
 
     "0001": {
 
-        nome:
-            "Débora",
-
-        matricula:
-            "0001",
-
-        cargo:
-            "Auxiliar de Limpeza",
-
-        tipo:
-            "limpeza"
+        nome:"Débora",
+        matricula:"0001",
+        cargo:"Auxiliar de Limpeza",
+        tipo:"limpeza"
 
     },
 
-
     "0002": {
 
-        nome:
-            "Zelador",
-
-        matricula:
-            "0002",
-
-        cargo:
-            "Zelador",
-
-        tipo:
-            "zeladoria"
+        nome:"Zelador",
+        matricula:"0002",
+        cargo:"Zelador",
+        tipo:"zeladoria"
 
     }
 
@@ -1059,9 +1014,8 @@ const usuario =
             "Colaborador",
 
         tipo:
-            localStorage.getItem(
-                "tipoAtividadeAtual"
-            ) || "limpeza"
+            sessao.tipo ||
+            "limpeza"
 
     };
 
@@ -1095,12 +1049,6 @@ let tipoAtividade =
     usuario.tipo;
 
 
-/*
-Se o usuário for zelador,
-a atividade é obrigatoriamente
-de zeladoria.
-*/
-
 if (
     usuario.tipo ===
     "zeladoria"
@@ -1122,103 +1070,100 @@ const localTitle =
         "localTitle"
     );
 
-
 const locationSubtitle =
     document.getElementById(
         "locationSubtitle"
     );
-
 
 const userName =
     document.getElementById(
         "userName"
     );
 
-
 const userDescription =
     document.getElementById(
         "userDescription"
     );
-
 
 const userIcon =
     document.getElementById(
         "userIcon"
     );
 
-
 const typeTag =
     document.getElementById(
         "typeTag"
     );
-
 
 const headerType =
     document.getElementById(
         "headerType"
     );
 
-
 const checklistContainer =
     document.getElementById(
         "checklist"
     );
-
 
 const specialNotice =
     document.getElementById(
         "specialNotice"
     );
 
-
 const photoInput =
     document.getElementById(
         "photoInput"
     );
-
 
 const photoPreview =
     document.getElementById(
         "photoPreview"
     );
 
-
 const previewContainer =
     document.getElementById(
         "previewContainer"
     );
-
 
 const photoButton =
     document.getElementById(
         "photoButton"
     );
 
-
 const observation =
     document.getElementById(
         "observation"
     );
-
 
 const charCount =
     document.getElementById(
         "charCount"
     );
 
-
 const errorMessage =
     document.getElementById(
         "errorMessage"
     );
 
+const uploadStatus =
+    document.getElementById(
+        "uploadStatus"
+    );
 
-let fotoSelecionada =
-    false;
+const finishButton =
+    document.getElementById(
+        "finishButton"
+    );
 
+
+let arquivoFoto =
+    null;
 
 let previewURL =
     null;
+
+let enviando =
+    false;
 
 
 
@@ -1286,58 +1231,40 @@ function checklistLimpeza() {
         local.toLowerCase();
 
 
-    /*
-       ABRIGO DE RESÍDUOS
-    */
-
     if (
-        nome.includes(
-            "abrigo"
-        )
+        nome.includes("abrigo")
         ||
-        nome.includes(
-            "resíduo"
-        )
+        nome.includes("resíduo")
     ) {
 
         return [
 
             {
-                titulo:
-                    "Piso",
-
+                titulo:"Piso",
                 descricao:
                     "Piso limpo e sem resíduos soltos."
             },
 
             {
-                titulo:
-                    "Lixeiras",
-
+                titulo:"Lixeiras",
                 descricao:
                     "Lixeiras limpas e organizadas."
             },
 
             {
-                titulo:
-                    "Resíduos",
-
+                titulo:"Resíduos",
                 descricao:
                     "Resíduos corretamente acondicionados."
             },
 
             {
-                titulo:
-                    "Sacos",
-
+                titulo:"Sacos",
                 descricao:
-                    "Sacos colocados ou substituídos quando necessário."
+                    "Sacos substituídos quando necessário."
             },
 
             {
-                titulo:
-                    "Porta e acesso",
-
+                titulo:"Porta e acesso",
                 descricao:
                     "Acesso limpo e desobstruído."
             }
@@ -1347,10 +1274,6 @@ function checklistLimpeza() {
     }
 
 
-    /*
-       ELEVADORES
-    */
-
     if (
         nome.includes(
             "elevador"
@@ -1359,47 +1282,26 @@ function checklistLimpeza() {
 
         return [
 
-            {
-                titulo:
-                    "Piso da cabine"
-            },
+            { titulo:"Piso da cabine" },
+
+            { titulo:"Espelho" },
 
             {
-                titulo:
-                    "Espelho"
-            },
-
-            {
-                titulo:
-                    "Botoeiras",
-
+                titulo:"Botoeiras",
                 descricao:
                     "Painel e áreas de contato."
             },
 
-            {
-                titulo:
-                    "Portas internas"
-            },
+            { titulo:"Portas internas" },
 
-            {
-                titulo:
-                    "Paredes da cabine"
-            },
+            { titulo:"Paredes da cabine" },
 
-            {
-                titulo:
-                    "Trilhos e canaletas"
-            }
+            { titulo:"Trilhos e canaletas" }
 
         ];
 
     }
 
-
-    /*
-       ESCADAS
-    */
 
     if (
         nome.includes(
@@ -1409,48 +1311,21 @@ function checklistLimpeza() {
 
         return [
 
-            {
-                titulo:
-                    "Degraus"
-            },
-
-            {
-                titulo:
-                    "Patamares"
-            },
-
-            {
-                titulo:
-                    "Corrimãos"
-            },
-
-            {
-                titulo:
-                    "Rodapés"
-            },
-
-            {
-                titulo:
-                    "Portas"
-            }
+            { titulo:"Degraus" },
+            { titulo:"Patamares" },
+            { titulo:"Corrimãos" },
+            { titulo:"Rodapés" },
+            { titulo:"Portas" }
 
         ];
 
     }
 
 
-    /*
-       TÉRREO
-    */
-
     if (
-        nome.includes(
-            "térreo"
-        )
+        nome.includes("térreo")
         ||
-        nome.includes(
-            "terreo"
-        )
+        nome.includes("terreo")
         ||
         nome.includes(
             "hall de entrada"
@@ -1459,44 +1334,17 @@ function checklistLimpeza() {
 
         return [
 
-            {
-                titulo:
-                    "Piso / Hall"
-            },
-
-            {
-                titulo:
-                    "Rodapés"
-            },
-
-            {
-                titulo:
-                    "Vidros"
-            },
-
-            {
-                titulo:
-                    "Porta de entrada"
-            },
-
-            {
-                titulo:
-                    "Portas dos elevadores"
-            },
-
-            {
-                titulo:
-                    "Áreas de contato"
-            }
+            { titulo:"Piso / Hall" },
+            { titulo:"Rodapés" },
+            { titulo:"Vidros" },
+            { titulo:"Porta de entrada" },
+            { titulo:"Portas dos elevadores" },
+            { titulo:"Áreas de contato" }
 
         ];
 
     }
 
-
-    /*
-       ACADEMIA
-    */
 
     if (
         nome.includes(
@@ -1506,42 +1354,22 @@ function checklistLimpeza() {
 
         return [
 
-            {
-                titulo:
-                    "Piso"
-            },
+            { titulo:"Piso" },
+            { titulo:"Espelhos" },
 
             {
-                titulo:
-                    "Espelhos"
-            },
-
-            {
-                titulo:
-                    "Equipamentos",
-
+                titulo:"Equipamentos",
                 descricao:
-                    "Limpeza externa e superfícies de contato."
+                    "Superfícies externas e áreas de contato."
             },
 
-            {
-                titulo:
-                    "Áreas de contato"
-            },
-
-            {
-                titulo:
-                    "Lixeiras"
-            }
+            { titulo:"Áreas de contato" },
+            { titulo:"Lixeiras" }
 
         ];
 
     }
 
-
-    /*
-       BANHEIRO
-    */
 
     if (
         nome.includes(
@@ -1551,71 +1379,25 @@ function checklistLimpeza() {
 
         return [
 
-            {
-                titulo:
-                    "Piso"
-            },
-
-            {
-                titulo:
-                    "Vasos sanitários"
-            },
-
-            {
-                titulo:
-                    "Pias"
-            },
-
-            {
-                titulo:
-                    "Espelhos"
-            },
-
-            {
-                titulo:
-                    "Lixeiras"
-            },
-
-            {
-                titulo:
-                    "Reposição de materiais"
-            },
-
-            {
-                titulo:
-                    "Áreas de contato"
-            }
+            { titulo:"Piso" },
+            { titulo:"Vasos sanitários" },
+            { titulo:"Pias" },
+            { titulo:"Espelhos" },
+            { titulo:"Lixeiras" },
+            { titulo:"Reposição de materiais" },
+            { titulo:"Áreas de contato" }
 
         ];
 
     }
 
 
-    /*
-       ANDARES / PADRÃO
-    */
-
     return [
 
-        {
-            titulo:
-                "Piso / Hall"
-        },
-
-        {
-            titulo:
-                "Rodapés"
-        },
-
-        {
-            titulo:
-                "Portas dos elevadores"
-        },
-
-        {
-            titulo:
-                "Áreas de contato"
-        }
+        { titulo:"Piso / Hall" },
+        { titulo:"Rodapés" },
+        { titulo:"Portas dos elevadores" },
+        { titulo:"Áreas de contato" }
 
     ];
 
@@ -1633,70 +1415,47 @@ function checklistZeladoria() {
         local.toLowerCase();
 
 
-    /*
-       GARAGENS
-    */
-
     if (
         nome.includes(
             "garagem"
         )
     ) {
 
-        specialNotice.style.display =
-            "block";
-
-        specialNotice.textContent =
-            "📅 Atividade semanal. Faça a limpeza do pavimento programado para hoje.";
+        mostrarAviso(
+            "📅 Atividade semanal. Faça a limpeza do pavimento programado."
+        );
 
 
         return [
 
             {
-                titulo:
-                    "Circulação limpa",
-
+                titulo:"Circulação limpa",
                 descricao:
-                    "Varrer e recolher resíduos das áreas de circulação."
+                    "Varrer e recolher resíduos."
             },
 
             {
-                titulo:
-                    "Vagas verificadas",
-
+                titulo:"Vagas verificadas",
                 descricao:
-                    "Recolher papéis, plásticos, folhas e resíduos."
+                    "Recolher papéis, plásticos e folhas."
             },
 
             {
-                titulo:
-                    "Cantos e laterais",
-
-                descricao:
-                    "Verificar acúmulo de sujeira junto às paredes e cantos."
+                titulo:"Cantos e laterais"
             },
 
             {
-                titulo:
-                    "Acessos",
-
-                descricao:
-                    "Manter acessos e circulação desobstruídos."
+                titulo:"Acessos desobstruídos"
             },
 
             {
-                titulo:
-                    "Resíduos recolhidos"
+                titulo:"Resíduos recolhidos"
             }
 
         ];
 
     }
 
-
-    /*
-       RUA LATERAL
-    */
 
     if (
         nome.includes(
@@ -1704,48 +1463,23 @@ function checklistZeladoria() {
         )
     ) {
 
-        specialNotice.style.display =
-            "block";
-
-        specialNotice.textContent =
-            "📅 Limpeza semanal da rua lateral e circulação externa.";
+        mostrarAviso(
+            "📅 Limpeza semanal da rua lateral."
+        );
 
 
         return [
 
-            {
-                titulo:
-                    "Via limpa"
-            },
-
-            {
-                titulo:
-                    "Folhas recolhidas"
-            },
-
-            {
-                titulo:
-                    "Papéis e plásticos recolhidos"
-            },
-
-            {
-                titulo:
-                    "Meio-fio verificado"
-            },
-
-            {
-                titulo:
-                    "Circulação desobstruída"
-            }
+            { titulo:"Via limpa" },
+            { titulo:"Folhas recolhidas" },
+            { titulo:"Papéis e plásticos recolhidos" },
+            { titulo:"Meio-fio verificado" },
+            { titulo:"Circulação desobstruída" }
 
         ];
 
     }
 
-
-    /*
-       ENTORNO DAS TORRES
-    */
 
     if (
         nome.includes(
@@ -1756,94 +1490,44 @@ function checklistZeladoria() {
         return [
 
             {
-                titulo:
-                    "Gramado sem resíduos",
-
+                titulo:"Gramado sem resíduos",
                 descricao:
-                    "Recolher lixo, papéis e objetos. Não inclui jardinagem."
+                    "Limpeza apenas. Não inclui jardinagem."
             },
 
-            {
-                titulo:
-                    "Calçada limpa"
-            },
-
-            {
-                titulo:
-                    "Acesso da torre limpo"
-            },
-
-            {
-                titulo:
-                    "Folhas e resíduos recolhidos"
-            },
-
-            {
-                titulo:
-                    "Sem objetos abandonados"
-            }
+            { titulo:"Calçada limpa" },
+            { titulo:"Acesso da torre limpo" },
+            { titulo:"Folhas e resíduos recolhidos" },
+            { titulo:"Sem objetos abandonados" }
 
         ];
 
     }
 
 
-    /*
-       ÁREAS VERDES
-    */
-
     if (
-        nome.includes(
-            "áreas verdes"
-        )
+        nome.includes("áreas verdes")
         ||
-        nome.includes(
-            "areas verdes"
-        )
+        nome.includes("areas verdes")
     ) {
 
-        specialNotice.style.display =
-            "block";
-
-        specialNotice.textContent =
-            "🌿 Esta atividade é somente limpeza e recolhimento de resíduos. Não inclui jardinagem.";
+        mostrarAviso(
+            "🌿 Somente limpeza e recolhimento de resíduos. Não inclui jardinagem."
+        );
 
 
         return [
 
-            {
-                titulo:
-                    "Papéis recolhidos"
-            },
-
-            {
-                titulo:
-                    "Plásticos recolhidos"
-            },
-
-            {
-                titulo:
-                    "Outros resíduos recolhidos"
-            },
-
-            {
-                titulo:
-                    "Gramados visualmente limpos"
-            },
-
-            {
-                titulo:
-                    "Circulação livre"
-            }
+            { titulo:"Papéis recolhidos" },
+            { titulo:"Plásticos recolhidos" },
+            { titulo:"Outros resíduos recolhidos" },
+            { titulo:"Gramados visualmente limpos" },
+            { titulo:"Circulação livre" }
 
         ];
 
     }
 
-
-    /*
-       FRENTE DO CONDOMÍNIO
-    */
 
     if (
         nome.includes(
@@ -1857,39 +1541,16 @@ function checklistZeladoria() {
 
         return [
 
-            {
-                titulo:
-                    "Calçada limpa"
-            },
-
-            {
-                titulo:
-                    "Entrada de pedestres limpa"
-            },
-
-            {
-                titulo:
-                    "Entrada de veículos limpa"
-            },
-
-            {
-                titulo:
-                    "Folhas recolhidas"
-            },
-
-            {
-                titulo:
-                    "Papéis e resíduos recolhidos"
-            }
+            { titulo:"Calçada limpa" },
+            { titulo:"Entrada de pedestres limpa" },
+            { titulo:"Entrada de veículos limpa" },
+            { titulo:"Folhas recolhidas" },
+            { titulo:"Papéis e resíduos recolhidos" }
 
         ];
 
     }
 
-
-    /*
-       RESÍDUOS DAS TORRES
-    */
 
     if (
         nome.includes(
@@ -1903,44 +1564,17 @@ function checklistZeladoria() {
 
         return [
 
-            {
-                titulo:
-                    "Resíduos acondicionados"
-            },
-
-            {
-                titulo:
-                    "Lixeiras organizadas"
-            },
-
-            {
-                titulo:
-                    "Sacos verificados"
-            },
-
-            {
-                titulo:
-                    "Piso limpo"
-            },
-
-            {
-                titulo:
-                    "Porta e acesso limpos"
-            },
-
-            {
-                titulo:
-                    "Sem resíduos fora das lixeiras"
-            }
+            { titulo:"Resíduos acondicionados" },
+            { titulo:"Lixeiras organizadas" },
+            { titulo:"Sacos verificados" },
+            { titulo:"Piso limpo" },
+            { titulo:"Porta e acesso limpos" },
+            { titulo:"Sem resíduos fora das lixeiras" }
 
         ];
 
     }
 
-
-    /*
-       CENTRAL DE RESÍDUOS
-    */
 
     if (
         nome.includes(
@@ -1954,44 +1588,17 @@ function checklistZeladoria() {
 
         return [
 
-            {
-                titulo:
-                    "Resíduos organizados"
-            },
-
-            {
-                titulo:
-                    "Lixeiras organizadas"
-            },
-
-            {
-                titulo:
-                    "Piso limpo"
-            },
-
-            {
-                titulo:
-                    "Materiais acondicionados"
-            },
-
-            {
-                titulo:
-                    "Acesso desobstruído"
-            },
-
-            {
-                titulo:
-                    "Sem resíduos fora do local"
-            }
+            { titulo:"Resíduos organizados" },
+            { titulo:"Lixeiras organizadas" },
+            { titulo:"Piso limpo" },
+            { titulo:"Materiais acondicionados" },
+            { titulo:"Acesso desobstruído" },
+            { titulo:"Sem resíduos fora do local" }
 
         ];
 
     }
 
-
-    /*
-       LIXEIRAS ÁREAS COMUNS
-    */
 
     if (
         nome.includes(
@@ -2005,34 +1612,15 @@ function checklistZeladoria() {
 
         return [
 
-            {
-                titulo:
-                    "Lixeiras verificadas"
-            },
-
-            {
-                titulo:
-                    "Lixeiras esvaziadas quando necessário"
-            },
-
-            {
-                titulo:
-                    "Sacos substituídos"
-            },
-
-            {
-                titulo:
-                    "Área ao redor limpa"
-            }
+            { titulo:"Lixeiras verificadas" },
+            { titulo:"Esvaziadas quando necessário" },
+            { titulo:"Sacos substituídos" },
+            { titulo:"Área ao redor limpa" }
 
         ];
 
     }
 
-
-    /*
-       CHIMARRÓDROMO
-    */
 
     if (
         nome.includes(
@@ -2042,44 +1630,19 @@ function checklistZeladoria() {
 
         return [
 
-            {
-                titulo:
-                    "Piso limpo"
-            },
-
-            {
-                titulo:
-                    "Mesas limpas"
-            },
-
-            {
-                titulo:
-                    "Bancos limpos"
-            },
-
-            {
-                titulo:
-                    "Lixeira verificada"
-            },
-
-            {
-                titulo:
-                    "Entorno sem resíduos"
-            }
+            { titulo:"Piso limpo" },
+            { titulo:"Mesas limpas" },
+            { titulo:"Bancos limpos" },
+            { titulo:"Lixeira verificada" },
+            { titulo:"Entorno sem resíduos" }
 
         ];
 
     }
 
 
-    /*
-       PLAY
-    */
-
     if (
-        nome.includes(
-            "play"
-        )
+        nome.includes("play")
         ||
         nome.includes(
             "praça infantil"
@@ -2092,42 +1655,21 @@ function checklistZeladoria() {
 
         return [
 
-            {
-                titulo:
-                    "Piso / área limpa"
-            },
+            { titulo:"Piso / área limpa" },
+            { titulo:"Resíduos recolhidos" },
+            { titulo:"Lixeira verificada" },
+            { titulo:"Entorno limpo" },
 
             {
-                titulo:
-                    "Resíduos recolhidos"
-            },
-
-            {
-                titulo:
-                    "Lixeira verificada"
-            },
-
-            {
-                titulo:
-                    "Entorno limpo"
-            },
-
-            {
-                titulo:
-                    "Inspeção visual dos brinquedos",
-
+                titulo:"Inspeção visual dos brinquedos",
                 descricao:
-                    "Registrar problema caso seja identificado dano aparente."
+                    "Anotar dano aparente na observação."
             }
 
         ];
 
     }
 
-
-    /*
-       PET
-    */
 
     if (
         nome.includes(
@@ -2137,39 +1679,16 @@ function checklistZeladoria() {
 
         return [
 
-            {
-                titulo:
-                    "Resíduos recolhidos"
-            },
-
-            {
-                titulo:
-                    "Piso / área limpa"
-            },
-
-            {
-                titulo:
-                    "Lixeira verificada"
-            },
-
-            {
-                titulo:
-                    "Entorno limpo"
-            },
-
-            {
-                titulo:
-                    "Área em condição de uso"
-            }
+            { titulo:"Resíduos recolhidos" },
+            { titulo:"Piso / área limpa" },
+            { titulo:"Lixeira verificada" },
+            { titulo:"Entorno limpo" },
+            { titulo:"Área em condição de uso" }
 
         ];
 
     }
 
-
-    /*
-       PISCINA
-    */
 
     if (
         nome.includes(
@@ -2179,39 +1698,16 @@ function checklistZeladoria() {
 
         return [
 
-            {
-                titulo:
-                    "Circulação limpa"
-            },
-
-            {
-                titulo:
-                    "Resíduos recolhidos"
-            },
-
-            {
-                titulo:
-                    "Lixeiras verificadas"
-            },
-
-            {
-                titulo:
-                    "Entorno organizado"
-            },
-
-            {
-                titulo:
-                    "Acessos desobstruídos"
-            }
+            { titulo:"Circulação limpa" },
+            { titulo:"Resíduos recolhidos" },
+            { titulo:"Lixeiras verificadas" },
+            { titulo:"Entorno organizado" },
+            { titulo:"Acessos desobstruídos" }
 
         ];
 
     }
 
-
-    /*
-       QUIOSQUES
-    */
 
     if (
         nome.includes(
@@ -2219,102 +1715,48 @@ function checklistZeladoria() {
         )
     ) {
 
-        specialNotice.style.display =
-            "block";
-
-        specialNotice.textContent =
-            "🛖 Limpeza gerada conforme utilização ou reserva do espaço.";
+        mostrarAviso(
+            "🛖 Limpeza conforme utilização ou reserva."
+        );
 
 
         return [
 
-            {
-                titulo:
-                    "Piso limpo"
-            },
-
-            {
-                titulo:
-                    "Mesas e superfícies limpas"
-            },
-
-            {
-                titulo:
-                    "Lixeiras esvaziadas"
-            },
-
-            {
-                titulo:
-                    "Resíduos recolhidos"
-            },
-
-            {
-                titulo:
-                    "Entorno limpo"
-            },
-
-            {
-                titulo:
-                    "Espaço organizado"
-            }
+            { titulo:"Piso limpo" },
+            { titulo:"Mesas e superfícies limpas" },
+            { titulo:"Lixeiras esvaziadas" },
+            { titulo:"Resíduos recolhidos" },
+            { titulo:"Entorno limpo" },
+            { titulo:"Espaço organizado" }
 
         ];
 
     }
 
 
-    /*
-       ILUMINAÇÃO
-    */
-
     if (
-        nome.includes(
-            "iluminação"
-        )
+        nome.includes("iluminação")
         ||
-        nome.includes(
-            "iluminacao"
-        )
+        nome.includes("iluminacao")
     ) {
 
         return [
 
-            {
-                titulo:
-                    "Torres verificadas"
-            },
+            { titulo:"Torres verificadas" },
+            { titulo:"Garagens verificadas" },
+            { titulo:"Áreas externas verificadas" },
+            { titulo:"Áreas de lazer verificadas" },
 
             {
-                titulo:
-                    "Garagens verificadas"
-            },
-
-            {
-                titulo:
-                    "Áreas externas verificadas"
-            },
-
-            {
-                titulo:
-                    "Áreas de lazer verificadas"
-            },
-
-            {
-                titulo:
-                    "Sem falha aparente",
-
+                titulo:"Situação registrada",
                 descricao:
-                    "Caso encontre falha, registre na observação."
+                    "Anote na observação qualquer falha encontrada."
             }
 
         ];
 
     }
 
-
-    /*
-       PORTAS E PORTÕES
-    */
 
     if (
         nome.includes(
@@ -2328,34 +1770,15 @@ function checklistZeladoria() {
 
         return [
 
-            {
-                titulo:
-                    "Portões verificados"
-            },
-
-            {
-                titulo:
-                    "Portas comuns verificadas"
-            },
-
-            {
-                titulo:
-                    "Fechamentos funcionando"
-            },
-
-            {
-                titulo:
-                    "Sem danos aparentes"
-            }
+            { titulo:"Portões verificados" },
+            { titulo:"Portas comuns verificadas" },
+            { titulo:"Fechamentos verificados" },
+            { titulo:"Danos aparentes verificados" }
 
         ];
 
     }
 
-
-    /*
-       VAZAMENTOS
-    */
 
     if (
         nome.includes(
@@ -2365,114 +1788,63 @@ function checklistZeladoria() {
 
         return [
 
-            {
-                titulo:
-                    "Áreas comuns verificadas"
-            },
-
-            {
-                titulo:
-                    "Garagens verificadas"
-            },
-
-            {
-                titulo:
-                    "Áreas técnicas visíveis verificadas"
-            },
-
-            {
-                titulo:
-                    "Sem água acumulada"
-            },
-
-            {
-                titulo:
-                    "Sem vazamento aparente"
-            }
+            { titulo:"Áreas comuns verificadas" },
+            { titulo:"Garagens verificadas" },
+            { titulo:"Áreas técnicas visíveis verificadas" },
+            { titulo:"Água acumulada verificada" },
+            { titulo:"Vazamentos aparentes verificados" }
 
         ];
 
     }
 
 
-    /*
-       CONSERVAÇÃO
-    */
-
     if (
-        nome.includes(
-            "conservação"
-        )
+        nome.includes("conservação")
         ||
-        nome.includes(
-            "conservacao"
-        )
+        nome.includes("conservacao")
     ) {
 
         return [
 
-            {
-                titulo:
-                    "Áreas comuns verificadas"
-            },
-
-            {
-                titulo:
-                    "Sem objetos abandonados"
-            },
-
-            {
-                titulo:
-                    "Sem obstruções aparentes"
-            },
-
-            {
-                titulo:
-                    "Sem danos aparentes"
-            },
-
-            {
-                titulo:
-                    "Sem situação de risco aparente"
-            }
+            { titulo:"Áreas comuns verificadas" },
+            { titulo:"Objetos abandonados verificados" },
+            { titulo:"Obstruções verificadas" },
+            { titulo:"Danos aparentes verificados" },
+            { titulo:"Situações de risco verificadas" }
 
         ];
 
     }
 
 
-    /*
-       PADRÃO ZELADORIA
-    */
-
     return [
 
-        {
-            titulo:
-                "Área limpa"
-        },
-
-        {
-            titulo:
-                "Resíduos recolhidos"
-        },
-
-        {
-            titulo:
-                "Acesso desobstruído"
-        },
-
-        {
-            titulo:
-                "Local organizado"
-        },
-
-        {
-            titulo:
-                "Inspeção visual realizada"
-        }
+        { titulo:"Área limpa" },
+        { titulo:"Resíduos recolhidos" },
+        { titulo:"Acesso desobstruído" },
+        { titulo:"Local organizado" },
+        { titulo:"Inspeção visual realizada" }
 
     ];
+
+}
+
+
+
+/* =====================================================
+   AVISO
+===================================================== */
+
+function mostrarAviso(
+    texto
+) {
+
+    specialNotice.textContent =
+        texto;
+
+    specialNotice.style.display =
+        "block";
 
 }
 
@@ -2488,23 +1860,13 @@ function carregarChecklist() {
         "none";
 
 
-    let itens;
-
-
-    if (
+    const itens =
         tipoAtividade ===
         "zeladoria"
-    ) {
-
-        itens =
-            checklistZeladoria();
-
-    } else {
-
-        itens =
-            checklistLimpeza();
-
-    }
+        ?
+        checklistZeladoria()
+        :
+        checklistLimpeza();
 
 
     checklistContainer.innerHTML =
@@ -2512,10 +1874,7 @@ function carregarChecklist() {
 
 
     itens.forEach(
-        (
-            item,
-            index
-        ) => {
+        (item,index) => {
 
             const label =
                 document.createElement(
@@ -2564,9 +1923,10 @@ function carregarChecklist() {
             `;
 
 
-            checklistContainer.appendChild(
-                label
-            );
+            checklistContainer
+                .appendChild(
+                    label
+                );
 
         }
     );
@@ -2594,8 +1954,43 @@ photoInput.addEventListener(
         }
 
 
-        fotoSelecionada =
-            true;
+        if (
+            !arquivo.type.startsWith(
+                "image/"
+            )
+        ) {
+
+            mostrarErro(
+                "Selecione uma imagem válida."
+            );
+
+            this.value =
+                "";
+
+            return;
+
+        }
+
+
+        if (
+            arquivo.size >
+            10 * 1024 * 1024
+        ) {
+
+            mostrarErro(
+                "A foto deve ter no máximo 10 MB."
+            );
+
+            this.value =
+                "";
+
+            return;
+
+        }
+
+
+        arquivoFoto =
+            arquivo;
 
 
         if (
@@ -2636,8 +2031,17 @@ photoInput.addEventListener(
 
 function removerFoto() {
 
-    fotoSelecionada =
-        false;
+    if (
+        enviando
+    ) {
+
+        return;
+
+    }
+
+
+    arquivoFoto =
+        null;
 
 
     photoInput.value =
@@ -2690,67 +2094,379 @@ observation.addEventListener(
 
 
 /* =====================================================
-   CONCLUIR
+   NOME SEGURO PARA ARQUIVO
 ===================================================== */
 
-function concluirAtividade() {
+function limparNome(
+    texto
+) {
 
-    esconderErro();
+    return String(texto)
+
+        .normalize("NFD")
+
+        .replace(
+            /[\u0300-\u036f]/g,
+            ""
+        )
+
+        .toLowerCase()
+
+        .replace(
+            /[^a-z0-9]+/g,
+            "-"
+        )
+
+        .replace(
+            /^-+|-+$/g,
+            "");
+
+}
 
 
-    const checkboxes =
-        [
-            ...document.querySelectorAll(
-                ".check"
-            )
-        ];
 
+/* =====================================================
+   EXTENSÃO DA FOTO
+===================================================== */
 
-    const marcados =
-        checkboxes.filter(
-            item =>
-                item.checked
-        );
+function obterExtensao(
+    arquivo
+) {
+
+    const nome =
+        arquivo.name || "";
 
 
     if (
-        marcados.length !==
-        checkboxes.length
+        nome.includes(".")
     ) {
 
-        mostrarErro(
-            "Conclua todos os itens do checklist."
-        );
+        const extensao =
+            nome
+            .split(".")
+            .pop()
+            .toLowerCase();
 
-        return;
+
+        if (
+            extensao &&
+            extensao.length <= 5
+        ) {
+
+            return extensao;
+
+        }
 
     }
 
 
     if (
-        !fotoSelecionada
+        arquivo.type ===
+        "image/png"
     ) {
 
-        mostrarErro(
-            "É necessário registrar uma foto para concluir a atividade."
-        );
-
-        return;
+        return "png";
 
     }
 
+
+    if (
+        arquivo.type ===
+        "image/webp"
+    ) {
+
+        return "webp";
+
+    }
+
+
+    if (
+        arquivo.type ===
+        "image/heic"
+    ) {
+
+        return "heic";
+
+    }
+
+
+    return "jpg";
+
+}
+
+
+
+/* =====================================================
+   UPLOAD FOTO
+===================================================== */
+
+async function enviarFoto() {
+
+    const extensao =
+        obterExtensao(
+            arquivoFoto
+        );
+
+
+    const nomeLocal =
+        limparNome(
+            local
+        )
+        ||
+        "atividade";
+
+
+    const pastaTipo =
+        tipoAtividade ===
+        "zeladoria"
+        ?
+        "zeladoria"
+        :
+        "limpeza";
+
+
+    const nomeArquivo =
+        Date.now()
+        +
+        "-"
+        +
+        nomeLocal
+        +
+        "."
+        +
+        extensao;
+
+
+    const caminho =
+        pastaTipo
+        +
+        "/"
+        +
+        usuario.matricula
+        +
+        "/"
+        +
+        nomeArquivo;
+
+
+    const {
+        error
+    } =
+        await db
+        .storage
+        .from(
+            "fotos-atividades"
+        )
+        .upload(
+            caminho,
+            arquivoFoto,
+            {
+                cacheControl:"3600",
+                upsert:false,
+                contentType:
+                    arquivoFoto.type
+            }
+        );
+
+
+    if (error) {
+
+        throw new Error(
+            "Erro ao enviar a foto: "
+            +
+            error.message
+        );
+
+    }
+
+
+    const {
+        data
+    } =
+        db
+        .storage
+        .from(
+            "fotos-atividades"
+        )
+        .getPublicUrl(
+            caminho
+        );
+
+
+    if (
+        !data ||
+        !data.publicUrl
+    ) {
+
+        throw new Error(
+            "Não foi possível gerar o endereço da foto."
+        );
+
+    }
+
+
+    return data.publicUrl;
+
+}
+
+
+
+/* =====================================================
+   SALVAR NO SUPABASE
+===================================================== */
+
+async function salvarAtividadeSupabase(
+    fotoURL,
+    itensChecklist
+) {
 
     const agora =
         new Date();
 
 
-    const data =
+    /*
+       YYYY-MM-DD no horário local.
+    */
+
+    const ano =
+        agora.getFullYear();
+
+
+    const mes =
+        String(
+            agora.getMonth() + 1
+        )
+        .padStart(
+            2,
+            "0"
+        );
+
+
+    const dia =
+        String(
+            agora.getDate()
+        )
+        .padStart(
+            2,
+            "0"
+        );
+
+
+    const dataBanco =
+        `${ano}-${mes}-${dia}`;
+
+
+    const horaBanco =
+        agora
+        .toTimeString()
+        .slice(
+            0,
+            8
+        );
+
+
+    const registro = {
+
+        tipo:
+            tipoAtividade,
+
+        condominio:
+            "Reserva Igara",
+
+        torre:
+            tipoAtividade ===
+            "zeladoria"
+            ?
+            null
+            :
+            torre,
+
+        local:
+            local,
+
+        colaborador:
+            usuario.nome,
+
+        matricula:
+            usuario.matricula,
+
+        cargo:
+            usuario.cargo,
+
+        checklist:
+            itensChecklist,
+
+        observacao:
+            observation
+            .value
+            .trim()
+            ||
+            null,
+
+        foto_url:
+            fotoURL,
+
+        data:
+            dataBanco,
+
+        hora:
+            horaBanco
+
+    };
+
+
+    const {
+        data,
+        error
+    } =
+        await db
+        .from(
+            "atividades"
+        )
+        .insert(
+            registro
+        )
+        .select()
+        .single();
+
+
+    if (error) {
+
+        throw new Error(
+            "Erro ao registrar a atividade: "
+            +
+            error.message
+        );
+
+    }
+
+
+    return data;
+
+}
+
+
+
+/* =====================================================
+   LOCALSTORAGE
+===================================================== */
+
+function salvarCopiaLocal(
+    atividade,
+    fotoURL
+) {
+
+    const agora =
+        new Date();
+
+
+    const dataBR =
         agora.toLocaleDateString(
             "pt-BR"
         );
 
 
-    const hora =
+    const horaBR =
         agora.toLocaleTimeString(
             "pt-BR",
             {
@@ -2768,27 +2484,25 @@ function concluirAtividade() {
         ) || [];
 
 
-    /*
-       Chave agora inclui data.
-
-       Assim a atividade de hoje
-       não fica concluída para sempre.
-    */
-
     const chave =
-        data +
-        "|" +
-        usuario.matricula +
-        "|" +
-        torre +
-        "|" +
+        dataBR
+        +
+        "|"
+        +
+        usuario.matricula
+        +
+        "|"
+        +
+        torre
+        +
+        "|"
+        +
         local;
 
 
     /*
-       Remove eventual registro
-       duplicado da mesma atividade
-       no mesmo dia.
+       Remove a conclusão local anterior
+       da mesma atividade no mesmo dia.
     */
 
     concluidos =
@@ -2814,40 +2528,13 @@ function concluirAtividade() {
         );
 
 
-    const itensChecklist =
-        checkboxes.map(
-            checkbox => {
-
-                const label =
-                    checkbox
-                    .closest(
-                        ".check-item"
-                    )
-                    .querySelector(
-                        ".check-label strong"
-                    )
-                    .textContent
-                    .trim();
-
-
-                return {
-
-                    item:
-                        label,
-
-                    concluido:
-                        checkbox.checked
-
-                };
-
-            }
-        );
-
-
-    const registro = {
+    concluidos.push({
 
         chave:
             chave,
+
+        supabase_id:
+            atividade.id,
 
         tipo:
             tipoAtividade,
@@ -2856,6 +2543,11 @@ function concluirAtividade() {
             "Reserva Igara",
 
         torre:
+            tipoAtividade ===
+            "zeladoria"
+            ?
+            "Reserva Igara"
+            :
             torre,
 
         local:
@@ -2871,19 +2563,10 @@ function concluirAtividade() {
             usuario.cargo,
 
         data:
-            data,
+            dataBR,
 
         hora:
-            hora,
-
-        timestamp:
-            agora.toISOString(),
-
-        checklist:
-            itensChecklist,
-
-        totalChecklist:
-            checkboxes.length,
+            horaBR,
 
         observacao:
             observation
@@ -2891,14 +2574,12 @@ function concluirAtividade() {
             .trim(),
 
         foto:
-            true
+            true,
 
-    };
+        foto_url:
+            fotoURL
 
-
-    concluidos.push(
-        registro
-    );
+    });
 
 
     localStorage.setItem(
@@ -2908,48 +2589,236 @@ function concluirAtividade() {
         )
     );
 
-
-    /*
-       IMPORTANTE:
-
-       Por enquanto salvamos somente
-       que existe uma foto.
-
-       Quando entrarmos no Supabase,
-       o arquivo real será enviado
-       para o Storage e teremos
-       foto_url.
-    */
+}
 
 
-    document
-        .getElementById(
-            "successText"
-        )
-        .textContent =
-            local +
-            " foi concluído às " +
-            hora +
-            ".";
+
+/* =====================================================
+   CONCLUIR ATIVIDADE
+===================================================== */
+
+async function concluirAtividade() {
+
+    if (
+        enviando
+    ) {
+
+        return;
+
+    }
 
 
-    document
-        .getElementById(
-            "successOverlay"
-        )
-        .style.display =
-            "flex";
+    esconderErro();
 
 
-    setTimeout(
-        () => {
+    const checkboxes =
+        [
+            ...document.querySelectorAll(
+                ".check"
+            )
+        ];
 
-            window.location.href =
-                "colaborador.html";
 
-        },
-        1500
-    );
+    if (
+        checkboxes.length === 0
+    ) {
+
+        mostrarErro(
+            "Não foi possível carregar o checklist."
+        );
+
+        return;
+
+    }
+
+
+    const marcados =
+        checkboxes.filter(
+            item =>
+                item.checked
+        );
+
+
+    if (
+        marcados.length !==
+        checkboxes.length
+    ) {
+
+        mostrarErro(
+            "Conclua todos os itens do checklist."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        !arquivoFoto
+    ) {
+
+        mostrarErro(
+            "É necessário tirar uma foto para concluir a atividade."
+        );
+
+        return;
+
+    }
+
+
+    const itensChecklist =
+        checkboxes.map(
+            checkbox => {
+
+                const titulo =
+                    checkbox
+                    .closest(
+                        ".check-item"
+                    )
+                    .querySelector(
+                        ".check-label strong"
+                    )
+                    .textContent
+                    .trim();
+
+
+                return {
+
+                    item:
+                        titulo,
+
+                    concluido:
+                        true
+
+                };
+
+            }
+        );
+
+
+    enviando =
+        true;
+
+
+    finishButton.disabled =
+        true;
+
+
+    finishButton.textContent =
+        "ENVIANDO...";
+
+
+    uploadStatus.style.display =
+        "block";
+
+
+    try {
+
+        /*
+           1. FOTO
+        */
+
+        uploadStatus.textContent =
+            "📷 Enviando foto...";
+
+
+        const fotoURL =
+            await enviarFoto();
+
+
+        /*
+           2. BANCO
+        */
+
+        uploadStatus.textContent =
+            "☁️ Registrando atividade...";
+
+
+        const atividade =
+            await salvarAtividadeSupabase(
+                fotoURL,
+                itensChecklist
+            );
+
+
+        /*
+           3. CÓPIA LOCAL PARA
+              PROGRESSO IMEDIATO
+        */
+
+        salvarCopiaLocal(
+            atividade,
+            fotoURL
+        );
+
+
+        /*
+           4. SUCESSO
+        */
+
+        uploadStatus.style.display =
+            "none";
+
+
+        document
+            .getElementById(
+                "successText"
+            )
+            .textContent =
+                local
+                +
+                " foi registrado e enviado para a gestão.";
+
+
+        document
+            .getElementById(
+                "successOverlay"
+            )
+            .style.display =
+                "flex";
+
+
+        setTimeout(
+            () => {
+
+                window.location.href =
+                    "colaborador.html";
+
+            },
+            1600
+        );
+
+
+    } catch (erro) {
+
+        console.error(
+            erro
+        );
+
+
+        enviando =
+            false;
+
+
+        finishButton.disabled =
+            false;
+
+
+        finishButton.textContent =
+            "✓ CONCLUIR ATIVIDADE";
+
+
+        uploadStatus.style.display =
+            "none";
+
+
+        mostrarErro(
+            erro.message
+            ||
+            "Não foi possível enviar a atividade."
+        );
+
+    }
 
 }
 
@@ -2979,6 +2848,7 @@ function mostrarErro(
 }
 
 
+
 function esconderErro() {
 
     errorMessage.style.display =
@@ -2989,7 +2859,7 @@ function esconderErro() {
 
 
 /* =====================================================
-   REPORTAR PROBLEMA
+   REPORTAR
 ===================================================== */
 
 function problemaEmConstrucao() {
@@ -3008,6 +2878,15 @@ function problemaEmConstrucao() {
 
 function voltar() {
 
+    if (
+        enviando
+    ) {
+
+        return;
+
+    }
+
+
     window.location.href =
         "colaborador.html";
 
@@ -3024,5 +2903,4 @@ carregarChecklist();
 </script>
 
 </body>
-
 </html>
