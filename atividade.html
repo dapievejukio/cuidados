@@ -2,861 +2,843 @@
 <html lang="pt-BR">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Registrar atividade — CUIDADOS</title>
-
-    <meta name="theme-color" content="#12355b">
-
-    <style>
-        :root {
-            --primary: #12355b;
-            --primary-dark: #0b2745;
-            --primary-light: #eaf2fb;
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Atividade — CUIDADOS</title>
+
+<meta
+    name="theme-color"
+    content="#12355b"
+>
+
+<style>
+
+:root {
+    --primary:#12355b;
+    --primary-dark:#0b2745;
+    --primary-light:#eaf2fb;
+
+    --green:#178c58;
+    --green-light:#e8f6ef;
+
+    --yellow:#d89b19;
+    --yellow-light:#fff4d6;
+
+    --red:#d94b4b;
+    --red-light:#fdecec;
+
+    --text:#17202a;
+    --muted:#687483;
+
+    --background:#f4f7fa;
+    --card:#ffffff;
+    --border:#e2e8ef;
+
+    --shadow:
+        0 8px 25px
+        rgba(20,45,75,.07);
+}
+
+* {
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body {
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
+
+    background:var(--background);
+    color:var(--text);
+
+    min-height:100vh;
+}
+
+button,
+input,
+textarea {
+    font-family:inherit;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary-dark),
+            var(--primary)
+        );
+
+    color:white;
+
+    padding:
+        calc(18px + env(safe-area-inset-top))
+        18px
+        34px;
+}
+
+.header-content {
+    max-width:720px;
+    margin:auto;
+}
 
-            --green: #178c58;
-            --green-light: #e8f6ef;
+.topbar {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
 
-            --yellow: #d89b19;
-            --yellow-light: #fff5d9;
-
-            --red: #d94b4b;
-            --red-light: #fdecec;
-
-            --text: #17202a;
-            --muted: #687483;
+.back {
+    width:42px;
+    height:42px;
 
-            --background: #f4f7fa;
-            --card: #ffffff;
-            --border: #e2e8ef;
+    border:0;
+    border-radius:13px;
 
-            --shadow: 0 10px 30px rgba(20,45,75,.08);
-            --radius: 20px;
-        }
+    background:
+        rgba(255,255,255,.14);
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+    color:white;
 
-        body {
-            font-family:
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                Roboto,
-                Helvetica,
-                Arial,
-                sans-serif;
+    font-size:20px;
+    cursor:pointer;
+}
 
-            background: var(--background);
-            color: var(--text);
+.brand {
+    text-align:right;
+}
 
-            min-height: 100vh;
-        }
+.brand strong {
+    display:block;
+    font-size:14px;
+}
 
-        button,
-        textarea,
-        input {
-            font-family: inherit;
-        }
+.brand small {
+    display:block;
+    margin-top:2px;
+    opacity:.7;
+    font-size:9px;
+}
 
-        /* ==========================
-           HEADER
-        ========================== */
+.header-title {
+    margin-top:25px;
+}
 
-        header {
-            background:
-                linear-gradient(
-                    135deg,
-                    var(--primary-dark),
-                    var(--primary)
-                );
+.header-title small {
+    display:block;
+    opacity:.7;
+    font-size:9px;
+    text-transform:uppercase;
+}
 
-            color: white;
+.header-title h1 {
+    margin-top:5px;
+    font-size:25px;
+}
 
-            padding:
-                calc(14px + env(safe-area-inset-top))
-                18px
-                32px;
-        }
+.header-title p {
+    margin-top:6px;
+    opacity:.72;
+    font-size:10px;
+}
 
-        .header-content {
-            max-width: 720px;
-            margin: auto;
-        }
 
-        .topbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
+/* =========================
+   MAIN
+========================= */
 
-        .back-button {
-            border: 0;
+main {
+    max-width:720px;
+    margin:-15px auto 60px;
+    padding:0 15px;
+}
 
-            width: 42px;
-            height: 42px;
 
-            border-radius: 13px;
+/* =========================
+   INFO
+========================= */
 
-            background: rgba(255,255,255,.13);
-            color: white;
+.info-card {
+    background:white;
 
-            font-size: 22px;
+    border-radius:19px;
 
-            cursor: pointer;
-        }
+    padding:15px;
 
-        .brand {
-            text-align: center;
-        }
+    box-shadow:var(--shadow);
 
-        .brand strong {
-            display: block;
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
 
-            font-size: 14px;
-            letter-spacing: .7px;
-        }
+.info-icon {
+    width:48px;
+    height:48px;
 
-        .brand small {
-            display: block;
+    flex-shrink:0;
 
-            margin-top: 2px;
+    border-radius:15px;
 
-            font-size: 10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-            opacity: .7;
-        }
+    background:var(--primary-light);
 
-        .employee {
-            width: 42px;
-            height: 42px;
+    font-size:22px;
+}
 
-            border-radius: 50%;
+.info-text {
+    flex:1;
+}
 
-            background: rgba(255,255,255,.14);
+.info-text strong {
+    display:block;
+    font-size:13px;
+}
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+.info-text span {
+    display:block;
+    margin-top:4px;
 
-            font-weight: 700;
-        }
+    color:var(--muted);
+    font-size:9px;
+}
 
-        .location-header {
-            margin-top: 27px;
-        }
+.type-tag {
+    padding:6px 9px;
 
-        .location-header small {
-            opacity: .72;
-            font-size: 12px;
-        }
+    border-radius:20px;
 
-        .location-header h1 {
-            font-size: 27px;
-            margin-top: 3px;
-        }
+    background:var(--primary-light);
+    color:var(--primary);
 
-        .location-header p {
-            margin-top: 5px;
+    font-size:8px;
+    font-weight:750;
+}
 
-            font-size: 12px;
 
-            opacity: .75;
-        }
+/* =========================
+   SEÇÕES
+========================= */
 
-        /* ==========================
-           MAIN
-        ========================== */
+.section {
+    margin-top:22px;
+}
 
-        main {
-            max-width: 720px;
+.section-title {
+    margin-bottom:10px;
+}
 
-            margin: -15px auto 60px;
+.section-title h2 {
+    font-size:15px;
+}
 
-            padding: 0 15px;
-        }
+.section-title p {
+    margin-top:3px;
 
-        .card {
-            background: white;
+    color:var(--muted);
 
-            border-radius: var(--radius);
+    font-size:9px;
+    line-height:1.5;
+}
 
-            box-shadow: var(--shadow);
 
-            padding: 19px;
+/* =========================
+   CHECKLIST
+========================= */
 
-            margin-bottom: 14px;
-        }
+.checklist {
+    background:white;
 
-        /* ==========================
-           IDENTIFICAÇÃO
-        ========================== */
+    border-radius:19px;
 
-        .identity {
-            display: flex;
-            align-items: center;
-            gap: 13px;
-        }
+    padding:5px 15px;
 
-        .identity-icon {
-            width: 49px;
-            height: 49px;
+    box-shadow:var(--shadow);
+}
 
-            border-radius: 15px;
+.check-item {
+    min-height:57px;
 
-            background: var(--primary-light);
+    display:flex;
+    align-items:center;
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+    gap:11px;
 
-            font-size: 23px;
-        }
+    border-bottom:
+        1px solid
+        var(--border);
 
-        .identity-info {
-            flex: 1;
-        }
+    cursor:pointer;
+}
 
-        .identity-info small {
-            color: var(--muted);
-            font-size: 10px;
-        }
+.check-item:last-child {
+    border-bottom:0;
+}
 
-        .identity-info strong {
-            display: block;
+.check-item input {
+    display:none;
+}
 
-            margin-top: 2px;
+.fake-check {
+    width:24px;
+    height:24px;
 
-            font-size: 14px;
-        }
+    flex-shrink:0;
 
-        .employee-tag {
-            background: var(--green-light);
-            color: var(--green);
+    border:
+        2px solid
+        #c7d0da;
 
-            border-radius: 20px;
+    border-radius:8px;
 
-            padding: 6px 9px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-            font-size: 9px;
-            font-weight: 700;
-        }
+    color:white;
 
-        /* ==========================
-           TITULOS
-        ========================== */
+    font-size:14px;
+    font-weight:800;
 
-        .section-title {
-            font-size: 16px;
-            font-weight: 700;
+    transition:.15s;
+}
 
-            margin-bottom: 4px;
-        }
+.check-item input:checked
++
+.fake-check {
+    border-color:var(--green);
+    background:var(--green);
+}
 
-        .section-description {
-            color: var(--muted);
+.check-item input:checked
++
+.fake-check::after {
+    content:"✓";
+}
 
-            font-size: 11px;
+.check-label {
+    flex:1;
+}
 
-            margin-bottom: 16px;
+.check-label strong {
+    display:block;
+    font-size:11px;
+}
 
-            line-height: 1.5;
-        }
+.check-label small {
+    display:block;
 
-        /* ==========================
-           CHECKLIST
-        ========================== */
+    margin-top:3px;
 
-        .check-item {
-            display: flex;
-            align-items: center;
+    color:var(--muted);
 
-            gap: 12px;
+    font-size:8px;
+    line-height:1.4;
+}
 
-            padding: 13px 2px;
 
-            border-bottom: 1px solid var(--border);
+/* =========================
+   ALERTA / INFORMAÇÃO
+========================= */
 
-            cursor: pointer;
-        }
+.notice {
+    padding:13px;
 
-        .check-item:last-child {
-            border-bottom: 0;
-        }
+    border-radius:15px;
 
-        .check-item input {
-            display: none;
-        }
+    background:var(--yellow-light);
 
-        .custom-check {
-            width: 25px;
-            height: 25px;
+    color:#7c5b0b;
 
-            flex-shrink: 0;
+    font-size:9px;
+    line-height:1.5;
 
-            border-radius: 8px;
+    margin-bottom:12px;
+}
 
-            border: 2px solid #ccd5de;
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+/* =========================
+   FOTO
+========================= */
 
-            transition: .2s;
-        }
+.photo-card {
+    background:white;
 
-        .check-item input:checked
-        + .custom-check {
-            background: var(--green);
-            border-color: var(--green);
-        }
+    border-radius:19px;
 
-        .check-item input:checked
-        + .custom-check::after {
-            content: "✓";
+    padding:15px;
 
-            color: white;
+    box-shadow:var(--shadow);
+}
 
-            font-size: 15px;
-            font-weight: 800;
-        }
+.photo-button {
+    width:100%;
+    min-height:100px;
 
-        .check-text {
-            flex: 1;
-        }
+    border:
+        2px dashed
+        #cbd5df;
 
-        .check-text strong {
-            display: block;
+    border-radius:16px;
 
-            font-size: 13px;
+    background:#f8fafc;
 
-            font-weight: 600;
-        }
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
 
-        .check-text small {
-            display: block;
+    cursor:pointer;
+}
 
-            color: var(--muted);
+.photo-button span {
+    font-size:26px;
+}
 
-            font-size: 10px;
+.photo-button strong {
+    margin-top:7px;
+    font-size:10px;
+}
 
-            margin-top: 2px;
-        }
+.photo-button small {
+    margin-top:4px;
+    color:var(--muted);
+    font-size:8px;
+}
 
-        /* ==========================
-           FOTO
-        ========================== */
+#photoInput {
+    display:none;
+}
 
-        .photo-box {
-            border: 2px dashed #cbd6e0;
+.preview-container {
+    display:none;
+    position:relative;
+}
 
-            border-radius: 17px;
+.preview-container img {
+    display:block;
 
-            padding: 23px 15px;
+    width:100%;
+    max-height:330px;
 
-            text-align: center;
+    object-fit:cover;
 
-            cursor: pointer;
+    border-radius:16px;
+}
 
-            background: #fafcfd;
+.remove-photo {
+    position:absolute;
 
-            transition: .2s;
-        }
+    top:10px;
+    right:10px;
 
-        .photo-box:active {
-            transform: scale(.99);
-        }
+    width:36px;
+    height:36px;
 
-        .photo-icon {
-            width: 51px;
-            height: 51px;
+    border:0;
+    border-radius:50%;
 
-            border-radius: 50%;
+    background:
+        rgba(0,0,0,.65);
 
-            margin: auto;
+    color:white;
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+    font-size:16px;
+    cursor:pointer;
+}
 
-            background: var(--primary-light);
 
-            font-size: 23px;
-        }
+/* =========================
+   OBSERVAÇÃO
+========================= */
 
-        .photo-box strong {
-            display: block;
+textarea {
+    width:100%;
+    min-height:100px;
 
-            margin-top: 10px;
+    resize:vertical;
 
-            font-size: 13px;
-        }
+    border:
+        1px solid
+        var(--border);
 
-        .photo-box span {
-            display: block;
+    border-radius:16px;
 
-            margin-top: 4px;
+    padding:13px;
 
-            color: var(--muted);
+    background:white;
 
-            font-size: 10px;
-        }
+    outline:none;
 
-        #photoInput {
-            display: none;
-        }
+    font-size:11px;
 
-        .preview-container {
-            display: none;
+    box-shadow:var(--shadow);
+}
 
-            position: relative;
+textarea:focus {
+    border-color:var(--primary);
+}
 
-            margin-top: 14px;
-        }
+.counter {
+    margin-top:5px;
 
-        #photoPreview {
-            width: 100%;
+    text-align:right;
 
-            max-height: 380px;
+    color:var(--muted);
 
-            object-fit: cover;
+    font-size:8px;
+}
 
-            border-radius: 17px;
 
-            display: block;
-        }
+/* =========================
+   OCORRÊNCIA
+========================= */
 
-        .photo-label {
-            position: absolute;
+.problem-button {
+    width:100%;
 
-            left: 10px;
-            bottom: 10px;
+    padding:13px;
 
-            background: rgba(11,39,69,.88);
-            color: white;
+    border:
+        1px solid
+        #efc7c7;
 
-            padding: 7px 10px;
+    border-radius:14px;
 
-            border-radius: 20px;
+    background:var(--red-light);
 
-            font-size: 9px;
-        }
+    color:var(--red);
 
-        .remove-photo {
-            position: absolute;
+    font-size:9px;
+    font-weight:750;
 
-            right: 10px;
-            top: 10px;
+    cursor:pointer;
+}
 
-            width: 35px;
-            height: 35px;
 
-            border: 0;
+/* =========================
+   FINALIZAR
+========================= */
 
-            border-radius: 50%;
+.finish {
+    margin-top:22px;
+}
 
-            background: rgba(0,0,0,.65);
-            color: white;
+.finish-button {
+    width:100%;
 
-            cursor: pointer;
+    min-height:52px;
 
-            font-size: 16px;
-        }
+    border:0;
+    border-radius:15px;
 
-        /* ==========================
-           OBSERVAÇÃO
-        ========================== */
+    background:var(--green);
 
-        textarea {
-            width: 100%;
+    color:white;
 
-            min-height: 105px;
+    font-size:11px;
+    font-weight:800;
 
-            resize: vertical;
+    cursor:pointer;
 
-            border: 1px solid var(--border);
+    box-shadow:
+        0 8px 20px
+        rgba(23,140,88,.20);
+}
 
-            border-radius: 15px;
+.finish-button:disabled {
+    opacity:.5;
+    cursor:not-allowed;
+}
 
-            padding: 13px;
 
-            outline: none;
+/* =========================
+   ERRO
+========================= */
 
-            color: var(--text);
+.error {
+    display:none;
 
-            background: #fafbfc;
+    margin-top:10px;
 
-            font-size: 12px;
+    padding:11px;
 
-            line-height: 1.5;
-        }
+    border-radius:13px;
 
-        textarea:focus {
-            border-color: #a9bfd5;
-            background: white;
-        }
+    background:var(--red-light);
 
-        .counter {
-            text-align: right;
+    color:var(--red);
 
-            color: var(--muted);
+    text-align:center;
 
-            font-size: 9px;
+    font-size:9px;
+}
 
-            margin-top: 5px;
-        }
 
-        /* ==========================
-           ALERTA
-        ========================== */
+/* =========================
+   SUCESSO
+========================= */
 
-        .problem-button {
-            width: 100%;
+.success-overlay {
+    position:fixed;
 
-            border: 0;
+    inset:0;
 
-            border-radius: 15px;
+    z-index:999;
 
-            padding: 15px;
+    display:none;
 
-            background: var(--red-light);
-            color: var(--red);
+    align-items:center;
+    justify-content:center;
 
-            font-size: 12px;
-            font-weight: 700;
+    padding:20px;
 
-            cursor: pointer;
-        }
+    background:
+        rgba(10,30,50,.70);
 
-        /* ==========================
-           CONCLUIR
-        ========================== */
+    backdrop-filter:
+        blur(5px);
+}
 
-        .finish-area {
-            position: sticky;
+.success-card {
+    width:100%;
+    max-width:350px;
 
-            bottom: 0;
+    padding:30px 22px;
 
-            padding:
-                12px
-                0
-                calc(12px + env(safe-area-inset-bottom));
+    border-radius:23px;
 
-            background:
-                linear-gradient(
-                    to top,
-                    var(--background) 75%,
-                    transparent
-                );
-        }
+    background:white;
 
-        .finish-button {
-            width: 100%;
+    text-align:center;
+}
 
-            border: 0;
+.success-icon {
+    width:70px;
+    height:70px;
 
-            border-radius: 17px;
+    margin:auto;
 
-            padding: 17px;
+    border-radius:50%;
 
-            background: var(--green);
-            color: white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-            font-size: 13px;
-            font-weight: 750;
+    background:var(--green-light);
 
-            cursor: pointer;
+    color:var(--green);
 
-            box-shadow:
-                0 9px 22px rgba(23,140,88,.22);
-        }
+    font-size:32px;
+    font-weight:800;
+}
 
-        .finish-button:active {
-            transform: scale(.99);
-        }
+.success-card h2 {
+    margin-top:16px;
+    font-size:20px;
+}
 
-        /* ==========================
-           MENSAGENS
-        ========================== */
+.success-card p {
+    margin-top:8px;
 
-        .message {
-            display: none;
+    color:var(--muted);
 
-            border-radius: 14px;
+    font-size:10px;
+    line-height:1.5;
+}
 
-            padding: 13px;
+</style>
 
-            margin-bottom: 13px;
-
-            font-size: 11px;
-
-            line-height: 1.45;
-        }
-
-        .message-error {
-            background: var(--red-light);
-            color: #a82d2d;
-        }
-
-        /* ==========================
-           SUCESSO
-        ========================== */
-
-        .success-overlay {
-            display: none;
-
-            position: fixed;
-
-            inset: 0;
-
-            background: rgba(8,28,48,.72);
-
-            z-index: 999;
-
-            padding: 20px;
-
-            align-items: center;
-            justify-content: center;
-        }
-
-        .success-box {
-            width: 100%;
-            max-width: 380px;
-
-            background: white;
-
-            border-radius: 24px;
-
-            padding: 29px 22px;
-
-            text-align: center;
-
-            box-shadow:
-                0 25px 70px rgba(0,0,0,.25);
-        }
-
-        .success-icon {
-            width: 70px;
-            height: 70px;
-
-            border-radius: 50%;
-
-            margin: auto;
-
-            background: var(--green-light);
-            color: var(--green);
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            font-size: 33px;
-            font-weight: 800;
-        }
-
-        .success-box h2 {
-            margin-top: 16px;
-            font-size: 20px;
-        }
-
-        .success-box p {
-            color: var(--muted);
-
-            font-size: 11px;
-
-            margin-top: 8px;
-
-            line-height: 1.6;
-        }
-
-        .success-data {
-            margin-top: 17px;
-
-            padding: 13px;
-
-            border-radius: 14px;
-
-            background: #f5f7f9;
-
-            font-size: 11px;
-
-            line-height: 1.7;
-        }
-
-        .success-box button {
-            width: 100%;
-
-            margin-top: 18px;
-
-            border: 0;
-
-            border-radius: 15px;
-
-            padding: 14px;
-
-            background: var(--primary);
-            color: white;
-
-            font-weight: 700;
-
-            cursor: pointer;
-        }
-
-    </style>
 </head>
+
 
 <body>
 
+
 <header>
 
-    <div class="header-content">
+<div class="header-content">
 
-        <div class="topbar">
+    <div class="topbar">
 
-            <button
-                class="back-button"
-                onclick="voltar()"
-                aria-label="Voltar"
-            >
-                ‹
-            </button>
+        <button
+            class="back"
+            onclick="voltar()"
+        >
+            ‹
+        </button>
 
-            <div class="brand">
+        <div class="brand">
 
-                <strong>CUIDADOS</strong>
+            <strong>
+                CUIDADOS
+            </strong>
 
-                <small>
-                    Registrar atividade
-                </small>
-
-            </div>
-
-            <div class="employee">
-                D
-            </div>
-
-        </div>
-
-
-        <div class="location-header">
-
-            <small id="towerName">
-                Torre E
+            <small>
+                Reserva Igara
             </small>
-
-            <h1 id="locationName">
-                Carregando...
-            </h1>
-
-            <p>
-                Registre a execução da limpeza deste local.
-            </p>
 
         </div>
 
     </div>
+
+
+    <div class="header-title">
+
+        <small id="headerType">
+            ATIVIDADE
+        </small>
+
+        <h1 id="localTitle">
+            Carregando...
+        </h1>
+
+        <p id="locationSubtitle">
+            Reserva Igara
+        </p>
+
+    </div>
+
+</div>
 
 </header>
 
 
 <main>
 
-    <!-- RESPONSÁVEL -->
 
-    <div class="card identity">
+<!-- COLABORADOR -->
 
-        <div class="identity-icon">
-            👤
-        </div>
+<div class="info-card">
 
-        <div class="identity-info">
+    <div
+        class="info-icon"
+        id="userIcon"
+    >
+        👷
+    </div>
 
-            <small>
-                Responsável pela atividade
-            </small>
 
-            <strong>
-                Débora • #0001
-            </strong>
+    <div class="info-text">
 
-        </div>
+        <strong id="userName">
+            Colaborador
+        </strong>
 
-        <span class="employee-tag">
-            Auxiliar
+        <span id="userDescription">
+            Reserva Igara
         </span>
 
     </div>
 
 
-    <!-- ERRO -->
+    <span
+        class="type-tag"
+        id="typeTag"
+    >
+        ATIVIDADE
+    </span>
 
-    <div
-        class="message message-error"
-        id="errorMessage"
-    ></div>
-
-
-    <!-- CHECKLIST -->
-
-    <div class="card">
-
-        <div class="section-title">
-            Checklist de limpeza
-        </div>
-
-        <div class="section-description">
-            Marque os itens realizados antes de
-            concluir a atividade.
-        </div>
+</div>
 
 
-        <div id="checklistContainer"></div>
+
+<!-- CHECKLIST -->
+
+<section class="section">
+
+    <div class="section-title">
+
+        <h2>
+            Checklist
+        </h2>
+
+        <p id="checklistDescription">
+            Marque os itens conforme forem concluídos.
+        </p>
 
     </div>
 
 
-    <!-- FOTO -->
+    <div
+        id="specialNotice"
+        class="notice"
+        style="display:none;"
+    ></div>
 
-    <div class="card">
 
-        <div class="section-title">
-            Comprovação
-        </div>
+    <div
+        class="checklist"
+        id="checklist"
+    ></div>
 
-        <div class="section-description">
-            Registre uma foto do local após a limpeza.
-        </div>
+</section>
 
+
+
+<!-- FOTO -->
+
+<section class="section">
+
+    <div class="section-title">
+
+        <h2>
+            Registro fotográfico
+        </h2>
+
+        <p>
+            Tire uma foto do local após a conclusão.
+            A foto é obrigatória.
+        </p>
+
+    </div>
+
+
+    <div class="photo-card">
 
         <label
-            class="photo-box"
+            class="photo-button"
+            id="photoButton"
             for="photoInput"
-            id="photoBox"
         >
 
-            <div class="photo-icon">
+            <span>
                 📷
-            </div>
+            </span>
 
             <strong>
-                Tirar foto
+                TIRAR FOTO
             </strong>
 
-            <span>
-                Toque para abrir a câmera
-                ou selecionar uma imagem
-            </span>
+            <small>
+                Registrar situação final do local
+            </small>
 
         </label>
 
 
         <input
-            type="file"
             id="photoInput"
+            type="file"
             accept="image/*"
             capture="environment"
         >
@@ -872,15 +854,10 @@
                 alt="Foto da atividade"
             >
 
-            <span class="photo-label">
-                Foto da limpeza
-            </span>
-
             <button
                 class="remove-photo"
                 onclick="removerFoto()"
                 type="button"
-                aria-label="Remover foto"
             >
                 ×
             </button>
@@ -889,74 +866,85 @@
 
     </div>
 
+</section>
 
-    <!-- OBSERVAÇÃO -->
 
-    <div class="card">
 
-        <div class="section-title">
+<!-- OBSERVAÇÃO -->
+
+<section class="section">
+
+    <div class="section-title">
+
+        <h2>
             Observação
-        </div>
+        </h2>
 
-        <div class="section-description">
-            Opcional. Informe alguma situação
-            relevante encontrada durante o serviço.
-        </div>
-
-
-        <textarea
-            id="observation"
-            maxlength="300"
-            placeholder="Ex.: havia bastante sujeira próxima ao elevador..."
-            oninput="atualizarContador()"
-        ></textarea>
-
-
-        <div class="counter">
-            <span id="charCount">0</span>/300
-        </div>
+        <p>
+            Opcional. Informe algo relevante sobre a atividade.
+        </p>
 
     </div>
 
 
-    <!-- PROBLEMA -->
-
-    <div class="card">
-
-        <div class="section-title">
-            Encontrou algum problema?
-        </div>
-
-        <div class="section-description">
-            Abra uma ocorrência sem perder
-            o local que está sendo atendido.
-        </div>
+    <textarea
+        id="observation"
+        maxlength="300"
+        placeholder="Ex.: havia grande quantidade de folhas junto ao acesso..."
+    ></textarea>
 
 
-        <button
-            class="problem-button"
-            onclick="reportarProblema()"
-        >
-            ⚠️ REPORTAR OCORRÊNCIA
-        </button>
+    <div class="counter">
+
+        <span id="charCount">
+            0
+        </span>/300
 
     </div>
 
+</section>
 
-    <!-- CONCLUIR -->
 
-    <div class="finish-area">
 
-        <button
-            class="finish-button"
-            onclick="concluirAtividade()"
-        >
-            ✓ CONCLUIR LIMPEZA
-        </button>
+<!-- PROBLEMA -->
 
-    </div>
+<section class="section">
+
+    <button
+        class="problem-button"
+        onclick="problemaEmConstrucao()"
+        type="button"
+    >
+        ⚠️ REPORTAR PROBLEMA — EM CONSTRUÇÃO
+    </button>
+
+</section>
+
+
+
+<!-- FINALIZAR -->
+
+<div class="finish">
+
+    <button
+        class="finish-button"
+        onclick="concluirAtividade()"
+        id="finishButton"
+    >
+        ✓ CONCLUIR ATIVIDADE
+    </button>
+
+
+    <div
+        class="error"
+        id="errorMessage"
+    ></div>
+
+</div>
+
 
 </main>
+
 
 
 <!-- SUCESSO -->
@@ -966,308 +954,392 @@
     id="successOverlay"
 >
 
-    <div class="success-box">
+    <div class="success-card">
 
         <div class="success-icon">
             ✓
         </div>
 
         <h2>
-            Limpeza concluída
+            Atividade concluída
         </h2>
 
-        <p>
-            A atividade foi registrada
-            no histórico da Torre E.
+        <p id="successText">
+            O registro foi salvo com sucesso.
         </p>
-
-
-        <div
-            class="success-data"
-            id="successData"
-        ></div>
-
-
-        <button onclick="voltarPainel()">
-            VOLTAR PARA MINHA ROTINA
-        </button>
 
     </div>
 
 </div>
 
 
+
 <script>
 
-    /* =========================================
-       DADOS DO USUÁRIO
+/* =====================================================
+   SESSÃO
+===================================================== */
 
-       Temporários.
-       Depois virão do login/Supabase.
-    ========================================= */
+const sessao =
+    JSON.parse(
+        localStorage.getItem(
+            "usuarioLogado"
+        )
+    );
 
-    const colaborador = {
-        id: 1,
-        nome: "Débora",
-        matricula: "0001",
-        cargo: "Auxiliar de Limpeza"
+
+if (!sessao) {
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+
+/* =====================================================
+   PERFIS TEMPORÁRIOS
+
+   Depois isso virá do banco.
+===================================================== */
+
+const perfis = {
+
+    "0001": {
+
+        nome:
+            "Débora",
+
+        matricula:
+            "0001",
+
+        cargo:
+            "Auxiliar de Limpeza",
+
+        tipo:
+            "limpeza"
+
+    },
+
+
+    "0002": {
+
+        nome:
+            "Zelador",
+
+        matricula:
+            "0002",
+
+        cargo:
+            "Zelador",
+
+        tipo:
+            "zeladoria"
+
+    }
+
+};
+
+
+const usuario =
+    perfis[sessao.matricula]
+    ||
+    {
+
+        nome:
+            sessao.nome ||
+            "Colaborador",
+
+        matricula:
+            sessao.matricula ||
+            "",
+
+        cargo:
+            sessao.cargo ||
+            "Colaborador",
+
+        tipo:
+            localStorage.getItem(
+                "tipoAtividadeAtual"
+            ) || "limpeza"
+
     };
 
 
-    /* =========================================
-       LOCAL SELECIONADO
-    ========================================= */
 
-    const torre =
-        localStorage.getItem(
-            "torreSelecionada"
-        ) || "Torre E";
+/* =====================================================
+   LOCAL
+===================================================== */
 
-
-    const local =
-        localStorage.getItem(
-            "localSelecionado"
-        ) || "Térreo / Hall de entrada";
+const local =
+    localStorage.getItem(
+        "localSelecionado"
+    )
+    ||
+    "Atividade";
 
 
+const torre =
+    localStorage.getItem(
+        "torreSelecionada"
+    )
+    ||
+    "Reserva Igara";
+
+
+let tipoAtividade =
+    localStorage.getItem(
+        "tipoAtividadeAtual"
+    )
+    ||
+    usuario.tipo;
+
+
+/*
+Se o usuário for zelador,
+a atividade é obrigatoriamente
+de zeladoria.
+*/
+
+if (
+    usuario.tipo ===
+    "zeladoria"
+) {
+
+    tipoAtividade =
+        "zeladoria";
+
+}
+
+
+
+/* =====================================================
+   ELEMENTOS
+===================================================== */
+
+const localTitle =
     document.getElementById(
-        "towerName"
-    ).textContent = torre;
+        "localTitle"
+    );
 
 
+const locationSubtitle =
     document.getElementById(
-        "locationName"
-    ).textContent = local;
+        "locationSubtitle"
+    );
 
 
-    /* =========================================
-       CHECKLISTS POR TIPO DE LOCAL
-    ========================================= */
-
-    function obterChecklist() {
-
-        const nome =
-            local.toLowerCase();
+const userName =
+    document.getElementById(
+        "userName"
+    );
 
 
-        /* ABRIGO DE RESÍDUOS */
-
-        if (
-            nome.includes("resíduo") ||
-            nome.includes("lixo")
-        ) {
-
-            return [
-
-                {
-                    titulo: "Piso",
-                    descricao:
-                        "Piso limpo e sem resíduos"
-                },
-
-                {
-                    titulo: "Lixeiras",
-                    descricao:
-                        "Conferir limpeza e organização"
-                },
-
-                {
-                    titulo: "Resíduos",
-                    descricao:
-                        "Materiais corretamente acondicionados"
-                },
-
-                {
-                    titulo: "Sacos",
-                    descricao:
-                        "Conferir necessidade de reposição"
-                },
-
-                {
-                    titulo: "Porta e acesso",
-                    descricao:
-                        "Limpeza da porta e área de acesso"
-                }
-
-            ];
-
-        }
+const userDescription =
+    document.getElementById(
+        "userDescription"
+    );
 
 
-        /* ELEVADORES */
-
-        if (
-            nome.includes("elevador")
-        ) {
-
-            return [
-
-                {
-                    titulo: "Piso da cabine",
-                    descricao:
-                        "Limpeza completa do piso"
-                },
-
-                {
-                    titulo: "Espelho",
-                    descricao:
-                        "Sem manchas ou marcas"
-                },
-
-                {
-                    titulo: "Botoeiras",
-                    descricao:
-                        "Higienização dos comandos"
-                },
-
-                {
-                    titulo: "Portas internas",
-                    descricao:
-                        "Limpeza e remoção de marcas"
-                },
-
-                {
-                    titulo: "Paredes da cabine",
-                    descricao:
-                        "Conferir limpeza geral"
-                },
-
-                {
-                    titulo: "Trilhos e canaletas",
-                    descricao:
-                        "Remover sujeira aparente"
-                }
-
-            ];
-
-        }
+const userIcon =
+    document.getElementById(
+        "userIcon"
+    );
 
 
-        /* ESCADAS */
-
-        if (
-            nome.includes("escada")
-        ) {
-
-            return [
-
-                {
-                    titulo: "Degraus",
-                    descricao:
-                        "Varrer e limpar os degraus"
-                },
-
-                {
-                    titulo: "Patamares",
-                    descricao:
-                        "Limpeza dos patamares"
-                },
-
-                {
-                    titulo: "Corrimãos",
-                    descricao:
-                        "Higienização dos corrimãos"
-                },
-
-                {
-                    titulo: "Rodapés",
-                    descricao:
-                        "Remover poeira e sujeira"
-                },
-
-                {
-                    titulo: "Portas",
-                    descricao:
-                        "Conferir portas das escadas"
-                }
-
-            ];
-
-        }
+const typeTag =
+    document.getElementById(
+        "typeTag"
+    );
 
 
-        /* TÉRREO */
-
-        if (
-            nome.includes("térreo") ||
-            nome.includes("hall de entrada")
-        ) {
-
-            return [
-
-                {
-                    titulo: "Piso / Hall",
-                    descricao:
-                        "Limpeza completa do piso"
-                },
-
-                {
-                    titulo: "Rodapés",
-                    descricao:
-                        "Remover poeira e marcas"
-                },
-
-                {
-                    titulo: "Vidros",
-                    descricao:
-                        "Portas e vidros sem manchas"
-                },
-
-                {
-                    titulo: "Porta de entrada",
-                    descricao:
-                        "Limpeza da porta e puxadores"
-                },
-
-                {
-                    titulo: "Portas dos elevadores",
-                    descricao:
-                        "Remover marcas e sujeira"
-                },
-
-                {
-                    titulo: "Áreas de contato",
-                    descricao:
-                        "Higienizar pontos de contato"
-                }
-
-            ];
-
-        }
+const headerType =
+    document.getElementById(
+        "headerType"
+    );
 
 
-        /* ANDARES */
+const checklistContainer =
+    document.getElementById(
+        "checklist"
+    );
+
+
+const specialNotice =
+    document.getElementById(
+        "specialNotice"
+    );
+
+
+const photoInput =
+    document.getElementById(
+        "photoInput"
+    );
+
+
+const photoPreview =
+    document.getElementById(
+        "photoPreview"
+    );
+
+
+const previewContainer =
+    document.getElementById(
+        "previewContainer"
+    );
+
+
+const photoButton =
+    document.getElementById(
+        "photoButton"
+    );
+
+
+const observation =
+    document.getElementById(
+        "observation"
+    );
+
+
+const charCount =
+    document.getElementById(
+        "charCount"
+    );
+
+
+const errorMessage =
+    document.getElementById(
+        "errorMessage"
+    );
+
+
+let fotoSelecionada =
+    false;
+
+
+let previewURL =
+    null;
+
+
+
+/* =====================================================
+   CABEÇALHO
+===================================================== */
+
+localTitle.textContent =
+    local;
+
+
+userName.textContent =
+    usuario.nome;
+
+
+userDescription.textContent =
+    usuario.cargo +
+    " • #" +
+    usuario.matricula;
+
+
+if (
+    tipoAtividade ===
+    "zeladoria"
+) {
+
+    headerType.textContent =
+        "ZELADORIA";
+
+    typeTag.textContent =
+        "ZELADORIA";
+
+    userIcon.textContent =
+        "🛠️";
+
+    locationSubtitle.textContent =
+        "Reserva Igara • Área comum";
+
+} else {
+
+    headerType.textContent =
+        "LIMPEZA";
+
+    typeTag.textContent =
+        "LIMPEZA";
+
+    userIcon.textContent =
+        "🧹";
+
+    locationSubtitle.textContent =
+        torre +
+        " • Reserva Igara";
+
+}
+
+
+
+/* =====================================================
+   CHECKLIST LIMPEZA
+===================================================== */
+
+function checklistLimpeza() {
+
+    const nome =
+        local.toLowerCase();
+
+
+    /*
+       ABRIGO DE RESÍDUOS
+    */
+
+    if (
+        nome.includes(
+            "abrigo"
+        )
+        ||
+        nome.includes(
+            "resíduo"
+        )
+    ) {
 
         return [
 
             {
-                titulo: "Piso / Hall",
+                titulo:
+                    "Piso",
+
                 descricao:
-                    "Limpeza completa do piso"
+                    "Piso limpo e sem resíduos soltos."
             },
 
             {
-                titulo: "Rodapés",
+                titulo:
+                    "Lixeiras",
+
                 descricao:
-                    "Remover poeira e marcas"
+                    "Lixeiras limpas e organizadas."
             },
 
             {
-                titulo: "Portas dos elevadores",
+                titulo:
+                    "Resíduos",
+
                 descricao:
-                    "Limpeza das portas externas"
+                    "Resíduos corretamente acondicionados."
             },
 
             {
-                titulo: "Áreas de contato",
+                titulo:
+                    "Sacos",
+
                 descricao:
-                    "Higienizar pontos de contato"
+                    "Sacos colocados ou substituídos quando necessário."
             },
 
             {
-                titulo: "Escada do andar",
+                titulo:
+                    "Porta e acesso",
+
                 descricao:
-                    "Conferir e limpar acesso à escada"
+                    "Acesso limpo e desobstruído."
             }
 
         ];
@@ -1275,22 +1347,1175 @@
     }
 
 
-    /* =========================================
-       RENDERIZAR CHECKLIST
-    ========================================= */
+    /*
+       ELEVADORES
+    */
 
-    const checklist =
-        obterChecklist();
+    if (
+        nome.includes(
+            "elevador"
+        )
+    ) {
+
+        return [
+
+            {
+                titulo:
+                    "Piso da cabine"
+            },
+
+            {
+                titulo:
+                    "Espelho"
+            },
+
+            {
+                titulo:
+                    "Botoeiras",
+
+                descricao:
+                    "Painel e áreas de contato."
+            },
+
+            {
+                titulo:
+                    "Portas internas"
+            },
+
+            {
+                titulo:
+                    "Paredes da cabine"
+            },
+
+            {
+                titulo:
+                    "Trilhos e canaletas"
+            }
+
+        ];
+
+    }
 
 
-    const checklistContainer =
-        document.getElementById(
-            "checklistContainer"
-        );
+    /*
+       ESCADAS
+    */
+
+    if (
+        nome.includes(
+            "escada"
+        )
+    ) {
+
+        return [
+
+            {
+                titulo:
+                    "Degraus"
+            },
+
+            {
+                titulo:
+                    "Patamares"
+            },
+
+            {
+                titulo:
+                    "Corrimãos"
+            },
+
+            {
+                titulo:
+                    "Rodapés"
+            },
+
+            {
+                titulo:
+                    "Portas"
+            }
+
+        ];
+
+    }
 
 
-    checklist.forEach(
-        (item, index) => {
+    /*
+       TÉRREO
+    */
+
+    if (
+        nome.includes(
+            "térreo"
+        )
+        ||
+        nome.includes(
+            "terreo"
+        )
+        ||
+        nome.includes(
+            "hall de entrada"
+        )
+    ) {
+
+        return [
+
+            {
+                titulo:
+                    "Piso / Hall"
+            },
+
+            {
+                titulo:
+                    "Rodapés"
+            },
+
+            {
+                titulo:
+                    "Vidros"
+            },
+
+            {
+                titulo:
+                    "Porta de entrada"
+            },
+
+            {
+                titulo:
+                    "Portas dos elevadores"
+            },
+
+            {
+                titulo:
+                    "Áreas de contato"
+            }
+
+        ];
+
+    }
+
+
+    /*
+       ACADEMIA
+    */
+
+    if (
+        nome.includes(
+            "academia"
+        )
+    ) {
+
+        return [
+
+            {
+                titulo:
+                    "Piso"
+            },
+
+            {
+                titulo:
+                    "Espelhos"
+            },
+
+            {
+                titulo:
+                    "Equipamentos",
+
+                descricao:
+                    "Limpeza externa e superfícies de contato."
+            },
+
+            {
+                titulo:
+                    "Áreas de contato"
+            },
+
+            {
+                titulo:
+                    "Lixeiras"
+            }
+
+        ];
+
+    }
+
+
+    /*
+       BANHEIRO
+    */
+
+    if (
+        nome.includes(
+            "banheiro"
+        )
+    ) {
+
+        return [
+
+            {
+                titulo:
+                    "Piso"
+            },
+
+            {
+                titulo:
+                    "Vasos sanitários"
+            },
+
+            {
+                titulo:
+                    "Pias"
+            },
+
+            {
+                titulo:
+                    "Espelhos"
+            },
+
+            {
+                titulo:
+                    "Lixeiras"
+            },
+
+            {
+                titulo:
+                    "Reposição de materiais"
+            },
+
+            {
+                titulo:
+                    "Áreas de contato"
+            }
+
+        ];
+
+    }
+
+
+    /*
+       ANDARES / PADRÃO
+    */
+
+    return [
+
+        {
+            titulo:
+                "Piso / Hall"
+        },
+
+        {
+            titulo:
+                "Rodapés"
+        },
+
+        {
+            titulo:
+                "Portas dos elevadores"
+        },
+
+        {
+            titulo:
+                "Áreas de contato"
+        }
+
+    ];
+
+}
+
+
+
+/* =====================================================
+   CHECKLIST ZELADORIA
+===================================================== */
+
+function checklistZeladoria() {
+
+    const nome =
+        local.toLowerCase();
+
+
+    /*
+       GARAGENS
+    */
+
+    if (
+        nome.includes(
+            "garagem"
+        )
+    ) {
+
+        specialNotice.style.display =
+            "block";
+
+        specialNotice.textContent =
+            "📅 Atividade semanal. Faça a limpeza do pavimento programado para hoje.";
+
+
+        return [
+
+            {
+                titulo:
+                    "Circulação limpa",
+
+                descricao:
+                    "Varrer e recolher resíduos das áreas de circulação."
+            },
+
+            {
+                titulo:
+                    "Vagas verificadas",
+
+                descricao:
+                    "Recolher papéis, plásticos, folhas e resíduos."
+            },
+
+            {
+                titulo:
+                    "Cantos e laterais",
+
+                descricao:
+                    "Verificar acúmulo de sujeira junto às paredes e cantos."
+            },
+
+            {
+                titulo:
+                    "Acessos",
+
+                descricao:
+                    "Manter acessos e circulação desobstruídos."
+            },
+
+            {
+                titulo:
+                    "Resíduos recolhidos"
+            }
+
+        ];
+
+    }
+
+
+    /*
+       RUA LATERAL
+    */
+
+    if (
+        nome.includes(
+            "rua lateral"
+        )
+    ) {
+
+        specialNotice.style.display =
+            "block";
+
+        specialNotice.textContent =
+            "📅 Limpeza semanal da rua lateral e circulação externa.";
+
+
+        return [
+
+            {
+                titulo:
+                    "Via limpa"
+            },
+
+            {
+                titulo:
+                    "Folhas recolhidas"
+            },
+
+            {
+                titulo:
+                    "Papéis e plásticos recolhidos"
+            },
+
+            {
+                titulo:
+                    "Meio-fio verificado"
+            },
+
+            {
+                titulo:
+                    "Circulação desobstruída"
+            }
+
+        ];
+
+    }
+
+
+    /*
+       ENTORNO DAS TORRES
+    */
+
+    if (
+        nome.includes(
+            "entorno torre"
+        )
+    ) {
+
+        return [
+
+            {
+                titulo:
+                    "Gramado sem resíduos",
+
+                descricao:
+                    "Recolher lixo, papéis e objetos. Não inclui jardinagem."
+            },
+
+            {
+                titulo:
+                    "Calçada limpa"
+            },
+
+            {
+                titulo:
+                    "Acesso da torre limpo"
+            },
+
+            {
+                titulo:
+                    "Folhas e resíduos recolhidos"
+            },
+
+            {
+                titulo:
+                    "Sem objetos abandonados"
+            }
+
+        ];
+
+    }
+
+
+    /*
+       ÁREAS VERDES
+    */
+
+    if (
+        nome.includes(
+            "áreas verdes"
+        )
+        ||
+        nome.includes(
+            "areas verdes"
+        )
+    ) {
+
+        specialNotice.style.display =
+            "block";
+
+        specialNotice.textContent =
+            "🌿 Esta atividade é somente limpeza e recolhimento de resíduos. Não inclui jardinagem.";
+
+
+        return [
+
+            {
+                titulo:
+                    "Papéis recolhidos"
+            },
+
+            {
+                titulo:
+                    "Plásticos recolhidos"
+            },
+
+            {
+                titulo:
+                    "Outros resíduos recolhidos"
+            },
+
+            {
+                titulo:
+                    "Gramados visualmente limpos"
+            },
+
+            {
+                titulo:
+                    "Circulação livre"
+            }
+
+        ];
+
+    }
+
+
+    /*
+       FRENTE DO CONDOMÍNIO
+    */
+
+    if (
+        nome.includes(
+            "frente do condomínio"
+        )
+        ||
+        nome.includes(
+            "frente do condominio"
+        )
+    ) {
+
+        return [
+
+            {
+                titulo:
+                    "Calçada limpa"
+            },
+
+            {
+                titulo:
+                    "Entrada de pedestres limpa"
+            },
+
+            {
+                titulo:
+                    "Entrada de veículos limpa"
+            },
+
+            {
+                titulo:
+                    "Folhas recolhidas"
+            },
+
+            {
+                titulo:
+                    "Papéis e resíduos recolhidos"
+            }
+
+        ];
+
+    }
+
+
+    /*
+       RESÍDUOS DAS TORRES
+    */
+
+    if (
+        nome.includes(
+            "resíduos torre"
+        )
+        ||
+        nome.includes(
+            "residuos torre"
+        )
+    ) {
+
+        return [
+
+            {
+                titulo:
+                    "Resíduos acondicionados"
+            },
+
+            {
+                titulo:
+                    "Lixeiras organizadas"
+            },
+
+            {
+                titulo:
+                    "Sacos verificados"
+            },
+
+            {
+                titulo:
+                    "Piso limpo"
+            },
+
+            {
+                titulo:
+                    "Porta e acesso limpos"
+            },
+
+            {
+                titulo:
+                    "Sem resíduos fora das lixeiras"
+            }
+
+        ];
+
+    }
+
+
+    /*
+       CENTRAL DE RESÍDUOS
+    */
+
+    if (
+        nome.includes(
+            "central de resíduos"
+        )
+        ||
+        nome.includes(
+            "central de residuos"
+        )
+    ) {
+
+        return [
+
+            {
+                titulo:
+                    "Resíduos organizados"
+            },
+
+            {
+                titulo:
+                    "Lixeiras organizadas"
+            },
+
+            {
+                titulo:
+                    "Piso limpo"
+            },
+
+            {
+                titulo:
+                    "Materiais acondicionados"
+            },
+
+            {
+                titulo:
+                    "Acesso desobstruído"
+            },
+
+            {
+                titulo:
+                    "Sem resíduos fora do local"
+            }
+
+        ];
+
+    }
+
+
+    /*
+       LIXEIRAS ÁREAS COMUNS
+    */
+
+    if (
+        nome.includes(
+            "lixeiras das áreas comuns"
+        )
+        ||
+        nome.includes(
+            "lixeiras das areas comuns"
+        )
+    ) {
+
+        return [
+
+            {
+                titulo:
+                    "Lixeiras verificadas"
+            },
+
+            {
+                titulo:
+                    "Lixeiras esvaziadas quando necessário"
+            },
+
+            {
+                titulo:
+                    "Sacos substituídos"
+            },
+
+            {
+                titulo:
+                    "Área ao redor limpa"
+            }
+
+        ];
+
+    }
+
+
+    /*
+       CHIMARRÓDROMO
+    */
+
+    if (
+        nome.includes(
+            "chimarr"
+        )
+    ) {
+
+        return [
+
+            {
+                titulo:
+                    "Piso limpo"
+            },
+
+            {
+                titulo:
+                    "Mesas limpas"
+            },
+
+            {
+                titulo:
+                    "Bancos limpos"
+            },
+
+            {
+                titulo:
+                    "Lixeira verificada"
+            },
+
+            {
+                titulo:
+                    "Entorno sem resíduos"
+            }
+
+        ];
+
+    }
+
+
+    /*
+       PLAY
+    */
+
+    if (
+        nome.includes(
+            "play"
+        )
+        ||
+        nome.includes(
+            "praça infantil"
+        )
+        ||
+        nome.includes(
+            "praca infantil"
+        )
+    ) {
+
+        return [
+
+            {
+                titulo:
+                    "Piso / área limpa"
+            },
+
+            {
+                titulo:
+                    "Resíduos recolhidos"
+            },
+
+            {
+                titulo:
+                    "Lixeira verificada"
+            },
+
+            {
+                titulo:
+                    "Entorno limpo"
+            },
+
+            {
+                titulo:
+                    "Inspeção visual dos brinquedos",
+
+                descricao:
+                    "Registrar problema caso seja identificado dano aparente."
+            }
+
+        ];
+
+    }
+
+
+    /*
+       PET
+    */
+
+    if (
+        nome.includes(
+            "pet"
+        )
+    ) {
+
+        return [
+
+            {
+                titulo:
+                    "Resíduos recolhidos"
+            },
+
+            {
+                titulo:
+                    "Piso / área limpa"
+            },
+
+            {
+                titulo:
+                    "Lixeira verificada"
+            },
+
+            {
+                titulo:
+                    "Entorno limpo"
+            },
+
+            {
+                titulo:
+                    "Área em condição de uso"
+            }
+
+        ];
+
+    }
+
+
+    /*
+       PISCINA
+    */
+
+    if (
+        nome.includes(
+            "piscina"
+        )
+    ) {
+
+        return [
+
+            {
+                titulo:
+                    "Circulação limpa"
+            },
+
+            {
+                titulo:
+                    "Resíduos recolhidos"
+            },
+
+            {
+                titulo:
+                    "Lixeiras verificadas"
+            },
+
+            {
+                titulo:
+                    "Entorno organizado"
+            },
+
+            {
+                titulo:
+                    "Acessos desobstruídos"
+            }
+
+        ];
+
+    }
+
+
+    /*
+       QUIOSQUES
+    */
+
+    if (
+        nome.includes(
+            "quiosque"
+        )
+    ) {
+
+        specialNotice.style.display =
+            "block";
+
+        specialNotice.textContent =
+            "🛖 Limpeza gerada conforme utilização ou reserva do espaço.";
+
+
+        return [
+
+            {
+                titulo:
+                    "Piso limpo"
+            },
+
+            {
+                titulo:
+                    "Mesas e superfícies limpas"
+            },
+
+            {
+                titulo:
+                    "Lixeiras esvaziadas"
+            },
+
+            {
+                titulo:
+                    "Resíduos recolhidos"
+            },
+
+            {
+                titulo:
+                    "Entorno limpo"
+            },
+
+            {
+                titulo:
+                    "Espaço organizado"
+            }
+
+        ];
+
+    }
+
+
+    /*
+       ILUMINAÇÃO
+    */
+
+    if (
+        nome.includes(
+            "iluminação"
+        )
+        ||
+        nome.includes(
+            "iluminacao"
+        )
+    ) {
+
+        return [
+
+            {
+                titulo:
+                    "Torres verificadas"
+            },
+
+            {
+                titulo:
+                    "Garagens verificadas"
+            },
+
+            {
+                titulo:
+                    "Áreas externas verificadas"
+            },
+
+            {
+                titulo:
+                    "Áreas de lazer verificadas"
+            },
+
+            {
+                titulo:
+                    "Sem falha aparente",
+
+                descricao:
+                    "Caso encontre falha, registre na observação."
+            }
+
+        ];
+
+    }
+
+
+    /*
+       PORTAS E PORTÕES
+    */
+
+    if (
+        nome.includes(
+            "portas e portões"
+        )
+        ||
+        nome.includes(
+            "portas e portoes"
+        )
+    ) {
+
+        return [
+
+            {
+                titulo:
+                    "Portões verificados"
+            },
+
+            {
+                titulo:
+                    "Portas comuns verificadas"
+            },
+
+            {
+                titulo:
+                    "Fechamentos funcionando"
+            },
+
+            {
+                titulo:
+                    "Sem danos aparentes"
+            }
+
+        ];
+
+    }
+
+
+    /*
+       VAZAMENTOS
+    */
+
+    if (
+        nome.includes(
+            "vazamento"
+        )
+    ) {
+
+        return [
+
+            {
+                titulo:
+                    "Áreas comuns verificadas"
+            },
+
+            {
+                titulo:
+                    "Garagens verificadas"
+            },
+
+            {
+                titulo:
+                    "Áreas técnicas visíveis verificadas"
+            },
+
+            {
+                titulo:
+                    "Sem água acumulada"
+            },
+
+            {
+                titulo:
+                    "Sem vazamento aparente"
+            }
+
+        ];
+
+    }
+
+
+    /*
+       CONSERVAÇÃO
+    */
+
+    if (
+        nome.includes(
+            "conservação"
+        )
+        ||
+        nome.includes(
+            "conservacao"
+        )
+    ) {
+
+        return [
+
+            {
+                titulo:
+                    "Áreas comuns verificadas"
+            },
+
+            {
+                titulo:
+                    "Sem objetos abandonados"
+            },
+
+            {
+                titulo:
+                    "Sem obstruções aparentes"
+            },
+
+            {
+                titulo:
+                    "Sem danos aparentes"
+            },
+
+            {
+                titulo:
+                    "Sem situação de risco aparente"
+            }
+
+        ];
+
+    }
+
+
+    /*
+       PADRÃO ZELADORIA
+    */
+
+    return [
+
+        {
+            titulo:
+                "Área limpa"
+        },
+
+        {
+            titulo:
+                "Resíduos recolhidos"
+        },
+
+        {
+            titulo:
+                "Acesso desobstruído"
+        },
+
+        {
+            titulo:
+                "Local organizado"
+        },
+
+        {
+            titulo:
+                "Inspeção visual realizada"
+        }
+
+    ];
+
+}
+
+
+
+/* =====================================================
+   CRIAR CHECKLIST
+===================================================== */
+
+function carregarChecklist() {
+
+    specialNotice.style.display =
+        "none";
+
+
+    let itens;
+
+
+    if (
+        tipoAtividade ===
+        "zeladoria"
+    ) {
+
+        itens =
+            checklistZeladoria();
+
+    } else {
+
+        itens =
+            checklistLimpeza();
+
+    }
+
+
+    checklistContainer.innerHTML =
+        "";
+
+
+    itens.forEach(
+        (
+            item,
+            index
+        ) => {
 
             const label =
                 document.createElement(
@@ -1306,441 +2531,495 @@
 
                 <input
                     type="checkbox"
-                    class="task-checkbox"
-                    value="${item.titulo}"
+                    class="check"
+                    value="${index}"
                 >
 
                 <span
-                    class="custom-check"
+                    class="fake-check"
                 ></span>
 
                 <span
-                    class="check-text"
+                    class="check-label"
                 >
 
                     <strong>
                         ${item.titulo}
                     </strong>
 
-                    <small>
-                        ${item.descricao}
-                    </small>
+                    ${
+                        item.descricao
+                        ?
+                        `
+                        <small>
+                            ${item.descricao}
+                        </small>
+                        `
+                        :
+                        ""
+                    }
 
                 </span>
 
             `;
 
 
-            checklistContainer
-                .appendChild(label);
+            checklistContainer.appendChild(
+                label
+            );
 
         }
     );
 
-
-    /* =========================================
-       FOTO
-    ========================================= */
-
-    const photoInput =
-        document.getElementById(
-            "photoInput"
-        );
+}
 
 
-    const photoPreview =
-        document.getElementById(
-            "photoPreview"
-        );
+
+/* =====================================================
+   FOTO
+===================================================== */
+
+photoInput.addEventListener(
+    "change",
+    function() {
+
+        const arquivo =
+            this.files[0];
 
 
-    const previewContainer =
-        document.getElementById(
-            "previewContainer"
-        );
+        if (!arquivo) {
 
-
-    const photoBox =
-        document.getElementById(
-            "photoBox"
-        );
-
-
-    let fotoSelecionada = false;
-
-
-    photoInput.addEventListener(
-        "change",
-        function () {
-
-            const file =
-                this.files[0];
-
-
-            if (!file) {
-                return;
-            }
-
-
-            if (
-                !file.type.startsWith(
-                    "image/"
-                )
-            ) {
-
-                mostrarErro(
-                    "Selecione uma imagem válida."
-                );
-
-                this.value = "";
-
-                return;
-            }
-
-
-            /*
-            Nesta versão a imagem fica
-            somente na memória do navegador.
-
-            NÃO salvamos Base64 no localStorage,
-            porque fotos rapidamente ultrapassam
-            o limite do navegador.
-
-            Quando conectarmos Supabase Storage,
-            o arquivo será enviado para a nuvem.
-            */
-
-            const imageURL =
-                URL.createObjectURL(file);
-
-
-            photoPreview.src =
-                imageURL;
-
-
-            photoBox.style.display =
-                "none";
-
-
-            previewContainer.style.display =
-                "block";
-
-
-            fotoSelecionada = true;
-
-
-            esconderErro();
+            return;
 
         }
-    );
 
 
-    function removerFoto() {
-
-        photoInput.value = "";
-
-        photoPreview.src = "";
-
-        previewContainer.style.display =
-            "none";
+        fotoSelecionada =
+            true;
 
 
-        photoBox.style.display =
-            "block";
+        if (
+            previewURL
+        ) {
+
+            URL.revokeObjectURL(
+                previewURL
+            );
+
+        }
 
 
-        fotoSelecionada = false;
-
-    }
-
-
-    /* =========================================
-       CONTADOR
-    ========================================= */
-
-    function atualizarContador() {
-
-        const texto =
-            document.getElementById(
-                "observation"
-            ).value;
-
-
-        document.getElementById(
-            "charCount"
-        ).textContent =
-            texto.length;
-
-    }
-
-
-    /* =========================================
-       ERROS
-    ========================================= */
-
-    function mostrarErro(texto) {
-
-        const box =
-            document.getElementById(
-                "errorMessage"
+        previewURL =
+            URL.createObjectURL(
+                arquivo
             );
 
 
-        box.textContent =
-            texto;
+        photoPreview.src =
+            previewURL;
 
 
-        box.style.display =
-            "block";
-
-
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
-
-    }
-
-
-    function esconderErro() {
-
-        document.getElementById(
-            "errorMessage"
-        ).style.display =
+        photoButton.style.display =
             "none";
 
-    }
 
+        previewContainer.style.display =
+            "block";
 
-    /* =========================================
-       CONCLUIR
-    ========================================= */
-
-    function concluirAtividade() {
 
         esconderErro();
 
-
-        const checkboxes =
-            document.querySelectorAll(
-                ".task-checkbox"
-            );
+    }
+);
 
 
-        const marcados =
-            document.querySelectorAll(
-                ".task-checkbox:checked"
-            );
+
+function removerFoto() {
+
+    fotoSelecionada =
+        false;
 
 
-        /*
-        Todos os itens devem estar marcados.
-        */
-
-        if (
-            marcados.length !==
-            checkboxes.length
-        ) {
-
-            mostrarErro(
-                "Conclua todos os itens do checklist antes de finalizar a limpeza."
-            );
-
-            return;
-
-        }
+    photoInput.value =
+        "";
 
 
-        /*
-        Foto obrigatória.
-        */
+    if (
+        previewURL
+    ) {
 
-        if (!fotoSelecionada) {
+        URL.revokeObjectURL(
+            previewURL
+        );
 
-            mostrarErro(
-                "Adicione uma foto do local após a limpeza."
-            );
+        previewURL =
+            null;
 
-            return;
-
-        }
-
-
-        const agora =
-            new Date();
+    }
 
 
-        const data =
-            agora.toLocaleDateString(
-                "pt-BR"
-            );
+    photoPreview.src =
+        "";
 
 
-        const hora =
-            agora.toLocaleTimeString(
-                "pt-BR",
-                {
-                    hour: "2-digit",
-                    minute: "2-digit"
-                }
-            );
+    previewContainer.style.display =
+        "none";
 
 
-        const observacao =
-            document.getElementById(
-                "observation"
-            ).value.trim();
+    photoButton.style.display =
+        "flex";
+
+}
 
 
-        /* ================================
-           REGISTRO TEMPORÁRIO
-        ================================ */
 
-        let concluidos =
-            JSON.parse(
-                localStorage.getItem(
-                    "atividadesConcluidas"
-                )
-            ) || [];
+/* =====================================================
+   OBSERVAÇÃO
+===================================================== */
 
+observation.addEventListener(
+    "input",
+    function() {
 
-        /*
-        Evita contar o mesmo local
-        duas vezes na rotina diária.
-        */
+        charCount.textContent =
+            this.value.length;
 
-        const chaveLocal =
-            torre + "|" + local;
+    }
+);
 
 
-        concluidos =
-            concluidos.filter(
-                item =>
-                    item.chave !==
-                    chaveLocal
-            );
+
+/* =====================================================
+   CONCLUIR
+===================================================== */
+
+function concluirAtividade() {
+
+    esconderErro();
 
 
-        concluidos.push({
-
-            chave:
-                chaveLocal,
-
-            torre:
-                torre,
-
-            local:
-                local,
-
-            colaborador:
-                colaborador.nome,
-
-            matricula:
-                colaborador.matricula,
-
-            data:
-                data,
-
-            hora:
-                hora,
-
-            checklist:
-                marcados.length,
-
-            totalChecklist:
-                checkboxes.length,
-
-            observacao:
-                observacao,
-
-            foto:
-                true
-
-        });
-
-
-        localStorage.setItem(
-            "atividadesConcluidas",
-            JSON.stringify(
-                concluidos
+    const checkboxes =
+        [
+            ...document.querySelectorAll(
+                ".check"
             )
+        ];
+
+
+    const marcados =
+        checkboxes.filter(
+            item =>
+                item.checked
         );
 
 
-        /* ================================
-           SUCESSO
-        ================================ */
+    if (
+        marcados.length !==
+        checkboxes.length
+    ) {
 
-        document.getElementById(
-            "successData"
-        ).innerHTML = `
+        mostrarErro(
+            "Conclua todos os itens do checklist."
+        );
 
-            <strong>${torre}</strong><br>
+        return;
 
-            ${local}<br><br>
-
-            👤 Débora • #0001<br>
-
-            🕐 ${data} às ${hora}<br>
-
-            ☑ ${marcados.length}/${checkboxes.length}
-            itens concluídos<br>
-
-            📷 Foto registrada
-
-        `;
+    }
 
 
-        document.getElementById(
+    if (
+        !fotoSelecionada
+    ) {
+
+        mostrarErro(
+            "É necessário registrar uma foto para concluir a atividade."
+        );
+
+        return;
+
+    }
+
+
+    const agora =
+        new Date();
+
+
+    const data =
+        agora.toLocaleDateString(
+            "pt-BR"
+        );
+
+
+    const hora =
+        agora.toLocaleTimeString(
+            "pt-BR",
+            {
+                hour:"2-digit",
+                minute:"2-digit"
+            }
+        );
+
+
+    let concluidos =
+        JSON.parse(
+            localStorage.getItem(
+                "atividadesConcluidas"
+            )
+        ) || [];
+
+
+    /*
+       Chave agora inclui data.
+
+       Assim a atividade de hoje
+       não fica concluída para sempre.
+    */
+
+    const chave =
+        data +
+        "|" +
+        usuario.matricula +
+        "|" +
+        torre +
+        "|" +
+        local;
+
+
+    /*
+       Remove eventual registro
+       duplicado da mesma atividade
+       no mesmo dia.
+    */
+
+    concluidos =
+        concluidos.filter(
+            item => {
+
+                if (
+                    typeof item ===
+                    "string"
+                ) {
+
+                    return true;
+
+                }
+
+
+                return (
+                    item.chave !==
+                    chave
+                );
+
+            }
+        );
+
+
+    const itensChecklist =
+        checkboxes.map(
+            checkbox => {
+
+                const label =
+                    checkbox
+                    .closest(
+                        ".check-item"
+                    )
+                    .querySelector(
+                        ".check-label strong"
+                    )
+                    .textContent
+                    .trim();
+
+
+                return {
+
+                    item:
+                        label,
+
+                    concluido:
+                        checkbox.checked
+
+                };
+
+            }
+        );
+
+
+    const registro = {
+
+        chave:
+            chave,
+
+        tipo:
+            tipoAtividade,
+
+        condominio:
+            "Reserva Igara",
+
+        torre:
+            torre,
+
+        local:
+            local,
+
+        colaborador:
+            usuario.nome,
+
+        matricula:
+            usuario.matricula,
+
+        cargo:
+            usuario.cargo,
+
+        data:
+            data,
+
+        hora:
+            hora,
+
+        timestamp:
+            agora.toISOString(),
+
+        checklist:
+            itensChecklist,
+
+        totalChecklist:
+            checkboxes.length,
+
+        observacao:
+            observation
+            .value
+            .trim(),
+
+        foto:
+            true
+
+    };
+
+
+    concluidos.push(
+        registro
+    );
+
+
+    localStorage.setItem(
+        "atividadesConcluidas",
+        JSON.stringify(
+            concluidos
+        )
+    );
+
+
+    /*
+       IMPORTANTE:
+
+       Por enquanto salvamos somente
+       que existe uma foto.
+
+       Quando entrarmos no Supabase,
+       o arquivo real será enviado
+       para o Storage e teremos
+       foto_url.
+    */
+
+
+    document
+        .getElementById(
+            "successText"
+        )
+        .textContent =
+            local +
+            " foi concluído às " +
+            hora +
+            ".";
+
+
+    document
+        .getElementById(
             "successOverlay"
-        ).style.display =
+        )
+        .style.display =
             "flex";
 
-    }
+
+    setTimeout(
+        () => {
+
+            window.location.href =
+                "colaborador.html";
+
+        },
+        1500
+    );
+
+}
 
 
-    /* =========================================
-       OCORRÊNCIA
-    ========================================= */
 
-    function reportarProblema() {
+/* =====================================================
+   ERROS
+===================================================== */
 
-        localStorage.setItem(
-            "torreSelecionada",
-            torre
-        );
+function mostrarErro(
+    mensagem
+) {
 
-
-        localStorage.setItem(
-            "localSelecionado",
-            local
-        );
+    errorMessage.textContent =
+        mensagem;
 
 
-        window.location.href =
-            "reportar.html";
-
-    }
+    errorMessage.style.display =
+        "block";
 
 
-    /* =========================================
-       NAVEGAÇÃO
-    ========================================= */
+    errorMessage.scrollIntoView({
+        behavior:"smooth",
+        block:"center"
+    });
 
-    function voltar() {
-
-        window.location.href =
-            "colaborador.html";
-
-    }
+}
 
 
-    function voltarPainel() {
+function esconderErro() {
 
-        window.location.href =
-            "colaborador.html";
+    errorMessage.style.display =
+        "none";
 
-    }
+}
+
+
+
+/* =====================================================
+   REPORTAR PROBLEMA
+===================================================== */
+
+function problemaEmConstrucao() {
+
+    alert(
+        "O registro de ocorrências está em construção."
+    );
+
+}
+
+
+
+/* =====================================================
+   VOLTAR
+===================================================== */
+
+function voltar() {
+
+    window.location.href =
+        "colaborador.html";
+
+}
+
+
+
+/* =====================================================
+   INICIAR
+===================================================== */
+
+carregarChecklist();
 
 </script>
 
