@@ -2,1106 +2,1022 @@
 <html lang="pt-BR">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Minha Rotina — CUIDADOS</title>
-
-    <meta name="theme-color" content="#12355b">
-
-    <style>
-        :root {
-            --primary: #12355b;
-            --primary-dark: #0b2745;
-            --primary-light: #eaf2fb;
-
-            --green: #178c58;
-            --green-light: #e8f6ef;
-
-            --yellow: #d89b19;
-            --yellow-light: #fff5d9;
-
-            --red: #d94b4b;
-            --red-light: #fdecec;
-
-            --text: #17202a;
-            --muted: #687483;
-
-            --background: #f4f7fa;
-            --card: #ffffff;
-            --border: #e2e8ef;
-
-            --shadow: 0 10px 30px rgba(20,45,75,.08);
-            --radius: 20px;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family:
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                Roboto,
-                Helvetica,
-                Arial,
-                sans-serif;
-
-            background: var(--background);
-            color: var(--text);
-            min-height: 100vh;
-        }
-
-        button {
-            font-family: inherit;
-        }
-
-        /* ==============================
-           HEADER
-        ============================== */
-
-        header {
-            background:
-                linear-gradient(
-                    135deg,
-                    var(--primary-dark),
-                    var(--primary)
-                );
-
-            color: white;
-
-            padding:
-                env(safe-area-inset-top)
-                18px
-                34px;
-        }
-
-        .header-content {
-            max-width: 900px;
-            margin: auto;
-        }
 
-        .topbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
+<meta charset="UTF-8">
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 11px;
-        }
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
-        .brand-logo {
-            width: 42px;
-            height: 42px;
+<title>Minha Rotina — CUIDADOS</title>
 
-            border-radius: 13px;
+<meta
+    name="theme-color"
+    content="#12355b"
+>
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+<style>
 
-            background: rgba(255,255,255,.14);
+:root {
 
-            font-size: 21px;
-            font-weight: bold;
-        }
+    --primary:#12355b;
+    --primary-dark:#0b2745;
+    --primary-light:#eaf2fb;
 
-        .brand h1 {
-            font-size: 19px;
-            letter-spacing: .7px;
-        }
+    --green:#178c58;
+    --green-light:#e8f6ef;
 
-        .brand small {
-            opacity: .7;
-            font-size: 11px;
-        }
+    --yellow:#d89b19;
+    --yellow-light:#fff4d6;
 
-        .profile {
-            width: 42px;
-            height: 42px;
+    --red:#d94b4b;
+    --red-light:#fdecec;
 
-            border-radius: 50%;
+    --purple:#6654a3;
+    --purple-light:#efecf8;
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+    --text:#17202a;
+    --muted:#687483;
 
-            background: rgba(255,255,255,.15);
+    --background:#f4f7fa;
+    --card:#ffffff;
+    --border:#e2e8ef;
 
-            font-size: 19px;
-        }
+    --shadow:
+        0 8px 25px
+        rgba(20,45,75,.07);
 
-        .hello {
-            margin-top: 29px;
-        }
+}
 
-        .hello small {
-            opacity: .72;
-            font-size: 13px;
-        }
+* {
 
-        .hello h2 {
-            font-size: 27px;
-            margin-top: 3px;
-        }
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
 
-        .hello p {
-            opacity: .75;
-            margin-top: 5px;
-            font-size: 13px;
-        }
+}
 
-        /* ==============================
-           MAIN
-        ============================== */
+body {
 
-        main {
-            max-width: 900px;
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
 
-            margin: -16px auto 100px;
+    background:
+        var(--background);
 
-            padding: 0 16px;
-        }
+    color:
+        var(--text);
 
-        /* ==============================
-           USER
-        ============================== */
+    min-height:100vh;
 
-        .user-card {
-            background: white;
+}
 
-            border-radius: var(--radius);
+button {
 
-            padding: 17px;
+    font-family:inherit;
 
-            box-shadow: var(--shadow);
+}
 
-            display: flex;
-            align-items: center;
-            gap: 13px;
-        }
 
-        .avatar {
-            width: 51px;
-            height: 51px;
+/* HEADER */
 
-            border-radius: 50%;
+header {
 
-            background: var(--primary-light);
-            color: var(--primary);
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary-dark),
+            var(--primary)
+        );
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+    color:white;
 
-            font-size: 21px;
-            font-weight: 700;
-        }
+    padding:
+        calc(18px + env(safe-area-inset-top))
+        18px
+        35px;
 
-        .user-info {
-            flex: 1;
-        }
+}
 
-        .user-info strong {
-            font-size: 15px;
-            display: block;
-        }
+.header-content {
 
-        .user-info span {
-            display: block;
+    max-width:760px;
+    margin:auto;
 
-            color: var(--muted);
+}
 
-            font-size: 12px;
+.topbar {
 
-            margin-top: 3px;
-        }
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
 
-        .employee-id {
-            background: #f1f4f7;
+}
 
-            padding: 6px 9px;
+.brand {
 
-            border-radius: 20px;
+    display:flex;
+    align-items:center;
+    gap:10px;
 
-            font-size: 10px;
-            color: var(--muted);
-        }
+}
 
-        /* ==============================
-           SUMMARY
-        ============================== */
+.logo {
 
-        .summary {
-            display: grid;
-            grid-template-columns: repeat(3,1fr);
+    width:43px;
+    height:43px;
 
-            gap: 10px;
+    border-radius:13px;
 
-            margin-top: 15px;
-        }
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-        .summary-card {
-            background: white;
+    background:
+        rgba(255,255,255,.14);
 
-            border-radius: 17px;
+    font-size:21px;
+    font-weight:800;
 
-            padding: 15px 10px;
+}
 
-            box-shadow: var(--shadow);
+.brand strong {
 
-            text-align: center;
-        }
+    display:block;
+    font-size:15px;
 
-        .summary-number {
-            font-size: 24px;
-            font-weight: 750;
-        }
+}
 
-        .summary-label {
-            display: block;
+.brand small {
 
-            margin-top: 4px;
+    display:block;
 
-            color: var(--muted);
+    margin-top:2px;
 
-            font-size: 10px;
-        }
+    opacity:.7;
+    font-size:9px;
 
-        .green {
-            color: var(--green);
-        }
+}
 
-        .yellow {
-            color: var(--yellow);
-        }
+.logout {
 
-        .red {
-            color: var(--red);
-        }
+    width:42px;
+    height:42px;
 
-        /* ==============================
-           TOWER CARD
-        ============================== */
+    border:0;
+    border-radius:13px;
 
-        .tower-card {
-            margin-top: 17px;
+    background:
+        rgba(255,255,255,.14);
 
-            background: white;
+    color:white;
+    cursor:pointer;
 
-            border-radius: var(--radius);
+    font-size:17px;
 
-            padding: 20px;
+}
 
-            box-shadow: var(--shadow);
-        }
+.welcome {
 
-        .tower-header {
-            display: flex;
-            align-items: center;
-            gap: 13px;
-        }
+    margin-top:27px;
 
-        .tower-icon {
-            width: 50px;
-            height: 50px;
+}
 
-            border-radius: 15px;
+.welcome small {
 
-            background: var(--primary-light);
+    opacity:.7;
+    font-size:10px;
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+}
 
-            font-size: 24px;
-        }
+.welcome h1 {
 
-        .tower-title {
-            flex: 1;
-        }
+    margin-top:4px;
+    font-size:26px;
 
-        .tower-title small {
-            color: var(--muted);
-            font-size: 11px;
-        }
+}
 
-        .tower-title h3 {
-            margin-top: 2px;
-            font-size: 19px;
-        }
+.welcome p {
 
-        .responsible {
-            background: var(--green-light);
-            color: var(--green);
+    margin-top:5px;
 
-            font-size: 10px;
-            font-weight: 650;
+    opacity:.72;
+    font-size:10px;
 
-            padding: 6px 9px;
+}
 
-            border-radius: 20px;
-        }
 
-        /* ==============================
-           PROGRESS
-        ============================== */
+/* MAIN */
 
-        .progress-info {
-            display: flex;
-            justify-content: space-between;
+main {
 
-            margin-top: 20px;
+    max-width:760px;
 
-            font-size: 12px;
-        }
+    margin:-15px auto 100px;
 
-        .progress-info span {
-            color: var(--muted);
-        }
+    padding:0 15px;
 
-        .progress-info strong {
-            color: var(--green);
-        }
+}
 
-        .progress {
-            height: 9px;
 
-            background: #e8edf2;
+/* PROFILE */
 
-            border-radius: 20px;
+.profile {
 
-            margin-top: 9px;
+    background:white;
 
-            overflow: hidden;
-        }
+    border-radius:20px;
 
-        .progress-fill {
-            width: 0%;
-            height: 100%;
+    padding:15px;
 
-            background: var(--green);
+    display:flex;
+    align-items:center;
+    gap:12px;
 
-            transition: width .4s ease;
-        }
+    box-shadow:
+        var(--shadow);
 
-        .progress-detail {
-            color: var(--muted);
+}
 
-            font-size: 11px;
+.avatar {
 
-            margin-top: 8px;
-        }
+    width:48px;
+    height:48px;
 
-        /* ==============================
-           SECTION
-        ============================== */
+    flex-shrink:0;
 
-        .section {
-            margin-top: 27px;
-        }
+    border-radius:15px;
 
-        .section-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-            margin-bottom: 11px;
-        }
+    background:
+        var(--primary-light);
 
-        .section-header h3 {
-            font-size: 17px;
-        }
+    font-size:22px;
 
-        .section-header span {
-            color: var(--muted);
-            font-size: 11px;
-        }
+}
 
-        /* ==============================
-           LOCATION
-        ============================== */
+.profile-info {
 
-        .location {
-            background: white;
+    flex:1;
 
-            border-radius: 17px;
+}
 
-            margin-bottom: 9px;
+.profile-info strong {
 
-            padding: 14px;
+    display:block;
+    font-size:14px;
 
-            display: flex;
-            align-items: center;
-            gap: 12px;
+}
 
-            box-shadow: 0 5px 18px rgba(20,45,75,.055);
+.profile-info span {
 
-            cursor: pointer;
+    display:block;
 
-            border: 1px solid transparent;
+    margin-top:3px;
 
-            transition: .2s;
-        }
+    color:
+        var(--muted);
 
-        .location:active {
-            transform: scale(.985);
-        }
+    font-size:9px;
 
-        .location:hover {
-            border-color: #dce6ef;
-        }
+}
 
-        .location-icon {
-            width: 43px;
-            height: 43px;
+.profile-tag {
 
-            flex-shrink: 0;
+    padding:6px 9px;
 
-            border-radius: 13px;
+    border-radius:20px;
 
-            background: var(--primary-light);
+    background:
+        var(--primary-light);
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+    color:
+        var(--primary);
 
-            font-size: 20px;
-        }
+    font-size:8px;
+    font-weight:700;
 
-        .location-content {
-            flex: 1;
-        }
+}
 
-        .location-content strong {
-            display: block;
 
-            font-size: 14px;
+/* SUMMARY */
 
-            font-weight: 650;
-        }
+.summary {
 
-        .location-content small {
-            display: block;
+    display:grid;
 
-            margin-top: 3px;
+    grid-template-columns:
+        repeat(3,1fr);
 
-            color: var(--muted);
+    gap:9px;
 
-            font-size: 11px;
-        }
+    margin-top:13px;
 
-        .status {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
+}
 
-            padding: 6px 8px;
+.summary-card {
 
-            border-radius: 20px;
+    background:white;
 
-            font-size: 9px;
-            font-weight: 650;
+    border-radius:16px;
 
-            white-space: nowrap;
-        }
+    padding:14px 8px;
 
-        .status-pending {
-            color: #986400;
-            background: var(--yellow-light);
-        }
+    text-align:center;
 
-        .status-done {
-            color: var(--green);
-            background: var(--green-light);
-        }
+    box-shadow:
+        var(--shadow);
 
-        .status-alert {
-            color: var(--red);
-            background: var(--red-light);
-        }
+}
 
-        /* ==============================
-           OCCURRENCES
-        ============================== */
+.summary-card strong {
 
-        .empty {
-            background: white;
+    display:block;
 
-            padding: 24px;
+    font-size:22px;
 
-            border-radius: 18px;
+}
 
-            text-align: center;
+.summary-card span {
 
-            box-shadow: var(--shadow);
+    display:block;
 
-            color: var(--muted);
-        }
+    margin-top:3px;
 
-        .empty-icon {
-            font-size: 30px;
-            margin-bottom: 7px;
-        }
+    color:
+        var(--muted);
 
-        .empty strong {
-            display: block;
+    font-size:8px;
 
-            color: var(--text);
+}
 
-            font-size: 14px;
-        }
+.green {
 
-        .empty p {
-            margin-top: 5px;
-            font-size: 11px;
-        }
+    color:
+        var(--green);
 
-        /* ==============================
-           BUTTON
-        ============================== */
+}
 
-        .report {
-            width: 100%;
+.yellow {
 
-            margin-top: 22px;
+    color:
+        var(--yellow);
 
-            padding: 16px;
+}
 
-            border: 0;
-            border-radius: 16px;
+.blue {
 
-            background: var(--red-light);
-            color: var(--red);
+    color:
+        var(--primary);
 
-            font-size: 13px;
-            font-weight: 650;
+}
 
-            cursor: pointer;
-        }
 
-        /* ==============================
-           BOTTOM NAV
-        ============================== */
+/* SECTIONS */
 
-        .bottom-nav {
-            position: fixed;
+.section {
 
-            left: 0;
-            right: 0;
-            bottom: 0;
+    margin-top:25px;
 
-            height: 72px;
+}
 
-            background: white;
+.section-title {
 
-            border-top: 1px solid var(--border);
+    display:flex;
 
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
+    align-items:center;
+    justify-content:space-between;
 
-            padding-bottom: env(safe-area-inset-bottom);
+    margin-bottom:10px;
 
-            z-index: 100;
-        }
+}
 
-        .nav-item {
-            color: var(--muted);
+.section-title h2 {
 
-            font-size: 9px;
+    font-size:16px;
 
-            text-align: center;
-        }
+}
 
-        .nav-icon {
-            display: block;
+.section-title span {
 
-            font-size: 20px;
+    color:
+        var(--muted);
 
-            margin-bottom: 3px;
-        }
+    font-size:9px;
 
-        .nav-active {
-            color: var(--primary);
-            font-weight: 700;
-        }
+}
 
-        /* ==============================
-           DESKTOP
-        ============================== */
 
-        @media (min-width: 750px) {
+/* GROUP */
 
-            .locations-grid {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 10px;
-            }
+.group {
 
-            .location {
-                margin-bottom: 0;
-            }
+    margin-bottom:18px;
 
-            .bottom-nav {
-                max-width: 900px;
+}
 
-                left: 50%;
-                transform: translateX(-50%);
+.group-title {
 
-                border-radius: 20px 20px 0 0;
-            }
-        }
+    display:flex;
+    align-items:center;
+    gap:7px;
 
-    </style>
+    margin:
+        0
+        3px
+        8px;
+
+    color:
+        var(--muted);
+
+    font-size:9px;
+    font-weight:750;
+
+    letter-spacing:.4px;
+
+    text-transform:uppercase;
+
+}
+
+
+/* CARD */
+
+.task {
+
+    width:100%;
+
+    border:0;
+
+    background:white;
+
+    border-radius:17px;
+
+    padding:14px;
+
+    margin-bottom:8px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:11px;
+
+    text-align:left;
+
+    cursor:pointer;
+
+    box-shadow:
+        var(--shadow);
+
+}
+
+.task-icon {
+
+    width:45px;
+    height:45px;
+
+    flex-shrink:0;
+
+    border-radius:14px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:
+        var(--primary-light);
+
+    font-size:20px;
+
+}
+
+.task-main {
+
+    flex:1;
+    min-width:0;
+
+}
+
+.task-main strong {
+
+    display:block;
+
+    color:
+        var(--text);
+
+    font-size:12px;
+
+}
+
+.task-main span {
+
+    display:block;
+
+    margin-top:4px;
+
+    color:
+        var(--muted);
+
+    font-size:8px;
+
+    line-height:1.4;
+
+}
+
+.status {
+
+    flex-shrink:0;
+
+    padding:6px 8px;
+
+    border-radius:20px;
+
+    font-size:8px;
+    font-weight:700;
+
+}
+
+.pending {
+
+    color:
+        #916300;
+
+    background:
+        var(--yellow-light);
+
+}
+
+.done {
+
+    color:
+        var(--green);
+
+    background:
+        var(--green-light);
+
+}
+
+.future {
+
+    color:
+        var(--muted);
+
+    background:#eef1f4;
+
+}
+
+
+/* TOWER */
+
+.tower {
+
+    background:white;
+
+    border-radius:19px;
+
+    padding:17px;
+
+    margin-bottom:10px;
+
+    box-shadow:
+        var(--shadow);
+
+}
+
+.tower-top {
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+}
+
+.tower-icon {
+
+    width:48px;
+    height:48px;
+
+    border-radius:15px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:
+        var(--primary-light);
+
+    font-size:22px;
+
+}
+
+.tower-info {
+
+    flex:1;
+
+}
+
+.tower-info small {
+
+    display:block;
+
+    color:
+        var(--muted);
+
+    font-size:8px;
+
+}
+
+.tower-info strong {
+
+    display:block;
+
+    margin-top:2px;
+
+    font-size:15px;
+
+}
+
+.tower-percent {
+
+    color:
+        var(--green);
+
+    font-size:13px;
+
+    font-weight:750;
+
+}
+
+.progress {
+
+    height:7px;
+
+    margin-top:13px;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    background:#e8edf2;
+
+}
+
+.progress-fill {
+
+    height:100%;
+
+    width:0%;
+
+    background:
+        var(--green);
+
+}
+
+.tower-button {
+
+    width:100%;
+
+    margin-top:13px;
+
+    padding:11px;
+
+    border:0;
+
+    border-radius:12px;
+
+    background:
+        var(--primary-light);
+
+    color:
+        var(--primary);
+
+    font-size:9px;
+
+    font-weight:750;
+
+    cursor:pointer;
+
+}
+
+
+/* EVENT */
+
+.event-card {
+
+    padding:16px;
+
+    border-radius:17px;
+
+    background:
+        var(--purple-light);
+
+    color:
+        var(--purple);
+
+    font-size:9px;
+
+    line-height:1.5;
+
+}
+
+.event-card strong {
+
+    display:block;
+
+    margin-bottom:4px;
+
+    font-size:12px;
+
+}
+
+
+/* EMPTY */
+
+.empty {
+
+    padding:20px;
+
+    border-radius:17px;
+
+    background:white;
+
+    text-align:center;
+
+    color:
+        var(--muted);
+
+    font-size:9px;
+
+    box-shadow:
+        var(--shadow);
+
+}
+
+
+/* BOTTOM */
+
+.bottom-nav {
+
+    position:fixed;
+
+    left:0;
+    right:0;
+    bottom:0;
+
+    height:68px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:space-around;
+
+    background:white;
+
+    border-top:
+        1px solid
+        var(--border);
+
+    z-index:100;
+
+    padding-bottom:
+        env(safe-area-inset-bottom);
+
+}
+
+.nav {
+
+    text-align:center;
+
+    color:
+        var(--muted);
+
+    font-size:8px;
+
+}
+
+.nav-icon {
+
+    display:block;
+
+    margin-bottom:3px;
+
+    font-size:18px;
+
+}
+
+.nav.active {
+
+    color:
+        var(--primary);
+
+    font-weight:700;
+
+}
+
+
+@media(min-width:700px) {
+
+    .tasks-grid {
+
+        display:grid;
+
+        grid-template-columns:
+            1fr 1fr;
+
+        gap:8px;
+
+    }
+
+    .task {
+
+        margin-bottom:0;
+
+    }
+
+}
+
+</style>
 
 </head>
 
 
 <body>
 
+
 <header>
 
-    <div class="header-content">
+<div class="header-content">
 
-        <div class="topbar">
+    <div class="topbar">
 
-            <div class="brand">
+        <div class="brand">
 
-                <div class="brand-logo">
-                    ✓
-                </div>
-
-                <div>
-                    <h1>CUIDADOS</h1>
-                    <small>Limpeza & Zeladoria</small>
-                </div>
-
+            <div class="logo">
+                ✓
             </div>
 
-            <div class="profile">
-                👤
+            <div>
+
+                <strong>
+                    CUIDADOS
+                </strong>
+
+                <small>
+                    Reserva Igara
+                </small>
+
             </div>
 
         </div>
 
 
-        <div class="hello">
-
-            <small>Reserva Igara</small>
-
-            <h2>Bom dia, Débora 👋</h2>
-
-            <p>
-                Sua rotina da Torre E está pronta.
-            </p>
-
-        </div>
+        <button
+            class="logout"
+            onclick="sair()"
+        >
+            ↪
+        </button>
 
     </div>
+
+
+    <div class="welcome">
+
+        <small id="welcomeType">
+            MINHA ROTINA
+        </small>
+
+        <h1 id="welcomeName">
+            Olá
+        </h1>
+
+        <p id="welcomeText">
+            Veja suas atividades programadas.
+        </p>
+
+    </div>
+
+</div>
 
 </header>
 
 
 <main>
 
-    <!-- COLABORADOR -->
 
-    <div class="user-card">
+<!-- PERFIL -->
 
-        <div class="avatar">
-            D
-        </div>
+<div class="profile">
 
-        <div class="user-info">
-
-            <strong>Débora</strong>
-
-            <span>
-                Auxiliar de Limpeza
-            </span>
-
-        </div>
-
-        <div class="employee-id">
-            #0001
-        </div>
-
-    </div>
-
-
-    <!-- RESUMO -->
-
-    <div class="summary">
-
-        <div class="summary-card">
-
-            <div
-                class="summary-number green"
-                id="completedCount"
-            >
-                0
-            </div>
-
-            <span class="summary-label">
-                Concluídos
-            </span>
-
-        </div>
-
-
-        <div class="summary-card">
-
-            <div
-                class="summary-number yellow"
-                id="pendingCount"
-            >
-                17
-            </div>
-
-            <span class="summary-label">
-                Pendentes
-            </span>
-
-        </div>
-
-
-        <div class="summary-card">
-
-            <div class="summary-number red">
-                0
-            </div>
-
-            <span class="summary-label">
-                Ocorrências
-            </span>
-
-        </div>
-
-    </div>
-
-
-    <!-- TORRE -->
-
-    <div class="tower-card">
-
-        <div class="tower-header">
-
-            <div class="tower-icon">
-                🏢
-            </div>
-
-            <div class="tower-title">
-
-                <small>Minha área</small>
-
-                <h3>Torre E</h3>
-
-            </div>
-
-            <span class="responsible">
-                Responsável
-            </span>
-
-        </div>
-
-
-        <div class="progress-info">
-
-            <span>Rotina de hoje</span>
-
-            <strong id="progressPercent">
-                0%
-            </strong>
-
-        </div>
-
-
-        <div class="progress">
-
-            <div
-                class="progress-fill"
-                id="progressFill"
-            ></div>
-
-        </div>
-
-
-        <div
-            class="progress-detail"
-            id="progressDetail"
-        >
-            0 de 17 locais concluídos
-        </div>
-
-    </div>
-
-
-    <!-- ACESSO -->
-
-    <section class="section">
-
-        <div class="section-header">
-
-            <h3>Acesso</h3>
-
-            <span>Torre E</span>
-
-        </div>
-
-
-        <div class="locations-grid">
-
-            <div
-                class="location"
-                onclick="abrirLocal('Térreo / Hall de entrada')"
-            >
-
-                <div class="location-icon">
-                    🚪
-                </div>
-
-                <div class="location-content">
-
-                    <strong>
-                        Térreo / Hall de entrada
-                    </strong>
-
-                    <small>
-                        Hall, piso, vidros e acesso
-                    </small>
-
-                </div>
-
-                <span class="status status-pending">
-                    ● Pendente
-                </span>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- ANDARES -->
-
-    <section class="section">
-
-        <div class="section-header">
-
-            <h3>Andares</h3>
-
-            <span>1º ao 12º</span>
-
-        </div>
-
-
-        <div
-            class="locations-grid"
-            id="floorsContainer"
-        ></div>
-
-    </section>
-
-
-    <!-- OUTROS LOCAIS -->
-
-    <section class="section">
-
-        <div class="section-header">
-
-            <h3>Outros locais</h3>
-
-            <span>4 locais</span>
-
-        </div>
-
-
-        <div class="locations-grid">
-
-            <!-- ESCADAS -->
-
-            <div
-                class="location"
-                onclick="abrirLocal('Escadas')"
-            >
-
-                <div class="location-icon">
-                    🪜
-                </div>
-
-                <div class="location-content">
-
-                    <strong>
-                        Escadas
-                    </strong>
-
-                    <small>
-                        Térreo ao 12º andar
-                    </small>
-
-                </div>
-
-                <span class="status status-pending">
-                    ● Pendente
-                </span>
-
-            </div>
-
-
-            <!-- ELEVADOR 1 -->
-
-            <div
-                class="location"
-                onclick="abrirLocal('Elevador 1')"
-            >
-
-                <div class="location-icon">
-                    🛗
-                </div>
-
-                <div class="location-content">
-
-                    <strong>
-                        Elevador 1
-                    </strong>
-
-                    <small>
-                        Cabine, espelho e botoeiras
-                    </small>
-
-                </div>
-
-                <span class="status status-pending">
-                    ● Pendente
-                </span>
-
-            </div>
-
-
-            <!-- ELEVADOR 2 -->
-
-            <div
-                class="location"
-                onclick="abrirLocal('Elevador 2')"
-            >
-
-                <div class="location-icon">
-                    🛗
-                </div>
-
-                <div class="location-content">
-
-                    <strong>
-                        Elevador 2
-                    </strong>
-
-                    <small>
-                        Cabine, espelho e botoeiras
-                    </small>
-
-                </div>
-
-                <span class="status status-pending">
-                    ● Pendente
-                </span>
-
-            </div>
-
-
-            <!-- LIXO -->
-
-            <div
-                class="location"
-                onclick="abrirLocal('Abrigo de resíduos')"
-            >
-
-                <div class="location-icon">
-                    🗑️
-                </div>
-
-                <div class="location-content">
-
-                    <strong>
-                        Abrigo de resíduos
-                    </strong>
-
-                    <small>
-                        Sala de lixo da Torre E
-                    </small>
-
-                </div>
-
-                <span class="status status-pending">
-                    ● Pendente
-                </span>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- OCORRÊNCIAS -->
-
-    <section class="section">
-
-        <div class="section-header">
-
-            <h3>Minhas ocorrências</h3>
-
-            <span>0 abertas</span>
-
-        </div>
-
-
-        <div class="empty">
-
-            <div class="empty-icon">
-                ✓
-            </div>
-
-            <strong>
-                Nenhuma ocorrência
-            </strong>
-
-            <p>
-                Quando uma ocorrência da Torre E for
-                atribuída a você, ela aparecerá aqui.
-            </p>
-
-        </div>
-
-    </section>
-
-
-    <button
-        class="report"
-        onclick="reportarProblema()"
+    <div
+        class="avatar"
+        id="profileIcon"
     >
-        ⚠️ Reportar um problema
-    </button>
+        👷
+    </div>
+
+
+    <div class="profile-info">
+
+        <strong id="profileName">
+            Colaborador
+        </strong>
+
+        <span id="profileCargo">
+            Reserva Igara
+        </span>
+
+    </div>
+
+
+    <span
+        class="profile-tag"
+        id="profileTag"
+    >
+        EQUIPE
+    </span>
+
+</div>
+
+
+<!-- RESUMO -->
+
+<div class="summary">
+
+    <div class="summary-card">
+
+        <strong
+            class="green"
+            id="completedCount"
+        >
+            0
+        </strong>
+
+        <span>
+            CONCLUÍDAS
+        </span>
+
+    </div>
+
+
+    <div class="summary-card">
+
+        <strong
+            class="yellow"
+            id="pendingCount"
+        >
+            0
+        </strong>
+
+        <span>
+            PENDENTES
+        </span>
+
+    </div>
+
+
+    <div class="summary-card">
+
+        <strong
+            class="blue"
+            id="totalCount"
+        >
+            0
+        </strong>
+
+        <span>
+            PROGRAMADAS
+        </span>
+
+    </div>
+
+</div>
+
+
+<div id="content"></div>
+
 
 </main>
 
 
-<!-- MENU -->
-
 <nav class="bottom-nav">
 
-    <div class="nav-item nav-active">
+    <div class="nav active">
 
         <span class="nav-icon">
-            ⌂
+            ☑
         </span>
 
         Minha rotina
@@ -1109,7 +1025,7 @@
     </div>
 
 
-    <div class="nav-item">
+    <div class="nav">
 
         <span class="nav-icon">
             ✓
@@ -1120,7 +1036,7 @@
     </div>
 
 
-    <div class="nav-item">
+    <div class="nav">
 
         <span class="nav-icon">
             ⚠
@@ -1131,7 +1047,7 @@
     </div>
 
 
-    <div class="nav-item">
+    <div class="nav">
 
         <span class="nav-icon">
             👤
@@ -1146,207 +1062,1484 @@
 
 <script>
 
-    /* =====================================
-       DADOS TEMPORÁRIOS
+/* ==================================================
+   USUÁRIO LOGADO
+================================================== */
 
-       Mais adiante isso virá do Supabase.
-    ===================================== */
+const sessao =
+    JSON.parse(
+        localStorage.getItem(
+            "usuarioLogado"
+        )
+    );
 
-    const colaborador = {
-        id: 1,
-        nome: "Débora",
-        matricula: "0001",
-        cargo: "Auxiliar de Limpeza",
-        torre: "E"
+
+if (!sessao) {
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+/*
+    Enquanto não temos banco,
+    complementamos os usuários aqui.
+
+    Mais tarde estas informações
+    virão do Supabase.
+*/
+
+const perfis = {
+
+    "0001": {
+
+        nome:
+            "Débora",
+
+        cargo:
+            "Auxiliar de Limpeza",
+
+        tipo:
+            "limpeza",
+
+        atribuicoes: [
+
+            {
+                tipo:"torre",
+                nome:"Torre E"
+            }
+
+        ]
+
+    },
+
+
+    "0002": {
+
+        nome:
+            "Zelador",
+
+        cargo:
+            "Zelador",
+
+        tipo:
+            "zeladoria",
+
+        atribuicoes: [
+            "zeladoria-geral"
+        ]
+
+    }
+
+};
+
+
+const usuario =
+    perfis[sessao.matricula]
+    ||
+    {
+
+        nome:
+            sessao.nome,
+
+        cargo:
+            sessao.cargo,
+
+        tipo:
+            "limpeza",
+
+        atribuicoes:[]
+
     };
 
 
-    const TOTAL_LOCAIS = 17;
+/* ==================================================
+   DATA
+================================================== */
+
+const hoje =
+    new Date();
 
 
-    /* =====================================
-       CRIAR ANDARES
-    ===================================== */
+const diaSemana =
+    hoje.getDay();
 
-    const floorsContainer =
+
+const dataHoje =
+    hoje.toLocaleDateString(
+        "pt-BR"
+    );
+
+
+/*
+0 domingo
+1 segunda
+2 terça
+3 quarta
+4 quinta
+5 sexta
+6 sábado
+*/
+
+
+/* ==================================================
+   ATIVIDADES CONCLUÍDAS
+================================================== */
+
+function obterConcluidas() {
+
+    return JSON.parse(
+        localStorage.getItem(
+            "atividadesConcluidas"
+        )
+    ) || [];
+
+}
+
+
+function estaConcluida(
+    local
+) {
+
+    const concluidas =
+        obterConcluidas();
+
+
+    return concluidas.some(
+        item => {
+
+            if (
+                typeof item ===
+                "string"
+            ) {
+
+                return item === local;
+
+            }
+
+
+            return (
+                item.local === local
+                &&
+                (
+                    !item.data
+                    ||
+                    item.data === dataHoje
+                )
+            );
+
+        }
+    );
+
+}
+
+
+/* ==================================================
+   PERFIL
+================================================== */
+
+document
+    .getElementById(
+        "welcomeName"
+    )
+    .textContent =
+        "Olá, " +
+        usuario.nome;
+
+
+document
+    .getElementById(
+        "profileName"
+    )
+    .textContent =
+        usuario.nome;
+
+
+document
+    .getElementById(
+        "profileCargo"
+    )
+    .textContent =
+        usuario.cargo +
+        " • Reserva Igara";
+
+
+if (
+    usuario.tipo ===
+    "zeladoria"
+) {
+
+    document
+        .getElementById(
+            "welcomeType"
+        )
+        .textContent =
+            "ZELADORIA";
+
+
+    document
+        .getElementById(
+            "welcomeText"
+        )
+        .textContent =
+            "Atividades e rondas do Reserva Igara.";
+
+
+    document
+        .getElementById(
+            "profileIcon"
+        )
+        .textContent =
+            "🛠️";
+
+
+    document
+        .getElementById(
+            "profileTag"
+        )
+        .textContent =
+            "ZELADOR";
+
+}
+
+
+/* ==================================================
+   LIMPEZA MULTI
+================================================== */
+
+const estruturaTorres = {
+
+    "Torre A":17,
+    "Torre B":17,
+    "Torre C":17,
+    "Torre D":17,
+    "Torre E":17
+
+};
+
+
+function renderLimpeza() {
+
+    const content =
         document.getElementById(
-            "floorsContainer"
+            "content"
         );
 
 
-    for (let andar = 1; andar <= 12; andar++) {
+    let html = `
 
-        const floor =
-            document.createElement("div");
+        <section class="section">
 
-        floor.className = "location";
+            <div class="section-title">
 
+                <h2>
+                    Minha rotina
+                </h2>
 
-        floor.onclick = function () {
-
-            abrirLocal(
-                `${andar}º andar`
-            );
-
-        };
-
-
-        floor.innerHTML = `
-
-            <div class="location-icon">
-                🧹
-            </div>
-
-            <div class="location-content">
-
-                <strong>
-                    ${andar}º andar
-                </strong>
-
-                <small>
-                    Hall, piso e elevadores
-                </small>
+                <span>
+                    ${dataHoje}
+                </span>
 
             </div>
 
-            <span class="status status-pending">
-                ● Pendente
-            </span>
+    `;
+
+
+    const torres =
+        usuario.atribuicoes.filter(
+            item =>
+                item.tipo === "torre"
+        );
+
+
+    const espacos =
+        usuario.atribuicoes.filter(
+            item =>
+                item.tipo === "espaco"
+        );
+
+
+    if (
+        torres.length > 0
+    ) {
+
+        html += `
+
+            <div class="group">
+
+                <div class="group-title">
+                    🏢 Torres
+                </div>
 
         `;
 
 
-        floorsContainer.appendChild(
-            floor
+        torres.forEach(
+            item => {
+
+                const total =
+                    estruturaTorres[
+                        item.nome
+                    ] || 17;
+
+
+                const concluidas =
+                    obterConcluidas()
+                    .filter(
+                        atividade =>
+                            typeof atividade ===
+                                "object"
+                            &&
+                            atividade.torre ===
+                                item.nome
+                            &&
+                            (
+                                !atividade.data
+                                ||
+                                atividade.data ===
+                                    dataHoje
+                            )
+                    )
+                    .length;
+
+
+                const percentual =
+                    Math.min(
+                        Math.round(
+                            (
+                                concluidas /
+                                total
+                            ) * 100
+                        ),
+                        100
+                    );
+
+
+                html += `
+
+                    <div class="tower">
+
+                        <div
+                            class="tower-top"
+                        >
+
+                            <div
+                                class="tower-icon"
+                            >
+                                🏢
+                            </div>
+
+
+                            <div
+                                class="tower-info"
+                            >
+
+                                <small>
+                                    RESERVA IGARA
+                                </small>
+
+                                <strong>
+                                    ${item.nome}
+                                </strong>
+
+                            </div>
+
+
+                            <span
+                                class="tower-percent"
+                            >
+                                ${percentual}%
+                            </span>
+
+                        </div>
+
+
+                        <div
+                            class="progress"
+                        >
+
+                            <div
+                                class="progress-fill"
+                                style="
+                                    width:
+                                    ${percentual}%
+                                "
+                            ></div>
+
+                        </div>
+
+
+                        <button
+                            class="tower-button"
+                            onclick="
+                                abrirTorre(
+                                    '${item.nome}'
+                                )
+                            "
+                        >
+                            ABRIR ROTINA
+                        </button>
+
+                    </div>
+
+                `;
+
+            }
         );
+
+
+        html += `
+            </div>
+        `;
 
     }
 
 
-    /* =====================================
-       ABRIR LOCAL
-    ===================================== */
+    if (
+        espacos.length > 0
+    ) {
 
-    function abrirLocal(local) {
+        html += `
 
-        /*
-        Salvamos temporariamente o local
-        selecionado.
+            <div class="group">
 
-        Na próxima página vamos usar isso
-        para saber onde Débora está limpando.
-        */
+                <div class="group-title">
+                    🧹 Espaços
+                </div>
 
-        localStorage.setItem(
-            "localSelecionado",
-            local
+                <div class="tasks-grid">
+
+        `;
+
+
+        espacos.forEach(
+            item => {
+
+                html +=
+                    criarCard(
+                        item.nome,
+                        item.icone ||
+                            "🧹",
+                        "Limpeza programada",
+                        estaConcluida(
+                            item.nome
+                        )
+                    );
+
+            }
         );
 
 
-        localStorage.setItem(
-            "torreSelecionada",
-            "Torre E"
-        );
+        html += `
 
+                </div>
 
-        /*
-        atividade.html será criada
-        na próxima etapa.
-        */
+            </div>
 
-        window.location.href =
-            "atividade.html";
+        `;
 
     }
 
 
-    /* =====================================
-       REPORTAR PROBLEMA
-    ===================================== */
-
-    function reportarProblema() {
-
-        localStorage.setItem(
-            "torreSelecionada",
-            "Torre E"
-        );
+    html += `
+        </section>
+    `;
 
 
-        window.location.href =
-            "reportar.html";
+    content.innerHTML =
+        html;
+
+
+    atualizarContadoresLimpeza();
+
+}
+
+
+/* ==================================================
+   ZELADORIA
+================================================== */
+
+/*
+   DIÁRIAS
+*/
+
+const zeladoriaDiaria = [
+
+    {
+        nome:
+            "Frente do condomínio",
+
+        icone:
+            "🚪",
+
+        detalhe:
+            "Acesso, calçada e recolhimento de resíduos"
+    },
+
+    {
+        nome:
+            "Áreas verdes comuns",
+
+        icone:
+            "🌿",
+
+        detalhe:
+            "Recolher lixo e resíduos sobre os gramados"
+    },
+
+    {
+        nome:
+            "Entorno Torre A",
+
+        icone:
+            "🏢",
+
+        detalhe:
+            "Gramado, calçada e acessos"
+    },
+
+    {
+        nome:
+            "Entorno Torre B",
+
+        icone:
+            "🏢",
+
+        detalhe:
+            "Gramado, calçada e acessos"
+    },
+
+    {
+        nome:
+            "Entorno Torre C",
+
+        icone:
+            "🏢",
+
+        detalhe:
+            "Gramado, calçada e acessos"
+    },
+
+    {
+        nome:
+            "Entorno Torre D",
+
+        icone:
+            "🏢",
+
+        detalhe:
+            "Gramado, calçada e acessos"
+    },
+
+    {
+        nome:
+            "Entorno Torre E",
+
+        icone:
+            "🏢",
+
+        detalhe:
+            "Gramado, calçada e acessos"
+    },
+
+    {
+        nome:
+            "Resíduos Torre A",
+
+        icone:
+            "🗑️",
+
+        detalhe:
+            "Abrigo de resíduos"
+    },
+
+    {
+        nome:
+            "Resíduos Torre B",
+
+        icone:
+            "🗑️",
+
+        detalhe:
+            "Abrigo de resíduos"
+    },
+
+    {
+        nome:
+            "Resíduos Torre C",
+
+        icone:
+            "🗑️",
+
+        detalhe:
+            "Abrigo de resíduos"
+    },
+
+    {
+        nome:
+            "Resíduos Torre D",
+
+        icone:
+            "🗑️",
+
+        detalhe:
+            "Abrigo de resíduos"
+    },
+
+    {
+        nome:
+            "Resíduos Torre E",
+
+        icone:
+            "🗑️",
+
+        detalhe:
+            "Abrigo de resíduos"
+    },
+
+    {
+        nome:
+            "Central de resíduos",
+
+        icone:
+            "♻️",
+
+        detalhe:
+            "Organização e limpeza"
+    },
+
+    {
+        nome:
+            "Lixeiras das áreas comuns",
+
+        icone:
+            "🗑️",
+
+        detalhe:
+            "Esvaziar, trocar sacos e verificar limpeza"
+    },
+
+    {
+        nome:
+            "Chimarródromo",
+
+        icone:
+            "🧉",
+
+        detalhe:
+            "Piso, bancos, mesas e entorno"
+    },
+
+    {
+        nome:
+            "Play / Praça infantil",
+
+        icone:
+            "🛝",
+
+        detalhe:
+            "Piso, entorno e resíduos"
+    },
+
+    {
+        nome:
+            "Espaço Pet",
+
+        icone:
+            "🐕",
+
+        detalhe:
+            "Piso, lixeira e entorno"
+    },
+
+    {
+        nome:
+            "Entorno da piscina",
+
+        icone:
+            "🏊",
+
+        detalhe:
+            "Circulação e recolhimento de resíduos"
+    }
+
+];
+
+
+/*
+   SEMANAIS
+
+   Segunda G1
+   Terça G2
+   Quarta G3
+   Quinta G4
+   Sexta rua lateral
+*/
+
+const zeladoriaSemanal = {
+
+    1:{
+
+        nome:
+            "Garagem G1",
+
+        icone:
+            "🅿️",
+
+        detalhe:
+            "Limpeza semanal da garagem"
+
+    },
+
+    2:{
+
+        nome:
+            "Garagem G2",
+
+        icone:
+            "🅿️",
+
+        detalhe:
+            "Limpeza semanal da garagem"
+
+    },
+
+    3:{
+
+        nome:
+            "Garagem G3",
+
+        icone:
+            "🅿️",
+
+        detalhe:
+            "Limpeza semanal da garagem"
+
+    },
+
+    4:{
+
+        nome:
+            "Garagem G4",
+
+        icone:
+            "🅿️",
+
+        detalhe:
+            "Limpeza semanal da garagem"
+
+    },
+
+    5:{
+
+        nome:
+            "Rua lateral",
+
+        icone:
+            "🛣️",
+
+        detalhe:
+            "Limpeza semanal da circulação externa"
 
     }
 
+};
 
-    /* =====================================
-       PROGRESSO
 
-       Temporariamente busca atividades
-       concluídas no próprio navegador.
+/*
+   RESERVAS
 
-       Depois isso será substituído
-       pelo banco de dados.
-    ===================================== */
+   Por enquanto fica vazio.
 
-    function atualizarProgresso() {
+   Depois o gestor cadastra uma reserva
+   e a tarefa aparece automaticamente.
+*/
 
-        const concluidos =
-            JSON.parse(
-                localStorage.getItem(
-                    "atividadesConcluidas"
+function obterReservasHoje() {
+
+    const reservas =
+        JSON.parse(
+            localStorage.getItem(
+                "reservasLimpeza"
+            )
+        ) || [];
+
+
+    return reservas.filter(
+        item =>
+            item.data ===
+            dataHoje
+    );
+
+}
+
+
+/* ==================================================
+   RONDA
+================================================== */
+
+const rondas = [
+
+    {
+        nome:
+            "Ronda de iluminação",
+
+        icone:
+            "💡",
+
+        detalhe:
+            "Verificar pontos apagados ou defeituosos"
+    },
+
+    {
+        nome:
+            "Portas e portões",
+
+        icone:
+            "🚪",
+
+        detalhe:
+            "Verificar funcionamento e danos aparentes"
+    },
+
+    {
+        nome:
+            "Vazamentos",
+
+        icone:
+            "💧",
+
+        detalhe:
+            "Verificar água acumulada e vazamentos aparentes"
+    },
+
+    {
+        nome:
+            "Conservação geral",
+
+        icone:
+            "🔎",
+
+        detalhe:
+            "Danos, objetos abandonados ou riscos"
+    }
+
+];
+
+
+/* ==================================================
+   RENDER ZELADORIA
+================================================== */
+
+function renderZeladoria() {
+
+    const content =
+        document.getElementById(
+            "content"
+        );
+
+
+    let html = `
+
+        <section class="section">
+
+            <div class="section-title">
+
+                <h2>
+                    Rotina de hoje
+                </h2>
+
+                <span>
+                    ${dataHoje}
+                </span>
+
+            </div>
+
+    `;
+
+
+    /* DIÁRIAS */
+
+    html += `
+
+        <div class="group">
+
+            <div class="group-title">
+                ☀️ Rotina diária
+            </div>
+
+            <div class="tasks-grid">
+
+    `;
+
+
+    zeladoriaDiaria.forEach(
+        item => {
+
+            html +=
+                criarCard(
+                    item.nome,
+                    item.icone,
+                    item.detalhe,
+                    estaConcluida(
+                        item.nome
+                    )
+                );
+
+        }
+    );
+
+
+    html += `
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    /* SEMANAL */
+
+    const semanal =
+        zeladoriaSemanal[
+            diaSemana
+        ];
+
+
+    html += `
+
+        <div class="group">
+
+            <div class="group-title">
+                📅 Atividade semanal
+            </div>
+
+    `;
+
+
+    if (semanal) {
+
+        html +=
+            criarCard(
+                semanal.nome,
+                semanal.icone,
+                semanal.detalhe,
+                estaConcluida(
+                    semanal.nome
                 )
-            ) || [];
-
-
-        const quantidade =
-            concluidos.length;
-
-
-        const percentual =
-            Math.round(
-                (
-                    quantidade /
-                    TOTAL_LOCAIS
-                ) * 100
             );
 
+    } else {
 
-        document.getElementById(
-            "completedCount"
-        ).textContent =
-            quantidade;
+        html += `
 
+            <div class="empty">
+                Nenhuma atividade semanal
+                programada para hoje.
+            </div>
 
-        document.getElementById(
-            "pendingCount"
-        ).textContent =
-            TOTAL_LOCAIS - quantidade;
-
-
-        document.getElementById(
-            "progressPercent"
-        ).textContent =
-            percentual + "%";
-
-
-        document.getElementById(
-            "progressFill"
-        ).style.width =
-            percentual + "%";
-
-
-        document.getElementById(
-            "progressDetail"
-        ).textContent =
-            `${quantidade} de ${TOTAL_LOCAIS} locais concluídos`;
+        `;
 
     }
 
 
-    atualizarProgresso();
+    html += `
+        </div>
+    `;
+
+
+    /* RESERVAS */
+
+    const reservas =
+        obterReservasHoje();
+
+
+    html += `
+
+        <div class="group">
+
+            <div class="group-title">
+                🛖 Quiosques / reservas
+            </div>
+
+    `;
+
+
+    if (
+        reservas.length === 0
+    ) {
+
+        html += `
+
+            <div class="event-card">
+
+                <strong>
+                    Nenhuma limpeza por reserva
+                </strong>
+
+                Não há quiosques programados
+                para limpeza hoje.
+
+            </div>
+
+        `;
+
+    } else {
+
+        reservas.forEach(
+            reserva => {
+
+                html +=
+                    criarCard(
+                        reserva.local,
+                        "🛖",
+                        "Limpeza após utilização",
+                        estaConcluida(
+                            reserva.local
+                        )
+                    );
+
+            }
+        );
+
+    }
+
+
+    html += `
+        </div>
+    `;
+
+
+    /* RONDA */
+
+    html += `
+
+        <div class="group">
+
+            <div class="group-title">
+                🔎 Ronda de conservação
+            </div>
+
+            <div class="tasks-grid">
+
+    `;
+
+
+    rondas.forEach(
+        item => {
+
+            html +=
+                criarCard(
+                    item.nome,
+                    item.icone,
+                    item.detalhe,
+                    estaConcluida(
+                        item.nome
+                    )
+                );
+
+        }
+    );
+
+
+    html += `
+
+            </div>
+
+        </div>
+
+        </section>
+
+    `;
+
+
+    content.innerHTML =
+        html;
+
+
+    atualizarContadoresZeladoria();
+
+}
+
+
+/* ==================================================
+   CARD GENÉRICO
+================================================== */
+
+function criarCard(
+    nome,
+    icone,
+    detalhe,
+    concluida
+) {
+
+    const status =
+        concluida
+        ? `
+            <span
+                class="status done"
+            >
+                ✓ CONCLUÍDO
+            </span>
+          `
+        : `
+            <span
+                class="status pending"
+            >
+                PENDENTE
+            </span>
+          `;
+
+
+    return `
+
+        <button
+            class="task"
+            onclick="
+                abrirAtividade(
+                    '${escaparJS(nome)}'
+                )
+            "
+        >
+
+            <div class="task-icon">
+                ${icone}
+            </div>
+
+
+            <div class="task-main">
+
+                <strong>
+                    ${nome}
+                </strong>
+
+                <span>
+                    ${detalhe}
+                </span>
+
+            </div>
+
+
+            ${status}
+
+        </button>
+
+    `;
+
+}
+
+
+/* ==================================================
+   ABRIR TORRE
+================================================== */
+
+function abrirTorre(
+    torre
+) {
+
+    localStorage.setItem(
+        "torreSelecionada",
+        torre
+    );
+
+
+    /*
+       Por enquanto a Torre E
+       já possui sua estrutura.
+
+       Quando cadastrarmos A-D,
+       usamos a mesma lógica.
+    */
+
+    localStorage.setItem(
+        "localSelecionado",
+        "Térreo / Hall de entrada"
+    );
+
+
+    window.location.href =
+        "atividade.html";
+
+}
+
+
+/* ==================================================
+   ABRIR ATIVIDADE
+================================================== */
+
+function abrirAtividade(
+    local
+) {
+
+    localStorage.setItem(
+        "localSelecionado",
+        local
+    );
+
+
+    localStorage.setItem(
+        "torreSelecionada",
+        "Reserva Igara"
+    );
+
+
+    localStorage.setItem(
+        "tipoAtividadeAtual",
+        usuario.tipo
+    );
+
+
+    window.location.href =
+        "atividade.html";
+
+}
+
+
+/* ==================================================
+   CONTADORES LIMPEZA
+================================================== */
+
+function atualizarContadoresLimpeza() {
+
+    let total = 0;
+    let concluidas = 0;
+
+
+    usuario.atribuicoes.forEach(
+        item => {
+
+            if (
+                item.tipo ===
+                "torre"
+            ) {
+
+                const quantidade =
+                    estruturaTorres[
+                        item.nome
+                    ] || 17;
+
+
+                total +=
+                    quantidade;
+
+
+                concluidas +=
+                    obterConcluidas()
+                    .filter(
+                        atividade =>
+                            typeof atividade ===
+                                "object"
+                            &&
+                            atividade.torre ===
+                                item.nome
+                            &&
+                            (
+                                !atividade.data
+                                ||
+                                atividade.data ===
+                                    dataHoje
+                            )
+                    )
+                    .length;
+
+            }
+
+
+            if (
+                item.tipo ===
+                "espaco"
+            ) {
+
+                total++;
+
+
+                if (
+                    estaConcluida(
+                        item.nome
+                    )
+                ) {
+
+                    concluidas++;
+
+                }
+
+            }
+
+        }
+    );
+
+
+    atualizarResumo(
+        total,
+        concluidas
+    );
+
+}
+
+
+/* ==================================================
+   CONTADORES ZELADOR
+================================================== */
+
+function atualizarContadoresZeladoria() {
+
+    let tarefas = [
+        ...zeladoriaDiaria,
+        ...rondas
+    ];
+
+
+    const semanal =
+        zeladoriaSemanal[
+            diaSemana
+        ];
+
+
+    if (semanal) {
+
+        tarefas.push(
+            semanal
+        );
+
+    }
+
+
+    const reservas =
+        obterReservasHoje();
+
+
+    reservas.forEach(
+        reserva => {
+
+            tarefas.push({
+
+                nome:
+                    reserva.local
+
+            });
+
+        }
+    );
+
+
+    const total =
+        tarefas.length;
+
+
+    const concluidas =
+        tarefas.filter(
+            item =>
+                estaConcluida(
+                    item.nome
+                )
+        ).length;
+
+
+    atualizarResumo(
+        total,
+        concluidas
+    );
+
+}
+
+
+/* ==================================================
+   RESUMO
+================================================== */
+
+function atualizarResumo(
+    total,
+    concluidas
+) {
+
+    document
+        .getElementById(
+            "totalCount"
+        )
+        .textContent =
+            total;
+
+
+    document
+        .getElementById(
+            "completedCount"
+        )
+        .textContent =
+            concluidas;
+
+
+    document
+        .getElementById(
+            "pendingCount"
+        )
+        .textContent =
+            Math.max(
+                total -
+                concluidas,
+                0
+            );
+
+}
+
+
+/* ==================================================
+   ESCAPE
+================================================== */
+
+function escaparJS(
+    texto
+) {
+
+    return String(texto)
+        .replace(
+            /\\/g,
+            "\\\\"
+        )
+        .replace(
+            /'/g,
+            "\\'"
+        );
+
+}
+
+
+/* ==================================================
+   LOGOUT
+================================================== */
+
+function sair() {
+
+    localStorage.removeItem(
+        "usuarioLogado"
+    );
+
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+/* ==================================================
+   INICIAR
+================================================== */
+
+if (
+    usuario.tipo ===
+    "zeladoria"
+) {
+
+    renderZeladoria();
+
+} else {
+
+    renderLimpeza();
+
+}
 
 </script>
-
 
 </body>
 
