@@ -1,0 +1,1553 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Reportar problema — CUIDADOS</title>
+
+<meta
+    name="theme-color"
+    content="#12355b"
+>
+
+<style>
+
+:root {
+
+    --primary:#12355b;
+    --primary-dark:#0b2745;
+    --primary-light:#eaf2fb;
+
+    --green:#178c58;
+    --green-light:#e8f6ef;
+
+    --red:#d94b4b;
+    --red-light:#fdecec;
+
+    --text:#17202a;
+    --muted:#687483;
+
+    --background:#f4f7fa;
+    --card:#ffffff;
+    --border:#e2e8ef;
+
+    --shadow:
+        0 10px 30px
+        rgba(20,45,75,.08);
+
+}
+
+
+* {
+
+    box-sizing:border-box;
+
+    margin:0;
+    padding:0;
+
+}
+
+
+body {
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
+
+    background:
+        var(--background);
+
+    color:
+        var(--text);
+
+    min-height:100vh;
+
+}
+
+
+button,
+textarea,
+select {
+
+    font-family:inherit;
+
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary-dark),
+            var(--primary)
+        );
+
+    color:white;
+
+    padding:
+        calc(
+            15px +
+            env(safe-area-inset-top)
+        )
+        18px
+        35px;
+
+}
+
+
+.header-content {
+
+    max-width:600px;
+
+    margin:auto;
+
+}
+
+
+.topbar {
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:
+        space-between;
+
+}
+
+
+.back {
+
+    width:42px;
+    height:42px;
+
+    border:0;
+
+    border-radius:13px;
+
+    background:
+        rgba(255,255,255,.14);
+
+    color:white;
+
+    font-size:22px;
+
+    cursor:pointer;
+
+}
+
+
+.brand {
+
+    text-align:center;
+
+}
+
+
+.brand strong {
+
+    display:block;
+
+    font-size:14px;
+
+    letter-spacing:.8px;
+
+}
+
+
+.brand small {
+
+    display:block;
+
+    margin-top:2px;
+
+    opacity:.7;
+
+    font-size:10px;
+
+}
+
+
+.public {
+
+    width:42px;
+    height:42px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    background:
+        rgba(255,255,255,.14);
+
+    font-size:18px;
+
+}
+
+
+.intro {
+
+    margin-top:28px;
+
+}
+
+
+.intro small {
+
+    opacity:.7;
+
+    font-size:11px;
+
+}
+
+
+.intro h1 {
+
+    margin-top:4px;
+
+    font-size:26px;
+
+}
+
+
+.intro p {
+
+    margin-top:7px;
+
+    max-width:430px;
+
+    opacity:.75;
+
+    font-size:11px;
+
+    line-height:1.55;
+
+}
+
+
+/* =========================
+   MAIN
+========================= */
+
+main {
+
+    max-width:600px;
+
+    margin:-15px auto 50px;
+
+    padding:0 15px;
+
+}
+
+
+.card {
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:19px;
+
+    margin-bottom:14px;
+
+    box-shadow:
+        var(--shadow);
+
+}
+
+
+.title {
+
+    font-size:15px;
+
+    font-weight:700;
+
+}
+
+
+.description {
+
+    color:
+        var(--muted);
+
+    font-size:10px;
+
+    line-height:1.5;
+
+    margin-top:4px;
+
+    margin-bottom:14px;
+
+}
+
+
+/* =========================
+   LOCAL
+========================= */
+
+.tower {
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    margin-bottom:15px;
+
+    padding:12px;
+
+    background:
+        var(--primary-light);
+
+    border-radius:14px;
+
+}
+
+
+.tower-icon {
+
+    width:40px;
+    height:40px;
+
+    border-radius:12px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    background:white;
+
+    font-size:19px;
+
+}
+
+
+.tower-info small {
+
+    display:block;
+
+    color:
+        var(--muted);
+
+    font-size:9px;
+
+}
+
+
+.tower-info strong {
+
+    display:block;
+
+    margin-top:2px;
+
+    font-size:14px;
+
+}
+
+
+select {
+
+    width:100%;
+
+    height:52px;
+
+    padding:0 13px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:14px;
+
+    outline:none;
+
+    background:#fafbfc;
+
+    color:
+        var(--text);
+
+    font-size:13px;
+
+}
+
+
+select:focus {
+
+    border-color:#9eb6cd;
+
+}
+
+
+/* =========================
+   FOTO
+========================= */
+
+.photo-box {
+
+    border:
+        2px dashed
+        #cbd6e0;
+
+    border-radius:17px;
+
+    padding:24px 15px;
+
+    text-align:center;
+
+    background:#fafcfd;
+
+    cursor:pointer;
+
+}
+
+
+.photo-icon {
+
+    width:53px;
+    height:53px;
+
+    margin:auto;
+
+    border-radius:50%;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    background:
+        var(--primary-light);
+
+    font-size:24px;
+
+}
+
+
+.photo-box strong {
+
+    display:block;
+
+    margin-top:10px;
+
+    font-size:13px;
+
+}
+
+
+.photo-box span {
+
+    display:block;
+
+    margin-top:4px;
+
+    color:
+        var(--muted);
+
+    font-size:10px;
+
+}
+
+
+#photoInput {
+
+    display:none;
+
+}
+
+
+.preview {
+
+    display:none;
+
+    position:relative;
+
+    margin-top:13px;
+
+}
+
+
+.preview img {
+
+    width:100%;
+
+    max-height:380px;
+
+    object-fit:cover;
+
+    border-radius:16px;
+
+}
+
+
+.remove {
+
+    position:absolute;
+
+    top:10px;
+    right:10px;
+
+    width:35px;
+    height:35px;
+
+    border:0;
+
+    border-radius:50%;
+
+    background:
+        rgba(0,0,0,.65);
+
+    color:white;
+
+    font-size:17px;
+
+    cursor:pointer;
+
+}
+
+
+/* =========================
+   OU
+========================= */
+
+.or {
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    margin:19px 0;
+
+}
+
+
+.or::before,
+.or::after {
+
+    content:"";
+
+    height:1px;
+
+    flex:1;
+
+    background:
+        var(--border);
+
+}
+
+
+.or span {
+
+    color:
+        var(--muted);
+
+    font-size:9px;
+
+    font-weight:700;
+
+}
+
+
+/* =========================
+   TEXTO
+========================= */
+
+textarea {
+
+    width:100%;
+
+    min-height:120px;
+
+    padding:13px;
+
+    resize:vertical;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:14px;
+
+    outline:none;
+
+    background:#fafbfc;
+
+    color:
+        var(--text);
+
+    font-size:12px;
+
+    line-height:1.5;
+
+}
+
+
+textarea:focus {
+
+    background:white;
+
+    border-color:#9eb6cd;
+
+}
+
+
+.counter {
+
+    margin-top:5px;
+
+    text-align:right;
+
+    color:
+        var(--muted);
+
+    font-size:9px;
+
+}
+
+
+/* =========================
+   INFO
+========================= */
+
+.info {
+
+    padding:12px;
+
+    border-radius:13px;
+
+    background:
+        var(--primary-light);
+
+    color:
+        var(--primary);
+
+    font-size:10px;
+
+    line-height:1.5;
+
+}
+
+
+/* =========================
+   ERROR
+========================= */
+
+.error {
+
+    display:none;
+
+    margin-bottom:13px;
+
+    padding:12px;
+
+    border-radius:13px;
+
+    background:
+        var(--red-light);
+
+    color:#a82d2d;
+
+    font-size:10px;
+
+    line-height:1.5;
+
+}
+
+
+/* =========================
+   SEND
+========================= */
+
+.send {
+
+    width:100%;
+
+    padding:17px;
+
+    border:0;
+
+    border-radius:16px;
+
+    background:
+        var(--primary);
+
+    color:white;
+
+    font-size:12px;
+
+    font-weight:750;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 9px 22px
+        rgba(18,53,91,.18);
+
+}
+
+
+/* =========================
+   SUCCESS
+========================= */
+
+.overlay {
+
+    display:none;
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:999;
+
+    padding:20px;
+
+    align-items:center;
+    justify-content:center;
+
+    background:
+        rgba(8,28,48,.72);
+
+}
+
+
+.success {
+
+    width:100%;
+    max-width:380px;
+
+    padding:28px 22px;
+
+    border-radius:24px;
+
+    background:white;
+
+    text-align:center;
+
+}
+
+
+.success-icon {
+
+    width:70px;
+    height:70px;
+
+    margin:auto;
+
+    border-radius:50%;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    background:
+        var(--green-light);
+
+    color:
+        var(--green);
+
+    font-size:31px;
+
+    font-weight:800;
+
+}
+
+
+.success h2 {
+
+    margin-top:15px;
+
+    font-size:20px;
+
+}
+
+
+.success p {
+
+    margin-top:8px;
+
+    color:
+        var(--muted);
+
+    font-size:11px;
+
+    line-height:1.55;
+
+}
+
+
+.protocol {
+
+    margin-top:16px;
+
+    padding:13px;
+
+    border-radius:13px;
+
+    background:#f5f7f9;
+
+    font-size:11px;
+
+    line-height:1.6;
+
+}
+
+
+.success button {
+
+    width:100%;
+
+    margin-top:18px;
+
+    padding:14px;
+
+    border:0;
+
+    border-radius:14px;
+
+    background:
+        var(--primary);
+
+    color:white;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+<div class="header-content">
+
+    <div class="topbar">
+
+        <button
+            class="back"
+            onclick="voltar()"
+        >
+            ‹
+        </button>
+
+
+        <div class="brand">
+
+            <strong>
+                CUIDADOS
+            </strong>
+
+            <small>
+                Reserva Igara
+            </small>
+
+        </div>
+
+
+        <div class="public">
+            ⚠
+        </div>
+
+    </div>
+
+
+    <div class="intro">
+
+        <small>
+            Comunicação com a equipe
+        </small>
+
+        <h1>
+            Reportar problema
+        </h1>
+
+        <p>
+            Informe onde está o problema
+            e envie uma foto ou uma breve descrição.
+        </p>
+
+    </div>
+
+</div>
+
+</header>
+
+
+<main>
+
+
+<div
+    class="error"
+    id="error"
+></div>
+
+
+<!-- LOCAL -->
+
+<section class="card">
+
+    <div class="title">
+        Onde está o problema?
+    </div>
+
+    <div class="description">
+        Selecione o local para direcionarmos
+        a ocorrência para a equipe responsável.
+    </div>
+
+
+    <div class="tower">
+
+        <div class="tower-icon">
+            🏢
+        </div>
+
+
+        <div class="tower-info">
+
+            <small>
+                LOCAL
+            </small>
+
+            <strong>
+                Torre E
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <select id="local">
+
+        <option value="">
+            Selecione o andar ou local
+        </option>
+
+        <option>
+            Térreo / Hall de entrada
+        </option>
+
+        <option>
+            1º andar
+        </option>
+
+        <option>
+            2º andar
+        </option>
+
+        <option>
+            3º andar
+        </option>
+
+        <option>
+            4º andar
+        </option>
+
+        <option>
+            5º andar
+        </option>
+
+        <option>
+            6º andar
+        </option>
+
+        <option>
+            7º andar
+        </option>
+
+        <option>
+            8º andar
+        </option>
+
+        <option>
+            9º andar
+        </option>
+
+        <option>
+            10º andar
+        </option>
+
+        <option>
+            11º andar
+        </option>
+
+        <option>
+            12º andar
+        </option>
+
+        <option>
+            Escadas
+        </option>
+
+        <option>
+            Elevador 1
+        </option>
+
+        <option>
+            Elevador 2
+        </option>
+
+        <option>
+            Abrigo de resíduos
+        </option>
+
+    </select>
+
+</section>
+
+
+<!-- FOTO OU TEXTO -->
+
+<section class="card">
+
+    <div class="title">
+        O que aconteceu?
+    </div>
+
+    <div class="description">
+        Você pode enviar uma foto,
+        escrever o problema ou fazer os dois.
+    </div>
+
+
+    <label
+        class="photo-box"
+        id="photoBox"
+        for="photoInput"
+    >
+
+        <div class="photo-icon">
+            📷
+        </div>
+
+        <strong>
+            Tirar foto
+        </strong>
+
+        <span>
+            Toque para usar a câmera
+            ou escolher uma imagem
+        </span>
+
+    </label>
+
+
+    <input
+        type="file"
+        id="photoInput"
+        accept="image/*"
+        capture="environment"
+    >
+
+
+    <div
+        class="preview"
+        id="preview"
+    >
+
+        <img
+            id="photoPreview"
+            alt="Foto da ocorrência"
+        >
+
+        <button
+            type="button"
+            class="remove"
+            onclick="removerFoto()"
+        >
+            ×
+        </button>
+
+    </div>
+
+
+    <div class="or">
+
+        <span>
+            OU
+        </span>
+
+    </div>
+
+
+    <textarea
+        id="descricao"
+        maxlength="300"
+        placeholder="Ex.: piso molhado próximo ao elevador..."
+        oninput="contador()"
+    ></textarea>
+
+
+    <div class="counter">
+
+        <span id="count">
+            0
+        </span>/300
+
+    </div>
+
+</section>
+
+
+<div class="card">
+
+    <div class="info">
+        🔒 Não é necessário informar nome,
+        apartamento ou telefone para enviar
+        esta ocorrência.
+    </div>
+
+</div>
+
+
+<button
+    class="send"
+    onclick="enviar()"
+>
+    ENVIAR OCORRÊNCIA
+</button>
+
+
+</main>
+
+
+<!-- SUCESSO -->
+
+<div
+    class="overlay"
+    id="successOverlay"
+>
+
+    <div class="success">
+
+        <div class="success-icon">
+            ✓
+        </div>
+
+
+        <h2>
+            Ocorrência enviada
+        </h2>
+
+
+        <p>
+            A equipe responsável recebeu
+            o registro.
+        </p>
+
+
+        <div
+            class="protocol"
+            id="protocol"
+        ></div>
+
+
+        <button
+            onclick="inicio()"
+        >
+            CONCLUIR
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* ==============================
+   FOTO
+============================== */
+
+const photoInput =
+    document.getElementById(
+        "photoInput"
+    );
+
+
+let fotoSelecionada = false;
+
+
+photoInput.addEventListener(
+    "change",
+    function() {
+
+        const file =
+            this.files[0];
+
+
+        if (!file) {
+            return;
+        }
+
+
+        const url =
+            URL.createObjectURL(
+                file
+            );
+
+
+        document
+            .getElementById(
+                "photoPreview"
+            )
+            .src = url;
+
+
+        document
+            .getElementById(
+                "photoBox"
+            )
+            .style.display =
+                "none";
+
+
+        document
+            .getElementById(
+                "preview"
+            )
+            .style.display =
+                "block";
+
+
+        fotoSelecionada =
+            true;
+
+
+        esconderErro();
+
+    }
+);
+
+
+function removerFoto() {
+
+    photoInput.value = "";
+
+
+    document
+        .getElementById(
+            "photoPreview"
+        )
+        .src = "";
+
+
+    document
+        .getElementById(
+            "preview"
+        )
+        .style.display =
+            "none";
+
+
+    document
+        .getElementById(
+            "photoBox"
+        )
+        .style.display =
+            "block";
+
+
+    fotoSelecionada =
+        false;
+
+}
+
+
+/* ==============================
+   CONTADOR
+============================== */
+
+function contador() {
+
+    const tamanho =
+        document
+            .getElementById(
+                "descricao"
+            )
+            .value
+            .length;
+
+
+    document
+        .getElementById(
+            "count"
+        )
+        .textContent =
+            tamanho;
+
+}
+
+
+/* ==============================
+   ERRO
+============================== */
+
+function mostrarErro(texto) {
+
+    const error =
+        document
+            .getElementById(
+                "error"
+            );
+
+
+    error.textContent =
+        texto;
+
+
+    error.style.display =
+        "block";
+
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+function esconderErro() {
+
+    document
+        .getElementById(
+            "error"
+        )
+        .style.display =
+            "none";
+
+}
+
+
+/* ==============================
+   ENVIAR
+============================== */
+
+function enviar() {
+
+    esconderErro();
+
+
+    const local =
+        document
+            .getElementById(
+                "local"
+            )
+            .value;
+
+
+    const descricao =
+        document
+            .getElementById(
+                "descricao"
+            )
+            .value
+            .trim();
+
+
+    /*
+    LOCAL É OBRIGATÓRIO
+    */
+
+    if (!local) {
+
+        mostrarErro(
+            "Selecione onde está o problema."
+        );
+
+        return;
+
+    }
+
+
+    /*
+    FOTO OU TEXTO
+    */
+
+    if (
+        !fotoSelecionada &&
+        descricao.length === 0
+    ) {
+
+        mostrarErro(
+            "Envie uma foto ou descreva o problema."
+        );
+
+        return;
+
+    }
+
+
+    const agora =
+        new Date();
+
+
+    const protocolo =
+        "OC-" +
+        agora.getTime()
+            .toString()
+            .slice(-7);
+
+
+    const ocorrencia = {
+
+        protocolo:
+            protocolo,
+
+        torre:
+            "Torre E",
+
+        local:
+            local,
+
+        descricao:
+            descricao,
+
+        foto:
+            fotoSelecionada,
+
+        status:
+            "Aberta",
+
+        origem:
+            "Morador / visitante",
+
+        data:
+            agora.toLocaleDateString(
+                "pt-BR"
+            ),
+
+        hora:
+            agora.toLocaleTimeString(
+                "pt-BR",
+                {
+                    hour:"2-digit",
+                    minute:"2-digit"
+                }
+            ),
+
+        timestamp:
+            agora.toISOString()
+
+    };
+
+
+    /*
+    TEMPORÁRIO:
+    GUARDA NO NAVEGADOR.
+
+    Depois isso irá para Supabase.
+    */
+
+    let ocorrencias =
+        JSON.parse(
+            localStorage.getItem(
+                "ocorrencias"
+            )
+        ) || [];
+
+
+    ocorrencias.unshift(
+        ocorrencia
+    );
+
+
+    localStorage.setItem(
+        "ocorrencias",
+        JSON.stringify(
+            ocorrencias
+        )
+    );
+
+
+    document
+        .getElementById(
+            "protocol"
+        )
+        .innerHTML = `
+
+            <strong>
+                ${protocolo}
+            </strong>
+
+            <br>
+
+            Torre E • ${local}
+
+            <br>
+
+            ${ocorrencia.data}
+            às
+            ${ocorrencia.hora}
+
+        `;
+
+
+    document
+        .getElementById(
+            "successOverlay"
+        )
+        .style.display =
+            "flex";
+
+}
+
+
+/* ==============================
+   NAVEGAÇÃO
+============================== */
+
+function voltar() {
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+function inicio() {
+
+    window.location.href =
+        "index.html";
+
+}
+
+</script>
+
+
+</body>
+
+</html>
