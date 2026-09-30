@@ -10,7 +10,7 @@
     content="width=device-width, initial-scale=1.0"
 >
 
-<title>Reportar problema — CUIDADOS</title>
+<title>CUIDADOS — Limpeza & Zeladoria</title>
 
 <meta
     name="theme-color"
@@ -27,6 +27,9 @@
 
     --green:#178c58;
     --green-light:#e8f6ef;
+
+    --purple:#6654a3;
+    --purple-light:#f0edf8;
 
     --red:#d94b4b;
     --red-light:#fdecec;
@@ -53,6 +56,12 @@
 
 }
 
+html {
+
+    -webkit-text-size-adjust:100%;
+
+}
+
 body {
 
     font-family:
@@ -75,8 +84,6 @@ body {
 }
 
 button,
-textarea,
-select,
 input {
 
     font-family:inherit;
@@ -84,120 +91,103 @@ input {
 }
 
 
-/* HEADER */
+/* ==================================
+   HEADER
+================================== */
 
 header {
 
-    background:
-        linear-gradient(
-            135deg,
-            var(--primary-dark),
-            var(--primary)
-        );
-
-    color:white;
+    min-height:310px;
 
     padding:
         calc(
-            15px +
+            24px +
             env(safe-area-inset-top)
         )
-        18px
-        35px;
+        20px
+        82px;
+
+    color:white;
+
+    background:
+        linear-gradient(
+            145deg,
+            var(--primary-dark),
+            var(--primary)
+        );
 
 }
 
 .header-content {
 
-    max-width:600px;
+    width:100%;
+
+    max-width:760px;
 
     margin:auto;
 
 }
 
-.topbar {
+.brand {
 
     display:flex;
 
     align-items:center;
 
-    justify-content:
-        space-between;
+    gap:12px;
 
 }
 
-.back {
+.logo {
 
-    width:42px;
-    height:42px;
+    width:52px;
+    height:52px;
 
-    border:0;
-
-    border-radius:13px;
-
-    background:
-        rgba(255,255,255,.14);
-
-    color:white;
-
-    font-size:22px;
-
-    cursor:pointer;
-
-}
-
-.brand {
-
-    text-align:center;
-
-}
-
-.brand strong {
-
-    display:block;
-
-    font-size:14px;
-
-    letter-spacing:.8px;
-
-}
-
-.brand small {
-
-    display:block;
-
-    margin-top:2px;
-
-    opacity:.7;
-
-    font-size:10px;
-
-}
-
-.public {
-
-    width:42px;
-    height:42px;
-
-    border-radius:50%;
+    flex-shrink:0;
 
     display:flex;
 
     align-items:center;
     justify-content:center;
 
+    border-radius:16px;
+
     background:
         rgba(255,255,255,.14);
 
-}
+    font-size:26px;
 
-.intro {
-
-    margin-top:28px;
+    font-weight:800;
 
 }
 
-.intro small {
+.brand-text h1 {
+
+    font-size:21px;
+
+    letter-spacing:1px;
+
+}
+
+.brand-text span {
+
+    display:block;
+
+    margin-top:2px;
+
+    opacity:.68;
+
+    font-size:11px;
+
+}
+
+.welcome {
+
+    margin-top:43px;
+
+}
+
+.welcome small {
 
     opacity:.7;
 
@@ -205,437 +195,197 @@ header {
 
 }
 
-.intro h1 {
+.welcome h2 {
 
-    margin-top:4px;
+    margin-top:5px;
 
-    font-size:26px;
+    font-size:29px;
+
+    line-height:1.15;
 
 }
 
-.intro p {
+.welcome p {
 
-    margin-top:7px;
+    max-width:480px;
 
-    max-width:430px;
+    margin-top:9px;
 
-    opacity:.75;
+    opacity:.72;
 
     font-size:11px;
 
-    line-height:1.55;
+    line-height:1.6;
 
 }
 
 
-/* MAIN */
+/* ==================================
+   MAIN
+================================== */
 
 main {
 
-    max-width:600px;
+    width:100%;
 
-    margin:-15px auto 50px;
+    max-width:760px;
+
+    margin:-55px auto 50px;
 
     padding:0 15px;
 
 }
 
-.card {
+
+/* ==================================
+   LOGIN GRID
+================================== */
+
+.login-grid {
+
+    display:grid;
+
+    grid-template-columns:1fr;
+
+    gap:14px;
+
+}
+
+
+/* ==================================
+   CARD
+================================== */
+
+.login-card {
 
     background:white;
 
-    border-radius:20px;
+    border-radius:22px;
 
-    padding:19px;
-
-    margin-bottom:14px;
+    padding:20px;
 
     box-shadow:
         var(--shadow);
 
 }
 
-.title {
+.card-header {
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    margin-bottom:20px;
+
+}
+
+.card-icon {
+
+    width:49px;
+    height:49px;
+
+    flex-shrink:0;
+
+    border-radius:15px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    font-size:22px;
+
+}
+
+.worker-icon {
+
+    background:
+        var(--primary-light);
+
+}
+
+.manager-icon {
+
+    background:
+        var(--purple-light);
+
+}
+
+.card-title {
+
+    flex:1;
+
+}
+
+.card-title strong {
+
+    display:block;
 
     font-size:15px;
 
-    font-weight:700;
-
 }
 
-.description {
-
-    margin-top:4px;
-
-    margin-bottom:14px;
-
-    color:
-        var(--muted);
-
-    font-size:10px;
-
-    line-height:1.5;
-
-}
-
-
-/* LOCATION */
-
-.tower {
-
-    display:flex;
-
-    align-items:center;
-
-    gap:12px;
-
-    margin-bottom:15px;
-
-    padding:12px;
-
-    border-radius:14px;
-
-    background:
-        var(--primary-light);
-
-}
-
-.tower-icon {
-
-    width:40px;
-    height:40px;
-
-    border-radius:12px;
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    background:white;
-
-    font-size:19px;
-
-}
-
-.tower-info small {
+.card-title span {
 
     display:block;
+
+    margin-top:3px;
 
     color:
         var(--muted);
 
     font-size:9px;
 
-}
-
-.tower-info strong {
-
-    display:block;
-
-    margin-top:2px;
-
-    font-size:14px;
+    line-height:1.4;
 
 }
 
-select {
+.profile-tag {
 
-    width:100%;
+    padding:6px 8px;
 
-    height:52px;
+    border-radius:20px;
 
-    padding:0 13px;
-
-    border:
-        1px solid
-        var(--border);
-
-    border-radius:14px;
-
-    outline:none;
-
-    background:#fafbfc;
-
-    color:
-        var(--text);
-
-    font-size:13px;
-
-}
-
-
-/* PHOTO */
-
-.photo-box {
-
-    border:
-        2px dashed
-        #cbd6e0;
-
-    border-radius:17px;
-
-    padding:24px 15px;
-
-    text-align:center;
-
-    background:#fafcfd;
-
-    cursor:pointer;
-
-}
-
-.photo-icon {
-
-    width:53px;
-    height:53px;
-
-    margin:auto;
-
-    border-radius:50%;
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    background:
-        var(--primary-light);
-
-    font-size:24px;
-
-}
-
-.photo-box strong {
-
-    display:block;
-
-    margin-top:10px;
-
-    font-size:13px;
-
-}
-
-.photo-box span {
-
-    display:block;
-
-    margin-top:4px;
-
-    color:
-        var(--muted);
-
-    font-size:10px;
-
-}
-
-#photoInput {
-
-    display:none;
-
-}
-
-.preview {
-
-    display:none;
-
-    position:relative;
-
-    margin-top:13px;
-
-}
-
-.preview img {
-
-    width:100%;
-
-    max-height:380px;
-
-    object-fit:cover;
-
-    border-radius:16px;
-
-}
-
-.remove {
-
-    position:absolute;
-
-    top:10px;
-    right:10px;
-
-    width:35px;
-    height:35px;
-
-    border:0;
-
-    border-radius:50%;
-
-    background:
-        rgba(0,0,0,.65);
-
-    color:white;
-
-    font-size:17px;
-
-}
-
-
-/* OR */
-
-.or {
-
-    display:flex;
-
-    align-items:center;
-
-    gap:10px;
-
-    margin:19px 0;
-
-}
-
-.or::before,
-.or::after {
-
-    content:"";
-
-    height:1px;
-
-    flex:1;
-
-    background:
-        var(--border);
-
-}
-
-.or span {
-
-    color:
-        var(--muted);
-
-    font-size:9px;
+    font-size:8px;
 
     font-weight:700;
 
 }
 
-
-/* TEXT */
-
-textarea {
-
-    width:100%;
-
-    min-height:120px;
-
-    padding:13px;
-
-    resize:vertical;
-
-    border:
-        1px solid
-        var(--border);
-
-    border-radius:14px;
-
-    outline:none;
-
-    background:#fafbfc;
+.worker-tag {
 
     color:
-        var(--text);
-
-    font-size:12px;
-
-    line-height:1.5;
-
-}
-
-.counter {
-
-    margin-top:5px;
-
-    text-align:right;
-
-    color:
-        var(--muted);
-
-    font-size:9px;
-
-}
-
-
-/* NOTIFICATION */
-
-.notification-option {
-
-    display:flex;
-
-    align-items:flex-start;
-
-    gap:12px;
-
-    cursor:pointer;
-
-}
-
-.notification-option input {
-
-    width:20px;
-    height:20px;
-
-    margin-top:1px;
-
-    accent-color:
         var(--primary);
 
-}
-
-.notification-text {
-
-    flex:1;
+    background:
+        var(--primary-light);
 
 }
 
-.notification-text strong {
-
-    display:block;
-
-    font-size:12px;
-
-}
-
-.notification-text span {
-
-    display:block;
-
-    margin-top:4px;
+.manager-tag {
 
     color:
-        var(--muted);
+        var(--purple);
 
-    font-size:9px;
-
-    line-height:1.5;
-
-}
-
-.email-area {
-
-    display:none;
-
-    margin-top:15px;
-
-    padding-top:15px;
-
-    border-top:
-        1px solid
-        var(--border);
+    background:
+        var(--purple-light);
 
 }
 
-.email-area label {
+
+/* ==================================
+   INPUT
+================================== */
+
+.field {
+
+    margin-bottom:13px;
+
+}
+
+.field label {
 
     display:block;
 
@@ -650,13 +400,42 @@ textarea {
 
 }
 
-.email-area input {
+.input-wrapper {
+
+    position:relative;
+
+}
+
+.input-icon {
+
+    position:absolute;
+
+    left:13px;
+    top:50%;
+
+    transform:
+        translateY(-50%);
+
+    color:
+        var(--muted);
+
+    font-size:14px;
+
+    pointer-events:none;
+
+}
+
+.field input {
 
     width:100%;
 
     height:50px;
 
-    padding:0 13px;
+    padding:
+        0
+        42px
+        0
+        39px;
 
     border:
         1px solid
@@ -668,46 +447,56 @@ textarea {
 
     background:#fafbfc;
 
-    font-size:13px;
-
-}
-
-.email-info {
-
-    margin-top:7px;
-
     color:
-        var(--muted);
+        var(--text);
 
-    font-size:8px;
+    font-size:14px;
 
-    line-height:1.5;
+    transition:.15s;
+
+}
+
+.field input:focus {
+
+    border-color:#9eb6cd;
+
+    background:white;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(18,53,91,.05);
+
+}
+
+.show-pin {
+
+    position:absolute;
+
+    top:50%;
+    right:7px;
+
+    width:36px;
+    height:36px;
+
+    transform:
+        translateY(-50%);
+
+    border:0;
+
+    border-radius:10px;
+
+    background:transparent;
+
+    cursor:pointer;
+
+    font-size:14px;
 
 }
 
 
-/* PRIVACY */
-
-.info {
-
-    padding:12px;
-
-    border-radius:13px;
-
-    background:
-        var(--primary-light);
-
-    color:
-        var(--primary);
-
-    font-size:9px;
-
-    line-height:1.55;
-
-}
-
-
-/* ERROR */
+/* ==================================
+   ERRORS
+================================== */
 
 .error {
 
@@ -715,98 +504,221 @@ textarea {
 
     margin-bottom:13px;
 
-    padding:12px;
+    padding:11px;
 
-    border-radius:13px;
+    border-radius:12px;
 
     background:
         var(--red-light);
 
-    color:#a82d2d;
+    color:#a52f2f;
 
-    font-size:10px;
+    font-size:9px;
+
+    line-height:1.5;
 
 }
 
 
-/* SEND */
+/* ==================================
+   LOGIN BUTTONS
+================================== */
 
-.send {
+.login-button {
 
     width:100%;
 
-    padding:17px;
+    height:50px;
+
+    margin-top:2px;
 
     border:0;
 
-    border-radius:16px;
-
-    background:
-        var(--primary);
+    border-radius:14px;
 
     color:white;
 
-    font-size:12px;
+    font-size:10px;
 
     font-weight:750;
 
     cursor:pointer;
 
+    transition:.15s;
+
+}
+
+.login-button:active {
+
+    transform:
+        scale(.99);
+
+}
+
+.worker-button {
+
+    background:
+        var(--primary);
+
+    box-shadow:
+        0 8px 20px
+        rgba(18,53,91,.16);
+
+}
+
+.manager-button {
+
+    background:
+        var(--purple);
+
+    box-shadow:
+        0 8px 20px
+        rgba(102,84,163,.16);
+
 }
 
 
-/* SUCCESS */
+/* ==================================
+   DIVIDER
+================================== */
 
-.overlay {
+.divider {
 
-    display:none;
-
-    position:fixed;
-
-    inset:0;
-
-    z-index:999;
-
-    padding:20px;
+    display:flex;
 
     align-items:center;
 
-    justify-content:center;
+    gap:11px;
 
-    background:
-        rgba(8,28,48,.72);
+    margin:23px 5px;
 
 }
 
-.success {
+.divider::before,
+.divider::after {
 
-    width:100%;
+    content:"";
 
-    max-width:380px;
+    flex:1;
 
-    padding:28px 22px;
+    height:1px;
 
-    border-radius:24px;
+    background:
+        var(--border);
+
+}
+
+.divider span {
+
+    color:
+        var(--muted);
+
+    font-size:8px;
+
+    font-weight:700;
+
+}
+
+
+/* ==================================
+   PUBLIC REPORT
+================================== */
+
+.report-card {
+
+    overflow:hidden;
 
     background:white;
 
-    text-align:center;
+    border-radius:22px;
+
+    box-shadow:
+        var(--shadow);
 
 }
 
-.success-icon {
+.report-top {
 
-    width:70px;
-    height:70px;
+    display:flex;
 
-    margin:auto;
+    align-items:center;
 
-    border-radius:50%;
+    gap:13px;
+
+    padding:20px;
+
+}
+
+.report-icon {
+
+    width:52px;
+    height:52px;
+
+    flex-shrink:0;
 
     display:flex;
 
     align-items:center;
     justify-content:center;
+
+    border-radius:16px;
+
+    background:
+        var(--red-light);
+
+    font-size:23px;
+
+}
+
+.report-info {
+
+    flex:1;
+
+}
+
+.report-info small {
+
+    display:block;
+
+    margin-bottom:2px;
+
+    color:
+        var(--red);
+
+    font-size:8px;
+
+    font-weight:750;
+
+    letter-spacing:.4px;
+
+}
+
+.report-info strong {
+
+    display:block;
+
+    font-size:15px;
+
+}
+
+.report-info p {
+
+    margin-top:4px;
+
+    color:
+        var(--muted);
+
+    font-size:9px;
+
+    line-height:1.45;
+
+}
+
+.no-login {
+
+    padding:6px 8px;
+
+    border-radius:20px;
 
     background:
         var(--green-light);
@@ -814,65 +726,135 @@ textarea {
     color:
         var(--green);
 
-    font-size:31px;
+    font-size:8px;
+
+    font-weight:700;
+
+    white-space:nowrap;
 
 }
 
-.success h2 {
+.report-button {
 
-    margin-top:15px;
+    width:calc(100% - 40px);
 
-    font-size:20px;
+    margin:
+        0
+        20px
+        20px;
 
-}
-
-.success p {
-
-    margin-top:8px;
-
-    color:
-        var(--muted);
-
-    font-size:10px;
-
-    line-height:1.55;
-
-}
-
-.protocol {
-
-    margin-top:16px;
-
-    padding:13px;
-
-    border-radius:13px;
-
-    background:#f5f7f9;
-
-    font-size:10px;
-
-    line-height:1.7;
-
-}
-
-.success button {
-
-    width:100%;
-
-    margin-top:18px;
-
-    padding:14px;
+    padding:15px;
 
     border:0;
 
     border-radius:14px;
 
     background:
-        var(--primary);
+        var(--red);
 
     color:white;
 
-    font-weight:700;
+    font-size:10px;
+
+    font-weight:750;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 8px 20px
+        rgba(217,75,75,.16);
+
+}
+
+.report-button:active {
+
+    transform:
+        scale(.99);
+
+}
+
+
+/* ==================================
+   INFO
+================================== */
+
+.info {
+
+    display:flex;
+
+    align-items:flex-start;
+
+    gap:9px;
+
+    margin-top:14px;
+
+    padding:12px 14px;
+
+    border-radius:14px;
+
+    background:
+        var(--primary-light);
+
+    color:
+        var(--primary);
+
+    font-size:8px;
+
+    line-height:1.55;
+
+}
+
+
+/* ==================================
+   FOOTER
+================================== */
+
+footer {
+
+    max-width:760px;
+
+    margin:30px auto;
+
+    padding:
+        0
+        20px
+        env(safe-area-inset-bottom);
+
+    text-align:center;
+
+    color:#949da6;
+
+    font-size:8px;
+
+    line-height:1.7;
+
+}
+
+
+/* ==================================
+   DESKTOP
+================================== */
+
+@media (min-width:720px) {
+
+    header {
+
+        min-height:325px;
+
+    }
+
+    .login-grid {
+
+        grid-template-columns:
+            1fr 1fr;
+
+    }
+
+    .welcome h2 {
+
+        font-size:32px;
+
+    }
 
 }
 
@@ -888,52 +870,47 @@ textarea {
 
 <div class="header-content">
 
-    <div class="topbar">
 
-        <button
-            class="back"
-            onclick="voltar()"
-        >
-            ‹
-        </button>
+    <div class="brand">
 
-
-        <div class="brand">
-
-            <strong>
-                CUIDADOS
-            </strong>
-
-            <small>
-                Reserva Igara
-            </small>
-
+        <div class="logo">
+            ✓
         </div>
 
 
-        <div class="public">
-            ⚠
+        <div class="brand-text">
+
+            <h1>
+                CUIDADOS
+            </h1>
+
+            <span>
+                Limpeza & Zeladoria
+            </span>
+
         </div>
 
     </div>
 
 
-    <div class="intro">
+    <div class="welcome">
 
         <small>
-            Comunicação com a equipe
+            Reserva Igara
         </small>
 
-        <h1>
-            Reportar problema
-        </h1>
+        <h2>
+            Cuidar ficou mais simples.
+        </h2>
 
         <p>
-            Informe onde está o problema
-            e envie uma foto ou uma breve descrição.
+            Acompanhamento da limpeza,
+            comunicação com a equipe
+            e registro de ocorrências.
         </p>
 
     </div>
+
 
 </div>
 
@@ -943,785 +920,767 @@ textarea {
 <main>
 
 
-<div
-    class="error"
-    id="error"
-></div>
+<!-- ==================================
+     ACESSOS
+================================== -->
+
+<div class="login-grid">
 
 
-<!-- LOCAL -->
+    <!-- COLABORADOR -->
 
-<section class="card">
-
-    <div class="title">
-        Onde está o problema?
-    </div>
-
-    <div class="description">
-        Selecione o andar ou local.
-    </div>
+    <section class="login-card">
 
 
-    <div class="tower">
+        <div class="card-header">
 
-        <div class="tower-icon">
-            🏢
+            <div
+                class="
+                    card-icon
+                    worker-icon
+                "
+            >
+                👷
+            </div>
+
+
+            <div class="card-title">
+
+                <strong>
+                    Colaborador
+                </strong>
+
+                <span>
+                    Acesse sua rotina de trabalho
+                </span>
+
+            </div>
+
+
+            <span
+                class="
+                    profile-tag
+                    worker-tag
+                "
+            >
+                EQUIPE
+            </span>
+
         </div>
 
-        <div class="tower-info">
+
+        <div
+            class="error"
+            id="workerError"
+        >
+            Matrícula ou PIN incorretos.
+        </div>
+
+
+        <!-- MATRÍCULA -->
+
+        <div class="field">
+
+            <label for="workerMatricula">
+                MATRÍCULA
+            </label>
+
+
+            <div class="input-wrapper">
+
+                <span class="input-icon">
+                    #
+                </span>
+
+
+                <input
+                    id="workerMatricula"
+                    type="text"
+                    inputmode="numeric"
+                    autocomplete="username"
+                    placeholder="Digite sua matrícula"
+                >
+
+            </div>
+
+        </div>
+
+
+        <!-- PIN -->
+
+        <div class="field">
+
+            <label for="workerPin">
+                PIN
+            </label>
+
+
+            <div class="input-wrapper">
+
+                <span class="input-icon">
+                    🔒
+                </span>
+
+
+                <input
+                    id="workerPin"
+                    type="password"
+                    inputmode="numeric"
+                    maxlength="4"
+                    placeholder="••••"
+                >
+
+
+                <button
+                    type="button"
+                    class="show-pin"
+                    onclick="
+                        mostrarPin(
+                            'workerPin'
+                        )
+                    "
+                >
+                    👁
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="
+                login-button
+                worker-button
+            "
+            onclick="entrarColaborador()"
+        >
+            ENTRAR NA ROTINA
+        </button>
+
+
+    </section>
+
+
+
+    <!-- GESTÃO -->
+
+    <section class="login-card">
+
+
+        <div class="card-header">
+
+            <div
+                class="
+                    card-icon
+                    manager-icon
+                "
+            >
+                📊
+            </div>
+
+
+            <div class="card-title">
+
+                <strong>
+                    Gestão
+                </strong>
+
+                <span>
+                    Acompanhe toda a operação
+                </span>
+
+            </div>
+
+
+            <span
+                class="
+                    profile-tag
+                    manager-tag
+                "
+            >
+                GESTOR
+            </span>
+
+        </div>
+
+
+        <div
+            class="error"
+            id="managerError"
+        >
+            Matrícula ou PIN incorretos.
+        </div>
+
+
+        <!-- MATRÍCULA -->
+
+        <div class="field">
+
+            <label for="managerMatricula">
+                MATRÍCULA
+            </label>
+
+
+            <div class="input-wrapper">
+
+                <span class="input-icon">
+                    #
+                </span>
+
+
+                <input
+                    id="managerMatricula"
+                    type="text"
+                    inputmode="numeric"
+                    autocomplete="username"
+                    placeholder="Digite sua matrícula"
+                >
+
+            </div>
+
+        </div>
+
+
+        <!-- PIN -->
+
+        <div class="field">
+
+            <label for="managerPin">
+                PIN
+            </label>
+
+
+            <div class="input-wrapper">
+
+                <span class="input-icon">
+                    🔒
+                </span>
+
+
+                <input
+                    id="managerPin"
+                    type="password"
+                    inputmode="numeric"
+                    maxlength="4"
+                    placeholder="••••"
+                >
+
+
+                <button
+                    type="button"
+                    class="show-pin"
+                    onclick="
+                        mostrarPin(
+                            'managerPin'
+                        )
+                    "
+                >
+                    👁
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="
+                login-button
+                manager-button
+            "
+            onclick="entrarGestor()"
+        >
+            ACESSAR PAINEL
+        </button>
+
+
+    </section>
+
+
+</div>
+
+
+
+<!-- ==================================
+     DIVISOR
+================================== -->
+
+<div class="divider">
+
+    <span>
+        ACESSO SEM LOGIN
+    </span>
+
+</div>
+
+
+
+<!-- ==================================
+     MORADOR
+================================== -->
+
+<section class="report-card">
+
+
+    <div class="report-top">
+
+
+        <div class="report-icon">
+            ⚠️
+        </div>
+
+
+        <div class="report-info">
 
             <small>
-                LOCAL
+                MORADOR OU VISITANTE
             </small>
 
             <strong>
-                Torre E
+                Encontrou algum problema?
             </strong>
 
+            <p>
+                Informe o local e envie
+                uma foto ou descrição.
+            </p>
+
         </div>
 
-    </div>
 
-
-    <select id="local">
-
-        <option value="">
-            Selecione o andar ou local
-        </option>
-
-        <option>Térreo / Hall de entrada</option>
-
-        <option>1º andar</option>
-        <option>2º andar</option>
-        <option>3º andar</option>
-        <option>4º andar</option>
-        <option>5º andar</option>
-        <option>6º andar</option>
-        <option>7º andar</option>
-        <option>8º andar</option>
-        <option>9º andar</option>
-        <option>10º andar</option>
-        <option>11º andar</option>
-        <option>12º andar</option>
-
-        <option>Escadas</option>
-
-        <option>Elevador 1</option>
-
-        <option>Elevador 2</option>
-
-        <option>Abrigo de resíduos</option>
-
-    </select>
-
-</section>
-
-
-<!-- PROBLEMA -->
-
-<section class="card">
-
-    <div class="title">
-        O que aconteceu?
-    </div>
-
-    <div class="description">
-        Envie uma foto, escreva o problema
-        ou faça os dois.
-    </div>
-
-
-    <label
-        class="photo-box"
-        id="photoBox"
-        for="photoInput"
-    >
-
-        <div class="photo-icon">
-            📷
-        </div>
-
-        <strong>
-            Tirar foto
-        </strong>
-
-        <span>
-            Abrir câmera ou escolher imagem
+        <span class="no-login">
+            SEM LOGIN
         </span>
 
-    </label>
+
+    </div>
 
 
-    <input
-        type="file"
-        id="photoInput"
-        accept="image/*"
-        capture="environment"
+    <button
+        class="report-button"
+        onclick="abrirOcorrencia()"
     >
+        REPORTAR PROBLEMA
+    </button>
 
-
-    <div
-        class="preview"
-        id="preview"
-    >
-
-        <img
-            id="photoPreview"
-            alt="Foto da ocorrência"
-        >
-
-        <button
-            type="button"
-            class="remove"
-            onclick="removerFoto()"
-        >
-            ×
-        </button>
-
-    </div>
-
-
-    <div class="or">
-        <span>OU</span>
-    </div>
-
-
-    <textarea
-        id="descricao"
-        maxlength="300"
-        placeholder="Ex.: piso sujo próximo ao elevador..."
-        oninput="contador()"
-    ></textarea>
-
-
-    <div class="counter">
-
-        <span id="count">
-            0
-        </span>/300
-
-    </div>
 
 </section>
 
 
-<!-- ACOMPANHAMENTO -->
 
-<section class="card">
+<div class="info">
 
-    <label class="notification-option">
+    <span>
+        🔒
+    </span>
 
-        <input
-            type="checkbox"
-            id="wantNotification"
-            onchange="alternarEmail()"
-        >
+    <span>
+        O registro de ocorrência não exige
+        identificação. Caso queira receber
+        aviso quando o problema for resolvido,
+        o morador poderá informar um e-mail
+        opcionalmente.
+    </span>
 
-
-        <span class="notification-text">
-
-            <strong>
-                🔔 Quero ser avisado quando for resolvido
-            </strong>
-
-            <span>
-                Opcional. Informe seu e-mail
-                para receber a confirmação da resolução.
-            </span>
-
-        </span>
-
-    </label>
-
-
-    <div
-        class="email-area"
-        id="emailArea"
-    >
-
-        <label for="email">
-            E-MAIL PARA ACOMPANHAMENTO
-        </label>
-
-        <input
-            type="email"
-            id="email"
-            autocomplete="email"
-            placeholder="seuemail@exemplo.com"
-        >
-
-
-        <div class="email-info">
-            O e-mail será associado somente a esta
-            ocorrência para acompanhamento.
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- PRIVACIDADE -->
-
-<section class="card">
-
-    <div class="info">
-
-        🔒 Não é necessário informar nome,
-        apartamento ou telefone.
-
-        O e-mail também é opcional e só é solicitado
-        caso você queira receber a confirmação
-        da resolução.
-
-    </div>
-
-</section>
-
-
-<button
-    class="send"
-    onclick="enviar()"
->
-    ENVIAR OCORRÊNCIA
-</button>
+</div>
 
 
 </main>
 
 
-<!-- SUCESSO -->
 
-<div
-    class="overlay"
-    id="successOverlay"
->
+<footer>
 
-    <div class="success">
+CUIDADOS • Reserva Igara<br>
 
-        <div class="success-icon">
-            ✓
-        </div>
+Sistema de Limpeza & Zeladoria
 
+</footer>
 
-        <h2>
-            Ocorrência enviada
-        </h2>
-
-
-        <p id="successMessage">
-            A equipe responsável recebeu o registro.
-        </p>
-
-
-        <div
-            class="protocol"
-            id="protocol"
-        ></div>
-
-
-        <button onclick="inicio()">
-            CONCLUIR
-        </button>
-
-    </div>
-
-</div>
 
 
 <script>
 
-/* =============================
-   FOTO
-============================= */
+/* ==========================================
+   USUÁRIOS TEMPORÁRIOS
 
-const photoInput =
-    document.getElementById(
-        "photoInput"
-    );
+   Apenas para o protótipo.
 
+   Depois serão substituídos por
+   autenticação segura no backend.
+========================================== */
 
-let fotoSelecionada =
-    false;
+const colaboradorTeste = {
 
+    nome:
+        "Débora",
 
-photoInput.addEventListener(
-    "change",
-    function() {
+    matricula:
+        "0001",
 
-        const file =
-            this.files[0];
+    pin:
+        "1234",
 
+    cargo:
+        "Auxiliar de Limpeza",
 
-        if (!file) {
-            return;
-        }
+    torre:
+        "Torre E",
 
+    perfil:
+        "colaborador"
 
-        if (
-            !file.type.startsWith(
-                "image/"
-            )
-        ) {
-
-            mostrarErro(
-                "Selecione uma imagem válida."
-            );
-
-            return;
-
-        }
+};
 
 
-        const url =
-            URL.createObjectURL(
-                file
-            );
+const gestorTeste = {
+
+    nome:
+        "Gestor",
+
+    matricula:
+        "9001",
+
+    pin:
+        "4321",
+
+    cargo:
+        "Gestão",
+
+    perfil:
+        "gestor"
+
+};
 
 
+/* ==========================================
+   LOGIN COLABORADOR
+========================================== */
+
+function entrarColaborador() {
+
+    esconderErros();
+
+
+    const matricula =
         document
             .getElementById(
-                "photoPreview"
-            )
-            .src =
-                url;
-
-
-        document
-            .getElementById(
-                "photoBox"
-            )
-            .style.display =
-                "none";
-
-
-        document
-            .getElementById(
-                "preview"
-            )
-            .style.display =
-                "block";
-
-
-        fotoSelecionada =
-            true;
-
-
-        esconderErro();
-
-    }
-);
-
-
-function removerFoto() {
-
-    photoInput.value =
-        "";
-
-
-    document
-        .getElementById(
-            "photoPreview"
-        )
-        .src =
-            "";
-
-
-    document
-        .getElementById(
-            "preview"
-        )
-        .style.display =
-            "none";
-
-
-    document
-        .getElementById(
-            "photoBox"
-        )
-        .style.display =
-            "block";
-
-
-    fotoSelecionada =
-        false;
-
-}
-
-
-/* =============================
-   EMAIL
-============================= */
-
-function alternarEmail() {
-
-    const marcado =
-        document
-            .getElementById(
-                "wantNotification"
-            )
-            .checked;
-
-
-    document
-        .getElementById(
-            "emailArea"
-        )
-        .style.display =
-            marcado
-            ? "block"
-            : "none";
-
-
-    if (!marcado) {
-
-        document
-            .getElementById(
-                "email"
-            )
-            .value = "";
-
-    }
-
-}
-
-
-function emailValido(email) {
-
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-        .test(email);
-
-}
-
-
-/* =============================
-   CONTADOR
-============================= */
-
-function contador() {
-
-    document
-        .getElementById(
-            "count"
-        )
-        .textContent =
-
-        document
-            .getElementById(
-                "descricao"
-            )
-            .value
-            .length;
-
-}
-
-
-/* =============================
-   ERRO
-============================= */
-
-function mostrarErro(texto) {
-
-    const error =
-        document.getElementById(
-            "error"
-        );
-
-
-    error.textContent =
-        texto;
-
-
-    error.style.display =
-        "block";
-
-
-    window.scrollTo({
-        top:0,
-        behavior:"smooth"
-    });
-
-}
-
-
-function esconderErro() {
-
-    document
-        .getElementById(
-            "error"
-        )
-        .style.display =
-            "none";
-
-}
-
-
-/* =============================
-   ENVIAR
-============================= */
-
-function enviar() {
-
-    esconderErro();
-
-
-    const local =
-        document
-            .getElementById(
-                "local"
-            )
-            .value;
-
-
-    const descricao =
-        document
-            .getElementById(
-                "descricao"
+                "workerMatricula"
             )
             .value
             .trim();
 
 
-    const querAviso =
+    const pin =
         document
             .getElementById(
-                "wantNotification"
-            )
-            .checked;
-
-
-    const email =
-        document
-            .getElementById(
-                "email"
+                "workerPin"
             )
             .value
-            .trim()
-            .toLowerCase();
-
-
-    /* LOCAL */
-
-    if (!local) {
-
-        mostrarErro(
-            "Selecione onde está o problema."
-        );
-
-        return;
-
-    }
-
-
-    /* FOTO OU TEXTO */
-
-    if (
-        !fotoSelecionada &&
-        descricao.length === 0
-    ) {
-
-        mostrarErro(
-            "Envie uma foto ou descreva o problema."
-        );
-
-        return;
-
-    }
-
-
-    /* EMAIL */
-
-    if (
-        querAviso &&
-        !email
-    ) {
-
-        mostrarErro(
-            "Informe seu e-mail para receber o aviso de resolução."
-        );
-
-        return;
-
-    }
+            .trim();
 
 
     if (
-        querAviso &&
-        !emailValido(email)
+        matricula ===
+            colaboradorTeste.matricula
+        &&
+        pin ===
+            colaboradorTeste.pin
     ) {
 
-        mostrarErro(
-            "Informe um endereço de e-mail válido."
+        const sessao = {
+
+            nome:
+                colaboradorTeste.nome,
+
+            matricula:
+                colaboradorTeste.matricula,
+
+            cargo:
+                colaboradorTeste.cargo,
+
+            torre:
+                colaboradorTeste.torre,
+
+            perfil:
+                colaboradorTeste.perfil,
+
+            loginEm:
+                new Date()
+                    .toISOString()
+
+        };
+
+
+        localStorage.setItem(
+            "usuarioLogado",
+            JSON.stringify(
+                sessao
+            )
         );
 
+
+        localStorage.setItem(
+            "torreSelecionada",
+            "Torre E"
+        );
+
+
+        window.location.href =
+            "colaborador.html";
+
+
         return;
-
-    }
-
-
-    const agora =
-        new Date();
-
-
-    const protocolo =
-        "OC-" +
-        agora
-            .getTime()
-            .toString()
-            .slice(-7);
-
-
-    const ocorrencia = {
-
-        protocolo:
-            protocolo,
-
-        torre:
-            "Torre E",
-
-        local:
-            local,
-
-        descricao:
-            descricao,
-
-        foto:
-            fotoSelecionada,
-
-        status:
-            "Aberta",
-
-        origem:
-            "Morador / visitante",
-
-        querNotificacao:
-            querAviso,
-
-        emailNotificacao:
-            querAviso
-            ? email
-            : "",
-
-        notificacaoEnviada:
-            false,
-
-        data:
-            agora.toLocaleDateString(
-                "pt-BR"
-            ),
-
-        hora:
-            agora.toLocaleTimeString(
-                "pt-BR",
-                {
-                    hour:"2-digit",
-                    minute:"2-digit"
-                }
-            ),
-
-        timestamp:
-            agora.toISOString()
-
-    };
-
-
-    let ocorrencias =
-        JSON.parse(
-            localStorage.getItem(
-                "ocorrencias"
-            )
-        ) || [];
-
-
-    ocorrencias.unshift(
-        ocorrencia
-    );
-
-
-    localStorage.setItem(
-        "ocorrencias",
-        JSON.stringify(
-            ocorrencias
-        )
-    );
-
-
-    document
-        .getElementById(
-            "protocol"
-        )
-        .innerHTML = `
-
-            <strong>
-                ${protocolo}
-            </strong>
-
-            <br>
-
-            Torre E • ${local}
-
-            <br>
-
-            ${ocorrencia.data}
-            às
-            ${ocorrencia.hora}
-
-        `;
-
-
-    if (querAviso) {
-
-        document
-            .getElementById(
-                "successMessage"
-            )
-            .textContent =
-
-            "Registro recebido. Você solicitou aviso por e-mail quando a ocorrência for resolvida.";
-
-    } else {
-
-        document
-            .getElementById(
-                "successMessage"
-            )
-            .textContent =
-
-            "A equipe responsável recebeu o registro.";
 
     }
 
 
     document
         .getElementById(
-            "successOverlay"
+            "workerError"
         )
         .style.display =
-            "flex";
+            "block";
 
 }
 
 
-/* =============================
-   NAVEGAÇÃO
-============================= */
+/* ==========================================
+   LOGIN GESTOR
+========================================== */
 
-function voltar() {
+function entrarGestor() {
 
-    window.location.href =
-        "index.html";
+    esconderErros();
+
+
+    const matricula =
+        document
+            .getElementById(
+                "managerMatricula"
+            )
+            .value
+            .trim();
+
+
+    const pin =
+        document
+            .getElementById(
+                "managerPin"
+            )
+            .value
+            .trim();
+
+
+    if (
+        matricula ===
+            gestorTeste.matricula
+        &&
+        pin ===
+            gestorTeste.pin
+    ) {
+
+        const sessao = {
+
+            nome:
+                gestorTeste.nome,
+
+            matricula:
+                gestorTeste.matricula,
+
+            cargo:
+                gestorTeste.cargo,
+
+            perfil:
+                gestorTeste.perfil,
+
+            loginEm:
+                new Date()
+                    .toISOString()
+
+        };
+
+
+        localStorage.setItem(
+            "usuarioLogado",
+            JSON.stringify(
+                sessao
+            )
+        );
+
+
+        window.location.href =
+            "gestor.html";
+
+
+        return;
+
+    }
+
+
+    document
+        .getElementById(
+            "managerError"
+        )
+        .style.display =
+            "block";
 
 }
 
 
-function inicio() {
+/* ==========================================
+   ESCONDER ERROS
+========================================== */
+
+function esconderErros() {
+
+    document
+        .getElementById(
+            "workerError"
+        )
+        .style.display =
+            "none";
+
+
+    document
+        .getElementById(
+            "managerError"
+        )
+        .style.display =
+            "none";
+
+}
+
+
+/* ==========================================
+   MOSTRAR PIN
+========================================== */
+
+function mostrarPin(id) {
+
+    const campo =
+        document
+            .getElementById(id);
+
+
+    campo.type =
+        campo.type === "password"
+        ? "text"
+        : "password";
+
+}
+
+
+/* ==========================================
+   ENTER - COLABORADOR
+========================================== */
+
+document
+    .getElementById(
+        "workerMatricula"
+    )
+    .addEventListener(
+        "keydown",
+        function(event) {
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                document
+                    .getElementById(
+                        "workerPin"
+                    )
+                    .focus();
+
+            }
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "workerPin"
+    )
+    .addEventListener(
+        "keydown",
+        function(event) {
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                entrarColaborador();
+
+            }
+
+        }
+    );
+
+
+/* ==========================================
+   ENTER - GESTOR
+========================================== */
+
+document
+    .getElementById(
+        "managerMatricula"
+    )
+    .addEventListener(
+        "keydown",
+        function(event) {
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                document
+                    .getElementById(
+                        "managerPin"
+                    )
+                    .focus();
+
+            }
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "managerPin"
+    )
+    .addEventListener(
+        "keydown",
+        function(event) {
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                entrarGestor();
+
+            }
+
+        }
+    );
+
+
+/* ==========================================
+   OCORRÊNCIA
+========================================== */
+
+function abrirOcorrencia() {
 
     window.location.href =
-        "index.html";
+        "reportar.html";
 
 }
 
 </script>
+
 
 </body>
 
