@@ -1394,3 +1394,972 @@ main {
                 class="progress-fill"
                 id="towerProgress"
             ></div>
+
+        </div>
+
+
+        <div class="tower-details">
+
+            <div class="tower-detail">
+
+                <strong
+                    id="towerDone"
+                >
+                    0
+                </strong>
+
+                <span>
+                    CONCLUÍDOS
+                </span>
+
+            </div>
+
+
+            <div class="tower-detail">
+
+                <strong
+                    id="towerPending"
+                >
+                    17
+                </strong>
+
+                <span>
+                    PENDENTES
+                </span>
+
+            </div>
+
+
+            <div class="tower-detail">
+
+                <strong
+                    id="towerOccurrences"
+                >
+                    0
+                </strong>
+
+                <span>
+                    OCORRÊNCIAS
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- OCORRÊNCIAS -->
+
+<section class="section">
+
+    <div class="section-header">
+
+        <h3>
+            Ocorrências
+        </h3>
+
+        <span
+            id="occurrenceTotal"
+        >
+            0 registros
+        </span>
+
+    </div>
+
+
+    <div
+        class="occurrences-grid"
+        id="occurrencesContainer"
+    ></div>
+
+</section>
+
+
+<!-- ATIVIDADES -->
+
+<section class="section">
+
+    <div class="section-header">
+
+        <h3>
+            Atividades realizadas
+        </h3>
+
+        <span>
+            Débora
+        </span>
+
+    </div>
+
+
+    <div
+        class="activities-grid"
+        id="activitiesContainer"
+    ></div>
+
+</section>
+
+
+<!-- TEMPORÁRIO -->
+
+<div class="test-tools">
+
+    <button
+        class="reset-button"
+        onclick="limparDadosTeste()"
+    >
+        🧪 Limpar dados de teste deste navegador
+    </button>
+
+</div>
+
+
+</main>
+
+
+<nav class="bottom-nav">
+
+    <div class="nav-item nav-active">
+
+        <span class="nav-icon">
+            ▦
+        </span>
+
+        Visão geral
+
+    </div>
+
+
+    <div class="nav-item">
+
+        <span class="nav-icon">
+            ⚠
+        </span>
+
+        Ocorrências
+
+    </div>
+
+
+    <div class="nav-item">
+
+        <span class="nav-icon">
+            ✓
+        </span>
+
+        Atividades
+
+    </div>
+
+
+    <div class="nav-item">
+
+        <span class="nav-icon">
+            👥
+        </span>
+
+        Equipe
+
+    </div>
+
+</nav>
+
+
+<script>
+
+/* ===============================
+   CONFIGURAÇÃO
+=============================== */
+
+const TOTAL_LOCAIS = 17;
+
+
+/* ===============================
+   BUSCAR DADOS
+=============================== */
+
+function obterAtividades() {
+
+    return JSON.parse(
+        localStorage.getItem(
+            "atividadesConcluidas"
+        )
+    ) || [];
+
+}
+
+
+function obterOcorrencias() {
+
+    return JSON.parse(
+        localStorage.getItem(
+            "ocorrencias"
+        )
+    ) || [];
+
+}
+
+
+/* ===============================
+   NORMALIZAR STATUS
+=============================== */
+
+function statusNormalizado(status) {
+
+    return String(
+        status || "Aberta"
+    )
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(
+        /[\u0300-\u036f]/g,
+        ""
+    );
+
+}
+
+
+/* ===============================
+   DASHBOARD
+=============================== */
+
+function atualizarDashboard() {
+
+    const atividades =
+        obterAtividades();
+
+
+    const ocorrencias =
+        obterOcorrencias();
+
+
+    const abertas =
+        ocorrencias.filter(
+            item =>
+                statusNormalizado(
+                    item.status
+                ) === "aberta"
+        ).length;
+
+
+    const atendimento =
+        ocorrencias.filter(
+            item =>
+                statusNormalizado(
+                    item.status
+                ) ===
+                "em atendimento"
+        ).length;
+
+
+    const resolvidas =
+        ocorrencias.filter(
+            item =>
+                statusNormalizado(
+                    item.status
+                ) === "resolvida"
+        ).length;
+
+
+    /* KPI */
+
+    document
+        .getElementById(
+            "kpiCompleted"
+        )
+        .textContent =
+            atividades.length;
+
+
+    document
+        .getElementById(
+            "kpiOpen"
+        )
+        .textContent =
+            abertas;
+
+
+    document
+        .getElementById(
+            "kpiProgress"
+        )
+        .textContent =
+            atendimento;
+
+
+    document
+        .getElementById(
+            "kpiResolved"
+        )
+        .textContent =
+            resolvidas;
+
+
+    /* TORRE */
+
+    const concluidos =
+        Math.min(
+            atividades.length,
+            TOTAL_LOCAIS
+        );
+
+
+    const pendentes =
+        Math.max(
+            TOTAL_LOCAIS -
+            concluidos,
+            0
+        );
+
+
+    const percentual =
+        Math.round(
+            (
+                concluidos /
+                TOTAL_LOCAIS
+            ) * 100
+        );
+
+
+    document
+        .getElementById(
+            "towerDone"
+        )
+        .textContent =
+            concluidos;
+
+
+    document
+        .getElementById(
+            "towerPending"
+        )
+        .textContent =
+            pendentes;
+
+
+    document
+        .getElementById(
+            "towerOccurrences"
+        )
+        .textContent =
+            ocorrencias.filter(
+                item =>
+                    statusNormalizado(
+                        item.status
+                    ) !==
+                    "resolvida"
+            ).length;
+
+
+    document
+        .getElementById(
+            "towerPercent"
+        )
+        .textContent =
+            percentual + "%";
+
+
+    document
+        .getElementById(
+            "towerProgress"
+        )
+        .style.width =
+            percentual + "%";
+
+
+    /* TOTAL */
+
+    document
+        .getElementById(
+            "occurrenceTotal"
+        )
+        .textContent =
+            ocorrencias.length +
+            (
+                ocorrencias.length === 1
+                ? " registro"
+                : " registros"
+            );
+
+
+    renderizarOcorrencias(
+        ocorrencias
+    );
+
+
+    renderizarAtividades(
+        atividades
+    );
+
+}
+
+
+/* ===============================
+   OCORRÊNCIAS
+=============================== */
+
+function renderizarOcorrencias(
+    ocorrencias
+) {
+
+    const container =
+        document.getElementById(
+            "occurrencesContainer"
+        );
+
+
+    container.innerHTML = "";
+
+
+    if (
+        ocorrencias.length === 0
+    ) {
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    ✓
+                </div>
+
+                <strong>
+                    Nenhuma ocorrência
+                </strong>
+
+                <p>
+                    Registros enviados por
+                    moradores e visitantes
+                    aparecerão aqui.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    ocorrencias.forEach(
+        (item,index) => {
+
+            const normal =
+                statusNormalizado(
+                    item.status
+                );
+
+
+            let statusClass =
+                "status-open";
+
+
+            let statusLabel =
+                "Aberta";
+
+
+            if (
+                normal ===
+                "em atendimento"
+            ) {
+
+                statusClass =
+                    "status-progress";
+
+                statusLabel =
+                    "Em atendimento";
+
+            }
+
+
+            if (
+                normal ===
+                "resolvida"
+            ) {
+
+                statusClass =
+                    "status-done";
+
+                statusLabel =
+                    "Resolvida";
+
+            }
+
+
+            const descricao =
+                item.descricao
+                ? item.descricao
+                : (
+                    item.foto
+                    ? "Ocorrência enviada com foto."
+                    : "Sem descrição."
+                );
+
+
+            let botoes = "";
+
+
+            if (
+                normal === "aberta"
+            ) {
+
+                botoes = `
+
+                    <button
+                        class="
+                            action
+                            action-progress
+                        "
+                        onclick="
+                            alterarStatus(
+                                ${index},
+                                'Em atendimento'
+                            )
+                        "
+                    >
+                        ASSUMIR
+                    </button>
+
+
+                    <button
+                        class="
+                            action
+                            action-done
+                        "
+                        onclick="
+                            alterarStatus(
+                                ${index},
+                                'Resolvida'
+                            )
+                        "
+                    >
+                        RESOLVER
+                    </button>
+
+                `;
+
+            }
+
+
+            if (
+                normal ===
+                "em atendimento"
+            ) {
+
+                botoes = `
+
+                    <button
+                        class="
+                            action
+                            action-done
+                        "
+                        style="
+                            grid-column:
+                            1 / -1;
+                        "
+                        onclick="
+                            alterarStatus(
+                                ${index},
+                                'Resolvida'
+                            )
+                        "
+                    >
+                        ✓ MARCAR COMO RESOLVIDA
+                    </button>
+
+                `;
+
+            }
+
+
+            if (
+                normal ===
+                "resolvida"
+            ) {
+
+                botoes = `
+
+                    <button
+                        class="
+                            action
+                            action-reopen
+                        "
+                        onclick="
+                            alterarStatus(
+                                ${index},
+                                'Aberta'
+                            )
+                        "
+                    >
+                        REABRIR OCORRÊNCIA
+                    </button>
+
+                `;
+
+            }
+
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "occurrence";
+
+
+            card.innerHTML = `
+
+                <div
+                    class="occurrence-top"
+                >
+
+                    <div
+                        class="occurrence-icon"
+                    >
+                        ⚠️
+                    </div>
+
+
+                    <div
+                        class="occurrence-main"
+                    >
+
+                        <strong>
+                            ${item.local || "Local não informado"}
+                        </strong>
+
+                        <p>
+                            ${escaparHTML(descricao)}
+                        </p>
+
+                        <div class="protocol">
+                            ${item.protocolo || ""}
+                        </div>
+
+                    </div>
+
+
+                    <span
+                        class="
+                            status
+                            ${statusClass}
+                        "
+                    >
+                        ${statusLabel}
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="occurrence-data"
+                >
+
+                    <span
+                        class="data-tag"
+                    >
+                        🏢 ${item.torre || "Torre E"}
+                    </span>
+
+                    <span
+                        class="data-tag"
+                    >
+                        🕐 ${item.data || ""}
+                        ${item.hora || ""}
+                    </span>
+
+                    <span
+                        class="data-tag"
+                    >
+                        👤 ${item.origem || "Morador / visitante"}
+                    </span>
+
+                    ${
+                        item.foto
+                        ? `
+                            <span
+                                class="data-tag"
+                            >
+                                📷 Com foto
+                            </span>
+                          `
+                        : ""
+                    }
+
+                </div>
+
+
+                <div
+                    class="occurrence-actions"
+                >
+                    ${botoes}
+                </div>
+
+            `;
+
+
+            container.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+/* ===============================
+   ALTERAR STATUS
+=============================== */
+
+function alterarStatus(
+    index,
+    novoStatus
+) {
+
+    const ocorrencias =
+        obterOcorrencias();
+
+
+    if (
+        !ocorrencias[index]
+    ) {
+        return;
+    }
+
+
+    ocorrencias[index].status =
+        novoStatus;
+
+
+    ocorrencias[index]
+        .ultimaAtualizacao =
+        new Date().toISOString();
+
+
+    /*
+    No futuro poderemos guardar:
+
+    responsavel
+    horarioAssumido
+    horarioResolvido
+    fotoResolucao
+    observacaoResolucao
+    */
+
+    localStorage.setItem(
+        "ocorrencias",
+        JSON.stringify(
+            ocorrencias
+        )
+    );
+
+
+    atualizarDashboard();
+
+}
+
+
+/* ===============================
+   ATIVIDADES
+=============================== */
+
+function renderizarAtividades(
+    atividades
+) {
+
+    const container =
+        document.getElementById(
+            "activitiesContainer"
+        );
+
+
+    container.innerHTML = "";
+
+
+    if (
+        atividades.length === 0
+    ) {
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    🧹
+                </div>
+
+                <strong>
+                    Nenhuma atividade registrada
+                </strong>
+
+                <p>
+                    As limpezas concluídas pela
+                    Débora aparecerão aqui.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    /*
+    Mais recentes primeiro.
+    */
+
+    const lista =
+        [...atividades]
+        .reverse();
+
+
+    lista.forEach(
+        item => {
+
+            const atividade =
+                document.createElement(
+                    "div"
+                );
+
+
+            atividade.className =
+                "activity";
+
+
+            atividade.innerHTML = `
+
+                <div
+                    class="activity-icon"
+                >
+                    🧹
+                </div>
+
+
+                <div
+                    class="activity-info"
+                >
+
+                    <strong>
+                        ${item.local || "Local"}
+                    </strong>
+
+                    <span>
+
+                        ${item.torre || "Torre E"}
+
+                        •
+
+                        ${item.colaborador || "Débora"}
+
+                        •
+
+                        ${item.data || ""}
+
+                        às
+
+                        ${item.hora || ""}
+
+                        ${
+                            item.foto
+                            ? " • 📷"
+                            : ""
+                        }
+
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="activity-check"
+                >
+                    ✓
+                </div>
+
+            `;
+
+
+            container.appendChild(
+                atividade
+            );
+
+        }
+    );
+
+}
+
+
+/* ===============================
+   SEGURANÇA DE TEXTO
+=============================== */
+
+function escaparHTML(texto) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent =
+        texto;
+
+
+    return div.innerHTML;
+
+}
+
+
+/* ===============================
+   LIMPAR TESTE
+=============================== */
+
+function limparDadosTeste() {
+
+    const confirmar =
+        confirm(
+            "Apagar atividades e ocorrências de teste deste navegador?"
+        );
+
+
+    if (!confirmar) {
+        return;
+    }
+
+
+    localStorage.removeItem(
+        "atividadesConcluidas"
+    );
+
+
+    localStorage.removeItem(
+        "ocorrencias"
+    );
+
+
+    atualizarDashboard();
+
+}
+
+
+/* ===============================
+   INICIAR
+=============================== */
+
+atualizarDashboard();
+
+</script>
+
+
+</body>
+
+</html>
