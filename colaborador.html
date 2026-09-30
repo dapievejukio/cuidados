@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Minha Rotina — CUIDADOS</title>
+
+    <meta name="theme-color" content="#12355b">
+
+    <style>
+        :root {
+            --primary: #12355b;
+            --primary-dark: #0b2745;
+            --primary-light: #eaf2fb;
+
+            --green: #178c58;
+            --green-light: #e8f6ef;
+
+            --yellow: #d89b19;
+            --yellow-light: #fff5d9;
+
+            --red: #d94b4b;
+            --red-light: #fdecec;
+
+            --text: #17202a;
+            --muted: #687483;
+
+            --background: #f4f7fa;
+            --card: #ffffff;
+            --border: #e2e8ef;
+
+            --shadow: 0 10px 30px rgba(20,45,75,.08);
+            --radius: 20px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                Helvetica,
+                Arial,
+                sans-serif;
+
+            background: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        button {
+            font-family: inherit;
+        }
+
+        /* ==============================
+           HEADER
+        ============================== */
+
+        header {
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary-dark),
+                    var(--primary)
+                );
+
+            color: white;
+
+            padding:
+                env(safe-area-inset-top)
+                18px
+                34px;
+        }
+
+        .header-content {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+
+        .brand-logo {
+            width: 42px;
+            height: 42px;
+
+            border-radius: 13px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: rgba(255,255,255,.14);
+
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        .brand h1 {
+            font-size: 19px;
+            letter-spacing: .7px;
+        }
+
+        .brand small {
+            opacity: .7;
+            font-size: 11px;
+        }
+
+        .profile {
+            width: 42px;
+            height: 42px;
+
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: rgba(255,255,255,.15);
+
+            font-size: 19px;
+        }
+
+        .hello {
+            margin-top: 29px;
+        }
+
+        .hello small {
+            opacity: .72;
+            font-size: 13px;
+        }
+
+        .hello h2 {
+            font-size: 27px;
+            margin-top: 3px;
+        }
+
+        .hello p {
+            opacity: .75;
+            margin-top: 5px;
+            font-size: 13px;
+        }
+
+        /* ==============================
+           MAIN
+        ============================== */
+
+        main {
+            max-width: 900px;
+
+            margin: -16px auto 100px;
+
+            padding: 0 16px;
+        }
+
+        /* ==============================
+           USER
+        ============================== */
+
+        .user-card {
+            background: white;
+
+            border-radius: var(--radius);
+
+            padding: 17px;
+
+            box-shadow: var(--shadow);
+
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .avatar {
+            width: 51px;
+            height: 51px;
+
+            border-radius: 50%;
+
+            background: var(--primary-light);
+            color: var(--primary);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 21px;
+            font-weight: 700;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-info strong {
+            font-size: 15px;
+            display: block;
+        }
+
+        .user-info span {
+            display: block;
+
+            color: var(--muted);
+
+            font-size: 12px;
+
+            margin-top: 3px;
+        }
+
+        .employee-id {
+            background: #f1f4f7;
+
+            padding: 6px 9px;
+
+            border-radius: 20px;
+
+            font-size: 10px;
+            color: var(--muted);
+        }
+
+        /* ==============================
+           SUMMARY
+        ============================== */
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+
+            gap: 10px;
+
+            margin-top: 15px;
+        }
+
+        .summary-card {
+            background: white;
+
+            border-radius: 17px;
+
+            padding: 15px 10px;
+
+            box-shadow: var(--shadow);
+
+            text-align: center;
+        }
+
+        .summary-number {
+            font-size: 24px;
+            font-weight: 750;
+        }
+
+        .summary-label {
+            display: block;
+
+            margin-top: 4px;
+
+            color: var(--muted);
+
+            font-size: 10px;
+        }
+
+        .green {
+            color: var(--green);
+        }
+
+        .yellow {
+            color: var(--yellow);
+        }
+
+        .red {
+            color: var(--red);
+        }
+
+        /* ==============================
+           TOWER CARD
+        ============================== */
+
+        .tower-card {
+            margin-top: 17px;
+
+            background: white;
+
+            border-radius: var(--radius);
+
+            padding: 20px;
+
+            box-shadow: var(--shadow);
+        }
+
+        .tower-header {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .tower-icon {
+            width: 50px;
+            height: 50px;
+
+            border-radius: 15px;
+
+            background: var(--primary-light);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 24px;
+        }
+
+        .tower-title {
+            flex: 1;
+        }
+
+        .tower-title small {
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .tower-title h3 {
+            margin-top: 2px;
+            font-size: 19px;
+        }
+
+        .responsible {
+            background: var(--green-light);
+            color: var(--green);
+
+            font-size: 10px;
+            font-weight: 650;
+
+            padding: 6px 9px;
+
+            border-radius: 20px;
+        }
+
+        /* ==============================
+           PROGRESS
+        ============================== */
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+
+            margin-top: 20px;
+
+            font-size: 12px;
+        }
+
+        .progress-info span {
+            color: var(--muted);
+        }
+
+        .progress-info strong {
+            color: var(--green);
+        }
+
+        .progress {
+            height: 9px;
+
+            background: #e8edf2;
+
+            border-radius: 20px;
+
+            margin-top: 9px;
+
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+
+            background: var(--green);
+
+            transition: width .4s ease;
+        }
+
+        .progress-detail {
+            color: var(--muted);
+
+            font-size: 11px;
+
+            margin-top: 8px;
+        }
+
+        /* ==============================
+           SECTION
+        ============================== */
+
+        .section {
+            margin-top: 27px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            margin-bottom: 11px;
+        }
+
+        .section-header h3 {
+            font-size: 17px;
+        }
+
+        .section-header span {
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        /* ==============================
+           LOCATION
+        ============================== */
+
+        .location {
+            background: white;
+
+            border-radius: 17px;
+
+            margin-bottom: 9px;
+
+            padding: 14px;
+
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            box-shadow: 0 5px 18px rgba(20,45,75,.055);
+
+            cursor: pointer;
+
+            border: 1px solid transparent;
+
+            transition: .2s;
+        }
+
+        .location:active {
+            transform: scale(.985);
+        }
+
+        .location:hover {
+            border-color: #dce6ef;
+        }
+
+        .location-icon {
+            width: 43px;
+            height: 43px;
+
+            flex-shrink: 0;
+
+            border-radius: 13px;
+
+            background: var(--primary-light);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 20px;
+        }
+
+        .location-content {
+            flex: 1;
+        }
+
+        .location-content strong {
+            display: block;
+
+            font-size: 14px;
+
+            font-weight: 650;
+        }
+
+        .location-content small {
+            display: block;
+
+            margin-top: 3px;
+
+            color: var(--muted);
+
+            font-size: 11px;
+        }
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+
+            padding: 6px 8px;
+
+            border-radius: 20px;
+
+            font-size: 9px;
+            font-weight: 650;
+
+            white-space: nowrap;
+        }
+
+        .status-pending {
+            color: #986400;
+            background: var(--yellow-light);
+        }
+
+        .status-done {
+            color: var(--green);
+            background: var(--green-light);
+        }
+
+        .status-alert {
+            color: var(--red);
+            background: var(--red-light);
+        }
+
+        /* ==============================
+           OCCURRENCES
+        ============================== */
+
+        .empty {
+            background: white;
+
+            padding: 24px;
+
+            border-radius: 18px;
+
+            text-align: center;
+
+            box-shadow: var(--shadow);
+
+            color: var(--muted);
+        }
+
+        .empty-icon {
+            font-size: 30px;
+            margin-bottom: 7px;
+        }
+
+        .empty strong {
+            display: block;
+
+            color: var(--text);
+
+            font-size: 14px;
+        }
+
+        .empty p {
+            margin-top: 5px;
+            font-size: 11px;
+        }
+
+        /* ==============================
+           BUTTON
+        ============================== */
+
+        .report {
+            width: 100%;
+
+            margin-top: 22px;
+
+            padding: 16px;
+
+            border: 0;
+            border-radius: 16px;
+
+            background: var(--red-light);
+            color: var(--red);
+
+            font-size: 13px;
+            font-weight: 650;
+
+            cursor: pointer;
+        }
+
+        /* ==============================
+           BOTTOM NAV
+        ============================== */
+
+        .bottom-nav {
+            position: fixed;
+
+            left: 0;
+            right: 0;
+            bottom: 0;
+
+            height: 72px;
+
+            background: white;
+
+            border-top: 1px solid var(--border);
+
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+
+            padding-bottom: env(safe-area-inset-bottom);
+
+            z-index: 100;
+        }
+
+        .nav-item {
+            color: var(--muted);
+
+            font-size: 9px;
+
+            text-align: center;
+        }
+
+        .nav-icon {
+            display: block;
+
+            font-size: 20px;
+
+            margin-bottom: 3px;
+        }
+
+        .nav-active {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* ==============================
+           DESKTOP
+        ============================== */
+
+        @media (min-width: 750px) {
+
+            .locations-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .location {
+                margin-bottom: 0;
+            }
+
+            .bottom-nav {
+                max-width: 900px;
+
+                left: 50%;
+                transform: translateX(-50%);
+
+                border-radius: 20px 20px 0 0;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<header>
+
+    <div class="header-content">
+
+        <div class="topbar">
+
+            <div class="brand">
+
+                <div class="brand-logo">
+                    ✓
+                </div>
+
+                <div>
+                    <h1>CUIDADOS</h1>
+                    <small>Limpeza & Zeladoria</small>
+                </div>
+
+            </div>
+
+            <div class="profile">
+                👤
+            </div>
+
+        </div>
+
+
+        <div class="hello">
+
+            <small>Reserva Igara</small>
+
+            <h2>Bom dia, Débora 👋</h2>
+
+            <p>
+                Sua rotina da Torre E está pronta.
+            </p>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<main>
+
+    <!-- COLABORADOR -->
+
+    <div class="user-card">
+
+        <div class="avatar">
+            D
+        </div>
+
+        <div class="user-info">
+
+            <strong>Débora</strong>
+
+            <span>
+                Auxiliar de Limpeza
+            </span>
+
+        </div>
+
+        <div class="employee-id">
+            #0001
+        </div>
+
+    </div>
+
+
+    <!-- RESUMO -->
+
+    <div class="summary">
+
+        <div class="summary-card">
+
+            <div
+                class="summary-number green"
+                id="completedCount"
+            >
+                0
+            </div>
+
+            <span class="summary-label">
+                Concluídos
+            </span>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div
+                class="summary-number yellow"
+                id="pendingCount"
+            >
+                17
+            </div>
+
+            <span class="summary-label">
+                Pendentes
+            </span>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-number red">
+                0
+            </div>
+
+            <span class="summary-label">
+                Ocorrências
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- TORRE -->
+
+    <div class="tower-card">
+
+        <div class="tower-header">
+
+            <div class="tower-icon">
+                🏢
+            </div>
+
+            <div class="tower-title">
+
+                <small>Minha área</small>
+
+                <h3>Torre E</h3>
+
+            </div>
+
+            <span class="responsible">
+                Responsável
+            </span>
+
+        </div>
+
+
+        <div class="progress-info">
+
+            <span>Rotina de hoje</span>
+
+            <strong id="progressPercent">
+                0%
+            </strong>
+
+        </div>
+
+
+        <div class="progress">
+
+            <div
+                class="progress-fill"
+                id="progressFill"
+            ></div>
+
+        </div>
+
+
+        <div
+            class="progress-detail"
+            id="progressDetail"
+        >
+            0 de 17 locais concluídos
+        </div>
+
+    </div>
+
+
+    <!-- ACESSO -->
+
+    <section class="section">
+
+        <div class="section-header">
+
+            <h3>Acesso</h3>
+
+            <span>Torre E</span>
+
+        </div>
+
+
+        <div class="locations-grid">
+
+            <div
+                class="location"
+                onclick="abrirLocal('Térreo / Hall de entrada')"
+            >
+
+                <div class="location-icon">
+                    🚪
+                </div>
+
+                <div class="location-content">
+
+                    <strong>
+                        Térreo / Hall de entrada
+                    </strong>
+
+                    <small>
+                        Hall, piso, vidros e acesso
+                    </small>
+
+                </div>
+
+                <span class="status status-pending">
+                    ● Pendente
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ANDARES -->
+
+    <section class="section">
+
+        <div class="section-header">
+
+            <h3>Andares</h3>
+
+            <span>1º ao 12º</span>
+
+        </div>
+
+
+        <div
+            class="locations-grid"
+            id="floorsContainer"
+        ></div>
+
+    </section>
+
+
+    <!-- OUTROS LOCAIS -->
+
+    <section class="section">
+
+        <div class="section-header">
+
+            <h3>Outros locais</h3>
+
+            <span>4 locais</span>
+
+        </div>
+
+
+        <div class="locations-grid">
+
+            <!-- ESCADAS -->
+
+            <div
+                class="location"
+                onclick="abrirLocal('Escadas')"
+            >
+
+                <div class="location-icon">
+                    🪜
+                </div>
+
+                <div class="location-content">
+
+                    <strong>
+                        Escadas
+                    </strong>
+
+                    <small>
+                        Térreo ao 12º andar
+                    </small>
+
+                </div>
+
+                <span class="status status-pending">
+                    ● Pendente
+                </span>
+
+            </div>
+
+
+            <!-- ELEVADOR 1 -->
+
+            <div
+                class="location"
+                onclick="abrirLocal('Elevador 1')"
+            >
+
+                <div class="location-icon">
+                    🛗
+                </div>
+
+                <div class="location-content">
+
+                    <strong>
+                        Elevador 1
+                    </strong>
+
+                    <small>
+                        Cabine, espelho e botoeiras
+                    </small>
+
+                </div>
+
+                <span class="status status-pending">
+                    ● Pendente
+                </span>
+
+            </div>
+
+
+            <!-- ELEVADOR 2 -->
+
+            <div
+                class="location"
+                onclick="abrirLocal('Elevador 2')"
+            >
+
+                <div class="location-icon">
+                    🛗
+                </div>
+
+                <div class="location-content">
+
+                    <strong>
+                        Elevador 2
+                    </strong>
+
+                    <small>
+                        Cabine, espelho e botoeiras
+                    </small>
+
+                </div>
+
+                <span class="status status-pending">
+                    ● Pendente
+                </span>
+
+            </div>
+
+
+            <!-- LIXO -->
+
+            <div
+                class="location"
+                onclick="abrirLocal('Abrigo de resíduos')"
+            >
+
+                <div class="location-icon">
+                    🗑️
+                </div>
+
+                <div class="location-content">
+
+                    <strong>
+                        Abrigo de resíduos
+                    </strong>
+
+                    <small>
+                        Sala de lixo da Torre E
+                    </small>
+
+                </div>
+
+                <span class="status status-pending">
+                    ● Pendente
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- OCORRÊNCIAS -->
+
+    <section class="section">
+
+        <div class="section-header">
+
+            <h3>Minhas ocorrências</h3>
+
+            <span>0 abertas</span>
+
+        </div>
+
+
+        <div class="empty">
+
+            <div class="empty-icon">
+                ✓
+            </div>
+
+            <strong>
+                Nenhuma ocorrência
+            </strong>
+
+            <p>
+                Quando uma ocorrência da Torre E for
+                atribuída a você, ela aparecerá aqui.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <button
+        class="report"
+        onclick="reportarProblema()"
+    >
+        ⚠️ Reportar um problema
+    </button>
+
+</main>
+
+
+<!-- MENU -->
+
+<nav class="bottom-nav">
+
+    <div class="nav-item nav-active">
+
+        <span class="nav-icon">
+            ⌂
+        </span>
+
+        Minha rotina
+
+    </div>
+
+
+    <div class="nav-item">
+
+        <span class="nav-icon">
+            ✓
+        </span>
+
+        Concluídos
+
+    </div>
+
+
+    <div class="nav-item">
+
+        <span class="nav-icon">
+            ⚠
+        </span>
+
+        Ocorrências
+
+    </div>
+
+
+    <div class="nav-item">
+
+        <span class="nav-icon">
+            👤
+        </span>
+
+        Perfil
+
+    </div>
+
+</nav>
+
+
+<script>
+
+    /* =====================================
+       DADOS TEMPORÁRIOS
+
+       Mais adiante isso virá do Supabase.
+    ===================================== */
+
+    const colaborador = {
+        id: 1,
+        nome: "Débora",
+        matricula: "0001",
+        cargo: "Auxiliar de Limpeza",
+        torre: "E"
+    };
+
+
+    const TOTAL_LOCAIS = 17;
+
+
+    /* =====================================
+       CRIAR ANDARES
+    ===================================== */
+
+    const floorsContainer =
+        document.getElementById(
+            "floorsContainer"
+        );
+
+
+    for (let andar = 1; andar <= 12; andar++) {
+
+        const floor =
+            document.createElement("div");
+
+        floor.className = "location";
+
+
+        floor.onclick = function () {
+
+            abrirLocal(
+                `${andar}º andar`
+            );
+
+        };
+
+
+        floor.innerHTML = `
+
+            <div class="location-icon">
+                🧹
+            </div>
+
+            <div class="location-content">
+
+                <strong>
+                    ${andar}º andar
+                </strong>
+
+                <small>
+                    Hall, piso e elevadores
+                </small>
+
+            </div>
+
+            <span class="status status-pending">
+                ● Pendente
+            </span>
+
+        `;
+
+
+        floorsContainer.appendChild(
+            floor
+        );
+
+    }
+
+
+    /* =====================================
+       ABRIR LOCAL
+    ===================================== */
+
+    function abrirLocal(local) {
+
+        /*
+        Salvamos temporariamente o local
+        selecionado.
+
+        Na próxima página vamos usar isso
+        para saber onde Débora está limpando.
+        */
+
+        localStorage.setItem(
+            "localSelecionado",
+            local
+        );
+
+
+        localStorage.setItem(
+            "torreSelecionada",
+            "Torre E"
+        );
+
+
+        /*
+        atividade.html será criada
+        na próxima etapa.
+        */
+
+        window.location.href =
+            "atividade.html";
+
+    }
+
+
+    /* =====================================
+       REPORTAR PROBLEMA
+    ===================================== */
+
+    function reportarProblema() {
+
+        localStorage.setItem(
+            "torreSelecionada",
+            "Torre E"
+        );
+
+
+        window.location.href =
+            "reportar.html";
+
+    }
+
+
+    /* =====================================
+       PROGRESSO
+
+       Temporariamente busca atividades
+       concluídas no próprio navegador.
+
+       Depois isso será substituído
+       pelo banco de dados.
+    ===================================== */
+
+    function atualizarProgresso() {
+
+        const concluidos =
+            JSON.parse(
+                localStorage.getItem(
+                    "atividadesConcluidas"
+                )
+            ) || [];
+
+
+        const quantidade =
+            concluidos.length;
+
+
+        const percentual =
+            Math.round(
+                (
+                    quantidade /
+                    TOTAL_LOCAIS
+                ) * 100
+            );
+
+
+        document.getElementById(
+            "completedCount"
+        ).textContent =
+            quantidade;
+
+
+        document.getElementById(
+            "pendingCount"
+        ).textContent =
+            TOTAL_LOCAIS - quantidade;
+
+
+        document.getElementById(
+            "progressPercent"
+        ).textContent =
+            percentual + "%";
+
+
+        document.getElementById(
+            "progressFill"
+        ).style.width =
+            percentual + "%";
+
+
+        document.getElementById(
+            "progressDetail"
+        ).textContent =
+            `${quantidade} de ${TOTAL_LOCAIS} locais concluídos`;
+
+    }
+
+
+    atualizarProgresso();
+
+</script>
+
+
+</body>
+
+</html>
