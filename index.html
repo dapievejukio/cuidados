@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cuidados — Limpeza & Zeladoria</title>
+
+    <meta
+        name="description"
+        content="Plataforma de gestão de limpeza, zeladoria e ocorrências."
+    >
+
+    <style>
+        :root {
+            --primary: #12355b;
+            --primary-dark: #0b2745;
+            --primary-light: #eaf2fb;
+
+            --green: #178c58;
+            --green-light: #e8f6ef;
+
+            --yellow: #d89b19;
+            --yellow-light: #fff5d9;
+
+            --red: #d94b4b;
+            --red-light: #fdecec;
+
+            --text: #17202a;
+            --muted: #687483;
+
+            --background: #f4f7fa;
+            --card: #ffffff;
+
+            --border: #e2e8ef;
+
+            --shadow:
+                0 10px 30px rgba(20, 45, 75, 0.08);
+
+            --radius: 20px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                Helvetica,
+                Arial,
+                sans-serif;
+
+            background: var(--background);
+            color: var(--text);
+        }
+
+        button {
+            font-family: inherit;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        header {
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary-dark),
+                    var(--primary)
+                );
+
+            color: white;
+            padding: 18px 20px 32px;
+        }
+
+        .header-content {
+            max-width: 1180px;
+            margin: auto;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: rgba(255,255,255,.13);
+
+            font-size: 24px;
+        }
+
+        .brand h1 {
+            font-size: 23px;
+            letter-spacing: .5px;
+        }
+
+        .brand p {
+            font-size: 12px;
+            opacity: .75;
+            margin-top: 2px;
+        }
+
+        .profile {
+            width: 42px;
+            height: 42px;
+
+            border-radius: 50%;
+
+            background: rgba(255,255,255,.15);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 19px;
+        }
+
+        .welcome {
+            margin-top: 30px;
+        }
+
+        .welcome-small {
+            font-size: 13px;
+            opacity: .72;
+        }
+
+        .welcome h2 {
+            font-size: 28px;
+            margin-top: 4px;
+        }
+
+        .welcome p {
+            margin-top: 6px;
+            opacity: .78;
+            font-size: 14px;
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        main {
+            max-width: 1180px;
+            margin: -16px auto 80px;
+            padding: 0 18px;
+        }
+
+        /* =========================
+           ACTION BUTTON
+        ========================= */
+
+        .report-button {
+            width: 100%;
+            border: none;
+            cursor: pointer;
+
+            background: white;
+
+            padding: 18px;
+
+            border-radius: var(--radius);
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            box-shadow: var(--shadow);
+
+            color: var(--text);
+        }
+
+        .report-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-align: left;
+        }
+
+        .report-icon {
+            width: 50px;
+            height: 50px;
+
+            background: var(--red-light);
+            color: var(--red);
+
+            border-radius: 15px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 23px;
+        }
+
+        .report-button strong {
+            display: block;
+            font-size: 15px;
+        }
+
+        .report-button small {
+            display: block;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+
+        /* =========================
+           STATS
+        ========================= */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            gap: 14px;
+            margin-top: 20px;
+        }
+
+        .stat {
+            background: white;
+            border-radius: 18px;
+            padding: 18px;
+            box-shadow: var(--shadow);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .stat-number {
+            font-size: 27px;
+            font-weight: 700;
+            margin-top: 6px;
+        }
+
+        .green { color: var(--green); }
+        .yellow { color: var(--yellow); }
+        .red { color: var(--red); }
+
+        /* =========================
+           PROGRESS
+        ========================= */
+
+        .progress-card {
+            background: white;
+            border-radius: var(--radius);
+
+            margin-top: 18px;
+            padding: 20px;
+
+            box-shadow: var(--shadow);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .progress-header h3 {
+            font-size: 16px;
+        }
+
+        .progress-header strong {
+            color: var(--green);
+        }
+
+        .progress {
+            width: 100%;
+            height: 9px;
+
+            background: #e9edf2;
+
+            border-radius: 10px;
+
+            margin-top: 15px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            width: 78%;
+            height: 100%;
+            background: var(--green);
+            border-radius: 10px;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+
+            color: var(--muted);
+            font-size: 12px;
+
+            margin-top: 10px;
+        }
+
+        /* =========================
+           SECTIONS
+        ========================= */
+
+        .section {
+            margin-top: 28px;
+        }
+
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 13px;
+        }
+
+        .section-title h3 {
+            font-size: 18px;
+        }
+
+        .section-title span {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        /* =========================
+           TOWERS
+        ========================= */
+
+        .tower-grid {
+            display: grid;
+            grid-template-columns: repeat(5,1fr);
+            gap: 12px;
+        }
+
+        .tower {
+            background: white;
+            border-radius: 18px;
+            padding: 18px 12px;
+
+            text-align: center;
+
+            box-shadow: var(--shadow);
+
+            cursor: pointer;
+
+            border: 2px solid transparent;
+
+            transition: .2s;
+        }
+
+        .tower:hover {
+            transform: translateY(-3px);
+            border-color: var(--primary-light);
+        }
+
+        .tower-icon {
+            font-size: 28px;
+        }
+
+        .tower strong {
+            display: block;
+            margin-top: 8px;
+        }
+
+        .tower small {
+            color: var(--muted);
+            display: block;
+            margin-top: 4px;
+        }
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+
+            margin-top: 10px;
+
+            padding: 5px 9px;
+
+            border-radius: 20px;
+
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .status-ok {
+            background: var(--green-light);
+            color: var(--green);
+        }
+
+        .status-pending {
+            background: var(--yellow-light);
+            color: #a66d00;
+        }
+
+        .status-alert {
+            background: var(--red-light);
+            color: var(--red);
+        }
+
+        /* =========================
+           AREAS
+        ========================= */
+
+        .area-grid {
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            gap: 12px;
+        }
+
+        .area-card {
+            background: white;
+
+            border-radius: 18px;
+            padding: 16px;
+
+            box-shadow: var(--shadow);
+
+            display: flex;
+            align-items: center;
+            gap: 13px;
+
+            cursor: pointer;
+
+            transition: .2s;
+        }
+
+        .area-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .area-icon {
+            width: 45px;
+            height: 45px;
+
+            border-radius: 13px;
+
+            background: var(--primary-light);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 21px;
+        }
+
+        .area-info {
+            flex: 1;
+        }
+
+        .area-info strong {
+            font-size: 14px;
+            display: block;
+        }
+
+        .area-info small {
+            color: var(--muted);
+            font-size: 11px;
+            display: block;
+            margin-top: 3px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .dot-green { background: var(--green); }
+        .dot-yellow { background: var(--yellow); }
+        .dot-red { background: var(--red); }
+
+        /* =========================
+           OCCURRENCES
+        ========================= */
+
+        .occurrence {
+            background: white;
+
+            padding: 16px;
+
+            border-radius: 18px;
+
+            margin-bottom: 10px;
+
+            display: flex;
+            align-items: center;
+            gap: 13px;
+
+            box-shadow: var(--shadow);
+        }
+
+        .occurrence-icon {
+            width: 44px;
+            height: 44px;
+
+            border-radius: 13px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: var(--red-light);
+        }
+
+        .occurrence-content {
+            flex: 1;
+        }
+
+        .occurrence-content strong {
+            display: block;
+            font-size: 14px;
+        }
+
+        .occurrence-content small {
+            display: block;
+            margin-top: 4px;
+            color: var(--muted);
+        }
+
+        /* =========================
+           BOTTOM NAV
+        ========================= */
+
+        .bottom-nav {
+            display: none;
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            header {
+                padding-bottom: 28px;
+            }
+
+            .welcome h2 {
+                font-size: 23px;
+            }
+
+            main {
+                margin-bottom: 100px;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2,1fr);
+            }
+
+            .tower-grid {
+                grid-template-columns:
+                    repeat(3,1fr);
+            }
+
+            .area-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tower {
+                padding: 15px 8px;
+            }
+
+            .bottom-nav {
+                position: fixed;
+
+                bottom: 0;
+                left: 0;
+                right: 0;
+
+                height: 70px;
+
+                background: white;
+
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+
+                border-top: 1px solid var(--border);
+
+                z-index: 50;
+            }
+
+            .nav-item {
+                color: var(--muted);
+                font-size: 10px;
+                text-align: center;
+            }
+
+            .nav-icon {
+                font-size: 21px;
+                display: block;
+                margin-bottom: 3px;
+            }
+
+            .nav-active {
+                color: var(--primary);
+                font-weight: 600;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="header-content">
+
+        <div class="topbar">
+
+            <div class="brand">
+
+                <div class="brand-icon">
+                    ✓
+                </div>
+
+                <div>
+                    <h1>CUIDADOS</h1>
+                    <p>Limpeza & Zeladoria</p>
+                </div>
+
+            </div>
+
+            <div class="profile">
+                👤
+            </div>
+
+        </div>
+
+
+        <div class="welcome">
+
+            <div class="welcome-small">
+                Reserva Igara
+            </div>
+
+            <h2>Bom dia 👋</h2>
+
+            <p>
+                Acompanhe a operação do condomínio em tempo real.
+            </p>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<main>
+
+    <!-- REPORTAR -->
+
+    <button
+        class="report-button"
+        onclick="reportarProblema()"
+    >
+
+        <div class="report-left">
+
+            <div class="report-icon">
+                📷
+            </div>
+
+            <div>
+                <strong>Reportar um problema</strong>
+                <small>
+                    Encontrou algo? Envie uma foto.
+                </small>
+            </div>
+
+        </div>
+
+        <div>
+            ›
+        </div>
+
+    </button>
+
+
+    <!-- INDICADORES -->
+
+    <div class="stats">
+
+        <div class="stat">
+            <div class="stat-label">
+                Locais
+            </div>
+            <div class="stat-number">
+                42
+            </div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-label">
+                Concluídos
+            </div>
+            <div class="stat-number green">
+                33
+            </div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-label">
+                Pendentes
+            </div>
+            <div class="stat-number yellow">
+                7
+            </div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-label">
+                Ocorrências
+            </div>
+            <div class="stat-number red">
+                2
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- PROGRESSO -->
+
+    <div class="progress-card">
+
+        <div class="progress-header">
+
+            <h3>Rotina de hoje</h3>
+
+            <strong>78%</strong>
+
+        </div>
+
+        <div class="progress">
+            <div class="progress-fill"></div>
+        </div>
+
+        <div class="progress-info">
+
+            <span>
+                33 atividades concluídas
+            </span>
+
+            <span>
+                9 restantes
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- TORRES -->
+
+    <section class="section">
+
+        <div class="section-title">
+
+            <h3>Torres</h3>
+
+            <span>
+                5 torres
+            </span>
+
+        </div>
+
+
+        <div class="tower-grid">
+
+            <div class="tower">
+                <div class="tower-icon">🏢</div>
+                <strong>Torre A</strong>
+                <small>Áreas + lixo</small>
+
+                <span class="status status-ok">
+                    ● Concluída
+                </span>
+            </div>
+
+
+            <div class="tower">
+                <div class="tower-icon">🏢</div>
+                <strong>Torre B</strong>
+                <small>Áreas + lixo</small>
+
+                <span class="status status-ok">
+                    ● Concluída
+                </span>
+            </div>
+
+
+            <div class="tower">
+                <div class="tower-icon">🏢</div>
+                <strong>Torre C</strong>
+                <small>1 ocorrência</small>
+
+                <span class="status status-alert">
+                    ● Alerta
+                </span>
+            </div>
+
+
+            <div class="tower">
+                <div class="tower-icon">🏢</div>
+                <strong>Torre D</strong>
+                <small>Áreas + lixo</small>
+
+                <span class="status status-ok">
+                    ● Concluída
+                </span>
+            </div>
+
+
+            <div class="tower">
+                <div class="tower-icon">🏢</div>
+                <strong>Torre E</strong>
+                <small>Em andamento</small>
+
+                <span class="status status-pending">
+                    ● Pendente
+                </span>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ÁREAS COMUNS -->
+
+    <section class="section">
+
+        <div class="section-title">
+
+            <h3>Áreas comuns</h3>
+
+            <span>
+                Ver todas
+            </span>
+
+        </div>
+
+
+        <div class="area-grid">
+
+            <div class="area-card">
+                <div class="area-icon">🚗</div>
+                <div class="area-info">
+                    <strong>Prédio Garagem</strong>
+                    <small>4 andares</small>
+                </div>
+                <div class="dot dot-yellow"></div>
+            </div>
+
+
+            <div class="area-card">
+                <div class="area-icon">🎉</div>
+                <div class="area-info">
+                    <strong>Salão de Festas</strong>
+                    <small>Limpeza pendente</small>
+                </div>
+                <div class="dot dot-yellow"></div>
+            </div>
+
+
+            <div class="area-card">
+                <div class="area-icon">🔥</div>
+                <div class="area-info">
+                    <strong>Quiosque 1</strong>
+                    <small>Limpo hoje</small>
+                </div>
+                <div class="dot dot-green"></div>
+            </div>
+
+
+            <div class="area-card">
+                <div class="area-icon">🔥</div>
+                <div class="area-info">
+                    <strong>Quiosque 2</strong>
+                    <small>Limpo hoje</small>
+                </div>
+                <div class="dot dot-green"></div>
+            </div>
+
+
+            <div class="area-card">
+                <div class="area-icon">🐕</div>
+                <div class="area-info">
+                    <strong>Área Pet</strong>
+                    <small>Limpo hoje</small>
+                </div>
+                <div class="dot dot-green"></div>
+            </div>
+
+
+            <div class="area-card">
+                <div class="area-icon">🛝</div>
+                <div class="area-info">
+                    <strong>Praça Infantil</strong>
+                    <small>Limpo hoje</small>
+                </div>
+                <div class="dot dot-green"></div>
+            </div>
+
+
+            <div class="area-card">
+                <div class="area-icon">🏊</div>
+                <div class="area-info">
+                    <strong>Piscina</strong>
+                    <small>Área + banheiro</small>
+                </div>
+                <div class="dot dot-green"></div>
+            </div>
+
+
+            <div class="area-card">
+                <div class="area-icon">🏋️</div>
+                <div class="area-info">
+                    <strong>Academia</strong>
+                    <small>Área + banheiros</small>
+                </div>
+                <div class="dot dot-red"></div>
+            </div>
+
+
+            <div class="area-card">
+                <div class="area-icon">☕</div>
+                <div class="area-info">
+                    <strong>Copa</strong>
+                    <small>Limpo hoje</small>
+                </div>
+                <div class="dot dot-green"></div>
+            </div>
+
+
+            <div class="area-card">
+                <div class="area-icon">🧉</div>
+                <div class="area-info">
+                    <strong>Chimarródromo</strong>
+                    <small>Limpo hoje</small>
+                </div>
+                <div class="dot dot-green"></div>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- OCORRÊNCIAS -->
+
+    <section class="section">
+
+        <div class="section-title">
+
+            <h3>Ocorrências abertas</h3>
+
+            <span>
+                2 abertas
+            </span>
+
+        </div>
+
+
+        <div class="occurrence">
+
+            <div class="occurrence-icon">
+                🧹
+            </div>
+
+            <div class="occurrence-content">
+
+                <strong>
+                    Piso sujo próximo ao elevador
+                </strong>
+
+                <small>
+                    Torre C • 5º andar • há 18 min
+                </small>
+
+            </div>
+
+            <span class="status status-alert">
+                Aberta
+            </span>
+
+        </div>
+
+
+        <div class="occurrence">
+
+            <div class="occurrence-icon">
+                🚻
+            </div>
+
+            <div class="occurrence-content">
+
+                <strong>
+                    Banheiro precisa de limpeza
+                </strong>
+
+                <small>
+                    Academia • há 32 min
+                </small>
+
+            </div>
+
+            <span class="status status-pending">
+                Atendimento
+            </span>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- MENU MOBILE -->
+
+<nav class="bottom-nav">
+
+    <div class="nav-item nav-active">
+        <span class="nav-icon">⌂</span>
+        Início
+    </div>
+
+    <div class="nav-item">
+        <span class="nav-icon">✓</span>
+        Rotina
+    </div>
+
+    <div class="nav-item">
+        <span class="nav-icon">⚠</span>
+        Ocorrências
+    </div>
+
+    <div class="nav-item">
+        <span class="nav-icon">👤</span>
+        Perfil
+    </div>
+
+</nav>
+
+
+<script>
+
+    function reportarProblema() {
+
+        alert(
+            "Na próxima etapa abriremos aqui o formulário de ocorrência com local, foto e descrição."
+        );
+
+    }
+
+</script>
+
+</body>
+</html>
