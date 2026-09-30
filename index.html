@@ -28,8 +28,11 @@
     --green:#178c58;
     --green-light:#e8f6ef;
 
+    --yellow:#d89b19;
+    --yellow-light:#fff4d6;
+
     --purple:#6654a3;
-    --purple-light:#f0edf8;
+    --purple-light:#efecf8;
 
     --red:#d94b4b;
     --red-light:#fdecec;
@@ -50,19 +53,14 @@
 * {
 
     box-sizing:border-box;
-
     margin:0;
     padding:0;
 
 }
 
-html {
-
-    -webkit-text-size-adjust:100%;
-
-}
-
 body {
+
+    min-height:100vh;
 
     font-family:
         -apple-system,
@@ -79,8 +77,6 @@ body {
     color:
         var(--text);
 
-    min-height:100vh;
-
 }
 
 button,
@@ -91,39 +87,31 @@ input {
 }
 
 
-/* ==================================
+/* =====================================
    HEADER
-================================== */
+===================================== */
 
 header {
 
-    min-height:310px;
-
-    padding:
-        calc(
-            24px +
-            env(safe-area-inset-top)
-        )
-        20px
-        82px;
-
-    color:white;
-
     background:
         linear-gradient(
-            145deg,
+            135deg,
             var(--primary-dark),
             var(--primary)
         );
+
+    color:white;
+
+    padding:
+        calc(28px + env(safe-area-inset-top))
+        20px
+        55px;
 
 }
 
 .header-content {
 
-    width:100%;
-
-    max-width:760px;
-
+    max-width:850px;
     margin:auto;
 
 }
@@ -131,41 +119,36 @@ header {
 .brand {
 
     display:flex;
-
     align-items:center;
-
     gap:12px;
 
 }
 
 .logo {
 
-    width:52px;
-    height:52px;
-
-    flex-shrink:0;
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
+    width:50px;
+    height:50px;
 
     border-radius:16px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
     background:
         rgba(255,255,255,.14);
 
-    font-size:26px;
-
+    font-size:24px;
     font-weight:800;
 
 }
 
-.brand-text h1 {
+.brand-text strong {
 
-    font-size:21px;
+    display:block;
 
-    letter-spacing:1px;
+    font-size:17px;
+    letter-spacing:.5px;
 
 }
 
@@ -173,88 +156,87 @@ header {
 
     display:block;
 
-    margin-top:2px;
+    margin-top:3px;
 
     opacity:.68;
 
-    font-size:11px;
+    font-size:9px;
 
 }
 
-.welcome {
+.hero {
 
-    margin-top:43px;
-
-}
-
-.welcome small {
-
-    opacity:.7;
-
-    font-size:11px;
+    margin-top:32px;
 
 }
 
-.welcome h2 {
+.hero small {
+
+    display:block;
+
+    opacity:.65;
+
+    font-size:9px;
+    font-weight:700;
+
+    letter-spacing:.5px;
+
+}
+
+.hero h1 {
 
     margin-top:5px;
 
-    font-size:29px;
+    font-size:28px;
 
-    line-height:1.15;
+    line-height:1.1;
 
 }
 
-.welcome p {
+.hero p {
 
-    max-width:480px;
+    margin-top:8px;
 
-    margin-top:9px;
+    max-width:450px;
 
     opacity:.72;
 
-    font-size:11px;
+    font-size:10px;
 
-    line-height:1.6;
+    line-height:1.5;
 
 }
 
 
-/* ==================================
+/* =====================================
    MAIN
-================================== */
+===================================== */
 
 main {
 
-    width:100%;
+    max-width:850px;
 
-    max-width:760px;
-
-    margin:-55px auto 50px;
+    margin:-28px auto 60px;
 
     padding:0 15px;
 
 }
 
 
-/* ==================================
+/* =====================================
    LOGIN GRID
-================================== */
+===================================== */
 
 .login-grid {
 
     display:grid;
 
-    grid-template-columns:1fr;
+    grid-template-columns:
+        1fr;
 
     gap:14px;
 
 }
-
-
-/* ==================================
-   CARD
-================================== */
 
 .login-card {
 
@@ -269,29 +251,26 @@ main {
 
 }
 
-.card-header {
+.login-header {
 
     display:flex;
-
     align-items:center;
-
     gap:12px;
 
-    margin-bottom:20px;
+    margin-bottom:19px;
 
 }
 
-.card-icon {
+.login-icon {
 
-    width:49px;
-    height:49px;
+    width:48px;
+    height:48px;
 
     flex-shrink:0;
 
     border-radius:15px;
 
     display:flex;
-
     align-items:center;
     justify-content:center;
 
@@ -313,21 +292,15 @@ main {
 
 }
 
-.card-title {
-
-    flex:1;
-
-}
-
-.card-title strong {
+.login-header strong {
 
     display:block;
 
-    font-size:15px;
+    font-size:14px;
 
 }
 
-.card-title span {
+.login-header span {
 
     display:block;
 
@@ -342,46 +315,14 @@ main {
 
 }
 
-.profile-tag {
 
-    padding:6px 8px;
-
-    border-radius:20px;
-
-    font-size:8px;
-
-    font-weight:700;
-
-}
-
-.worker-tag {
-
-    color:
-        var(--primary);
-
-    background:
-        var(--primary-light);
-
-}
-
-.manager-tag {
-
-    color:
-        var(--purple);
-
-    background:
-        var(--purple-light);
-
-}
-
-
-/* ==================================
-   INPUT
-================================== */
+/* =====================================
+   FORM
+===================================== */
 
 .field {
 
-    margin-bottom:13px;
+    margin-top:12px;
 
 }
 
@@ -394,77 +335,56 @@ main {
     color:
         var(--muted);
 
-    font-size:9px;
+    font-size:8px;
+    font-weight:750;
 
-    font-weight:700;
-
-}
-
-.input-wrapper {
-
-    position:relative;
-
-}
-
-.input-icon {
-
-    position:absolute;
-
-    left:13px;
-    top:50%;
-
-    transform:
-        translateY(-50%);
-
-    color:
-        var(--muted);
-
-    font-size:14px;
-
-    pointer-events:none;
+    letter-spacing:.3px;
 
 }
 
 .field input {
 
     width:100%;
-
-    height:50px;
-
-    padding:
-        0
-        42px
-        0
-        39px;
+    height:48px;
 
     border:
         1px solid
         var(--border);
 
-    border-radius:14px;
+    border-radius:13px;
 
-    outline:none;
+    padding:
+        0 13px;
 
-    background:#fafbfc;
+    background:#fbfcfd;
 
     color:
         var(--text);
 
-    font-size:14px;
+    outline:none;
 
-    transition:.15s;
+    font-size:13px;
 
 }
 
 .field input:focus {
 
-    border-color:#9eb6cd;
+    border-color:
+        var(--primary);
 
     background:white;
 
-    box-shadow:
-        0 0 0 3px
-        rgba(18,53,91,.05);
+}
+
+.pin-wrapper {
+
+    position:relative;
+
+}
+
+.pin-wrapper input {
+
+    padding-right:55px;
 
 }
 
@@ -472,79 +392,61 @@ main {
 
     position:absolute;
 
-    top:50%;
     right:7px;
+    top:6px;
 
-    width:36px;
+    width:38px;
     height:36px;
-
-    transform:
-        translateY(-50%);
 
     border:0;
 
-    border-radius:10px;
+    border-radius:9px;
 
-    background:transparent;
+    background:#eef2f6;
 
     cursor:pointer;
 
-    font-size:14px;
+    font-size:15px;
 
 }
 
 
-/* ==================================
-   ERRORS
-================================== */
-
-.error {
-
-    display:none;
-
-    margin-bottom:13px;
-
-    padding:11px;
-
-    border-radius:12px;
-
-    background:
-        var(--red-light);
-
-    color:#a52f2f;
-
-    font-size:9px;
-
-    line-height:1.5;
-
-}
-
-
-/* ==================================
-   LOGIN BUTTONS
-================================== */
+/* =====================================
+   BUTTONS
+===================================== */
 
 .login-button {
 
     width:100%;
+    height:49px;
 
-    height:50px;
-
-    margin-top:2px;
+    margin-top:17px;
 
     border:0;
-
     border-radius:14px;
 
     color:white;
 
-    font-size:10px;
+    font-size:9px;
+    font-weight:800;
 
-    font-weight:750;
+    letter-spacing:.3px;
 
     cursor:pointer;
 
-    transition:.15s;
+}
+
+.worker-button {
+
+    background:
+        var(--primary);
+
+}
+
+.manager-button {
+
+    background:
+        var(--purple);
 
 }
 
@@ -555,32 +457,37 @@ main {
 
 }
 
-.worker-button {
+
+/* =====================================
+   ERROR
+===================================== */
+
+.error {
+
+    display:none;
+
+    margin-top:11px;
+
+    padding:10px;
+
+    border-radius:12px;
 
     background:
-        var(--primary);
+        var(--red-light);
 
-    box-shadow:
-        0 8px 20px
-        rgba(18,53,91,.16);
+    color:
+        var(--red);
+
+    text-align:center;
+
+    font-size:9px;
 
 }
 
-.manager-button {
 
-    background:
-        var(--purple);
-
-    box-shadow:
-        0 8px 20px
-        rgba(102,84,163,.16);
-
-}
-
-
-/* ==================================
+/* =====================================
    DIVIDER
-================================== */
+===================================== */
 
 .divider {
 
@@ -588,9 +495,17 @@ main {
 
     align-items:center;
 
-    gap:11px;
+    gap:10px;
 
-    margin:23px 5px;
+    margin:27px 3px 15px;
+
+    color:
+        var(--muted);
+
+    font-size:8px;
+    font-weight:700;
+
+    letter-spacing:.4px;
 
 }
 
@@ -608,100 +523,84 @@ main {
 
 }
 
-.divider span {
 
-    color:
-        var(--muted);
+/* =====================================
+   REPORTAR - CONSTRUÇÃO
+===================================== */
 
-    font-size:8px;
-
-    font-weight:700;
-
-}
-
-
-/* ==================================
-   PUBLIC REPORT
-================================== */
-
-.report-card {
-
-    overflow:hidden;
+.construction-card {
 
     background:white;
 
-    border-radius:22px;
+    border-radius:20px;
+
+    padding:18px;
 
     box-shadow:
         var(--shadow);
 
 }
 
-.report-top {
+.construction-content {
 
     display:flex;
-
     align-items:center;
 
     gap:13px;
 
-    padding:20px;
-
 }
 
-.report-icon {
+.construction-icon {
 
-    width:52px;
-    height:52px;
+    width:50px;
+    height:50px;
 
     flex-shrink:0;
 
-    display:flex;
+    border-radius:15px;
 
+    display:flex;
     align-items:center;
     justify-content:center;
 
-    border-radius:16px;
-
     background:
-        var(--red-light);
+        var(--yellow-light);
 
-    font-size:23px;
+    font-size:22px;
 
 }
 
-.report-info {
+.construction-info {
 
     flex:1;
 
 }
 
-.report-info small {
+.construction-info small {
 
     display:block;
 
-    margin-bottom:2px;
-
     color:
-        var(--red);
+        var(--yellow);
 
     font-size:8px;
-
-    font-weight:750;
+    font-weight:800;
 
     letter-spacing:.4px;
 
 }
 
-.report-info strong {
+.construction-info strong {
 
     display:block;
 
-    font-size:15px;
+    margin-top:3px;
+
+    font-size:13px;
 
 }
 
-.report-info p {
+.construction-info p {
 
     margin-top:4px;
 
@@ -710,87 +609,49 @@ main {
 
     font-size:9px;
 
-    line-height:1.45;
+    line-height:1.4;
 
 }
 
-.no-login {
+.construction-button {
 
-    padding:6px 8px;
-
-    border-radius:20px;
-
-    background:
-        var(--green-light);
-
-    color:
-        var(--green);
-
-    font-size:8px;
-
-    font-weight:700;
-
-    white-space:nowrap;
-
-}
-
-.report-button {
-
-    width:calc(100% - 40px);
-
-    margin:
-        0
-        20px
-        20px;
-
-    padding:15px;
-
-    border:0;
-
-    border-radius:14px;
-
-    background:
-        var(--red);
-
-    color:white;
-
-    font-size:10px;
-
-    font-weight:750;
-
-    cursor:pointer;
-
-    box-shadow:
-        0 8px 20px
-        rgba(217,75,75,.16);
-
-}
-
-.report-button:active {
-
-    transform:
-        scale(.99);
-
-}
-
-
-/* ==================================
-   INFO
-================================== */
-
-.info {
-
-    display:flex;
-
-    align-items:flex-start;
-
-    gap:9px;
+    width:100%;
 
     margin-top:14px;
 
-    padding:12px 14px;
+    padding:12px;
 
-    border-radius:14px;
+    border:
+        1px solid
+        #ecd49a;
+
+    border-radius:13px;
+
+    background:
+        var(--yellow-light);
+
+    color:
+        #8a6512;
+
+    font-size:9px;
+    font-weight:800;
+
+    cursor:not-allowed;
+
+}
+
+
+/* =====================================
+   INFO
+===================================== */
+
+.info-card {
+
+    margin-top:15px;
+
+    padding:14px;
+
+    border-radius:16px;
 
     background:
         var(--primary-light);
@@ -798,50 +659,38 @@ main {
     color:
         var(--primary);
 
-    font-size:8px;
+    font-size:9px;
 
     line-height:1.55;
 
 }
 
 
-/* ==================================
+/* =====================================
    FOOTER
-================================== */
+===================================== */
 
 footer {
 
-    max-width:760px;
-
-    margin:30px auto;
-
     padding:
-        0
-        20px
-        env(safe-area-inset-bottom);
+        5px 20px
+        calc(25px + env(safe-area-inset-bottom));
 
     text-align:center;
 
-    color:#949da6;
+    color:
+        var(--muted);
 
     font-size:8px;
-
-    line-height:1.7;
 
 }
 
 
-/* ==================================
+/* =====================================
    DESKTOP
-================================== */
+===================================== */
 
-@media (min-width:720px) {
-
-    header {
-
-        min-height:325px;
-
-    }
+@media(min-width:720px) {
 
     .login-grid {
 
@@ -850,9 +699,9 @@ footer {
 
     }
 
-    .welcome h2 {
+    .hero h1 {
 
-        font-size:32px;
+        font-size:34px;
 
     }
 
@@ -865,6 +714,10 @@ footer {
 
 <body>
 
+
+<!-- =====================================
+     HEADER
+===================================== -->
 
 <header>
 
@@ -880,12 +733,12 @@ footer {
 
         <div class="brand-text">
 
-            <h1>
+            <strong>
                 CUIDADOS
-            </h1>
+            </strong>
 
             <span>
-                Limpeza & Zeladoria
+                LIMPEZA & ZELADORIA
             </span>
 
         </div>
@@ -893,20 +746,20 @@ footer {
     </div>
 
 
-    <div class="welcome">
+    <div class="hero">
 
         <small>
-            Reserva Igara
+            RESERVA IGARA
         </small>
 
-        <h2>
+        <h1>
             Cuidar ficou mais simples.
-        </h2>
+        </h1>
 
         <p>
-            Acompanhamento da limpeza,
-            comunicação com a equipe
-            e registro de ocorrências.
+            Registro e acompanhamento das
+            rotinas de limpeza e zeladoria
+            do condomínio.
         </p>
 
     </div>
@@ -917,26 +770,29 @@ footer {
 </header>
 
 
+
+<!-- =====================================
+     MAIN
+===================================== -->
+
 <main>
 
-
-<!-- ==================================
-     ACESSOS
-================================== -->
 
 <div class="login-grid">
 
 
-    <!-- COLABORADOR -->
+    <!-- =================================
+         COLABORADOR
+    ================================== -->
 
     <section class="login-card">
 
 
-        <div class="card-header">
+        <div class="login-header">
 
             <div
                 class="
-                    card-icon
+                    login-icon
                     worker-icon
                 "
             >
@@ -944,101 +800,72 @@ footer {
             </div>
 
 
-            <div class="card-title">
+            <div>
 
                 <strong>
                     Colaborador
                 </strong>
 
                 <span>
-                    Acesse sua rotina de trabalho
+                    Limpeza e zeladoria
                 </span>
 
             </div>
 
-
-            <span
-                class="
-                    profile-tag
-                    worker-tag
-                "
-            >
-                EQUIPE
-            </span>
-
         </div>
 
 
-        <div
-            class="error"
-            id="workerError"
-        >
-            Matrícula ou PIN incorretos.
-        </div>
-
-
-        <!-- MATRÍCULA -->
 
         <div class="field">
 
-            <label for="workerMatricula">
+            <label
+                for="workerMatricula"
+            >
                 MATRÍCULA
             </label>
 
-
-            <div class="input-wrapper">
-
-                <span class="input-icon">
-                    #
-                </span>
-
-
-                <input
-                    id="workerMatricula"
-                    type="text"
-                    inputmode="numeric"
-                    autocomplete="username"
-                    placeholder="Digite sua matrícula"
-                >
-
-            </div>
+            <input
+                id="workerMatricula"
+                type="text"
+                inputmode="numeric"
+                autocomplete="username"
+                placeholder="Digite sua matrícula"
+            >
 
         </div>
 
 
-        <!-- PIN -->
 
         <div class="field">
 
-            <label for="workerPin">
+            <label
+                for="workerPin"
+            >
                 PIN
             </label>
 
 
-            <div class="input-wrapper">
-
-                <span class="input-icon">
-                    🔒
-                </span>
-
+            <div class="pin-wrapper">
 
                 <input
                     id="workerPin"
                     type="password"
                     inputmode="numeric"
-                    maxlength="4"
-                    placeholder="••••"
+                    autocomplete="current-password"
+                    placeholder="Digite seu PIN"
                 >
 
 
                 <button
-                    type="button"
                     class="show-pin"
+                    type="button"
                     onclick="
-                        mostrarPin(
-                            'workerPin'
+                        alternarPin(
+                            'workerPin',
+                            this
                         )
                     "
+                    aria-label="Mostrar ou ocultar PIN"
                 >
                     👁
                 </button>
@@ -1046,6 +873,7 @@ footer {
             </div>
 
         </div>
+
 
 
         <button
@@ -1053,26 +881,34 @@ footer {
                 login-button
                 worker-button
             "
-            onclick="entrarColaborador()"
+            onclick="loginColaborador()"
         >
             ENTRAR NA ROTINA
         </button>
+
+
+        <div
+            class="error"
+            id="workerError"
+        ></div>
 
 
     </section>
 
 
 
-    <!-- GESTÃO -->
+    <!-- =================================
+         GESTÃO
+    ================================== -->
 
     <section class="login-card">
 
 
-        <div class="card-header">
+        <div class="login-header">
 
             <div
                 class="
-                    card-icon
+                    login-icon
                     manager-icon
                 "
             >
@@ -1080,101 +916,72 @@ footer {
             </div>
 
 
-            <div class="card-title">
+            <div>
 
                 <strong>
                     Gestão
                 </strong>
 
                 <span>
-                    Acompanhe toda a operação
+                    Acompanhamento da operação
                 </span>
 
             </div>
 
-
-            <span
-                class="
-                    profile-tag
-                    manager-tag
-                "
-            >
-                GESTOR
-            </span>
-
         </div>
 
 
-        <div
-            class="error"
-            id="managerError"
-        >
-            Matrícula ou PIN incorretos.
-        </div>
-
-
-        <!-- MATRÍCULA -->
 
         <div class="field">
 
-            <label for="managerMatricula">
+            <label
+                for="managerMatricula"
+            >
                 MATRÍCULA
             </label>
 
-
-            <div class="input-wrapper">
-
-                <span class="input-icon">
-                    #
-                </span>
-
-
-                <input
-                    id="managerMatricula"
-                    type="text"
-                    inputmode="numeric"
-                    autocomplete="username"
-                    placeholder="Digite sua matrícula"
-                >
-
-            </div>
+            <input
+                id="managerMatricula"
+                type="text"
+                inputmode="numeric"
+                autocomplete="username"
+                placeholder="Digite sua matrícula"
+            >
 
         </div>
 
 
-        <!-- PIN -->
 
         <div class="field">
 
-            <label for="managerPin">
+            <label
+                for="managerPin"
+            >
                 PIN
             </label>
 
 
-            <div class="input-wrapper">
-
-                <span class="input-icon">
-                    🔒
-                </span>
-
+            <div class="pin-wrapper">
 
                 <input
                     id="managerPin"
                     type="password"
                     inputmode="numeric"
-                    maxlength="4"
-                    placeholder="••••"
+                    autocomplete="current-password"
+                    placeholder="Digite seu PIN"
                 >
 
 
                 <button
-                    type="button"
                     class="show-pin"
+                    type="button"
                     onclick="
-                        mostrarPin(
-                            'managerPin'
+                        alternarPin(
+                            'managerPin',
+                            this
                         )
                     "
+                    aria-label="Mostrar ou ocultar PIN"
                 >
                     👁
                 </button>
@@ -1184,15 +991,22 @@ footer {
         </div>
 
 
+
         <button
             class="
                 login-button
                 manager-button
             "
-            onclick="entrarGestor()"
+            onclick="loginGestor()"
         >
             ACESSAR PAINEL
         </button>
+
+
+        <div
+            class="error"
+            id="managerError"
+        ></div>
 
 
     </section>
@@ -1202,66 +1016,53 @@ footer {
 
 
 
-<!-- ==================================
-     DIVISOR
-================================== -->
+<!-- =====================================
+     SEM LOGIN
+===================================== -->
 
 <div class="divider">
-
-    <span>
-        ACESSO SEM LOGIN
-    </span>
-
+    ACESSO SEM LOGIN
 </div>
 
 
 
-<!-- ==================================
-     MORADOR
-================================== -->
-
-<section class="report-card">
+<section class="construction-card">
 
 
-    <div class="report-top">
+    <div class="construction-content">
 
-
-        <div class="report-icon">
-            ⚠️
+        <div class="construction-icon">
+            🚧
         </div>
 
 
-        <div class="report-info">
+        <div class="construction-info">
 
             <small>
-                MORADOR OU VISITANTE
+                EM CONSTRUÇÃO
             </small>
 
             <strong>
-                Encontrou algum problema?
+                Reportar problema
             </strong>
 
             <p>
-                Informe o local e envie
-                uma foto ou descrição.
+                O registro de ocorrências
+                por moradores e visitantes
+                estará disponível em breve.
             </p>
 
         </div>
-
-
-        <span class="no-login">
-            SEM LOGIN
-        </span>
-
 
     </div>
 
 
     <button
-        class="report-button"
-        onclick="abrirOcorrencia()"
+        class="construction-button"
+        type="button"
+        disabled
     >
-        REPORTAR PROBLEMA
+        🚧 FUNCIONALIDADE EM CONSTRUÇÃO
     </button>
 
 
@@ -1269,19 +1070,17 @@ footer {
 
 
 
-<div class="info">
+<div class="info-card">
 
-    <span>
-        🔒
-    </span>
+    <strong>
+        👷 Colaboradores
+    </strong>
 
-    <span>
-        O registro de ocorrência não exige
-        identificação. Caso queira receber
-        aviso quando o problema for resolvido,
-        o morador poderá informar um e-mail
-        opcionalmente.
-    </span>
+    <br>
+
+    Cada colaborador acessa somente
+    a rotina correspondente às suas
+    atribuições de limpeza ou zeladoria.
 
 </div>
 
@@ -1292,9 +1091,7 @@ footer {
 
 <footer>
 
-CUIDADOS • Reserva Igara<br>
-
-Sistema de Limpeza & Zeladoria
+    CUIDADOS • Reserva Igara
 
 </footer>
 
@@ -1302,303 +1099,427 @@ Sistema de Limpeza & Zeladoria
 
 <script>
 
-/* ==========================================
-   USUÁRIOS TEMPORÁRIOS
+/* =====================================
+   USUÁRIOS DE TESTE
 
-   Apenas para o protótipo.
+   TEMPORÁRIO.
 
-   Depois serão substituídos por
-   autenticação segura no backend.
-========================================== */
+   Depois estes usuários serão
+   carregados do banco de dados.
 
-const colaboradorTeste = {
+   Nunca manter PINs diretamente
+   no JavaScript em produção.
+===================================== */
 
-    nome:
-        "Débora",
+const colaboradores = {
 
-    matricula:
-        "0001",
+    "0001": {
 
-    pin:
-        "1234",
+        matricula:
+            "0001",
 
-    cargo:
-        "Auxiliar de Limpeza",
+        pin:
+            "1234",
 
-    torre:
-        "Torre E",
+        nome:
+            "Débora",
 
-    perfil:
-        "colaborador"
+        cargo:
+            "Auxiliar de Limpeza",
+
+        tipo:
+            "limpeza"
+
+    },
+
+
+    "0002": {
+
+        matricula:
+            "0002",
+
+        pin:
+            "1234",
+
+        nome:
+            "Zelador",
+
+        cargo:
+            "Zelador",
+
+        tipo:
+            "zeladoria"
+
+    }
 
 };
 
 
-const gestorTeste = {
 
-    nome:
-        "Gestor",
+const gestores = {
 
-    matricula:
-        "9001",
+    "9001": {
 
-    pin:
-        "4321",
+        matricula:
+            "9001",
 
-    cargo:
-        "Gestão",
+        pin:
+            "4321",
 
-    perfil:
-        "gestor"
+        nome:
+            "Gestor",
+
+        cargo:
+            "Gestão",
+
+        tipo:
+            "gestor"
+
+    }
 
 };
 
 
-/* ==========================================
+
+/* =====================================
    LOGIN COLABORADOR
-========================================== */
+===================================== */
 
-function entrarColaborador() {
+function loginColaborador() {
 
     esconderErros();
 
 
     const matricula =
         document
-            .getElementById(
-                "workerMatricula"
-            )
-            .value
-            .trim();
+        .getElementById(
+            "workerMatricula"
+        )
+        .value
+        .trim();
 
 
     const pin =
         document
-            .getElementById(
-                "workerPin"
-            )
-            .value
-            .trim();
+        .getElementById(
+            "workerPin"
+        )
+        .value
+        .trim();
 
 
     if (
-        matricula ===
-            colaboradorTeste.matricula
-        &&
-        pin ===
-            colaboradorTeste.pin
+        !matricula
+        ||
+        !pin
     ) {
 
-        const sessao = {
-
-            nome:
-                colaboradorTeste.nome,
-
-            matricula:
-                colaboradorTeste.matricula,
-
-            cargo:
-                colaboradorTeste.cargo,
-
-            torre:
-                colaboradorTeste.torre,
-
-            perfil:
-                colaboradorTeste.perfil,
-
-            loginEm:
-                new Date()
-                    .toISOString()
-
-        };
-
-
-        localStorage.setItem(
-            "usuarioLogado",
-            JSON.stringify(
-                sessao
-            )
+        mostrarErro(
+            "workerError",
+            "Informe a matrícula e o PIN."
         );
-
-
-        localStorage.setItem(
-            "torreSelecionada",
-            "Torre E"
-        );
-
-
-        window.location.href =
-            "colaborador.html";
-
 
         return;
 
     }
 
 
-    document
-        .getElementById(
-            "workerError"
+    const usuario =
+        colaboradores[
+            matricula
+        ];
+
+
+    if (
+        !usuario
+        ||
+        usuario.pin !== pin
+    ) {
+
+        mostrarErro(
+            "workerError",
+            "Matrícula ou PIN inválido."
+        );
+
+        return;
+
+    }
+
+
+    /*
+       Não salvamos o PIN
+       na sessão.
+    */
+
+    const sessao = {
+
+        matricula:
+            usuario.matricula,
+
+        nome:
+            usuario.nome,
+
+        cargo:
+            usuario.cargo,
+
+        tipo:
+            usuario.tipo,
+
+        perfil:
+            "colaborador",
+
+        condominio:
+            "Reserva Igara"
+
+    };
+
+
+    localStorage.setItem(
+        "usuarioLogado",
+        JSON.stringify(
+            sessao
         )
-        .style.display =
-            "block";
+    );
+
+
+    /*
+       Guarda o tipo da rotina.
+    */
+
+    localStorage.setItem(
+        "tipoAtividadeAtual",
+        usuario.tipo
+    );
+
+
+    /*
+       Limpa eventual seleção
+       de uma sessão anterior.
+    */
+
+    localStorage.removeItem(
+        "localSelecionado"
+    );
+
+
+    localStorage.removeItem(
+        "torreSelecionada"
+    );
+
+
+    window.location.href =
+        "colaborador.html";
 
 }
 
 
-/* ==========================================
+
+/* =====================================
    LOGIN GESTOR
-========================================== */
+===================================== */
 
-function entrarGestor() {
+function loginGestor() {
 
     esconderErros();
 
 
     const matricula =
         document
-            .getElementById(
-                "managerMatricula"
-            )
-            .value
-            .trim();
+        .getElementById(
+            "managerMatricula"
+        )
+        .value
+        .trim();
 
 
     const pin =
         document
-            .getElementById(
-                "managerPin"
-            )
-            .value
-            .trim();
+        .getElementById(
+            "managerPin"
+        )
+        .value
+        .trim();
 
 
     if (
-        matricula ===
-            gestorTeste.matricula
-        &&
-        pin ===
-            gestorTeste.pin
+        !matricula
+        ||
+        !pin
     ) {
 
-        const sessao = {
-
-            nome:
-                gestorTeste.nome,
-
-            matricula:
-                gestorTeste.matricula,
-
-            cargo:
-                gestorTeste.cargo,
-
-            perfil:
-                gestorTeste.perfil,
-
-            loginEm:
-                new Date()
-                    .toISOString()
-
-        };
-
-
-        localStorage.setItem(
-            "usuarioLogado",
-            JSON.stringify(
-                sessao
-            )
+        mostrarErro(
+            "managerError",
+            "Informe a matrícula e o PIN."
         );
-
-
-        window.location.href =
-            "gestor.html";
-
 
         return;
 
     }
 
 
-    document
-        .getElementById(
-            "managerError"
+    const usuario =
+        gestores[
+            matricula
+        ];
+
+
+    if (
+        !usuario
+        ||
+        usuario.pin !== pin
+    ) {
+
+        mostrarErro(
+            "managerError",
+            "Matrícula ou PIN inválido."
+        );
+
+        return;
+
+    }
+
+
+    const sessao = {
+
+        matricula:
+            usuario.matricula,
+
+        nome:
+            usuario.nome,
+
+        cargo:
+            usuario.cargo,
+
+        tipo:
+            usuario.tipo,
+
+        perfil:
+            "gestor",
+
+        condominio:
+            "Reserva Igara"
+
+    };
+
+
+    localStorage.setItem(
+        "usuarioLogado",
+        JSON.stringify(
+            sessao
         )
-        .style.display =
-            "block";
+    );
+
+
+    localStorage.removeItem(
+        "localSelecionado"
+    );
+
+
+    localStorage.removeItem(
+        "torreSelecionada"
+    );
+
+
+    localStorage.removeItem(
+        "tipoAtividadeAtual"
+    );
+
+
+    window.location.href =
+        "gestor.html";
 
 }
 
 
-/* ==========================================
-   ESCONDER ERROS
-========================================== */
+
+/* =====================================
+   MOSTRAR PIN
+===================================== */
+
+function alternarPin(
+    id,
+    botao
+) {
+
+    const campo =
+        document.getElementById(
+            id
+        );
+
+
+    if (
+        campo.type ===
+        "password"
+    ) {
+
+        campo.type =
+            "text";
+
+        botao.textContent =
+            "🙈";
+
+    } else {
+
+        campo.type =
+            "password";
+
+        botao.textContent =
+            "👁";
+
+    }
+
+}
+
+
+
+/* =====================================
+   ERROS
+===================================== */
+
+function mostrarErro(
+    id,
+    mensagem
+) {
+
+    const elemento =
+        document.getElementById(
+            id
+        );
+
+
+    elemento.textContent =
+        mensagem;
+
+
+    elemento.style.display =
+        "block";
+
+}
+
+
 
 function esconderErros() {
 
     document
-        .getElementById(
-            "workerError"
+        .querySelectorAll(
+            ".error"
         )
-        .style.display =
-            "none";
+        .forEach(
+            elemento => {
 
-
-    document
-        .getElementById(
-            "managerError"
-        )
-        .style.display =
-            "none";
-
-}
-
-
-/* ==========================================
-   MOSTRAR PIN
-========================================== */
-
-function mostrarPin(id) {
-
-    const campo =
-        document
-            .getElementById(id);
-
-
-    campo.type =
-        campo.type === "password"
-        ? "text"
-        : "password";
-
-}
-
-
-/* ==========================================
-   ENTER - COLABORADOR
-========================================== */
-
-document
-    .getElementById(
-        "workerMatricula"
-    )
-    .addEventListener(
-        "keydown",
-        function(event) {
-
-            if (
-                event.key === "Enter"
-            ) {
-
-                document
-                    .getElementById(
-                        "workerPin"
-                    )
-                    .focus();
+                elemento.style.display =
+                    "none";
 
             }
+        );
 
-        }
-    );
+}
 
+
+
+/* =====================================
+   ENTER
+===================================== */
 
 document
     .getElementById(
@@ -1609,10 +1530,11 @@ document
         function(event) {
 
             if (
-                event.key === "Enter"
+                event.key ===
+                "Enter"
             ) {
 
-                entrarColaborador();
+                loginColaborador();
 
             }
 
@@ -1620,27 +1542,24 @@ document
     );
 
 
-/* ==========================================
-   ENTER - GESTOR
-========================================== */
-
 document
     .getElementById(
-        "managerMatricula"
+        "workerMatricula"
     )
     .addEventListener(
         "keydown",
         function(event) {
 
             if (
-                event.key === "Enter"
+                event.key ===
+                "Enter"
             ) {
 
                 document
-                    .getElementById(
-                        "managerPin"
-                    )
-                    .focus();
+                .getElementById(
+                    "workerPin"
+                )
+                .focus();
 
             }
 
@@ -1657,10 +1576,11 @@ document
         function(event) {
 
             if (
-                event.key === "Enter"
+                event.key ===
+                "Enter"
             ) {
 
-                entrarGestor();
+                loginGestor();
 
             }
 
@@ -1668,16 +1588,29 @@ document
     );
 
 
-/* ==========================================
-   OCORRÊNCIA
-========================================== */
+document
+    .getElementById(
+        "managerMatricula"
+    )
+    .addEventListener(
+        "keydown",
+        function(event) {
 
-function abrirOcorrencia() {
+            if (
+                event.key ===
+                "Enter"
+            ) {
 
-    window.location.href =
-        "reportar.html";
+                document
+                .getElementById(
+                    "managerPin"
+                )
+                .focus();
 
-}
+            }
+
+        }
+    );
 
 </script>
 
