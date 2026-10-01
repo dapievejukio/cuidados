@@ -9,11 +9,11 @@
     content="width=device-width, initial-scale=1.0"
 >
 
-<title>Gestão — CUIDADOS</title>
+<title>Gestão — ORAQUI</title>
 
 <meta
     name="theme-color"
-    content="#342a67"
+    content="#6f67a8"
 >
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -21,32 +21,32 @@
 <style>
 
 :root{
-    --primary:#342a67;
-    --primary-dark:#211a49;
-    --primary-light:#eeeafd;
+    --primary:#6f67a8;
+    --primary-dark:#514a82;
+    --primary-light:#f0eef9;
 
-    --blue:#12355b;
-    --blue-light:#eaf2fb;
+    --blue:#5f88a3;
+    --blue-light:#edf5f8;
 
-    --green:#178c58;
-    --green-light:#e8f6ef;
+    --green:#6d9f83;
+    --green-light:#edf7f1;
 
-    --yellow:#d89b19;
-    --yellow-light:#fff4d6;
+    --yellow:#c49a58;
+    --yellow-light:#fff7e8;
 
-    --red:#d94b4b;
-    --red-light:#fdecec;
+    --red:#c96f72;
+    --red-light:#fceff0;
 
-    --text:#17202a;
-    --muted:#687483;
+    --text:#2d3640;
+    --muted:#77818c;
 
-    --background:#f4f7fa;
+    --background:#f6f7f8;
     --card:#ffffff;
-    --border:#e2e8ef;
+    --border:#e6e9ed;
 
     --shadow:
         0 8px 25px
-        rgba(20,45,75,.07);
+        rgba(40,50,65,.06);
 }
 
 *{
@@ -71,7 +71,8 @@ body{
     color:var(--text);
 }
 
-button{
+button,
+select{
     font-family:inherit;
 }
 
@@ -84,8 +85,8 @@ header{
     background:
         linear-gradient(
             135deg,
-            var(--primary-dark),
-            var(--primary)
+            #5c7390,
+            #7770a9
         );
 
     color:white;
@@ -93,11 +94,11 @@ header{
     padding:
         calc(18px + env(safe-area-inset-top))
         18px
-        37px;
+        36px;
 }
 
 .header-content{
-    max-width:850px;
+    max-width:900px;
     margin:auto;
 }
 
@@ -107,19 +108,42 @@ header{
     justify-content:space-between;
 }
 
-.brand strong{
-    display:block;
-    font-size:16px;
+.brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
 }
 
-.brand small{
+.brand-mark{
+    width:38px;
+    height:38px;
+
+    border-radius:12px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:
+        rgba(255,255,255,.16);
+
+    font-size:20px;
+    font-weight:900;
+}
+
+.brand-text strong{
     display:block;
+    font-size:16px;
+    letter-spacing:.5px;
+}
 
-    margin-top:3px;
+.brand-text small{
+    display:block;
+    margin-top:2px;
 
-    font-size:9px;
-
-    opacity:.68;
+    font-size:8px;
+    opacity:.7;
+    letter-spacing:.5px;
 }
 
 .logout{
@@ -130,18 +154,18 @@ header{
     border-radius:12px;
 
     background:
-        rgba(255,255,255,.13);
+        rgba(255,255,255,.14);
 
     color:white;
 
     font-size:9px;
-    font-weight:750;
+    font-weight:800;
 
     cursor:pointer;
 }
 
 .header-title{
-    margin-top:26px;
+    margin-top:25px;
 }
 
 .header-title small{
@@ -149,15 +173,15 @@ header{
 
     font-size:9px;
 
-    opacity:.65;
+    opacity:.68;
 
     text-transform:uppercase;
+    letter-spacing:.7px;
 }
 
 .header-title h1{
     margin-top:5px;
-
-    font-size:26px;
+    font-size:27px;
 }
 
 .header-title p{
@@ -165,7 +189,7 @@ header{
 
     font-size:10px;
 
-    opacity:.72;
+    opacity:.75;
 }
 
 
@@ -174,9 +198,9 @@ header{
 ===================================================== */
 
 main{
-    max-width:850px;
+    max-width:900px;
 
-    margin:-17px auto 80px;
+    margin:-16px auto 80px;
 
     padding:0 15px;
 }
@@ -223,7 +247,6 @@ main{
 
 .manager-info strong{
     display:block;
-
     font-size:13px;
 }
 
@@ -247,6 +270,82 @@ main{
 
     font-size:8px;
     font-weight:800;
+}
+
+
+/* =====================================================
+   ABAS
+===================================================== */
+
+.tabs{
+    margin-top:15px;
+
+    padding:5px;
+
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:5px;
+
+    border-radius:16px;
+
+    background:#e9edf1;
+}
+
+.tab{
+    border:0;
+
+    padding:12px 10px;
+
+    border-radius:12px;
+
+    background:transparent;
+
+    color:var(--muted);
+
+    font-size:9px;
+    font-weight:800;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.tab.active{
+    background:white;
+    color:var(--primary);
+
+    box-shadow:
+        0 3px 12px
+        rgba(40,50,65,.08);
+}
+
+.tab-badge{
+    display:inline-flex;
+
+    min-width:18px;
+    height:18px;
+
+    margin-left:5px;
+
+    padding:0 5px;
+
+    align-items:center;
+    justify-content:center;
+
+    border-radius:20px;
+
+    background:var(--red-light);
+    color:var(--red);
+
+    font-size:8px;
+}
+
+.view{
+    display:none;
+}
+
+.view.active{
+    display:block;
 }
 
 
@@ -282,7 +381,7 @@ main{
 
 
 /* =====================================================
-   KPIs
+   KPI
 ===================================================== */
 
 .kpis{
@@ -330,21 +429,11 @@ main{
     font-size:8px;
 }
 
-.kpi.green strong{
-    color:var(--green);
-}
-
-.kpi.blue strong{
-    color:var(--blue);
-}
-
-.kpi.purple strong{
-    color:var(--primary);
-}
-
-.kpi.yellow strong{
-    color:var(--yellow);
-}
+.kpi.green strong{color:var(--green);}
+.kpi.blue strong{color:var(--blue);}
+.kpi.purple strong{color:var(--primary);}
+.kpi.yellow strong{color:var(--yellow);}
+.kpi.red strong{color:var(--red);}
 
 
 /* =====================================================
@@ -359,6 +448,8 @@ main{
     display:flex;
     align-items:flex-end;
     justify-content:space-between;
+
+    gap:10px;
 
     margin-bottom:11px;
 }
@@ -393,7 +484,7 @@ main{
 
 
 /* =====================================================
-   TORRE E
+   TORRE
 ===================================================== */
 
 .tower-card{
@@ -433,7 +524,6 @@ main{
 
 .tower-info strong{
     display:block;
-
     font-size:13px;
 }
 
@@ -540,7 +630,6 @@ main{
 
 .location-info strong{
     display:block;
-
     font-size:11px;
 }
 
@@ -594,7 +683,7 @@ main{
 
 
 /* =====================================================
-   REGISTRO
+   REGISTROS OPERAÇÃO
 ===================================================== */
 
 .record{
@@ -672,7 +761,7 @@ main{
 
 
 /* =====================================================
-   ÚLTIMOS REGISTROS
+   ÚLTIMAS ATIVIDADES
 ===================================================== */
 
 .activity-list{
@@ -754,7 +843,270 @@ main{
 
 
 /* =====================================================
-   VAZIO
+   OCORRÊNCIAS
+===================================================== */
+
+.occurrence-list{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.occurrence{
+    padding:16px;
+
+    border-radius:20px;
+
+    background:white;
+
+    box-shadow:var(--shadow);
+}
+
+.occurrence-top{
+    display:flex;
+
+    align-items:flex-start;
+    justify-content:space-between;
+
+    gap:12px;
+}
+
+.occurrence-protocol{
+    font-size:11px;
+    font-weight:850;
+
+    color:var(--blue);
+}
+
+.occurrence-date{
+    margin-top:4px;
+
+    color:var(--muted);
+
+    font-size:8px;
+}
+
+.status{
+    flex-shrink:0;
+
+    padding:6px 9px;
+
+    border-radius:20px;
+
+    font-size:8px;
+    font-weight:800;
+}
+
+.status.aberta{
+    background:var(--red-light);
+    color:var(--red);
+}
+
+.status.atendimento{
+    background:var(--yellow-light);
+    color:var(--yellow);
+}
+
+.status.resolvida{
+    background:var(--green-light);
+    color:var(--green);
+}
+
+.occurrence-location{
+    margin-top:13px;
+
+    padding:10px 12px;
+
+    border-radius:13px;
+
+    background:var(--blue-light);
+
+    font-size:10px;
+    font-weight:700;
+
+    color:var(--blue);
+}
+
+.occurrence-body{
+    margin-top:12px;
+
+    display:grid;
+    grid-template-columns:1fr;
+
+    gap:12px;
+}
+
+.occurrence-description{
+    color:#4f5a65;
+
+    font-size:10px;
+    line-height:1.6;
+
+    white-space:pre-wrap;
+}
+
+.occurrence-photo{
+    width:100%;
+
+    max-height:270px;
+
+    border:0;
+
+    border-radius:15px;
+
+    overflow:hidden;
+
+    padding:0;
+
+    background:#edf1f5;
+
+    cursor:pointer;
+}
+
+.occurrence-photo img{
+    display:block;
+
+    width:100%;
+    max-height:270px;
+
+    object-fit:cover;
+}
+
+.occurrence-return{
+    margin-top:12px;
+
+    padding:11px;
+
+    border-radius:13px;
+
+    background:#f6f7f9;
+
+    font-size:9px;
+    line-height:1.6;
+}
+
+.occurrence-return strong{
+    color:var(--text);
+}
+
+.occurrence-return span{
+    color:var(--muted);
+}
+
+.occurrence-actions{
+    margin-top:13px;
+
+    padding-top:13px;
+
+    border-top:
+        1px solid
+        var(--border);
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+}
+
+.status-select{
+    flex:1;
+
+    height:42px;
+
+    padding:0 11px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:12px;
+
+    outline:none;
+
+    background:#fafbfc;
+
+    color:var(--text);
+
+    font-size:9px;
+}
+
+.save-status{
+    height:42px;
+
+    padding:0 14px;
+
+    border:0;
+
+    border-radius:12px;
+
+    background:var(--primary);
+    color:white;
+
+    font-size:8px;
+    font-weight:800;
+
+    cursor:pointer;
+}
+
+.save-status:disabled{
+    opacity:.5;
+    cursor:default;
+}
+
+.access-code{
+    margin-top:9px;
+
+    color:var(--muted);
+
+    font-size:8px;
+}
+
+
+/* =====================================================
+   FILTRO
+===================================================== */
+
+.filters{
+    display:flex;
+    gap:8px;
+
+    margin-bottom:12px;
+
+    overflow:auto;
+
+    padding-bottom:2px;
+}
+
+.filter{
+    flex-shrink:0;
+
+    border:0;
+
+    padding:8px 11px;
+
+    border-radius:20px;
+
+    background:white;
+
+    box-shadow:var(--shadow);
+
+    color:var(--muted);
+
+    font-size:8px;
+    font-weight:800;
+
+    cursor:pointer;
+}
+
+.filter.active{
+    background:var(--primary);
+    color:white;
+}
+
+
+/* =====================================================
+   VAZIO / LOADING / ERRO
 ===================================================== */
 
 .empty{
@@ -793,11 +1145,6 @@ main{
     line-height:1.5;
 }
 
-
-/* =====================================================
-   LOADING
-===================================================== */
-
 .loading{
     padding:28px;
 
@@ -813,11 +1160,6 @@ main{
 
     font-size:9px;
 }
-
-
-/* =====================================================
-   ERRO
-===================================================== */
 
 .error-box{
     display:none;
@@ -925,6 +1267,13 @@ main{
             repeat(4,1fr);
     }
 
+    .occurrence-body.with-photo{
+        grid-template-columns:
+            1fr 220px;
+
+        align-items:start;
+    }
+
 }
 
 </style>
@@ -942,13 +1291,21 @@ main{
 
         <div class="brand">
 
-            <strong>
-                CUIDADOS
-            </strong>
+            <div class="brand-mark">
+                ✓
+            </div>
 
-            <small>
-                Limpeza & Zeladoria
-            </small>
+            <div class="brand-text">
+
+                <strong>
+                    ORAQUI
+                </strong>
+
+                <small>
+                    AGORA. AQUI. REGISTRADO.
+                </small>
+
+            </div>
 
         </div>
 
@@ -974,7 +1331,7 @@ main{
         </h1>
 
         <p>
-            Acompanhamento da operação em tempo real.
+            Operação e ocorrências em um único lugar.
         </p>
 
     </div>
@@ -982,7 +1339,6 @@ main{
 </div>
 
 </header>
-
 
 
 <main>
@@ -994,7 +1350,6 @@ main{
         📊
     </div>
 
-
     <div class="manager-info">
 
         <strong>
@@ -1002,11 +1357,10 @@ main{
         </strong>
 
         <span>
-            Limpeza e zeladoria
+            Limpeza, zeladoria e ocorrências
         </span>
 
     </div>
-
 
     <span class="online">
         ● ONLINE
@@ -1015,125 +1369,312 @@ main{
 </div>
 
 
+<div
+    class="error-box"
+    id="errorBox"
+></div>
 
-<div class="error-box" id="errorBox"></div>
 
+<!-- ABAS -->
 
+<div class="tabs">
 
-<div class="date-row">
-
-    <h2>
-        Hoje
-    </h2>
-
-    <div
-        class="date-pill"
-        id="todayDate"
+    <button
+        class="tab active"
+        id="tabOperacao"
+        onclick="abrirAba('operacao')"
     >
-        --
-    </div>
+        ✓ OPERAÇÃO
+    </button>
+
+    <button
+        class="tab"
+        id="tabOcorrencias"
+        onclick="abrirAba('ocorrencias')"
+    >
+        ⚠ OCORRÊNCIAS
+
+        <span
+            class="tab-badge"
+            id="badgeOcorrencias"
+        >
+            0
+        </span>
+    </button>
 
 </div>
 
 
+<!-- ==================================================
+     OPERAÇÃO
+=================================================== -->
 
-<!-- KPIs -->
+<div
+    class="view active"
+    id="viewOperacao"
+>
 
-<div class="kpis">
+    <div class="date-row">
 
-    <div class="kpi green">
+        <h2>
+            Hoje
+        </h2>
 
-        <div class="kpi-icon">
-            ✓
+        <div
+            class="date-pill"
+            id="todayDate"
+        >
+            --
         </div>
-
-        <strong id="kpiItems">
-            0
-        </strong>
-
-        <span>
-            ITENS REGISTRADOS HOJE
-        </span>
 
     </div>
 
 
-    <div class="kpi blue">
+    <div class="kpis">
 
-        <div class="kpi-icon">
-            📷
+        <div class="kpi green">
+
+            <div class="kpi-icon">
+                ✓
+            </div>
+
+            <strong id="kpiItems">
+                0
+            </strong>
+
+            <span>
+                ITENS REGISTRADOS HOJE
+            </span>
+
         </div>
 
-        <strong id="kpiPhotos">
-            0
-        </strong>
 
-        <span>
-            FOTOS RECEBIDAS
-        </span>
+        <div class="kpi blue">
+
+            <div class="kpi-icon">
+                📷
+            </div>
+
+            <strong id="kpiPhotos">
+                0
+            </strong>
+
+            <span>
+                FOTOS RECEBIDAS
+            </span>
+
+        </div>
+
+
+        <div class="kpi purple">
+
+            <div class="kpi-icon">
+                👷
+            </div>
+
+            <strong id="kpiWorkers">
+                0
+            </strong>
+
+            <span>
+                COLABORADORES ATIVOS
+            </span>
+
+        </div>
+
+
+        <div class="kpi yellow">
+
+            <div class="kpi-icon">
+                📍
+            </div>
+
+            <strong id="kpiLocations">
+                0
+            </strong>
+
+            <span>
+                LOCAIS COM REGISTRO
+            </span>
+
+        </div>
 
     </div>
 
 
-    <div class="kpi purple">
+    <!-- TORRE E -->
 
-        <div class="kpi-icon">
-            👷
+    <section class="section">
+
+        <div class="section-title">
+
+            <div>
+
+                <h2>
+                    Torre E
+                </h2>
+
+                <p>
+                    Limpeza • Débora
+                </p>
+
+            </div>
+
+
+            <button
+                class="refresh"
+                onclick="carregarTudo()"
+            >
+                ↻ ATUALIZAR
+            </button>
+
         </div>
 
-        <strong id="kpiWorkers">
-            0
-        </strong>
 
-        <span>
-            COLABORADORES ATIVOS
-        </span>
+        <div class="tower-card">
 
-    </div>
+            <div class="tower-top">
+
+                <div class="tower-icon">
+                    🏢
+                </div>
+
+                <div class="tower-info">
+
+                    <strong>
+                        Operação de hoje
+                    </strong>
+
+                    <span id="towerStatus">
+                        Carregando registros...
+                    </span>
+
+                </div>
+
+                <div
+                    class="percent"
+                    id="towerPercent"
+                >
+                    0%
+                </div>
+
+            </div>
 
 
-    <div class="kpi yellow">
+            <div class="progress">
 
-        <div class="kpi-icon">
-            📍
+                <div
+                    class="progress-fill"
+                    id="towerProgress"
+                ></div>
+
+            </div>
+
+
+            <div class="progress-info">
+
+                <span id="towerDone">
+                    0 itens realizados
+                </span>
+
+                <span id="towerTotal">
+                    0 previstos
+                </span>
+
+            </div>
+
         </div>
 
-        <strong id="kpiLocations">
-            0
-        </strong>
+    </section>
 
-        <span>
-            LOCAIS COM REGISTRO
-        </span>
 
-    </div>
+    <!-- LOCAIS -->
+
+    <section class="section">
+
+        <div class="section-title">
+
+            <div>
+
+                <h2>
+                    Registros por local
+                </h2>
+
+                <p>
+                    Toque no local para visualizar os itens e fotos.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="locationList"
+            class="location-list"
+        >
+
+            <div class="loading">
+                Buscando registros...
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ÚLTIMOS -->
+
+    <section class="section">
+
+        <div class="section-title">
+
+            <div>
+
+                <h2>
+                    Últimos registros
+                </h2>
+
+                <p>
+                    Atividades recebidas hoje.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div id="activityContainer">
+
+            <div class="loading">
+                Carregando...
+            </div>
+
+        </div>
+
+    </section>
 
 </div>
 
 
+<!-- ==================================================
+     OCORRÊNCIAS
+=================================================== -->
 
-<!-- TORRE E -->
+<div
+    class="view"
+    id="viewOcorrencias"
+>
 
-<section class="section">
+    <div class="date-row">
 
-    <div class="section-title">
-
-        <div>
-
-            <h2>
-                Torre E
-            </h2>
-
-            <p>
-                Limpeza • Débora
-            </p>
-
-        </div>
-
+        <h2>
+            Ocorrências
+        </h2>
 
         <button
             class="refresh"
-            onclick="carregarDados()"
+            onclick="carregarOcorrencias()"
         >
             ↻ ATUALIZAR
         </button>
@@ -1141,136 +1682,151 @@ main{
     </div>
 
 
-    <div class="tower-card">
+    <div class="kpis">
 
-        <div class="tower-top">
+        <div class="kpi red">
 
-            <div class="tower-icon">
-                🏢
+            <div class="kpi-icon">
+                ⚠
             </div>
 
+            <strong id="occOpen">
+                0
+            </strong>
 
-            <div class="tower-info">
+            <span>
+                ABERTAS
+            </span>
 
-                <strong>
-                    Operação de hoje
-                </strong>
+        </div>
 
-                <span id="towerStatus">
-                    Carregando registros...
-                </span>
+
+        <div class="kpi yellow">
+
+            <div class="kpi-icon">
+                ◷
+            </div>
+
+            <strong id="occProgress">
+                0
+            </strong>
+
+            <span>
+                EM ATENDIMENTO
+            </span>
+
+        </div>
+
+
+        <div class="kpi green">
+
+            <div class="kpi-icon">
+                ✓
+            </div>
+
+            <strong id="occResolved">
+                0
+            </strong>
+
+            <span>
+                RESOLVIDAS
+            </span>
+
+        </div>
+
+
+        <div class="kpi blue">
+
+            <div class="kpi-icon">
+                ✉
+            </div>
+
+            <strong id="occReturn">
+                0
+            </strong>
+
+            <span>
+                SOLICITAM RETORNO
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <section class="section">
+
+        <div class="section-title">
+
+            <div>
+
+                <h2>
+                    Registros recebidos
+                </h2>
+
+                <p>
+                    Comunicação enviada por moradores e visitantes.
+                </p>
 
             </div>
 
+        </div>
 
-            <div
-                class="percent"
-                id="towerPercent"
+
+        <div class="filters">
+
+            <button
+                class="filter active"
+                data-filter="todas"
+                onclick="filtrarOcorrencias(this)"
             >
-                0%
+                TODAS
+            </button>
+
+            <button
+                class="filter"
+                data-filter="aberta"
+                onclick="filtrarOcorrencias(this)"
+            >
+                ABERTAS
+            </button>
+
+            <button
+                class="filter"
+                data-filter="em atendimento"
+                onclick="filtrarOcorrencias(this)"
+            >
+                EM ATENDIMENTO
+            </button>
+
+            <button
+                class="filter"
+                data-filter="resolvida"
+                onclick="filtrarOcorrencias(this)"
+            >
+                RESOLVIDAS
+            </button>
+
+        </div>
+
+
+        <div
+            class="occurrence-list"
+            id="occurrenceList"
+        >
+
+            <div class="loading">
+                Buscando ocorrências...
             </div>
 
         </div>
 
+    </section>
 
-        <div class="progress">
-
-            <div
-                class="progress-fill"
-                id="towerProgress"
-            ></div>
-
-        </div>
-
-
-        <div class="progress-info">
-
-            <span id="towerDone">
-                0 itens realizados
-            </span>
-
-            <span id="towerTotal">
-                0 previstos
-            </span>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-
-<!-- LOCAIS -->
-
-<section class="section">
-
-    <div class="section-title">
-
-        <div>
-
-            <h2>
-                Registros por local
-            </h2>
-
-            <p>
-                Toque no local para visualizar os itens e fotos.
-            </p>
-
-        </div>
-
-    </div>
-
-
-    <div
-        id="locationList"
-        class="location-list"
-    >
-
-        <div class="loading">
-            Buscando registros no Supabase...
-        </div>
-
-    </div>
-
-</section>
-
-
-
-<!-- ÚLTIMOS -->
-
-<section class="section">
-
-    <div class="section-title">
-
-        <div>
-
-            <h2>
-                Últimos registros
-            </h2>
-
-            <p>
-                Atividades recebidas hoje.
-            </p>
-
-        </div>
-
-    </div>
-
-
-    <div id="activityContainer">
-
-        <div class="loading">
-            Carregando...
-        </div>
-
-    </div>
-
-</section>
+</div>
 
 
 </main>
-
 
 
 <!-- MODAL FOTO -->
@@ -1290,12 +1846,10 @@ main{
             ×
         </button>
 
-
         <img
             id="modalImage"
-            alt="Registro da atividade"
+            alt="Registro"
         >
-
 
         <div
             class="photo-caption"
@@ -1305,7 +1859,6 @@ main{
     </div>
 
 </div>
-
 
 
 <script>
@@ -1329,6 +1882,17 @@ const db =
     );
 
 
+/*
+    Se o bucket fotos-ocorrencias estiver público,
+    o sistema consegue montar a URL abaixo.
+
+    Se futuramente tornarmos o bucket privado,
+    alteraremos apenas esta função.
+*/
+
+const OCCURRENCE_BUCKET =
+    "fotos-ocorrencias";
+
 
 /* =====================================================
    SESSÃO
@@ -1342,7 +1906,7 @@ const sessao =
     );
 
 
-if (!sessao){
+if(!sessao){
 
     window.location.href =
         "index.html";
@@ -1350,9 +1914,8 @@ if (!sessao){
 }
 
 
-
 /* =====================================================
-   ELEMENTOS
+   VARIÁVEIS
 ===================================================== */
 
 const locationList =
@@ -1367,11 +1930,24 @@ const activityContainer =
     );
 
 
+const occurrenceList =
+    document.getElementById(
+        "occurrenceList"
+    );
+
+
 const errorBox =
     document.getElementById(
         "errorBox"
     );
 
+
+let ocorrenciasCarregadas =
+    [];
+
+
+let filtroOcorrencia =
+    "todas";
 
 
 /* =====================================================
@@ -1429,30 +2005,72 @@ document
     );
 
 
-
 /* =====================================================
-   QUANTIDADE PREVISTA TORRE E
-
-   Térreo: 6
-   12 andares: 4 cada = 48
-   Escadas: 5
-   Elevador 1: 6
-   Elevador 2: 6
-   Abrigo resíduos: 5
-
-   Total = 76 itens
+   ABAS
 ===================================================== */
 
-const TOTAL_ITENS_TORRE_E =
-    76;
+function abrirAba(
+    aba
+){
 
+    const operacao =
+        aba ===
+        "operacao";
+
+
+    document
+    .getElementById(
+        "viewOperacao"
+    )
+    .classList
+    .toggle(
+        "active",
+        operacao
+    );
+
+
+    document
+    .getElementById(
+        "viewOcorrencias"
+    )
+    .classList
+    .toggle(
+        "active",
+        !operacao
+    );
+
+
+    document
+    .getElementById(
+        "tabOperacao"
+    )
+    .classList
+    .toggle(
+        "active",
+        operacao
+    );
+
+
+    document
+    .getElementById(
+        "tabOcorrencias"
+    )
+    .classList
+    .toggle(
+        "active",
+        !operacao
+    );
+
+}
 
 
 /* =====================================================
-   ESCAPAR HTML
+   ESCAPAR
 ===================================================== */
 
-function escapar(texto){
+function escapar(
+    texto
+){
 
     if(
         texto === null ||
@@ -1492,7 +2110,6 @@ function escapar(texto){
 }
 
 
-
 /* =====================================================
    HORA
 ===================================================== */
@@ -1515,20 +2132,20 @@ function formatarHora(
 }
 
 
-
 /* =====================================================
-   CARREGAR SUPABASE
+   OPERAÇÃO
 ===================================================== */
 
-async function carregarDados(){
+const TOTAL_ITENS_TORRE_E =
+    76;
 
-    esconderErro();
 
+async function carregarOperacao(){
 
     locationList.innerHTML =
         `
         <div class="loading">
-            Buscando registros no Supabase...
+            Buscando registros...
         </div>
         `;
 
@@ -1575,9 +2192,7 @@ async function carregarDados(){
 
 
         if(error){
-
             throw error;
-
         }
 
 
@@ -1613,7 +2228,7 @@ async function carregarDados(){
 
 
         mostrarErro(
-            "Não foi possível carregar os registros: "
+            "Não foi possível carregar a operação: "
             +
             (
                 erro.message ||
@@ -1642,9 +2257,8 @@ async function carregarDados(){
 }
 
 
-
 /* =====================================================
-   KPIs
+   KPI OPERAÇÃO
 ===================================================== */
 
 function atualizarKPIs(
@@ -1666,9 +2280,7 @@ function atualizarKPIs(
                 item =>
                     item.matricula
             )
-            .filter(
-                Boolean
-            )
+            .filter(Boolean)
         );
 
 
@@ -1679,9 +2291,7 @@ function atualizarKPIs(
                 item =>
                     item.local
             )
-            .filter(
-                Boolean
-            )
+            .filter(Boolean)
         );
 
 
@@ -1719,7 +2329,6 @@ function atualizarKPIs(
 }
 
 
-
 /* =====================================================
    TORRE E
 ===================================================== */
@@ -1727,11 +2336,6 @@ function atualizarKPIs(
 function atualizarTorreE(
     registros
 ){
-
-    /*
-       Apenas registros de limpeza
-       associados à Torre E.
-    */
 
     const torreE =
         registros.filter(
@@ -1746,15 +2350,6 @@ function atualizarTorreE(
                 "Torre E"
         );
 
-
-    /*
-       Evita contar duas vezes o mesmo
-       item/local se houver novo registro
-       no mesmo dia.
-
-       Exemplo:
-       Térreo + Piso/Hall
-    */
 
     const chaves =
         new Set();
@@ -1844,17 +2439,13 @@ function atualizarTorreE(
         );
 
 
-    if(
-        realizados === 0
-    ){
+    if(realizados === 0){
 
         status.textContent =
             "Nenhum item registrado hoje.";
 
     }
-    else if(
-        percentual >= 100
-    ){
+    else if(percentual >= 100){
 
         status.textContent =
             "Rotina prevista registrada.";
@@ -1870,18 +2461,15 @@ function atualizarTorreE(
 }
 
 
-
 /* =====================================================
-   AGRUPAR POR LOCAL
+   LOCAIS OPERAÇÃO
 ===================================================== */
 
 function montarLocais(
     registros
 ){
 
-    if(
-        registros.length === 0
-    ){
+    if(registros.length === 0){
 
         locationList.innerHTML =
             vazioHTML(
@@ -1889,7 +2477,6 @@ function montarLocais(
                 "Nenhum registro hoje",
                 "As atividades aparecerão aqui assim que forem enviadas."
             );
-
 
         return;
 
@@ -1908,9 +2495,7 @@ function montarLocais(
                 "Sem local";
 
 
-            if(
-                !grupos[nome]
-            ){
+            if(!grupos[nome]){
 
                 grupos[nome] =
                     [];
@@ -1919,9 +2504,9 @@ function montarLocais(
 
 
             grupos[nome]
-                .push(
-                    registro
-                );
+            .push(
+                registro
+            );
 
         }
     );
@@ -1954,14 +2539,7 @@ function montarLocais(
                 "location-card";
 
 
-            /*
-               Abre automaticamente
-               o primeiro local.
-            */
-
-            if(
-                indice === 0
-            ){
+            if(indice === 0){
 
                 card.classList.add(
                     "open"
@@ -1973,10 +2551,12 @@ function montarLocais(
             const pessoas =
                 [
                     ...new Set(
-                        itens.map(
+                        itens
+                        .map(
                             item =>
                                 item.colaborador
                         )
+                        .filter(Boolean)
                     )
                 ]
                 .join(", ");
@@ -1997,15 +2577,12 @@ function montarLocais(
 
                 <div
                     class="location-header"
-                    onclick="
-                        alternarLocal(this)
-                    "
+                    onclick="alternarLocal(this)"
                 >
 
                     <div class="location-icon">
                         📍
                     </div>
-
 
                     <div class="location-info">
 
@@ -2019,10 +2596,10 @@ function montarLocais(
 
                     </div>
 
-
                     <span class="location-count">
 
                         ${itens.length}
+
                         ${
                             itens.length === 1
                             ?
@@ -2033,7 +2610,6 @@ function montarLocais(
 
                     </span>
 
-
                     <span class="location-arrow">
                         ⌄
                     </span>
@@ -2042,18 +2618,16 @@ function montarLocais(
 
 
                 <div class="location-content">
-
                     ${registrosHTML}
-
                 </div>
 
             `;
 
 
             locationList
-                .appendChild(
-                    card
-                );
+            .appendChild(
+                card
+            );
 
         }
     );
@@ -2061,9 +2635,8 @@ function montarLocais(
 }
 
 
-
 /* =====================================================
-   REGISTRO POR LOCAL
+   REGISTRO
 ===================================================== */
 
 function criarRegistroHTML(
@@ -2079,19 +2652,21 @@ function criarRegistroHTML(
             onclick='abrirFoto(
                 ${JSON.stringify(registro.foto_url)},
                 ${JSON.stringify(
-                    registro.local
+                    (registro.local || "")
                     +
                     " • "
                     +
-                    registro.item
+                    (registro.item || "")
                 )}
             )'
         >
+
             <img
                 src="${escapar(registro.foto_url)}"
                 alt="Foto do registro"
                 loading="lazy"
             >
+
         </button>
         `
         :
@@ -2119,19 +2694,18 @@ function criarRegistroHTML(
 
             ${foto}
 
-
             <div class="record-body">
 
                 <strong>
                     ✓ ${escapar(registro.item)}
                 </strong>
 
-
                 <div class="record-meta">
 
                     ${escapar(registro.colaborador)}
                     •
                     ${formatarHora(registro.hora)}
+
                     <br>
 
                     ${
@@ -2144,7 +2718,6 @@ function criarRegistroHTML(
 
                 </div>
 
-
                 ${observacao}
 
             </div>
@@ -2156,18 +2729,15 @@ function criarRegistroHTML(
 }
 
 
-
 /* =====================================================
-   ÚLTIMOS REGISTROS
+   ÚLTIMOS
 ===================================================== */
 
 function montarUltimos(
     registros
 ){
 
-    if(
-        registros.length === 0
-    ){
+    if(registros.length === 0){
 
         activityContainer.innerHTML =
             vazioHTML(
@@ -2175,7 +2745,6 @@ function montarUltimos(
                 "Sem atividades",
                 "Nenhuma atividade foi recebida hoje."
             );
-
 
         return;
 
@@ -2203,11 +2772,11 @@ function montarUltimos(
                         onclick='abrirFoto(
                             ${JSON.stringify(registro.foto_url)},
                             ${JSON.stringify(
-                                registro.local
+                                (registro.local || "")
                                 +
                                 " • "
                                 +
-                                registro.item
+                                (registro.item || "")
                             )}
                         )'
                     >
@@ -2233,7 +2802,6 @@ function montarUltimos(
 
                         ${foto}
 
-
                         <div class="activity-info">
 
                             <strong>
@@ -2250,11 +2818,8 @@ function montarUltimos(
 
                         </div>
 
-
                         <div class="activity-time">
-
                             ${formatarHora(registro.hora)}
-
                         </div>
 
                     </div>
@@ -2276,9 +2841,818 @@ function montarUltimos(
 }
 
 
+/* =====================================================
+   OCORRÊNCIAS
+===================================================== */
+
+async function carregarOcorrencias(){
+
+    occurrenceList.innerHTML =
+        `
+        <div class="loading">
+            Buscando ocorrências...
+        </div>
+        `;
+
+
+    try{
+
+        const {
+            data,
+            error
+        } =
+            await db
+
+            .from(
+                "ocorrencias"
+            )
+
+            .select(
+                "*"
+            )
+
+            .eq(
+                "condominio",
+                "Reserva Igara"
+            )
+
+            .order(
+                "created_at",
+                {
+                    ascending:false
+                }
+            );
+
+
+        if(error){
+            throw error;
+        }
+
+
+        ocorrenciasCarregadas =
+            data || [];
+
+
+        atualizarKPIsOcorrencias();
+
+
+        montarOcorrencias();
+
+
+    }catch(erro){
+
+        console.error(
+            erro
+        );
+
+
+        occurrenceList.innerHTML =
+            vazioHTML(
+                "⚠️",
+                "Não foi possível carregar",
+                erro.message ||
+                "Erro ao consultar as ocorrências."
+            );
+
+
+        mostrarErro(
+            "Ocorrências: "
+            +
+            (
+                erro.message ||
+                "erro desconhecido"
+            )
+        );
+
+    }
+
+}
+
 
 /* =====================================================
-   ABRIR / FECHAR LOCAL
+   NORMALIZAR STATUS
+===================================================== */
+
+function statusNormalizado(
+    status
+){
+
+    const valor =
+        String(
+            status ||
+            "Aberta"
+        )
+        .trim()
+        .toLowerCase();
+
+
+    if(
+        valor === "resolvida" ||
+        valor === "resolvido"
+    ){
+        return "resolvida";
+    }
+
+
+    if(
+        valor === "em atendimento" ||
+        valor === "atendimento"
+    ){
+        return "em atendimento";
+    }
+
+
+    return "aberta";
+
+}
+
+
+/* =====================================================
+   KPI OCORRÊNCIAS
+===================================================== */
+
+function atualizarKPIsOcorrencias(){
+
+    const abertas =
+        ocorrenciasCarregadas
+        .filter(
+            item =>
+                statusNormalizado(
+                    item.status
+                )
+                ===
+                "aberta"
+        )
+        .length;
+
+
+    const atendimento =
+        ocorrenciasCarregadas
+        .filter(
+            item =>
+                statusNormalizado(
+                    item.status
+                )
+                ===
+                "em atendimento"
+        )
+        .length;
+
+
+    const resolvidas =
+        ocorrenciasCarregadas
+        .filter(
+            item =>
+                statusNormalizado(
+                    item.status
+                )
+                ===
+                "resolvida"
+        )
+        .length;
+
+
+    const retorno =
+        ocorrenciasCarregadas
+        .filter(
+            item =>
+                item.deseja_retorno === true
+        )
+        .length;
+
+
+    document
+    .getElementById(
+        "occOpen"
+    )
+    .textContent =
+        abertas;
+
+
+    document
+    .getElementById(
+        "occProgress"
+    )
+    .textContent =
+        atendimento;
+
+
+    document
+    .getElementById(
+        "occResolved"
+    )
+    .textContent =
+        resolvidas;
+
+
+    document
+    .getElementById(
+        "occReturn"
+    )
+    .textContent =
+        retorno;
+
+
+    document
+    .getElementById(
+        "badgeOcorrencias"
+    )
+    .textContent =
+        abertas
+        +
+        atendimento;
+
+}
+
+
+/* =====================================================
+   FILTRO OCORRÊNCIAS
+===================================================== */
+
+function filtrarOcorrencias(
+    botao
+){
+
+    document
+    .querySelectorAll(
+        ".filter"
+    )
+    .forEach(
+        item =>
+            item.classList.remove(
+                "active"
+            )
+    );
+
+
+    botao
+    .classList
+    .add(
+        "active"
+    );
+
+
+    filtroOcorrencia =
+        botao.dataset.filter;
+
+
+    montarOcorrencias();
+
+}
+
+
+/* =====================================================
+   URL FOTO OCORRÊNCIA
+===================================================== */
+
+function urlFotoOcorrencia(
+    caminho
+){
+
+    if(!caminho){
+        return "";
+    }
+
+
+    /*
+       Caso foto_path já contenha uma URL completa.
+    */
+
+    if(
+        String(caminho)
+        .startsWith("http://")
+
+        ||
+
+        String(caminho)
+        .startsWith("https://")
+    ){
+
+        return caminho;
+
+    }
+
+
+    const {
+        data
+    } =
+        db
+        .storage
+        .from(
+            OCCURRENCE_BUCKET
+        )
+        .getPublicUrl(
+            caminho
+        );
+
+
+    return (
+        data &&
+        data.publicUrl
+    )
+    ?
+    data.publicUrl
+    :
+    "";
+
+}
+
+
+/* =====================================================
+   MONTAR OCORRÊNCIAS
+===================================================== */
+
+function montarOcorrencias(){
+
+    let lista =
+        [...ocorrenciasCarregadas];
+
+
+    if(
+        filtroOcorrencia !==
+        "todas"
+    ){
+
+        lista =
+            lista.filter(
+                item =>
+                    statusNormalizado(
+                        item.status
+                    )
+                    ===
+                    filtroOcorrencia
+            );
+
+    }
+
+
+    if(lista.length === 0){
+
+        occurrenceList.innerHTML =
+            vazioHTML(
+                "✓",
+                "Nenhuma ocorrência",
+                filtroOcorrencia === "todas"
+                ?
+                "Nenhuma ocorrência foi registrada."
+                :
+                "Não há ocorrências com este status."
+            );
+
+        return;
+
+    }
+
+
+    occurrenceList.innerHTML =
+        lista
+        .map(
+            criarOcorrenciaHTML
+        )
+        .join("");
+
+}
+
+
+/* =====================================================
+   CARD OCORRÊNCIA
+===================================================== */
+
+function criarOcorrenciaHTML(
+    ocorrencia
+){
+
+    const status =
+        statusNormalizado(
+            ocorrencia.status
+        );
+
+
+    const classeStatus =
+        status === "resolvida"
+        ?
+        "resolvida"
+        :
+        status === "em atendimento"
+        ?
+        "atendimento"
+        :
+        "aberta";
+
+
+    const nomeStatus =
+        status === "resolvida"
+        ?
+        "RESOLVIDA"
+        :
+        status === "em atendimento"
+        ?
+        "EM ATENDIMENTO"
+        :
+        "ABERTA";
+
+
+    const fotoURL =
+        urlFotoOcorrencia(
+            ocorrencia.foto_path
+        );
+
+
+    const foto =
+        fotoURL
+        ?
+        `
+        <button
+            class="occurrence-photo"
+            onclick='abrirFoto(
+                ${JSON.stringify(fotoURL)},
+                ${JSON.stringify(
+                    ocorrencia.protocolo ||
+                    "Ocorrência"
+                )}
+            )'
+        >
+
+            <img
+                src="${escapar(fotoURL)}"
+                alt="Foto da ocorrência"
+                loading="lazy"
+            >
+
+        </button>
+        `
+        :
+        "";
+
+
+    const retorno =
+        ocorrencia.deseja_retorno
+        ?
+        `
+        <div class="occurrence-return">
+
+            <strong>
+                ✉ Retorno solicitado
+            </strong>
+
+            <br>
+
+            <span>
+                ${
+                    ocorrencia.email
+                    ?
+                    escapar(ocorrencia.email)
+                    :
+                    "E-mail não informado"
+                }
+            </span>
+
+        </div>
+        `
+        :
+        `
+        <div class="occurrence-return">
+
+            <span>
+                Retorno por e-mail não solicitado.
+            </span>
+
+        </div>
+        `;
+
+
+    const local =
+        ocorrencia.local_completo
+        ||
+        [
+            ocorrencia.area,
+            ocorrencia.detalhe
+        ]
+        .filter(Boolean)
+        .join(" • ")
+        ||
+        "Local não informado";
+
+
+    const dataFormatada =
+        ocorrencia.data
+        ?
+        String(
+            ocorrencia.data
+        )
+        .split("-")
+        .reverse()
+        .join("/")
+        :
+        "";
+
+
+    const descricao =
+        ocorrencia.descricao
+        ?
+        escapar(
+            ocorrencia.descricao
+        )
+        :
+        "Sem descrição adicional.";
+
+
+    return `
+
+        <article
+            class="occurrence"
+            id="occ-${ocorrencia.id}"
+        >
+
+            <div class="occurrence-top">
+
+                <div>
+
+                    <div class="occurrence-protocol">
+                        ${escapar(
+                            ocorrencia.protocolo ||
+                            "Sem protocolo"
+                        )}
+                    </div>
+
+                    <div class="occurrence-date">
+
+                        ${escapar(dataFormatada)}
+
+                        ${
+                            ocorrencia.hora
+                            ?
+                            " • "
+                            +
+                            formatarHora(
+                                ocorrencia.hora
+                            )
+                            :
+                            ""
+                        }
+
+                        ${
+                            ocorrencia.origem
+                            ?
+                            " • "
+                            +
+                            escapar(
+                                ocorrencia.origem
+                            )
+                            :
+                            ""
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <span
+                    class="status ${classeStatus}"
+                >
+                    ${nomeStatus}
+                </span>
+
+            </div>
+
+
+            <div class="occurrence-location">
+                📍 ${escapar(local)}
+            </div>
+
+
+            <div
+                class="
+                    occurrence-body
+                    ${fotoURL ? "with-photo" : ""}
+                "
+            >
+
+                <div>
+
+                    <div class="occurrence-description">
+                        ${descricao}
+                    </div>
+
+                    ${retorno}
+
+                    ${
+                        ocorrencia.codigo_acesso
+                        ?
+                        `
+                        <div class="access-code">
+                            Código de acompanhamento:
+                            <strong>
+                                ${escapar(
+                                    ocorrencia.codigo_acesso
+                                )}
+                            </strong>
+                        </div>
+                        `
+                        :
+                        ""
+                    }
+
+                </div>
+
+                ${foto}
+
+            </div>
+
+
+            <div class="occurrence-actions">
+
+                <select
+                    class="status-select"
+                    id="status-${ocorrencia.id}"
+                >
+
+                    <option
+                        value="Aberta"
+                        ${
+                            status === "aberta"
+                            ?
+                            "selected"
+                            :
+                            ""
+                        }
+                    >
+                        Aberta
+                    </option>
+
+                    <option
+                        value="Em atendimento"
+                        ${
+                            status === "em atendimento"
+                            ?
+                            "selected"
+                            :
+                            ""
+                        }
+                    >
+                        Em atendimento
+                    </option>
+
+                    <option
+                        value="Resolvida"
+                        ${
+                            status === "resolvida"
+                            ?
+                            "selected"
+                            :
+                            ""
+                        }
+                    >
+                        Resolvida
+                    </option>
+
+                </select>
+
+
+                <button
+                    class="save-status"
+                    id="save-${ocorrencia.id}"
+                    onclick="alterarStatus(
+                        ${ocorrencia.id}
+                    )"
+                >
+                    SALVAR
+                </button>
+
+            </div>
+
+        </article>
+
+    `;
+
+}
+
+
+/* =====================================================
+   ALTERAR STATUS
+===================================================== */
+
+async function alterarStatus(
+    id
+){
+
+    const select =
+        document.getElementById(
+            `status-${id}`
+        );
+
+
+    const botao =
+        document.getElementById(
+            `save-${id}`
+        );
+
+
+    if(
+        !select ||
+        !botao
+    ){
+        return;
+    }
+
+
+    const novoStatus =
+        select.value;
+
+
+    botao.disabled =
+        true;
+
+
+    botao.textContent =
+        "SALVANDO...";
+
+
+    try{
+
+        const {
+            error
+        } =
+            await db
+
+            .from(
+                "ocorrencias"
+            )
+
+            .update({
+                status:
+                    novoStatus,
+
+                updated_at:
+                    new Date()
+                    .toISOString()
+            })
+
+            .eq(
+                "id",
+                id
+            );
+
+
+        if(error){
+            throw error;
+        }
+
+
+        const registro =
+            ocorrenciasCarregadas
+            .find(
+                item =>
+                    item.id === id
+            );
+
+
+        if(registro){
+
+            registro.status =
+                novoStatus;
+
+        }
+
+
+        atualizarKPIsOcorrencias();
+
+
+        montarOcorrencias();
+
+
+    }catch(erro){
+
+        console.error(
+            erro
+        );
+
+
+        mostrarErro(
+            "Não foi possível alterar o status: "
+            +
+            (
+                erro.message ||
+                "erro desconhecido"
+            )
+        );
+
+
+        botao.disabled =
+            false;
+
+
+        botao.textContent =
+            "SALVAR";
+
+    }
+
+}
+
+
+/* =====================================================
+   LOCAL
 ===================================================== */
 
 function alternarLocal(
@@ -2295,7 +3669,6 @@ function alternarLocal(
     );
 
 }
-
 
 
 /* =====================================================
@@ -2339,7 +3712,6 @@ function abrirFoto(
 }
 
 
-
 function fecharFoto(){
 
     document
@@ -2366,7 +3738,6 @@ function fecharFoto(){
 }
 
 
-
 function fecharFotoFundo(
     evento
 ){
@@ -2381,7 +3752,6 @@ function fecharFotoFundo(
     }
 
 }
-
 
 
 /* =====================================================
@@ -2403,11 +3773,11 @@ function vazioHTML(
             </div>
 
             <strong>
-                ${titulo}
+                ${escapar(titulo)}
             </strong>
 
             <span>
-                ${texto}
+                ${escapar(texto)}
             </span>
 
         </div>
@@ -2415,7 +3785,6 @@ function vazioHTML(
     `;
 
 }
-
 
 
 /* =====================================================
@@ -2436,7 +3805,6 @@ function mostrarErro(
 }
 
 
-
 function esconderErro(){
 
     errorBox.style.display =
@@ -2444,6 +3812,22 @@ function esconderErro(){
 
 }
 
+
+/* =====================================================
+   CARREGAR TUDO
+===================================================== */
+
+async function carregarTudo(){
+
+    esconderErro();
+
+
+    await Promise.all([
+        carregarOperacao(),
+        carregarOcorrencias()
+    ]);
+
+}
 
 
 /* =====================================================
@@ -2463,22 +3847,15 @@ function sair(){
 }
 
 
-
 /* =====================================================
    INICIAR
 ===================================================== */
 
-carregarDados();
+carregarTudo();
 
-
-/*
-   Atualização automática a cada
-   60 segundos enquanto o gestor
-   estiver com a página aberta.
-*/
 
 setInterval(
-    carregarDados,
+    carregarTudo,
     60000
 );
 
