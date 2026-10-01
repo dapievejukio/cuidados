@@ -10,52 +10,50 @@
     content="width=device-width, initial-scale=1.0"
 >
 
-<title>Reportar problema — CUIDADOS</title>
+<title>Reportar problema — ORAQUI</title>
 
 <meta
     name="theme-color"
-    content="#12355b"
+    content="#eaf6ff"
 >
 
 <style>
 
 :root {
 
-    --primary:#12355b;
-    --primary-dark:#0b2745;
-    --primary-light:#eaf2fb;
+    --blue:#287bd8;
+    --blue-dark:#173f70;
+    --blue-soft:#eaf5ff;
 
-    --green:#178c58;
-    --green-light:#e8f6ef;
+    --coral:#f35b62;
+    --coral-dark:#df4850;
+    --coral-soft:#fff0f1;
 
-    --red:#d94b4b;
-    --red-light:#fdecec;
+    --green:#4fa66c;
+    --green-soft:#eaf7ee;
 
-    --text:#17202a;
-    --muted:#687483;
+    --text:#183653;
+    --muted:#6d8299;
 
-    --background:#f4f7fa;
+    --background:#f6fbff;
     --card:#ffffff;
-    --border:#e2e8ef;
+    --border:#dce8f2;
 
     --shadow:
-        0 10px 30px
-        rgba(20,45,75,.08);
+        0 14px 40px
+        rgba(43,88,128,.09);
 
 }
-
 
 * {
-
     box-sizing:border-box;
-
     margin:0;
     padding:0;
-
 }
 
-
 body {
+
+    min-height:100vh;
 
     font-family:
         -apple-system,
@@ -67,92 +65,122 @@ body {
         sans-serif;
 
     background:
-        var(--background);
+        linear-gradient(
+            180deg,
+            #e6f6ff 0,
+            #f6fbff 310px
+        );
 
-    color:
-        var(--text);
-
-    min-height:100vh;
+    color:var(--text);
 
 }
-
 
 button,
 textarea,
-select {
-
+select,
+input {
     font-family:inherit;
-
 }
 
 
-/* =========================
+/* =====================================
    HEADER
-========================= */
+===================================== */
 
 header {
+
+    position:relative;
+    overflow:hidden;
+
+    padding:
+        calc(17px + env(safe-area-inset-top))
+        18px
+        47px;
 
     background:
         linear-gradient(
             135deg,
-            var(--primary-dark),
-            var(--primary)
+            #eaf7ff,
+            #d9f1ff
         );
-
-    color:white;
-
-    padding:
-        calc(
-            15px +
-            env(safe-area-inset-top)
-        )
-        18px
-        35px;
 
 }
 
+header::after {
+
+    content:"";
+
+    position:absolute;
+
+    width:230px;
+    height:230px;
+
+    right:-100px;
+    top:-120px;
+
+    border-radius:50%;
+
+    background:
+        rgba(255,242,211,.60);
+
+}
 
 .header-content {
 
-    max-width:600px;
+    position:relative;
+    z-index:2;
 
+    max-width:640px;
     margin:auto;
 
 }
 
-
 .topbar {
 
     display:flex;
-
     align-items:center;
-
-    justify-content:
-        space-between;
+    justify-content:space-between;
 
 }
 
+.back,
+.public {
+
+    width:43px;
+    height:43px;
+
+    border:0;
+    border-radius:14px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+}
 
 .back {
 
-    width:42px;
-    height:42px;
-
-    border:0;
-
-    border-radius:13px;
-
     background:
-        rgba(255,255,255,.14);
+        rgba(255,255,255,.75);
 
-    color:white;
+    color:var(--blue-dark);
 
-    font-size:22px;
+    font-size:23px;
 
     cursor:pointer;
 
 }
 
+.public {
+
+    background:
+        var(--coral-soft);
+
+    color:var(--coral);
+
+    font-size:19px;
+
+}
 
 .brand {
 
@@ -160,17 +188,18 @@ header {
 
 }
 
-
 .brand strong {
 
     display:block;
 
-    font-size:14px;
+    color:var(--blue-dark);
+
+    font-size:15px;
+    font-weight:900;
 
     letter-spacing:.8px;
 
 }
-
 
 .brand small {
 
@@ -178,200 +207,208 @@ header {
 
     margin-top:2px;
 
-    opacity:.7;
-
-    font-size:10px;
-
-}
-
-
-.public {
-
-    width:42px;
-    height:42px;
-
-    border-radius:50%;
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    background:
-        rgba(255,255,255,.14);
-
-    font-size:18px;
-
-}
-
-
-.intro {
-
-    margin-top:28px;
-
-}
-
-
-.intro small {
-
-    opacity:.7;
-
-    font-size:11px;
-
-}
-
-
-.intro h1 {
-
-    margin-top:4px;
-
-    font-size:26px;
-
-}
-
-
-.intro p {
-
-    margin-top:7px;
-
-    max-width:430px;
-
-    opacity:.75;
-
-    font-size:11px;
-
-    line-height:1.55;
-
-}
-
-
-/* =========================
-   MAIN
-========================= */
-
-main {
-
-    max-width:600px;
-
-    margin:-15px auto 50px;
-
-    padding:0 15px;
-
-}
-
-
-.card {
-
-    background:white;
-
-    border-radius:20px;
-
-    padding:19px;
-
-    margin-bottom:14px;
-
-    box-shadow:
-        var(--shadow);
-
-}
-
-
-.title {
-
-    font-size:15px;
-
-    font-weight:700;
-
-}
-
-
-.description {
-
-    color:
-        var(--muted);
-
-    font-size:10px;
-
-    line-height:1.5;
-
-    margin-top:4px;
-
-    margin-bottom:14px;
-
-}
-
-
-/* =========================
-   LOCAL
-========================= */
-
-.tower {
-
-    display:flex;
-
-    align-items:center;
-
-    gap:12px;
-
-    margin-bottom:15px;
-
-    padding:12px;
-
-    background:
-        var(--primary-light);
-
-    border-radius:14px;
-
-}
-
-
-.tower-icon {
-
-    width:40px;
-    height:40px;
-
-    border-radius:12px;
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    background:white;
-
-    font-size:19px;
-
-}
-
-
-.tower-info small {
-
-    display:block;
-
-    color:
-        var(--muted);
+    color:#7190ae;
 
     font-size:9px;
 
 }
 
+.intro {
 
-.tower-info strong {
+    margin-top:30px;
+
+}
+
+.intro small {
+
+    color:#6194c6;
+
+    font-size:9px;
+    font-weight:850;
+
+    letter-spacing:.6px;
+
+}
+
+.intro h1 {
+
+    margin-top:5px;
+
+    color:var(--blue-dark);
+
+    font-size:28px;
+
+}
+
+.intro p {
+
+    max-width:450px;
+
+    margin-top:8px;
+
+    color:#64809d;
+
+    font-size:11px;
+    line-height:1.55;
+
+}
+
+
+/* =====================================
+   MAIN
+===================================== */
+
+main {
+
+    max-width:640px;
+
+    margin:-18px auto 55px;
+
+    padding:0 14px;
+
+    position:relative;
+    z-index:5;
+
+}
+
+.card {
+
+    margin-bottom:14px;
+    padding:20px;
+
+    border:
+        1px solid
+        rgba(220,232,242,.85);
+
+    border-radius:22px;
+
+    background:
+        rgba(255,255,255,.96);
+
+    box-shadow:var(--shadow);
+
+}
+
+.title {
+
+    color:var(--text);
+
+    font-size:15px;
+    font-weight:800;
+
+}
+
+.description {
+
+    margin-top:4px;
+    margin-bottom:15px;
+
+    color:var(--muted);
+
+    font-size:10px;
+    line-height:1.5;
+
+}
+
+
+/* =====================================
+   LOCAL
+===================================== */
+
+.location-highlight {
+
+    display:flex;
+    align-items:center;
+
+    gap:12px;
+
+    margin-bottom:16px;
+    padding:12px;
+
+    border-radius:15px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #edf8ff,
+            #f4fbff
+        );
+
+}
+
+.location-icon {
+
+    width:43px;
+    height:43px;
+
+    flex-shrink:0;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:13px;
+
+    background:white;
+
+    font-size:20px;
+
+}
+
+.location-info small {
+
+    display:block;
+
+    color:#7891a8;
+
+    font-size:8px;
+    font-weight:800;
+
+}
+
+.location-info strong {
 
     display:block;
 
     margin-top:2px;
 
-    font-size:14px;
+    color:var(--blue-dark);
+
+    font-size:13px;
 
 }
 
 
-select {
+/* =====================================
+   FORM
+===================================== */
+
+.field {
+
+    margin-top:13px;
+
+}
+
+.field label {
+
+    display:block;
+
+    margin-bottom:6px;
+
+    color:#6c829a;
+
+    font-size:8px;
+    font-weight:850;
+
+    letter-spacing:.5px;
+
+}
+
+select,
+input[type="email"] {
 
     width:100%;
-
-    height:52px;
+    height:51px;
 
     padding:0 13px;
 
@@ -383,67 +420,75 @@ select {
 
     outline:none;
 
-    background:#fafbfc;
+    background:#fbfdff;
 
-    color:
-        var(--text);
+    color:var(--text);
 
-    font-size:13px;
-
-}
-
-
-select:focus {
-
-    border-color:#9eb6cd;
+    font-size:12px;
 
 }
 
+select:focus,
+input[type="email"]:focus,
+textarea:focus {
 
-/* =========================
+    border-color:#87bde8;
+
+    background:white;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(80,150,210,.07);
+
+}
+
+#detalheLocalField {
+    display:none;
+}
+
+
+/* =====================================
    FOTO
-========================= */
+===================================== */
 
 .photo-box {
 
+    display:block;
+
+    padding:25px 15px;
+
     border:
         2px dashed
-        #cbd6e0;
+        #cbdce9;
 
-    border-radius:17px;
+    border-radius:18px;
 
-    padding:24px 15px;
+    background:#f9fcff;
 
     text-align:center;
-
-    background:#fafcfd;
 
     cursor:pointer;
 
 }
 
-
 .photo-icon {
 
-    width:53px;
-    height:53px;
+    width:55px;
+    height:55px;
 
     margin:auto;
 
-    border-radius:50%;
+    border-radius:18px;
 
     display:flex;
-
     align-items:center;
     justify-content:center;
 
-    background:
-        var(--primary-light);
+    background:var(--blue-soft);
 
-    font-size:24px;
+    font-size:25px;
 
 }
-
 
 .photo-box strong {
 
@@ -451,10 +496,11 @@ select:focus {
 
     margin-top:10px;
 
+    color:var(--blue-dark);
+
     font-size:13px;
 
 }
-
 
 .photo-box span {
 
@@ -462,20 +508,15 @@ select:focus {
 
     margin-top:4px;
 
-    color:
-        var(--muted);
+    color:var(--muted);
 
-    font-size:10px;
+    font-size:9px;
 
 }
-
 
 #photoInput {
-
     display:none;
-
 }
-
 
 .preview {
 
@@ -487,19 +528,16 @@ select:focus {
 
 }
 
-
 .preview img {
 
     width:100%;
-
     max-height:380px;
 
     object-fit:cover;
 
-    border-radius:16px;
+    border-radius:17px;
 
 }
-
 
 .remove {
 
@@ -508,33 +546,31 @@ select:focus {
     top:10px;
     right:10px;
 
-    width:35px;
-    height:35px;
+    width:36px;
+    height:36px;
 
     border:0;
-
     border-radius:50%;
 
     background:
-        rgba(0,0,0,.65);
+        rgba(0,0,0,.66);
 
     color:white;
 
-    font-size:17px;
+    font-size:18px;
 
     cursor:pointer;
 
 }
 
 
-/* =========================
-   OU
-========================= */
+/* =====================================
+   DIVISOR
+===================================== */
 
 .or {
 
     display:flex;
-
     align-items:center;
 
     gap:10px;
@@ -542,7 +578,6 @@ select:focus {
     margin:19px 0;
 
 }
-
 
 .or::before,
 .or::after {
@@ -553,33 +588,28 @@ select:focus {
 
     flex:1;
 
-    background:
-        var(--border);
+    background:var(--border);
 
 }
-
 
 .or span {
 
-    color:
-        var(--muted);
+    color:#8b9aaa;
 
-    font-size:9px;
-
-    font-weight:700;
+    font-size:8px;
+    font-weight:800;
 
 }
 
 
-/* =========================
+/* =====================================
    TEXTO
-========================= */
+===================================== */
 
 textarea {
 
     width:100%;
-
-    min-height:120px;
+    min-height:125px;
 
     padding:13px;
 
@@ -593,26 +623,14 @@ textarea {
 
     outline:none;
 
-    background:#fafbfc;
+    background:#fbfdff;
 
-    color:
-        var(--text);
+    color:var(--text);
 
     font-size:12px;
-
     line-height:1.5;
 
 }
-
-
-textarea:focus {
-
-    background:white;
-
-    border-color:#9eb6cd;
-
-}
-
 
 .counter {
 
@@ -620,66 +638,130 @@ textarea:focus {
 
     text-align:right;
 
-    color:
-        var(--muted);
+    color:var(--muted);
 
-    font-size:9px;
+    font-size:8px;
 
 }
 
 
-/* =========================
-   INFO
-========================= */
+/* =====================================
+   EMAIL
+===================================== */
+
+.email-box {
+
+    padding:15px;
+
+    border-radius:16px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f1f9ff,
+            #f7fcff
+        );
+
+}
+
+.email-head {
+
+    display:flex;
+    align-items:flex-start;
+
+    gap:11px;
+
+}
+
+.email-icon {
+
+    width:39px;
+    height:39px;
+
+    flex-shrink:0;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:12px;
+
+    background:white;
+
+    font-size:18px;
+
+}
+
+.email-copy strong {
+
+    display:block;
+
+    color:var(--blue-dark);
+
+    font-size:12px;
+
+}
+
+.email-copy span {
+
+    display:block;
+
+    margin-top:3px;
+
+    color:var(--muted);
+
+    font-size:9px;
+    line-height:1.45;
+
+}
+
+
+/* =====================================
+   PRIVACIDADE
+===================================== */
 
 .info {
 
-    padding:12px;
+    padding:13px;
 
-    border-radius:13px;
+    border-radius:14px;
 
-    background:
-        var(--primary-light);
+    background:#f1f8ff;
 
-    color:
-        var(--primary);
+    color:#466d95;
 
-    font-size:10px;
-
+    font-size:9px;
     line-height:1.5;
 
 }
 
 
-/* =========================
-   ERROR
-========================= */
+/* =====================================
+   ERRO
+===================================== */
 
 .error {
 
     display:none;
 
     margin-bottom:13px;
-
     padding:12px;
 
-    border-radius:13px;
+    border-radius:14px;
 
-    background:
-        var(--red-light);
+    background:var(--coral-soft);
 
-    color:#a82d2d;
+    color:#b93c44;
 
     font-size:10px;
-
     line-height:1.5;
 
 }
 
 
-/* =========================
-   SEND
-========================= */
+/* =====================================
+   ENVIAR
+===================================== */
 
 .send {
 
@@ -688,37 +770,38 @@ textarea:focus {
     padding:17px;
 
     border:0;
-
     border-radius:16px;
 
     background:
-        var(--primary);
+        linear-gradient(
+            90deg,
+            #ff655d,
+            #f2495f
+        );
 
     color:white;
 
-    font-size:12px;
-
-    font-weight:750;
+    font-size:11px;
+    font-weight:850;
 
     cursor:pointer;
 
     box-shadow:
         0 9px 22px
-        rgba(18,53,91,.18);
+        rgba(242,73,95,.18);
 
 }
 
 
-/* =========================
+/* =====================================
    SUCCESS
-========================= */
+===================================== */
 
 .overlay {
 
     display:none;
 
     position:fixed;
-
     inset:0;
 
     z-index:999;
@@ -729,26 +812,31 @@ textarea:focus {
     justify-content:center;
 
     background:
-        rgba(8,28,48,.72);
+        rgba(20,55,85,.62);
+
+    backdrop-filter:
+        blur(5px);
 
 }
-
 
 .success {
 
     width:100%;
-    max-width:380px;
+    max-width:390px;
 
-    padding:28px 22px;
+    padding:29px 22px;
 
-    border-radius:24px;
+    border-radius:25px;
 
     background:white;
 
     text-align:center;
 
-}
+    box-shadow:
+        0 25px 70px
+        rgba(20,50,80,.18);
 
+}
 
 .success-icon {
 
@@ -760,83 +848,89 @@ textarea:focus {
     border-radius:50%;
 
     display:flex;
-
     align-items:center;
     justify-content:center;
 
-    background:
-        var(--green-light);
+    background:var(--green-soft);
 
-    color:
-        var(--green);
+    color:var(--green);
 
     font-size:31px;
-
-    font-weight:800;
+    font-weight:900;
 
 }
-
 
 .success h2 {
 
     margin-top:15px;
 
+    color:var(--blue-dark);
+
     font-size:20px;
 
 }
-
 
 .success p {
 
     margin-top:8px;
 
-    color:
-        var(--muted);
+    color:var(--muted);
 
     font-size:11px;
-
     line-height:1.55;
 
 }
 
-
 .protocol {
 
     margin-top:16px;
-
     padding:13px;
 
-    border-radius:13px;
+    border-radius:14px;
 
-    background:#f5f7f9;
+    background:#f4f9fd;
 
-    font-size:11px;
+    color:#416583;
 
-    line-height:1.6;
+    font-size:10px;
+    line-height:1.7;
 
 }
-
 
 .success button {
 
     width:100%;
 
     margin-top:18px;
-
     padding:14px;
 
     border:0;
-
     border-radius:14px;
 
-    background:
-        var(--primary);
+    background:var(--blue);
 
     color:white;
 
-    font-weight:700;
+    font-weight:800;
 
     cursor:pointer;
+
+}
+
+
+/* =====================================
+   MOBILE
+===================================== */
+
+@media(max-width:480px) {
+
+    .intro h1 {
+        font-size:25px;
+    }
+
+    .card {
+        padding:17px;
+    }
 
 }
 
@@ -852,11 +946,13 @@ textarea:focus {
 
 <div class="header-content">
 
+
     <div class="topbar">
 
         <button
             class="back"
             onclick="voltar()"
+            aria-label="Voltar"
         >
             ‹
         </button>
@@ -865,7 +961,7 @@ textarea:focus {
         <div class="brand">
 
             <strong>
-                CUIDADOS
+                ORAQUI
             </strong>
 
             <small>
@@ -885,7 +981,7 @@ textarea:focus {
     <div class="intro">
 
         <small>
-            Comunicação com a equipe
+            COMUNICAÇÃO COM A EQUIPE
         </small>
 
         <h1>
@@ -893,15 +989,17 @@ textarea:focus {
         </h1>
 
         <p>
-            Informe onde está o problema
-            e envie uma foto ou uma breve descrição.
+            Informe onde está o problema e envie
+            uma foto ou uma breve descrição.
         </p>
 
     </div>
 
+
 </div>
 
 </header>
+
 
 
 <main>
@@ -913,7 +1011,10 @@ textarea:focus {
 ></div>
 
 
-<!-- LOCAL -->
+
+<!-- =====================================
+     LOCAL
+===================================== -->
 
 <section class="card">
 
@@ -923,25 +1024,24 @@ textarea:focus {
 
     <div class="description">
         Selecione o local para direcionarmos
-        a ocorrência para a equipe responsável.
+        a ocorrência corretamente.
     </div>
 
 
-    <div class="tower">
+    <div class="location-highlight">
 
-        <div class="tower-icon">
-            🏢
+        <div class="location-icon">
+            📍
         </div>
 
-
-        <div class="tower-info">
+        <div class="location-info">
 
             <small>
-                LOCAL
+                CONDOMÍNIO
             </small>
 
             <strong>
-                Torre E
+                Reserva Igara
             </strong>
 
         </div>
@@ -949,86 +1049,252 @@ textarea:focus {
     </div>
 
 
-    <select id="local">
+    <div class="field">
 
-        <option value="">
-            Selecione o andar ou local
-        </option>
+        <label for="area">
+            LOCAL
+        </label>
 
-        <option>
-            Térreo / Hall de entrada
-        </option>
+        <select
+            id="area"
+            onchange="alterarArea()"
+        >
 
-        <option>
-            1º andar
-        </option>
+            <option value="">
+                Selecione o local
+            </option>
 
-        <option>
-            2º andar
-        </option>
+            <optgroup label="Torres">
 
-        <option>
-            3º andar
-        </option>
+                <option value="Torre A">
+                    Torre A
+                </option>
 
-        <option>
-            4º andar
-        </option>
+                <option value="Torre B">
+                    Torre B
+                </option>
 
-        <option>
-            5º andar
-        </option>
+                <option value="Torre C">
+                    Torre C
+                </option>
 
-        <option>
-            6º andar
-        </option>
+                <option value="Torre D">
+                    Torre D
+                </option>
 
-        <option>
-            7º andar
-        </option>
+                <option value="Torre E">
+                    Torre E
+                </option>
 
-        <option>
-            8º andar
-        </option>
+            </optgroup>
 
-        <option>
-            9º andar
-        </option>
 
-        <option>
-            10º andar
-        </option>
+            <optgroup label="Garagens e estacionamento">
 
-        <option>
-            11º andar
-        </option>
+                <option value="Garagem G1">
+                    Garagem G1
+                </option>
 
-        <option>
-            12º andar
-        </option>
+                <option value="Garagem G2">
+                    Garagem G2
+                </option>
 
-        <option>
-            Escadas
-        </option>
+                <option value="Garagem G3">
+                    Garagem G3
+                </option>
 
-        <option>
-            Elevador 1
-        </option>
+                <option value="Garagem G4">
+                    Garagem G4
+                </option>
 
-        <option>
-            Elevador 2
-        </option>
+                <option value="Vagas externas">
+                    Vagas externas
+                </option>
 
-        <option>
-            Abrigo de resíduos
-        </option>
+            </optgroup>
 
-    </select>
+
+            <optgroup label="Áreas de lazer">
+
+                <option value="Salão de festas">
+                    Salão de festas
+                </option>
+
+                <option value="Quiosque 1">
+                    Quiosque 1
+                </option>
+
+                <option value="Quiosque 2">
+                    Quiosque 2
+                </option>
+
+                <option value="Piscina">
+                    Piscina
+                </option>
+
+                <option value="Banheiros da piscina">
+                    Banheiros da piscina
+                </option>
+
+                <option value="Academia">
+                    Academia
+                </option>
+
+                <option value="Banheiros da academia">
+                    Banheiros da academia
+                </option>
+
+                <option value="Praça infantil / Playground">
+                    Praça infantil / Playground
+                </option>
+
+                <option value="Espaço Pet">
+                    Espaço Pet
+                </option>
+
+                <option value="Chimarródromo">
+                    Chimarródromo
+                </option>
+
+            </optgroup>
+
+
+            <optgroup label="Áreas comuns">
+
+                <option value="Entrada / Frente do condomínio">
+                    Entrada / Frente do condomínio
+                </option>
+
+                <option value="Vias internas">
+                    Vias internas
+                </option>
+
+                <option value="Rua lateral">
+                    Rua lateral
+                </option>
+
+                <option value="Áreas verdes">
+                    Áreas verdes
+                </option>
+
+                <option value="Central de resíduos">
+                    Central de resíduos
+                </option>
+
+                <option value="Copa">
+                    Copa
+                </option>
+
+                <option value="Outro local">
+                    Outro local
+                </option>
+
+            </optgroup>
+
+        </select>
+
+    </div>
+
+
+
+    <div
+        class="field"
+        id="detalheLocalField"
+    >
+
+        <label for="detalheLocal">
+            ONDE NA TORRE?
+        </label>
+
+        <select id="detalheLocal">
+
+            <option value="">
+                Selecione o andar ou área
+            </option>
+
+            <option value="Térreo / Hall de entrada">
+                Térreo / Hall de entrada
+            </option>
+
+            <option value="1º andar">
+                1º andar
+            </option>
+
+            <option value="2º andar">
+                2º andar
+            </option>
+
+            <option value="3º andar">
+                3º andar
+            </option>
+
+            <option value="4º andar">
+                4º andar
+            </option>
+
+            <option value="5º andar">
+                5º andar
+            </option>
+
+            <option value="6º andar">
+                6º andar
+            </option>
+
+            <option value="7º andar">
+                7º andar
+            </option>
+
+            <option value="8º andar">
+                8º andar
+            </option>
+
+            <option value="9º andar">
+                9º andar
+            </option>
+
+            <option value="10º andar">
+                10º andar
+            </option>
+
+            <option value="11º andar">
+                11º andar
+            </option>
+
+            <option value="12º andar">
+                12º andar
+            </option>
+
+            <option value="Escadas">
+                Escadas
+            </option>
+
+            <option value="Elevador 1">
+                Elevador 1
+            </option>
+
+            <option value="Elevador 2">
+                Elevador 2
+            </option>
+
+            <option value="Abrigo de resíduos">
+                Abrigo de resíduos
+            </option>
+
+            <option value="Entorno da torre">
+                Entorno da torre
+            </option>
+
+        </select>
+
+    </div>
 
 </section>
 
 
-<!-- FOTO OU TEXTO -->
+
+<!-- =====================================
+     PROBLEMA
+===================================== -->
 
 <section class="card">
 
@@ -1053,12 +1319,12 @@ textarea:focus {
         </div>
 
         <strong>
-            Tirar foto
+            Tirar ou enviar foto
         </strong>
 
         <span>
             Toque para usar a câmera
-            ou escolher uma imagem
+            ou escolher uma imagem.
         </span>
 
     </label>
@@ -1086,6 +1352,7 @@ textarea:focus {
             type="button"
             class="remove"
             onclick="removerFoto()"
+            aria-label="Remover foto"
         >
             ×
         </button>
@@ -1094,18 +1361,14 @@ textarea:focus {
 
 
     <div class="or">
-
-        <span>
-            OU
-        </span>
-
+        <span>OU</span>
     </div>
 
 
     <textarea
         id="descricao"
         maxlength="300"
-        placeholder="Ex.: piso molhado próximo ao elevador..."
+        placeholder="Ex.: há água acumulada próximo ao elevador..."
         oninput="contador()"
     ></textarea>
 
@@ -1121,29 +1384,90 @@ textarea:focus {
 </section>
 
 
-<div class="card">
 
-    <div class="info">
-        🔒 Não é necessário informar nome,
-        apartamento ou telefone para enviar
-        esta ocorrência.
+<!-- =====================================
+     EMAIL OPCIONAL
+===================================== -->
+
+<section class="card">
+
+    <div class="email-box">
+
+        <div class="email-head">
+
+            <div class="email-icon">
+                ✉️
+            </div>
+
+            <div class="email-copy">
+
+                <strong>
+                    Quer receber uma resposta?
+                </strong>
+
+                <span>
+                    Informe seu e-mail apenas se quiser
+                    receber atualizações sobre esta ocorrência.
+                    É opcional.
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="field">
+
+            <label for="email">
+                E-MAIL OPCIONAL
+            </label>
+
+            <input
+                type="email"
+                id="email"
+                autocomplete="email"
+                placeholder="seuemail@exemplo.com"
+            >
+
+        </div>
+
     </div>
 
-</div>
+</section>
+
+
+
+<!-- =====================================
+     PRIVACIDADE
+===================================== -->
+
+<section class="card">
+
+    <div class="info">
+        🔒 Você pode enviar a ocorrência de forma anônima.
+        O e-mail só será registrado se você optar por
+        receber retorno sobre o atendimento.
+    </div>
+
+</section>
+
 
 
 <button
     class="send"
     onclick="enviar()"
 >
-    ENVIAR OCORRÊNCIA
+    ENVIAR OCORRÊNCIA →
 </button>
 
 
 </main>
 
 
-<!-- SUCESSO -->
+
+<!-- =====================================
+     SUCESSO
+===================================== -->
 
 <div
     class="overlay"
@@ -1162,9 +1486,8 @@ textarea:focus {
         </h2>
 
 
-        <p>
-            A equipe responsável recebeu
-            o registro.
+        <p id="successText">
+            A equipe responsável recebeu o registro.
         </p>
 
 
@@ -1174,9 +1497,7 @@ textarea:focus {
         ></div>
 
 
-        <button
-            onclick="inicio()"
-        >
+        <button onclick="inicio()">
             CONCLUIR
         </button>
 
@@ -1185,11 +1506,59 @@ textarea:focus {
 </div>
 
 
+
 <script>
 
-/* ==============================
+/* =====================================
+   LOCAL
+===================================== */
+
+function alterarArea() {
+
+    const area =
+        document
+        .getElementById("area")
+        .value;
+
+
+    const campo =
+        document
+        .getElementById(
+            "detalheLocalField"
+        );
+
+
+    const detalhe =
+        document
+        .getElementById(
+            "detalheLocal"
+        );
+
+
+    if (
+        area.startsWith("Torre ")
+    ) {
+
+        campo.style.display =
+            "block";
+
+    } else {
+
+        campo.style.display =
+            "none";
+
+        detalhe.value =
+            "";
+
+    }
+
+}
+
+
+
+/* =====================================
    FOTO
-============================== */
+===================================== */
 
 const photoInput =
     document.getElementById(
@@ -1197,7 +1566,8 @@ const photoInput =
     );
 
 
-let fotoSelecionada = false;
+let fotoSelecionada =
+    false;
 
 
 photoInput.addEventListener(
@@ -1210,6 +1580,27 @@ photoInput.addEventListener(
 
         if (!file) {
             return;
+        }
+
+
+        /*
+        LIMITE TEMPORÁRIO:
+        10 MB
+        */
+
+        if (
+            file.size >
+            10 * 1024 * 1024
+        ) {
+
+            this.value = "";
+
+            mostrarErro(
+                "A foto deve ter no máximo 10 MB."
+            );
+
+            return;
+
         }
 
 
@@ -1252,9 +1643,11 @@ photoInput.addEventListener(
 );
 
 
+
 function removerFoto() {
 
-    photoInput.value = "";
+    photoInput.value =
+        "";
 
 
     document
@@ -1286,19 +1679,20 @@ function removerFoto() {
 }
 
 
-/* ==============================
+
+/* =====================================
    CONTADOR
-============================== */
+===================================== */
 
 function contador() {
 
     const tamanho =
         document
-            .getElementById(
-                "descricao"
-            )
-            .value
-            .length;
+        .getElementById(
+            "descricao"
+        )
+        .value
+        .length;
 
 
     document
@@ -1311,17 +1705,36 @@ function contador() {
 }
 
 
-/* ==============================
+
+/* =====================================
+   EMAIL
+===================================== */
+
+function emailValido(email) {
+
+    if (!email) {
+        return true;
+    }
+
+
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        .test(email);
+
+}
+
+
+
+/* =====================================
    ERRO
-============================== */
+===================================== */
 
 function mostrarErro(texto) {
 
     const error =
         document
-            .getElementById(
-                "error"
-            );
+        .getElementById(
+            "error"
+        );
 
 
     error.textContent =
@@ -1340,6 +1753,7 @@ function mostrarErro(texto) {
 }
 
 
+
 function esconderErro() {
 
     document
@@ -1352,37 +1766,56 @@ function esconderErro() {
 }
 
 
-/* ==============================
+
+/* =====================================
    ENVIAR
-============================== */
+===================================== */
 
 function enviar() {
 
     esconderErro();
 
 
-    const local =
+    const area =
         document
-            .getElementById(
-                "local"
-            )
-            .value;
+        .getElementById(
+            "area"
+        )
+        .value;
+
+
+    const detalhe =
+        document
+        .getElementById(
+            "detalheLocal"
+        )
+        .value;
 
 
     const descricao =
         document
-            .getElementById(
-                "descricao"
-            )
-            .value
-            .trim();
+        .getElementById(
+            "descricao"
+        )
+        .value
+        .trim();
+
+
+    const email =
+        document
+        .getElementById(
+            "email"
+        )
+        .value
+        .trim()
+        .toLowerCase();
 
 
     /*
-    LOCAL É OBRIGATÓRIO
+       LOCAL OBRIGATÓRIO
     */
 
-    if (!local) {
+    if (!area) {
 
         mostrarErro(
             "Selecione onde está o problema."
@@ -1394,16 +1827,55 @@ function enviar() {
 
 
     /*
-    FOTO OU TEXTO
+       TORRE EXIGE DETALHE
     */
 
     if (
-        !fotoSelecionada &&
+        area.startsWith("Torre ")
+        &&
+        !detalhe
+    ) {
+
+        mostrarErro(
+            "Selecione onde está o problema dentro da torre."
+        );
+
+        return;
+
+    }
+
+
+    /*
+       FOTO OU TEXTO
+    */
+
+    if (
+        !fotoSelecionada
+        &&
         descricao.length === 0
     ) {
 
         mostrarErro(
             "Envie uma foto ou descreva o problema."
+        );
+
+        return;
+
+    }
+
+
+    /*
+       EMAIL, SE INFORMADO
+    */
+
+    if (
+        email
+        &&
+        !emailValido(email)
+    ) {
+
+        mostrarErro(
+            "Informe um endereço de e-mail válido."
         );
 
         return;
@@ -1417,9 +1889,16 @@ function enviar() {
 
     const protocolo =
         "OC-" +
-        agora.getTime()
-            .toString()
-            .slice(-7);
+        agora
+        .getTime()
+        .toString()
+        .slice(-7);
+
+
+    const localCompleto =
+        detalhe
+        ? `${area} • ${detalhe}`
+        : area;
 
 
     const ocorrencia = {
@@ -1427,17 +1906,29 @@ function enviar() {
         protocolo:
             protocolo,
 
-        torre:
-            "Torre E",
+        condominio:
+            "Reserva Igara",
+
+        area:
+            area,
+
+        detalhe:
+            detalhe || null,
 
         local:
-            local,
+            localCompleto,
 
         descricao:
             descricao,
 
         foto:
             fotoSelecionada,
+
+        email:
+            email || null,
+
+        desejaRetorno:
+            Boolean(email),
 
         status:
             "Aberta",
@@ -1466,10 +1957,13 @@ function enviar() {
 
 
     /*
-    TEMPORÁRIO:
-    GUARDA NO NAVEGADOR.
+       TEMPORÁRIO:
+       SALVA NO NAVEGADOR.
 
-    Depois isso irá para Supabase.
+       Depois iremos salvar:
+       - ocorrência no Supabase
+       - foto no Storage
+       - e-mail para retorno
     */
 
     let ocorrencias =
@@ -1505,7 +1999,7 @@ function enviar() {
 
             <br>
 
-            Torre E • ${local}
+            ${localCompleto}
 
             <br>
 
@@ -1514,6 +2008,26 @@ function enviar() {
             ${ocorrencia.hora}
 
         `;
+
+
+    const successText =
+        document
+        .getElementById(
+            "successText"
+        );
+
+
+    if (email) {
+
+        successText.textContent =
+            "A equipe recebeu o registro. Você informou um e-mail para receber atualizações sobre esta ocorrência.";
+
+    } else {
+
+        successText.textContent =
+            "A equipe responsável recebeu o registro.";
+
+    }
 
 
     document
@@ -1526,9 +2040,10 @@ function enviar() {
 }
 
 
-/* ==============================
+
+/* =====================================
    NAVEGAÇÃO
-============================== */
+===================================== */
 
 function voltar() {
 
