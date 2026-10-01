@@ -2,7 +2,6 @@
 <html lang="pt-BR">
 
 <head>
-
 <meta charset="UTF-8">
 
 <meta
@@ -10,54 +9,53 @@
     content="width=device-width, initial-scale=1.0"
 >
 
-<title>ORAQUI — Limpeza & Zeladoria</title>
+<title>ORAQUI — Reserva Igara</title>
 
 <meta
     name="theme-color"
-    content="#12355b"
+    content="#eaf6ff"
 >
 
 <style>
 
 :root {
 
-    --primary:#12355b;
-    --primary-dark:#0b2745;
-    --primary-light:#eaf2fb;
+    --blue:#287bd8;
+    --blue-dark:#153f70;
+    --blue-soft:#eaf5ff;
 
-    --green:#178c58;
-    --green-dark:#116c44;
-    --green-light:#e8f6ef;
+    --purple:#7956bd;
+    --purple-dark:#6542a8;
+    --purple-soft:#f1eafe;
 
-    --yellow:#d89b19;
-    --yellow-light:#fff4d6;
+    --coral:#f35b62;
+    --coral-dark:#dd454d;
+    --coral-soft:#fff0f1;
 
-    --purple:#6654a3;
-    --purple-light:#efecf8;
+    --green:#73b96b;
 
-    --red:#d94b4b;
-    --red-dark:#b83737;
-    --red-light:#fdecec;
+    --text:#15365f;
+    --text-dark:#14243a;
+    --muted:#66809e;
 
-    --text:#17202a;
-    --muted:#687483;
-
-    --background:#f4f7fa;
-    --card:#ffffff;
-    --border:#e2e8ef;
+    --background:#f7fbff;
+    --card:rgba(255,255,255,.94);
+    --border:#dce9f5;
 
     --shadow:
-        0 10px 30px
-        rgba(20,45,75,.08);
+        0 18px 50px
+        rgba(43,88,128,.10);
 
 }
 
 * {
-
     box-sizing:border-box;
     margin:0;
     padding:0;
+}
 
+html {
+    min-height:100%;
 }
 
 body {
@@ -73,48 +71,225 @@ body {
         Arial,
         sans-serif;
 
-    background:
-        var(--background);
+    color:var(--text-dark);
 
-    color:
-        var(--text);
+    background:
+        linear-gradient(
+            180deg,
+            #dff3ff 0,
+            #f4fbff 420px,
+            #f7fbff 100%
+        );
 
 }
 
 button,
 input {
-
     font-family:inherit;
-
 }
 
 
-/* =====================================
-   HEADER
-===================================== */
+/* =========================================
+   HERO
+========================================= */
 
-header {
+.hero-background {
+
+    position:relative;
+    overflow:hidden;
+
+    min-height:350px;
 
     background:
         linear-gradient(
             135deg,
-            var(--primary-dark),
-            var(--primary)
+            #eff9ff 0%,
+            #d7f0ff 55%,
+            #ccecff 100%
         );
-
-    color:white;
-
-    padding:
-        calc(28px + env(safe-area-inset-top))
-        20px
-        55px;
 
 }
 
-.header-content {
+.hero-background::before {
 
-    max-width:850px;
+    content:"";
+
+    position:absolute;
+
+    width:650px;
+    height:650px;
+
+    left:-380px;
+    top:-390px;
+
+    border-radius:50%;
+
+    background:
+        rgba(255,249,235,.94);
+
+}
+
+.hero-background::after {
+
+    content:"";
+
+    position:absolute;
+
+    left:-5%;
+    right:-5%;
+    bottom:-165px;
+
+    height:250px;
+
+    border-radius:50% 50% 0 0;
+
+    background:#f7fbff;
+
+}
+
+
+/* =========================================
+   DECORAÇÃO
+========================================= */
+
+.city {
+
+    position:absolute;
+
+    right:4%;
+    bottom:72px;
+
+    display:flex;
+    align-items:flex-end;
+
+    gap:12px;
+
+    opacity:.78;
+
+}
+
+.building {
+
+    position:relative;
+
+    width:95px;
+
+    border-radius:10px 10px 0 0;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fff7e8,
+            #f2e9d6
+        );
+
+    box-shadow:
+        0 10px 25px
+        rgba(80,110,130,.08);
+
+}
+
+.building.b1 {
+    height:115px;
+}
+
+.building.b2 {
+    height:165px;
+}
+
+.building.b3 {
+    width:110px;
+    height:215px;
+}
+
+.building::after {
+
+    content:"";
+
+    position:absolute;
+
+    inset:18px;
+
+    background:
+        repeating-linear-gradient(
+            90deg,
+            #9dd7ee 0 12px,
+            transparent 12px 27px
+        );
+
+    opacity:.6;
+
+}
+
+.tree {
+
+    position:absolute;
+
+    bottom:72px;
+
+    width:55px;
+    height:55px;
+
+    border-radius:
+        50% 55% 45% 60%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #b5d957,
+            #65b27a
+        );
+
+}
+
+.tree::after {
+
+    content:"";
+
+    position:absolute;
+
+    width:6px;
+    height:35px;
+
+    background:#9a7253;
+
+    left:25px;
+    top:43px;
+
+}
+
+.tree.t1 {
+    right:32%;
+}
+
+.tree.t2 {
+    right:2%;
+    transform:scale(.75);
+}
+
+.tree.t3 {
+    right:25%;
+    transform:scale(.6);
+}
+
+
+/* =========================================
+   HERO CONTENT
+========================================= */
+
+.hero-content {
+
+    position:relative;
+    z-index:5;
+
+    max-width:980px;
+
     margin:auto;
+
+    padding:
+        calc(30px + env(safe-area-inset-top))
+        24px
+        120px;
 
 }
 
@@ -122,14 +297,15 @@ header {
 
     display:flex;
     align-items:center;
-    gap:12px;
+
+    gap:13px;
 
 }
 
 .logo {
 
-    width:50px;
-    height:50px;
+    width:52px;
+    height:52px;
 
     border-radius:16px;
 
@@ -137,287 +313,271 @@ header {
     align-items:center;
     justify-content:center;
 
-    background:
-        rgba(255,255,255,.14);
-
-    font-size:24px;
-    font-weight:800;
-
-}
-
-.brand-text strong {
-
-    display:block;
-
-    font-size:19px;
-    letter-spacing:1px;
-
-}
-
-.brand-text span {
-
-    display:block;
-
-    margin-top:3px;
-
-    opacity:.68;
-
-    font-size:9px;
-
-    letter-spacing:.5px;
-
-}
-
-.hero {
-
-    margin-top:32px;
-
-}
-
-.hero small {
-
-    display:block;
-
-    opacity:.65;
-
-    font-size:9px;
-    font-weight:700;
-
-    letter-spacing:.5px;
-
-}
-
-.hero h1 {
-
-    margin-top:5px;
+    color:white;
 
     font-size:28px;
-
-    line-height:1.1;
-
-}
-
-.hero p {
-
-    margin-top:8px;
-
-    max-width:470px;
-
-    opacity:.72;
-
-    font-size:10px;
-
-    line-height:1.5;
-
-}
-
-
-/* =====================================
-   MAIN
-===================================== */
-
-main {
-
-    max-width:850px;
-
-    margin:-28px auto 60px;
-
-    padding:0 15px;
-
-}
-
-
-/* =====================================
-   REPORTAR PROBLEMA
-===================================== */
-
-.report-card {
-
-    position:relative;
-
-    overflow:hidden;
+    font-weight:900;
 
     background:
         linear-gradient(
             135deg,
-            #ffffff,
-            #fff8f8
+            #1e5fa5,
+            #397fc5
         );
+
+    box-shadow:
+        0 8px 20px
+        rgba(26,84,143,.18);
+
+}
+
+.brand-name {
+
+    font-size:20px;
+    font-weight:900;
+
+    color:var(--blue-dark);
+
+    letter-spacing:.5px;
+
+}
+
+.brand-tag {
+
+    margin-top:2px;
+
+    color:#7890ac;
+
+    font-size:8px;
+    font-weight:800;
+
+    letter-spacing:1px;
+
+}
+
+.hero-copy {
+
+    margin-top:35px;
+
+    max-width:590px;
+
+}
+
+.hero-copy small {
+
+    color:#5795d4;
+
+    font-size:10px;
+    font-weight:900;
+
+    letter-spacing:1px;
+
+}
+
+.hero-copy h1 {
+
+    margin-top:7px;
+
+    color:#123c6b;
+
+    font-size:38px;
+    line-height:1.05;
+
+    letter-spacing:-1.2px;
+
+}
+
+.hero-copy p {
+
+    margin-top:12px;
+
+    max-width:560px;
+
+    color:#5c7898;
+
+    font-size:13px;
+    line-height:1.55;
+
+}
+
+
+/* =========================================
+   MAIN
+========================================= */
+
+main {
+
+    position:relative;
+    z-index:10;
+
+    max-width:980px;
+
+    margin:-112px auto 60px;
+
+    padding:0 20px;
+
+}
+
+
+/* =========================================
+   REPORT
+========================================= */
+
+.report-card {
+
+    padding:22px;
 
     border:
         1px solid
-        #f2d4d4;
+        #ffd8da;
 
-    border-radius:24px;
-
-    padding:21px;
-
-    box-shadow:
-        0 14px 35px
-        rgba(130,40,40,.10);
-
-}
-
-.report-card::after {
-
-    content:"";
-
-    position:absolute;
-
-    width:150px;
-    height:150px;
-
-    right:-75px;
-    top:-75px;
-
-    border-radius:50%;
+    border-radius:26px;
 
     background:
-        rgba(217,75,75,.06);
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.98),
+            rgba(255,243,244,.98)
+        );
+
+    box-shadow:
+        0 18px 45px
+        rgba(190,70,80,.10);
 
 }
 
-.report-content {
-
-    position:relative;
-    z-index:1;
+.report-top {
 
     display:flex;
     align-items:center;
 
-    gap:14px;
+    gap:17px;
 
 }
 
 .report-icon {
 
-    width:55px;
-    height:55px;
+    width:62px;
+    height:62px;
 
     flex-shrink:0;
-
-    border-radius:17px;
 
     display:flex;
     align-items:center;
     justify-content:center;
 
-    background:
-        var(--red-light);
+    border-radius:20px;
 
-    font-size:25px;
+    background:#ffe7e9;
+
+    color:var(--coral);
+
+    font-size:29px;
 
 }
 
-.report-info {
+.report-copy {
 
     flex:1;
 
 }
 
-.report-info small {
+.report-copy small {
 
     display:block;
 
-    color:
-        var(--red);
+    color:var(--coral);
 
-    font-size:8px;
-    font-weight:850;
+    font-size:9px;
+    font-weight:900;
 
-    letter-spacing:.5px;
+    letter-spacing:.8px;
 
 }
 
-.report-info strong {
+.report-copy strong {
 
     display:block;
 
-    margin-top:3px;
+    margin-top:4px;
 
-    font-size:16px;
+    color:#17375e;
+
+    font-size:18px;
 
 }
 
-.report-info p {
+.report-copy p {
 
     margin-top:5px;
 
-    max-width:560px;
+    color:#6d8199;
 
-    color:
-        var(--muted);
-
-    font-size:9px;
-
-    line-height:1.45;
+    font-size:10px;
+    line-height:1.5;
 
 }
 
 .report-button {
 
-    position:relative;
-    z-index:1;
-
     width:100%;
-    height:50px;
+    height:55px;
 
-    margin-top:17px;
+    margin-top:18px;
 
     border:0;
-    border-radius:14px;
-
-    background:
-        linear-gradient(
-            135deg,
-            var(--red),
-            var(--red-dark)
-        );
+    border-radius:16px;
 
     color:white;
 
-    font-size:9px;
-    font-weight:850;
+    background:
+        linear-gradient(
+            90deg,
+            #ff655d,
+            #f2495f
+        );
 
-    letter-spacing:.4px;
+    box-shadow:
+        0 9px 22px
+        rgba(242,73,95,.20);
 
     cursor:pointer;
 
-    box-shadow:
-        0 7px 18px
-        rgba(217,75,75,.20);
+    font-size:10px;
+    font-weight:900;
 
+    letter-spacing:.5px;
+
+}
+
+.report-button:hover {
+    filter:brightness(1.03);
 }
 
 .report-button:active {
-
-    transform:
-        scale(.99);
-
+    transform:scale(.995);
 }
 
 
-/* =====================================
+/* =========================================
    DIVIDER
-===================================== */
+========================================= */
 
 .divider {
 
     display:flex;
-
     align-items:center;
 
-    gap:10px;
+    gap:15px;
 
-    margin:27px 3px 15px;
+    margin:24px 0 17px;
 
-    color:
-        var(--muted);
+    color:#8295aa;
 
-    font-size:8px;
-    font-weight:700;
+    font-size:9px;
+    font-weight:900;
 
-    letter-spacing:.4px;
+    letter-spacing:.8px;
 
 }
 
@@ -430,37 +590,39 @@ main {
 
     height:1px;
 
-    background:
-        var(--border);
+    background:#dbe7f1;
 
 }
 
 
-/* =====================================
+/* =========================================
    LOGIN GRID
-===================================== */
+========================================= */
 
 .login-grid {
 
     display:grid;
 
     grid-template-columns:
-        1fr;
+        1fr 1fr;
 
-    gap:14px;
+    gap:17px;
 
 }
 
 .login-card {
 
-    background:white;
+    padding:23px;
 
-    border-radius:22px;
+    border:
+        1px solid
+        rgba(220,233,245,.8);
 
-    padding:20px;
+    border-radius:25px;
 
-    box-shadow:
-        var(--shadow);
+    background:var(--card);
+
+    box-shadow:var(--shadow);
 
 }
 
@@ -468,40 +630,49 @@ main {
 
     display:flex;
     align-items:center;
-    gap:12px;
 
-    margin-bottom:19px;
+    gap:14px;
+
+    margin-bottom:20px;
 
 }
 
 .login-icon {
 
-    width:48px;
-    height:48px;
+    width:54px;
+    height:54px;
 
     flex-shrink:0;
-
-    border-radius:15px;
 
     display:flex;
     align-items:center;
     justify-content:center;
 
-    font-size:22px;
+    border-radius:18px;
+
+    font-size:24px;
 
 }
 
 .worker-icon {
 
     background:
-        var(--primary-light);
+        linear-gradient(
+            135deg,
+            #e7f5ff,
+            #d7efff
+        );
 
 }
 
 .manager-icon {
 
     background:
-        var(--purple-light);
+        linear-gradient(
+            135deg,
+            #f3edff,
+            #e8ddff
+        );
 
 }
 
@@ -509,7 +680,9 @@ main {
 
     display:block;
 
-    font-size:14px;
+    color:#17375e;
+
+    font-size:16px;
 
 }
 
@@ -519,23 +692,20 @@ main {
 
     margin-top:3px;
 
-    color:
-        var(--muted);
+    color:#7488a0;
 
     font-size:9px;
-
-    line-height:1.4;
 
 }
 
 
-/* =====================================
-   FORM
-===================================== */
+/* =========================================
+   FIELDS
+========================================= */
 
 .field {
 
-    margin-top:12px;
+    margin-top:13px;
 
 }
 
@@ -545,13 +715,12 @@ main {
 
     margin-bottom:6px;
 
-    color:
-        var(--muted);
+    color:#69809b;
 
     font-size:8px;
-    font-weight:750;
+    font-weight:900;
 
-    letter-spacing:.3px;
+    letter-spacing:.6px;
 
 }
 
@@ -560,32 +729,40 @@ main {
     width:100%;
     height:48px;
 
+    padding:0 14px;
+
     border:
         1px solid
-        var(--border);
+        #d8e5f0;
 
-    border-radius:13px;
-
-    padding:
-        0 13px;
-
-    background:#fbfcfd;
-
-    color:
-        var(--text);
+    border-radius:15px;
 
     outline:none;
 
+    background:
+        rgba(249,252,255,.9);
+
+    color:#17375e;
+
     font-size:13px;
 
+    transition:.2s;
+
+}
+
+.field input::placeholder {
+    color:#a2b0bf;
 }
 
 .field input:focus {
 
-    border-color:
-        var(--primary);
+    border-color:#78b8ef;
 
     background:white;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(77,153,220,.08);
 
 }
 
@@ -612,10 +789,9 @@ main {
     height:36px;
 
     border:0;
+    border-radius:11px;
 
-    border-radius:9px;
-
-    background:#eef2f6;
+    background:#edf3f8;
 
     cursor:pointer;
 
@@ -624,56 +800,69 @@ main {
 }
 
 
-/* =====================================
+/* =========================================
    LOGIN BUTTONS
-===================================== */
+========================================= */
 
 .login-button {
 
     width:100%;
-    height:49px;
+    height:50px;
 
     margin-top:17px;
 
     border:0;
-    border-radius:14px;
+    border-radius:15px;
 
     color:white;
 
-    font-size:9px;
-    font-weight:800;
-
-    letter-spacing:.3px;
-
     cursor:pointer;
+
+    font-size:9px;
+    font-weight:900;
+
+    letter-spacing:.4px;
 
 }
 
 .worker-button {
 
     background:
-        var(--primary);
+        linear-gradient(
+            90deg,
+            #2885df,
+            #3499ee
+        );
+
+    box-shadow:
+        0 8px 18px
+        rgba(40,133,223,.17);
 
 }
 
 .manager-button {
 
     background:
-        var(--purple);
+        linear-gradient(
+            90deg,
+            #7b57bd,
+            #885ec8
+        );
+
+    box-shadow:
+        0 8px 18px
+        rgba(123,87,189,.17);
 
 }
 
 .login-button:active {
-
-    transform:
-        scale(.99);
-
+    transform:scale(.995);
 }
 
 
-/* =====================================
-   ERROR
-===================================== */
+/* =========================================
+   ERRORS
+========================================= */
 
 .error {
 
@@ -685,11 +874,9 @@ main {
 
     border-radius:12px;
 
-    background:
-        var(--red-light);
+    background:#fff0f1;
 
-    color:
-        var(--red);
+    color:#d84950;
 
     text-align:center;
 
@@ -698,67 +885,197 @@ main {
 }
 
 
-/* =====================================
+/* =========================================
    INFO
-===================================== */
+========================================= */
 
 .info-card {
 
-    margin-top:15px;
+    display:flex;
+    align-items:center;
 
-    padding:14px;
+    gap:10px;
 
-    border-radius:16px;
+    margin-top:16px;
+
+    padding:14px 17px;
+
+    border-radius:18px;
 
     background:
-        var(--primary-light);
+        linear-gradient(
+            90deg,
+            #eaf5ff,
+            #eef7ff
+        );
 
-    color:
-        var(--primary);
+    color:#315d8d;
 
     font-size:9px;
+    line-height:1.45;
 
-    line-height:1.55;
+}
+
+.info-icon {
+
+    font-size:18px;
 
 }
 
 
-/* =====================================
+/* =========================================
    FOOTER
-===================================== */
+========================================= */
 
 footer {
 
     padding:
-        5px 20px
-        calc(25px + env(safe-area-inset-bottom));
+        0 20px
+        calc(28px + env(safe-area-inset-bottom));
 
     text-align:center;
 
-    color:
-        var(--muted);
+    color:#91a1b2;
 
     font-size:8px;
+
+    letter-spacing:.5px;
 
 }
 
 
-/* =====================================
-   DESKTOP
-===================================== */
+/* =========================================
+   MOBILE
+========================================= */
 
-@media(min-width:720px) {
+@media(max-width:720px) {
 
-    .login-grid {
+    .hero-background {
+        min-height:390px;
+    }
 
-        grid-template-columns:
-            1fr 1fr;
+    .hero-content {
+
+        padding:
+            calc(22px + env(safe-area-inset-top))
+            18px
+            135px;
 
     }
 
-    .hero h1 {
+    .city {
 
-        font-size:34px;
+        right:-90px;
+        bottom:80px;
+
+        transform:scale(.7);
+
+        transform-origin:right bottom;
+
+        opacity:.5;
+
+    }
+
+    .tree.t1 {
+        right:22%;
+    }
+
+    .hero-copy {
+        margin-top:30px;
+    }
+
+    .hero-copy h1 {
+
+        max-width:340px;
+
+        font-size:31px;
+
+    }
+
+    .hero-copy p {
+
+        max-width:330px;
+
+        font-size:11px;
+
+    }
+
+    main {
+
+        margin-top:-118px;
+
+        padding:0 14px;
+
+    }
+
+    .report-card {
+
+        padding:17px;
+
+        border-radius:22px;
+
+    }
+
+    .report-icon {
+
+        width:53px;
+        height:53px;
+
+        border-radius:17px;
+
+        font-size:24px;
+
+    }
+
+    .report-copy strong {
+        font-size:15px;
+    }
+
+    .report-copy p {
+        font-size:9px;
+    }
+
+    .login-grid {
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media(max-width:430px) {
+
+    .brand-name {
+        font-size:18px;
+    }
+
+    .logo {
+
+        width:47px;
+        height:47px;
+
+    }
+
+    .hero-copy h1 {
+
+        font-size:28px;
+
+    }
+
+    .report-top {
+
+        align-items:flex-start;
+
+    }
+
+    .report-copy p {
+
+        line-height:1.4;
 
     }
 
@@ -773,58 +1090,72 @@ footer {
 
 
 <!-- =====================================
-     HEADER
+     HERO
 ===================================== -->
 
-<header>
-
-<div class="header-content">
+<section class="hero-background">
 
 
-    <div class="brand">
+    <div class="city">
 
-        <div class="logo">
-            ✓
-        </div>
-
-
-        <div class="brand-text">
-
-            <strong>
-                ORAQUI
-            </strong>
-
-            <span>
-                AGORA. AQUI. REGISTRADO.
-            </span>
-
-        </div>
+        <div class="building b1"></div>
+        <div class="building b2"></div>
+        <div class="building b3"></div>
 
     </div>
 
 
-    <div class="hero">
+    <div class="tree t1"></div>
+    <div class="tree t2"></div>
+    <div class="tree t3"></div>
 
-        <small>
-            RESERVA IGARA
-        </small>
 
-        <h1>
-            Cuidar ficou mais simples.
-        </h1>
+    <div class="hero-content">
 
-        <p>
-            Registro, acompanhamento e comunicação
-            das rotinas de limpeza, zeladoria
-            e ocorrências do condomínio.
-        </p>
+
+        <div class="brand">
+
+            <div class="logo">
+                ✓
+            </div>
+
+            <div>
+
+                <div class="brand-name">
+                    ORAQUI
+                </div>
+
+                <div class="brand-tag">
+                    AGORA. AQUI. REGISTRADO.
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="hero-copy">
+
+            <small>
+                RESERVA IGARA
+            </small>
+
+            <h1>
+                Cuidar ficou mais simples.
+            </h1>
+
+            <p>
+                Registro, acompanhamento e comunicação
+                das rotinas de limpeza, zeladoria
+                e ocorrências do condomínio.
+            </p>
+
+        </div>
+
 
     </div>
 
-
-</div>
-
-</header>
+</section>
 
 
 
@@ -835,317 +1166,321 @@ footer {
 <main>
 
 
-<!-- =====================================
-     REPORTAR PROBLEMA
-===================================== -->
+    <!-- =================================
+         REPORTAR
+    ================================== -->
 
-<section class="report-card">
-
-
-    <div class="report-content">
+    <section class="report-card">
 
 
-        <div class="report-icon">
-            ⚠️
+        <div class="report-top">
+
+
+            <div class="report-icon">
+                !
+            </div>
+
+
+            <div class="report-copy">
+
+                <small>
+                    ACESSO RÁPIDO • SEM LOGIN
+                </small>
+
+                <strong>
+                    Reportar problema
+                </strong>
+
+                <p>
+                    Encontrou algo que precisa de atenção?
+                    Informe o local, descreva o problema
+                    e envie uma foto para a equipe responsável.
+                </p>
+
+            </div>
+
+
         </div>
 
 
-        <div class="report-info">
+        <button
+            class="report-button"
+            type="button"
+            onclick="abrirOcorrencia()"
+        >
+            ⚠️ &nbsp; REPORTAR UM PROBLEMA &nbsp; →
+        </button>
 
-            <small>
-                ACESSO RÁPIDO • SEM LOGIN
-            </small>
 
-            <strong>
-                Reportar problema
-            </strong>
+    </section>
 
-            <p>
-                Encontrou algo que precisa de atenção?
-                Informe o local, descreva o problema
-                e envie uma foto para a equipe responsável.
-            </p>
 
-        </div>
+
+    <!-- =================================
+         DIVISOR
+    ================================== -->
+
+    <div class="divider">
+        ACESSO DA EQUIPE
+    </div>
+
+
+
+    <!-- =================================
+         LOGIN
+    ================================== -->
+
+    <div class="login-grid">
+
+
+        <!-- COLABORADOR -->
+
+        <section class="login-card">
+
+
+            <div class="login-header">
+
+                <div
+                    class="
+                        login-icon
+                        worker-icon
+                    "
+                >
+                    👷
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        Colaborador
+                    </strong>
+
+                    <span>
+                        Limpeza e zeladoria
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="field">
+
+                <label for="workerMatricula">
+                    MATRÍCULA
+                </label>
+
+                <input
+                    id="workerMatricula"
+                    type="text"
+                    inputmode="numeric"
+                    autocomplete="username"
+                    placeholder="Digite sua matrícula"
+                >
+
+            </div>
+
+
+
+            <div class="field">
+
+                <label for="workerPin">
+                    PIN
+                </label>
+
+
+                <div class="pin-wrapper">
+
+                    <input
+                        id="workerPin"
+                        type="password"
+                        inputmode="numeric"
+                        autocomplete="current-password"
+                        placeholder="Digite seu PIN"
+                    >
+
+
+                    <button
+                        class="show-pin"
+                        type="button"
+                        onclick="
+                            alternarPin(
+                                'workerPin',
+                                this
+                            )
+                        "
+                        aria-label="Mostrar ou ocultar PIN"
+                    >
+                        👁
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <button
+                class="
+                    login-button
+                    worker-button
+                "
+                onclick="loginColaborador()"
+            >
+                ENTRAR NA ROTINA &nbsp; →
+            </button>
+
+
+            <div
+                class="error"
+                id="workerError"
+            ></div>
+
+
+        </section>
+
+
+
+        <!-- GESTÃO -->
+
+        <section class="login-card">
+
+
+            <div class="login-header">
+
+                <div
+                    class="
+                        login-icon
+                        manager-icon
+                    "
+                >
+                    📊
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        Gestão
+                    </strong>
+
+                    <span>
+                        Acompanhamento da operação
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="field">
+
+                <label for="managerMatricula">
+                    MATRÍCULA
+                </label>
+
+                <input
+                    id="managerMatricula"
+                    type="text"
+                    inputmode="numeric"
+                    autocomplete="username"
+                    placeholder="Digite sua matrícula"
+                >
+
+            </div>
+
+
+
+            <div class="field">
+
+                <label for="managerPin">
+                    PIN
+                </label>
+
+
+                <div class="pin-wrapper">
+
+                    <input
+                        id="managerPin"
+                        type="password"
+                        inputmode="numeric"
+                        autocomplete="current-password"
+                        placeholder="Digite seu PIN"
+                    >
+
+
+                    <button
+                        class="show-pin"
+                        type="button"
+                        onclick="
+                            alternarPin(
+                                'managerPin',
+                                this
+                            )
+                        "
+                        aria-label="Mostrar ou ocultar PIN"
+                    >
+                        👁
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <button
+                class="
+                    login-button
+                    manager-button
+                "
+                onclick="loginGestor()"
+            >
+                ACESSAR PAINEL &nbsp; →
+            </button>
+
+
+            <div
+                class="error"
+                id="managerError"
+            ></div>
+
+
+        </section>
 
 
     </div>
 
 
-    <button
-        class="report-button"
-        type="button"
-        onclick="abrirOcorrencia()"
-    >
-        ⚠️ REPORTAR UM PROBLEMA
-    </button>
-
-
-</section>
-
-
-
-<!-- =====================================
-     ACESSO DA EQUIPE
-===================================== -->
-
-<div class="divider">
-    ACESSO DA EQUIPE
-</div>
-
-
-
-<div class="login-grid">
-
 
     <!-- =================================
-         COLABORADOR
+         INFO
     ================================== -->
 
-    <section class="login-card">
+    <div class="info-card">
 
+        <div class="info-icon">
+            👷
+        </div>
 
-        <div class="login-header">
+        <div>
 
-            <div
-                class="
-                    login-icon
-                    worker-icon
-                "
-            >
-                👷
-            </div>
+            <strong>
+                Acesso operacional
+            </strong>
 
+            <br>
 
-            <div>
-
-                <strong>
-                    Colaborador
-                </strong>
-
-                <span>
-                    Limpeza e zeladoria
-                </span>
-
-            </div>
+            Cada colaborador acessa somente
+            as rotinas correspondentes às suas
+            atribuições de limpeza ou zeladoria.
 
         </div>
 
-
-
-        <div class="field">
-
-            <label
-                for="workerMatricula"
-            >
-                MATRÍCULA
-            </label>
-
-            <input
-                id="workerMatricula"
-                type="text"
-                inputmode="numeric"
-                autocomplete="username"
-                placeholder="Digite sua matrícula"
-            >
-
-        </div>
-
-
-
-        <div class="field">
-
-            <label
-                for="workerPin"
-            >
-                PIN
-            </label>
-
-
-            <div class="pin-wrapper">
-
-                <input
-                    id="workerPin"
-                    type="password"
-                    inputmode="numeric"
-                    autocomplete="current-password"
-                    placeholder="Digite seu PIN"
-                >
-
-
-                <button
-                    class="show-pin"
-                    type="button"
-                    onclick="
-                        alternarPin(
-                            'workerPin',
-                            this
-                        )
-                    "
-                    aria-label="Mostrar ou ocultar PIN"
-                >
-                    👁
-                </button>
-
-            </div>
-
-        </div>
-
-
-
-        <button
-            class="
-                login-button
-                worker-button
-            "
-            onclick="loginColaborador()"
-        >
-            ENTRAR NA ROTINA
-        </button>
-
-
-        <div
-            class="error"
-            id="workerError"
-        ></div>
-
-
-    </section>
-
-
-
-    <!-- =================================
-         GESTÃO
-    ================================== -->
-
-    <section class="login-card">
-
-
-        <div class="login-header">
-
-            <div
-                class="
-                    login-icon
-                    manager-icon
-                "
-            >
-                📊
-            </div>
-
-
-            <div>
-
-                <strong>
-                    Gestão
-                </strong>
-
-                <span>
-                    Acompanhamento da operação
-                </span>
-
-            </div>
-
-        </div>
-
-
-
-        <div class="field">
-
-            <label
-                for="managerMatricula"
-            >
-                MATRÍCULA
-            </label>
-
-            <input
-                id="managerMatricula"
-                type="text"
-                inputmode="numeric"
-                autocomplete="username"
-                placeholder="Digite sua matrícula"
-            >
-
-        </div>
-
-
-
-        <div class="field">
-
-            <label
-                for="managerPin"
-            >
-                PIN
-            </label>
-
-
-            <div class="pin-wrapper">
-
-                <input
-                    id="managerPin"
-                    type="password"
-                    inputmode="numeric"
-                    autocomplete="current-password"
-                    placeholder="Digite seu PIN"
-                >
-
-
-                <button
-                    class="show-pin"
-                    type="button"
-                    onclick="
-                        alternarPin(
-                            'managerPin',
-                            this
-                        )
-                    "
-                    aria-label="Mostrar ou ocultar PIN"
-                >
-                    👁
-                </button>
-
-            </div>
-
-        </div>
-
-
-
-        <button
-            class="
-                login-button
-                manager-button
-            "
-            onclick="loginGestor()"
-        >
-            ACESSAR PAINEL
-        </button>
-
-
-        <div
-            class="error"
-            id="managerError"
-        ></div>
-
-
-    </section>
-
-
-</div>
-
-
-
-<div class="info-card">
-
-    <strong>
-        👷 Acesso operacional
-    </strong>
-
-    <br>
-
-    Cada colaborador acessa somente
-    as rotinas correspondentes às suas
-    atribuições de limpeza ou zeladoria.
-
-</div>
+    </div>
 
 
 </main>
@@ -1153,9 +1488,7 @@ footer {
 
 
 <footer>
-
     ORAQUI • Reserva Igara
-
 </footer>
 
 
@@ -1163,89 +1496,51 @@ footer {
 <script>
 
 /* =====================================
-   USUÁRIOS DE TESTE
-
-   TEMPORÁRIO.
-
-   Depois estes usuários serão
-   carregados do banco de dados.
-
-   Nunca manter PINs diretamente
-   no JavaScript em produção.
+   USUÁRIOS TEMPORÁRIOS
 ===================================== */
 
 const colaboradores = {
 
     "0001": {
 
-        matricula:
-            "0001",
-
-        pin:
-            "1234",
-
-        nome:
-            "Débora",
-
-        cargo:
-            "Auxiliar de Limpeza",
-
-        tipo:
-            "limpeza"
+        matricula:"0001",
+        pin:"1234",
+        nome:"Débora",
+        cargo:"Auxiliar de Limpeza",
+        tipo:"limpeza"
 
     },
 
-
     "0002": {
 
-        matricula:
-            "0002",
-
-        pin:
-            "1234",
-
-        nome:
-            "Zelador",
-
-        cargo:
-            "Zelador",
-
-        tipo:
-            "zeladoria"
+        matricula:"0002",
+        pin:"1234",
+        nome:"Zelador",
+        cargo:"Zelador",
+        tipo:"zeladoria"
 
     }
 
 };
-
 
 
 const gestores = {
 
     "9001": {
 
-        matricula:
-            "9001",
-
-        pin:
-            "4321",
-
-        nome:
-            "Gestor",
-
-        cargo:
-            "Gestão",
-
-        tipo:
-            "gestor"
+        matricula:"9001",
+        pin:"4321",
+        nome:"Gestor",
+        cargo:"Gestão",
+        tipo:"gestor"
 
     }
 
 };
 
 
-
 /* =====================================
-   REPORTAR PROBLEMA
+   REPORTAR
 ===================================== */
 
 function abrirOcorrencia() {
@@ -1254,7 +1549,6 @@ function abrirOcorrencia() {
         "reportar.html";
 
 }
-
 
 
 /* =====================================
@@ -1284,11 +1578,7 @@ function loginColaborador() {
         .trim();
 
 
-    if (
-        !matricula
-        ||
-        !pin
-    ) {
+    if (!matricula || !pin) {
 
         mostrarErro(
             "workerError",
@@ -1301,14 +1591,11 @@ function loginColaborador() {
 
 
     const usuario =
-        colaboradores[
-            matricula
-        ];
+        colaboradores[matricula];
 
 
     if (
-        !usuario
-        ||
+        !usuario ||
         usuario.pin !== pin
     ) {
 
@@ -1347,9 +1634,7 @@ function loginColaborador() {
 
     localStorage.setItem(
         "usuarioLogado",
-        JSON.stringify(
-            sessao
-        )
+        JSON.stringify(sessao)
     );
 
 
@@ -1373,7 +1658,6 @@ function loginColaborador() {
         "colaborador.html";
 
 }
-
 
 
 /* =====================================
@@ -1403,11 +1687,7 @@ function loginGestor() {
         .trim();
 
 
-    if (
-        !matricula
-        ||
-        !pin
-    ) {
+    if (!matricula || !pin) {
 
         mostrarErro(
             "managerError",
@@ -1420,14 +1700,11 @@ function loginGestor() {
 
 
     const usuario =
-        gestores[
-            matricula
-        ];
+        gestores[matricula];
 
 
     if (
-        !usuario
-        ||
+        !usuario ||
         usuario.pin !== pin
     ) {
 
@@ -1466,9 +1743,7 @@ function loginGestor() {
 
     localStorage.setItem(
         "usuarioLogado",
-        JSON.stringify(
-            sessao
-        )
+        JSON.stringify(sessao)
     );
 
 
@@ -1493,26 +1768,17 @@ function loginGestor() {
 }
 
 
-
 /* =====================================
    MOSTRAR PIN
 ===================================== */
 
-function alternarPin(
-    id,
-    botao
-) {
+function alternarPin(id, botao) {
 
     const campo =
-        document.getElementById(
-            id
-        );
+        document.getElementById(id);
 
 
-    if (
-        campo.type ===
-        "password"
-    ) {
+    if (campo.type === "password") {
 
         campo.type =
             "text";
@@ -1533,7 +1799,6 @@ function alternarPin(
 }
 
 
-
 /* =====================================
    ERROS
 ===================================== */
@@ -1544,9 +1809,7 @@ function mostrarErro(
 ) {
 
     const elemento =
-        document.getElementById(
-            id
-        );
+        document.getElementById(id);
 
 
     elemento.textContent =
@@ -1559,24 +1822,18 @@ function mostrarErro(
 }
 
 
-
 function esconderErros() {
 
     document
-        .querySelectorAll(
-            ".error"
-        )
-        .forEach(
-            elemento => {
+        .querySelectorAll(".error")
+        .forEach(elemento => {
 
-                elemento.style.display =
-                    "none";
+            elemento.style.display =
+                "none";
 
-            }
-        );
+        });
 
 }
-
 
 
 /* =====================================
@@ -1584,17 +1841,12 @@ function esconderErros() {
 ===================================== */
 
 document
-    .getElementById(
-        "workerPin"
-    )
+    .getElementById("workerPin")
     .addEventListener(
         "keydown",
         function(event) {
 
-            if (
-                event.key ===
-                "Enter"
-            ) {
+            if (event.key === "Enter") {
 
                 loginColaborador();
 
@@ -1605,23 +1857,18 @@ document
 
 
 document
-    .getElementById(
-        "workerMatricula"
-    )
+    .getElementById("workerMatricula")
     .addEventListener(
         "keydown",
         function(event) {
 
-            if (
-                event.key ===
-                "Enter"
-            ) {
+            if (event.key === "Enter") {
 
                 document
-                .getElementById(
-                    "workerPin"
-                )
-                .focus();
+                    .getElementById(
+                        "workerPin"
+                    )
+                    .focus();
 
             }
 
@@ -1630,17 +1877,12 @@ document
 
 
 document
-    .getElementById(
-        "managerPin"
-    )
+    .getElementById("managerPin")
     .addEventListener(
         "keydown",
         function(event) {
 
-            if (
-                event.key ===
-                "Enter"
-            ) {
+            if (event.key === "Enter") {
 
                 loginGestor();
 
@@ -1651,23 +1893,18 @@ document
 
 
 document
-    .getElementById(
-        "managerMatricula"
-    )
+    .getElementById("managerMatricula")
     .addEventListener(
         "keydown",
         function(event) {
 
-            if (
-                event.key ===
-                "Enter"
-            ) {
+            if (event.key === "Enter") {
 
                 document
-                .getElementById(
-                    "managerPin"
-                )
-                .focus();
+                    .getElementById(
+                        "managerPin"
+                    )
+                    .focus();
 
             }
 
@@ -1676,7 +1913,5 @@ document
 
 </script>
 
-
 </body>
-
 </html>
