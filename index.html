@@ -10,7 +10,7 @@
     content="width=device-width, initial-scale=1.0"
 >
 
-<title>CUIDADOS — Limpeza & Zeladoria</title>
+<title>ORAQUI — Limpeza & Zeladoria</title>
 
 <meta
     name="theme-color"
@@ -26,6 +26,7 @@
     --primary-light:#eaf2fb;
 
     --green:#178c58;
+    --green-dark:#116c44;
     --green-light:#e8f6ef;
 
     --yellow:#d89b19;
@@ -35,6 +36,7 @@
     --purple-light:#efecf8;
 
     --red:#d94b4b;
+    --red-dark:#b83737;
     --red-light:#fdecec;
 
     --text:#17202a;
@@ -147,8 +149,8 @@ header {
 
     display:block;
 
-    font-size:17px;
-    letter-spacing:.5px;
+    font-size:19px;
+    letter-spacing:1px;
 
 }
 
@@ -161,6 +163,8 @@ header {
     opacity:.68;
 
     font-size:9px;
+
+    letter-spacing:.5px;
 
 }
 
@@ -197,7 +201,7 @@ header {
 
     margin-top:8px;
 
-    max-width:450px;
+    max-width:470px;
 
     opacity:.72;
 
@@ -219,6 +223,215 @@ main {
     margin:-28px auto 60px;
 
     padding:0 15px;
+
+}
+
+
+/* =====================================
+   REPORTAR PROBLEMA
+===================================== */
+
+.report-card {
+
+    position:relative;
+
+    overflow:hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffffff,
+            #fff8f8
+        );
+
+    border:
+        1px solid
+        #f2d4d4;
+
+    border-radius:24px;
+
+    padding:21px;
+
+    box-shadow:
+        0 14px 35px
+        rgba(130,40,40,.10);
+
+}
+
+.report-card::after {
+
+    content:"";
+
+    position:absolute;
+
+    width:150px;
+    height:150px;
+
+    right:-75px;
+    top:-75px;
+
+    border-radius:50%;
+
+    background:
+        rgba(217,75,75,.06);
+
+}
+
+.report-content {
+
+    position:relative;
+    z-index:1;
+
+    display:flex;
+    align-items:center;
+
+    gap:14px;
+
+}
+
+.report-icon {
+
+    width:55px;
+    height:55px;
+
+    flex-shrink:0;
+
+    border-radius:17px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:
+        var(--red-light);
+
+    font-size:25px;
+
+}
+
+.report-info {
+
+    flex:1;
+
+}
+
+.report-info small {
+
+    display:block;
+
+    color:
+        var(--red);
+
+    font-size:8px;
+    font-weight:850;
+
+    letter-spacing:.5px;
+
+}
+
+.report-info strong {
+
+    display:block;
+
+    margin-top:3px;
+
+    font-size:16px;
+
+}
+
+.report-info p {
+
+    margin-top:5px;
+
+    max-width:560px;
+
+    color:
+        var(--muted);
+
+    font-size:9px;
+
+    line-height:1.45;
+
+}
+
+.report-button {
+
+    position:relative;
+    z-index:1;
+
+    width:100%;
+    height:50px;
+
+    margin-top:17px;
+
+    border:0;
+    border-radius:14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--red),
+            var(--red-dark)
+        );
+
+    color:white;
+
+    font-size:9px;
+    font-weight:850;
+
+    letter-spacing:.4px;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 7px 18px
+        rgba(217,75,75,.20);
+
+}
+
+.report-button:active {
+
+    transform:
+        scale(.99);
+
+}
+
+
+/* =====================================
+   DIVIDER
+===================================== */
+
+.divider {
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    margin:27px 3px 15px;
+
+    color:
+        var(--muted);
+
+    font-size:8px;
+    font-weight:700;
+
+    letter-spacing:.4px;
+
+}
+
+.divider::before,
+.divider::after {
+
+    content:"";
+
+    flex:1;
+
+    height:1px;
+
+    background:
+        var(--border);
 
 }
 
@@ -412,7 +625,7 @@ main {
 
 
 /* =====================================
-   BUTTONS
+   LOGIN BUTTONS
 ===================================== */
 
 .login-button {
@@ -481,162 +694,6 @@ main {
     text-align:center;
 
     font-size:9px;
-
-}
-
-
-/* =====================================
-   DIVIDER
-===================================== */
-
-.divider {
-
-    display:flex;
-
-    align-items:center;
-
-    gap:10px;
-
-    margin:27px 3px 15px;
-
-    color:
-        var(--muted);
-
-    font-size:8px;
-    font-weight:700;
-
-    letter-spacing:.4px;
-
-}
-
-.divider::before,
-.divider::after {
-
-    content:"";
-
-    flex:1;
-
-    height:1px;
-
-    background:
-        var(--border);
-
-}
-
-
-/* =====================================
-   REPORTAR - CONSTRUÇÃO
-===================================== */
-
-.construction-card {
-
-    background:white;
-
-    border-radius:20px;
-
-    padding:18px;
-
-    box-shadow:
-        var(--shadow);
-
-}
-
-.construction-content {
-
-    display:flex;
-    align-items:center;
-
-    gap:13px;
-
-}
-
-.construction-icon {
-
-    width:50px;
-    height:50px;
-
-    flex-shrink:0;
-
-    border-radius:15px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    background:
-        var(--yellow-light);
-
-    font-size:22px;
-
-}
-
-.construction-info {
-
-    flex:1;
-
-}
-
-.construction-info small {
-
-    display:block;
-
-    color:
-        var(--yellow);
-
-    font-size:8px;
-    font-weight:800;
-
-    letter-spacing:.4px;
-
-}
-
-.construction-info strong {
-
-    display:block;
-
-    margin-top:3px;
-
-    font-size:13px;
-
-}
-
-.construction-info p {
-
-    margin-top:4px;
-
-    color:
-        var(--muted);
-
-    font-size:9px;
-
-    line-height:1.4;
-
-}
-
-.construction-button {
-
-    width:100%;
-
-    margin-top:14px;
-
-    padding:12px;
-
-    border:
-        1px solid
-        #ecd49a;
-
-    border-radius:13px;
-
-    background:
-        var(--yellow-light);
-
-    color:
-        #8a6512;
-
-    font-size:9px;
-    font-weight:800;
-
-    cursor:not-allowed;
 
 }
 
@@ -734,11 +791,11 @@ footer {
         <div class="brand-text">
 
             <strong>
-                CUIDADOS
+                ORAQUI
             </strong>
 
             <span>
-                LIMPEZA & ZELADORIA
+                AGORA. AQUI. REGISTRADO.
             </span>
 
         </div>
@@ -757,9 +814,9 @@ footer {
         </h1>
 
         <p>
-            Registro e acompanhamento das
-            rotinas de limpeza e zeladoria
-            do condomínio.
+            Registro, acompanhamento e comunicação
+            das rotinas de limpeza, zeladoria
+            e ocorrências do condomínio.
         </p>
 
     </div>
@@ -776,6 +833,66 @@ footer {
 ===================================== -->
 
 <main>
+
+
+<!-- =====================================
+     REPORTAR PROBLEMA
+===================================== -->
+
+<section class="report-card">
+
+
+    <div class="report-content">
+
+
+        <div class="report-icon">
+            ⚠️
+        </div>
+
+
+        <div class="report-info">
+
+            <small>
+                ACESSO RÁPIDO • SEM LOGIN
+            </small>
+
+            <strong>
+                Reportar problema
+            </strong>
+
+            <p>
+                Encontrou algo que precisa de atenção?
+                Informe o local, descreva o problema
+                e envie uma foto para a equipe responsável.
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+    <button
+        class="report-button"
+        type="button"
+        onclick="abrirOcorrencia()"
+    >
+        ⚠️ REPORTAR UM PROBLEMA
+    </button>
+
+
+</section>
+
+
+
+<!-- =====================================
+     ACESSO DA EQUIPE
+===================================== -->
+
+<div class="divider">
+    ACESSO DA EQUIPE
+</div>
+
 
 
 <div class="login-grid">
@@ -1016,70 +1133,16 @@ footer {
 
 
 
-<!-- =====================================
-     SEM LOGIN
-===================================== -->
-
-<div class="divider">
-    ACESSO SEM LOGIN
-</div>
-
-
-
-<section class="construction-card">
-
-
-    <div class="construction-content">
-
-        <div class="construction-icon">
-            🚧
-        </div>
-
-
-        <div class="construction-info">
-
-            <small>
-                EM CONSTRUÇÃO
-            </small>
-
-            <strong>
-                Reportar problema
-            </strong>
-
-            <p>
-                O registro de ocorrências
-                por moradores e visitantes
-                estará disponível em breve.
-            </p>
-
-        </div>
-
-    </div>
-
-
-    <button
-        class="construction-button"
-        type="button"
-        disabled
-    >
-        🚧 FUNCIONALIDADE EM CONSTRUÇÃO
-    </button>
-
-
-</section>
-
-
-
 <div class="info-card">
 
     <strong>
-        👷 Colaboradores
+        👷 Acesso operacional
     </strong>
 
     <br>
 
     Cada colaborador acessa somente
-    a rotina correspondente às suas
+    as rotinas correspondentes às suas
     atribuições de limpeza ou zeladoria.
 
 </div>
@@ -1091,7 +1154,7 @@ footer {
 
 <footer>
 
-    CUIDADOS • Reserva Igara
+    ORAQUI • Reserva Igara
 
 </footer>
 
@@ -1182,6 +1245,19 @@ const gestores = {
 
 
 /* =====================================
+   REPORTAR PROBLEMA
+===================================== */
+
+function abrirOcorrencia() {
+
+    window.location.href =
+        "reportar.html";
+
+}
+
+
+
+/* =====================================
    LOGIN COLABORADOR
 ===================================== */
 
@@ -1246,11 +1322,6 @@ function loginColaborador() {
     }
 
 
-    /*
-       Não salvamos o PIN
-       na sessão.
-    */
-
     const sessao = {
 
         matricula:
@@ -1282,20 +1353,11 @@ function loginColaborador() {
     );
 
 
-    /*
-       Guarda o tipo da rotina.
-    */
-
     localStorage.setItem(
         "tipoAtividadeAtual",
         usuario.tipo
     );
 
-
-    /*
-       Limpa eventual seleção
-       de uma sessão anterior.
-    */
 
     localStorage.removeItem(
         "localSelecionado"
