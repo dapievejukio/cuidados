@@ -3,41 +3,50 @@
 
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
 <title>Gestão — ORAQUI</title>
 
-<meta name="theme-color" content="#7784ad">
+<meta
+    name="theme-color"
+    content="#342a67"
+>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 
 :root{
-    --primary:#7565b5;
-    --primary-dark:#68789f;
-    --primary-light:#f0eef9;
+    --primary:#7667b9;
+    --primary-dark:#6477a4;
+    --primary-light:#eeeafd;
 
-    --blue:#5e88a3;
-    --blue-light:#edf6f9;
+    --blue:#5d88a5;
+    --blue-light:#eaf4f8;
 
-    --green:#67a17f;
-    --green-light:#edf7f1;
+    --green:#69a17f;
+    --green-light:#eaf5ee;
 
-    --yellow:#c69b52;
-    --yellow-light:#fff7e8;
+    --yellow:#c4974d;
+    --yellow-light:#fff5df;
 
-    --red:#d26f72;
-    --red-light:#fceff0;
+    --red:#c96565;
+    --red-light:#fdecec;
 
-    --text:#303945;
-    --muted:#77828f;
+    --text:#2d3742;
+    --muted:#75808c;
 
-    --background:#f5f7f8;
+    --background:#f4f6f8;
     --card:#ffffff;
-    --border:#e8ecef;
+    --border:#e4e9ee;
 
-    --shadow:0 10px 30px rgba(55,70,90,.06);
+    --shadow:
+        0 10px 30px
+        rgba(35,48,65,.06);
 }
 
 *{
@@ -48,7 +57,16 @@
 
 body{
     min-height:100vh;
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
+
     background:var(--background);
     color:var(--text);
 }
@@ -58,117 +76,173 @@ textarea{
     font-family:inherit;
 }
 
-/* HEADER */
+
+/* =====================================================
+   HEADER
+===================================================== */
 
 header{
-    background:linear-gradient(135deg,#7182a7,#7d74aa);
+    background:
+        linear-gradient(
+            135deg,
+            #6d80a8,
+            #7c72ae
+        );
+
     color:white;
-    padding:calc(15px + env(safe-area-inset-top)) 18px 48px;
+
+    padding:
+        calc(18px + env(safe-area-inset-top))
+        18px
+        52px;
 }
 
 .header-content{
-    max-width:850px;
+    max-width:980px;
     margin:auto;
 }
 
 .topbar{
     display:flex;
-    justify-content:space-between;
     align-items:center;
+    justify-content:space-between;
 }
 
 .brand{
     display:flex;
     align-items:center;
-    gap:10px;
+    gap:11px;
 }
 
 .brand-icon{
     width:39px;
     height:39px;
-    border-radius:13px;
-    background:rgba(255,255,255,.16);
+
+    border-radius:12px;
+
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:22px;
+
+    background:
+        rgba(255,255,255,.18);
+
+    font-size:20px;
     font-weight:800;
 }
 
 .brand strong{
     display:block;
-    font-size:16px;
+    font-size:17px;
+    letter-spacing:.4px;
 }
 
 .brand small{
     display:block;
+
     margin-top:2px;
-    font-size:8px;
-    letter-spacing:.7px;
-    opacity:.8;
+
+    font-size:7px;
+
+    letter-spacing:1.2px;
+
+    opacity:.75;
 }
 
 .logout{
     border:0;
-    padding:9px 13px;
-    border-radius:15px;
-    background:rgba(255,255,255,.15);
+
+    padding:10px 13px;
+
+    border-radius:14px;
+
+    background:
+        rgba(255,255,255,.16);
+
     color:white;
+
     font-size:9px;
     font-weight:800;
+
     cursor:pointer;
 }
 
 .header-title{
-    margin-top:27px;
+    margin-top:29px;
 }
 
 .header-title small{
+    display:block;
+
     font-size:9px;
-    font-weight:700;
-    letter-spacing:.5px;
-    opacity:.75;
+
+    letter-spacing:1px;
+
+    opacity:.72;
+
+    text-transform:uppercase;
 }
 
 .header-title h1{
-    margin-top:5px;
-    font-size:27px;
+    margin-top:6px;
+
+    font-size:28px;
 }
 
 .header-title p{
-    margin-top:5px;
-    font-size:10px;
+    margin-top:7px;
+
+    font-size:11px;
+
     opacity:.8;
 }
 
-/* MAIN */
+
+/* =====================================================
+   MAIN
+===================================================== */
 
 main{
-    max-width:850px;
-    margin:-17px auto 80px;
-    padding:0 15px;
+    max-width:980px;
+
+    margin:-18px auto 80px;
+
+    padding:0 16px;
 }
 
-/* MANAGER */
+
+/* =====================================================
+   GESTOR
+===================================================== */
 
 .manager-card{
-    padding:15px;
-    border-radius:20px;
+    padding:16px;
+
+    border-radius:21px;
+
     background:white;
+
     box-shadow:var(--shadow);
+
     display:flex;
     align-items:center;
-    gap:12px;
+    gap:13px;
 }
 
 .manager-icon{
     width:48px;
     height:48px;
+
     border-radius:15px;
-    background:var(--primary-light);
+
+    flex-shrink:0;
+
     display:flex;
     align-items:center;
     justify-content:center;
+
+    background:var(--primary-light);
+
     font-size:22px;
 }
 
@@ -178,173 +252,275 @@ main{
 
 .manager-info strong{
     display:block;
+
     font-size:13px;
 }
 
 .manager-info span{
     display:block;
-    margin-top:3px;
+
+    margin-top:4px;
+
     color:var(--muted);
+
     font-size:9px;
 }
 
 .online{
-    padding:6px 10px;
+    padding:7px 10px;
+
     border-radius:20px;
+
     background:var(--green-light);
     color:var(--green);
+
     font-size:8px;
     font-weight:800;
 }
 
-/* TABS */
 
-.main-tabs{
-    margin-top:14px;
-    padding:5px;
-    border-radius:17px;
-    background:#e9edf1;
+/* =====================================================
+   ABAS
+===================================================== */
+
+.tabs{
     display:grid;
-    grid-template-columns:1fr 1fr;
+
+    grid-template-columns:
+        1fr 1fr;
+
     gap:5px;
+
+    margin-top:16px;
+
+    padding:5px;
+
+    border-radius:17px;
+
+    background:#e9edf1;
 }
 
-.main-tab{
+.tab{
     border:0;
-    padding:12px;
+
+    padding:14px 10px;
+
     border-radius:13px;
+
     background:transparent;
+
     color:var(--muted);
+
     font-size:9px;
     font-weight:800;
+
     cursor:pointer;
 }
 
-.main-tab.active{
+.tab.active{
     background:white;
+
     color:var(--primary);
-    box-shadow:0 3px 12px rgba(30,45,60,.05);
+
+    box-shadow:
+        0 3px 10px
+        rgba(30,40,60,.05);
 }
 
-.badge-tab{
+.tab-badge{
     display:inline-flex;
-    margin-left:4px;
-    min-width:19px;
-    height:19px;
-    padding:0 5px;
+
+    min-width:20px;
+    height:20px;
+
+    margin-left:5px;
+
+    padding:0 6px;
+
     align-items:center;
     justify-content:center;
+
     border-radius:20px;
+
     background:var(--red-light);
     color:var(--red);
+
     font-size:8px;
 }
 
-/* VIEW */
 
-.view{
+/* =====================================================
+   PAINÉIS
+===================================================== */
+
+.panel{
     display:none;
 }
 
-.view.active{
+.panel.active{
     display:block;
 }
 
-/* COMMON */
+
+/* =====================================================
+   DATA
+===================================================== */
 
 .date-row{
-    margin-top:22px;
+    margin-top:24px;
+
     display:flex;
-    justify-content:space-between;
     align-items:center;
+    justify-content:space-between;
 }
 
-.date-row h2,
-.section-title h2{
-    font-size:16px;
+.date-row h2{
+    font-size:17px;
 }
 
 .date-pill{
-    padding:7px 10px;
-    border-radius:13px;
+    padding:8px 11px;
+
+    border-radius:14px;
+
     background:white;
-    color:var(--muted);
-    font-size:9px;
+
     box-shadow:var(--shadow);
+
+    color:var(--muted);
+
+    font-size:9px;
 }
+
+
+/* =====================================================
+   KPIs
+===================================================== */
 
 .kpis{
     display:grid;
-    grid-template-columns:repeat(2,1fr);
+
+    grid-template-columns:
+        repeat(2,1fr);
+
     gap:10px;
+
     margin-top:12px;
 }
 
 .kpi{
     min-height:105px;
-    padding:15px;
-    border-radius:18px;
+
+    padding:16px;
+
+    border-radius:19px;
+
     background:white;
+
     box-shadow:var(--shadow);
 }
 
 .kpi-icon{
-    font-size:18px;
+    font-size:19px;
 }
 
 .kpi strong{
     display:block;
+
     margin-top:9px;
+
     font-size:24px;
 }
 
 .kpi span{
     display:block;
-    margin-top:3px;
+
+    margin-top:4px;
+
     color:var(--muted);
+
     font-size:8px;
 }
 
-.green strong{color:var(--green);}
-.blue strong{color:var(--blue);}
-.purple strong{color:var(--primary);}
-.yellow strong{color:var(--yellow);}
-.red strong{color:var(--red);}
+.kpi.green strong{
+    color:var(--green);
+}
+
+.kpi.blue strong{
+    color:var(--blue);
+}
+
+.kpi.purple strong{
+    color:var(--primary);
+}
+
+.kpi.yellow strong{
+    color:var(--yellow);
+}
+
+.kpi.red strong{
+    color:var(--red);
+}
+
+
+/* =====================================================
+   SEÇÕES
+===================================================== */
 
 .section{
-    margin-top:25px;
+    margin-top:27px;
 }
 
 .section-title{
-    margin-bottom:11px;
     display:flex;
-    justify-content:space-between;
     align-items:flex-end;
+    justify-content:space-between;
+
+    gap:10px;
+
+    margin-bottom:12px;
+}
+
+.section-title h2{
+    font-size:17px;
 }
 
 .section-title p{
     margin-top:4px;
+
     color:var(--muted);
+
     font-size:9px;
 }
 
 .refresh{
     border:0;
-    padding:8px 10px;
+
+    padding:9px 11px;
+
     border-radius:12px;
+
     background:var(--blue-light);
     color:var(--blue);
+
     font-size:8px;
     font-weight:800;
+
     cursor:pointer;
 }
 
-/* TORRE */
+
+/* =====================================================
+   TORRE
+===================================================== */
 
 .tower-card{
-    padding:16px;
-    border-radius:20px;
+    padding:17px;
+
+    border-radius:21px;
+
     background:white;
+
     box-shadow:var(--shadow);
 }
 
@@ -357,11 +533,15 @@ main{
 .tower-icon{
     width:48px;
     height:48px;
+
     border-radius:15px;
-    background:var(--blue-light);
+
     display:flex;
     align-items:center;
     justify-content:center;
+
+    background:var(--blue-light);
+
     font-size:22px;
 }
 
@@ -370,46 +550,64 @@ main{
 }
 
 .tower-info strong{
+    display:block;
+
     font-size:13px;
 }
 
 .tower-info span{
     display:block;
+
     margin-top:4px;
+
     color:var(--muted);
+
     font-size:8px;
 }
 
 .percent{
-    color:var(--green);
     font-size:20px;
     font-weight:800;
+
+    color:var(--green);
 }
 
 .progress{
     height:9px;
-    margin-top:14px;
+
+    margin-top:15px;
+
     border-radius:20px;
+
     overflow:hidden;
-    background:#e8edf1;
+
+    background:#e9edf2;
 }
 
 .progress-fill{
     height:100%;
     width:0;
+
     background:var(--green);
+
     transition:.3s;
 }
 
 .progress-info{
     margin-top:9px;
+
     display:flex;
     justify-content:space-between;
+
     color:var(--muted);
+
     font-size:8px;
 }
 
-/* OPERAÇÃO */
+
+/* =====================================================
+   LOCAIS
+===================================================== */
 
 .location-list{
     display:flex;
@@ -417,30 +615,41 @@ main{
     gap:10px;
 }
 
-.location-card,
-.activity-list{
-    background:white;
+.location-card{
     border-radius:18px;
+
+    background:white;
+
     box-shadow:var(--shadow);
+
     overflow:hidden;
 }
 
 .location-header{
     padding:14px;
+
     display:flex;
     align-items:center;
     gap:11px;
+
     cursor:pointer;
 }
 
 .location-icon{
     width:40px;
     height:40px;
+
+    flex-shrink:0;
+
     border-radius:12px;
-    background:var(--blue-light);
+
     display:flex;
     align-items:center;
     justify-content:center;
+
+    background:var(--blue-light);
+
+    font-size:18px;
 }
 
 .location-info{
@@ -449,93 +658,161 @@ main{
 
 .location-info strong{
     display:block;
+
     font-size:11px;
 }
 
 .location-info span{
     display:block;
+
     margin-top:4px;
+
     color:var(--muted);
+
     font-size:8px;
 }
 
 .location-count{
     padding:5px 8px;
+
     border-radius:20px;
+
     background:var(--green-light);
     color:var(--green);
+
     font-size:8px;
     font-weight:800;
 }
 
-.location-content{
-    display:none;
-    padding:0 14px 14px;
+.location-arrow{
+    color:var(--muted);
+
+    font-size:17px;
+
+    transition:.2s;
 }
 
-.location-card.open .location-content{
+.location-card.open
+.location-arrow{
+    transform:rotate(180deg);
+}
+
+.location-content{
+    display:none;
+
+    padding:
+        0 14px
+        14px;
+}
+
+.location-card.open
+.location-content{
     display:block;
 }
 
+
+/* =====================================================
+   REGISTROS OPERAÇÃO
+===================================================== */
+
 .record{
     padding:12px 0;
-    border-top:1px solid var(--border);
-    display:grid;
-    grid-template-columns:54px 1fr;
-    gap:11px;
-}
 
-.record-photo,
-.activity-photo{
-    border:0;
-    overflow:hidden;
-    padding:0;
-    background:#edf1f5;
-    cursor:pointer;
+    border-top:
+        1px solid
+        var(--border);
+
+    display:grid;
+
+    grid-template-columns:
+        54px 1fr;
+
+    gap:11px;
 }
 
 .record-photo{
     width:54px;
     height:54px;
+
+    border:0;
+
     border-radius:11px;
+
+    overflow:hidden;
+
+    padding:0;
+
+    background:#edf1f5;
+
+    cursor:pointer;
 }
 
-.record-photo img,
-.activity-photo img{
+.record-photo img{
+    display:block;
+
     width:100%;
     height:100%;
+
     object-fit:cover;
 }
 
 .record-body strong{
+    display:block;
+
     font-size:10px;
 }
 
 .record-meta{
     margin-top:4px;
+
     color:var(--muted);
+
     font-size:8px;
+
     line-height:1.5;
 }
 
 .record-observation{
     margin-top:6px;
+
     padding:7px 9px;
+
     border-radius:9px;
+
     background:#f6f8fa;
+
+    color:#56616e;
+
     font-size:8px;
+
+    line-height:1.4;
 }
 
+
+/* =====================================================
+   ÚLTIMOS REGISTROS
+===================================================== */
+
 .activity-list{
+    border-radius:20px;
+
+    background:white;
+
     padding:0 15px;
+
+    box-shadow:var(--shadow);
 }
 
 .activity-row{
     min-height:67px;
+
     display:flex;
     align-items:center;
     gap:11px;
-    border-bottom:1px solid var(--border);
+
+    border-bottom:
+        1px solid
+        var(--border);
 }
 
 .activity-row:last-child{
@@ -545,7 +822,26 @@ main{
 .activity-photo{
     width:44px;
     height:44px;
+
+    flex-shrink:0;
+
+    border:0;
     border-radius:11px;
+
+    overflow:hidden;
+
+    padding:0;
+
+    cursor:pointer;
+
+    background:#edf1f5;
+}
+
+.activity-photo img{
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
 }
 
 .activity-info{
@@ -554,32 +850,55 @@ main{
 
 .activity-info strong{
     display:block;
+
     font-size:10px;
 }
 
-.activity-info span,
-.activity-time{
+.activity-info span{
+    display:block;
+
+    margin-top:4px;
+
     color:var(--muted);
+
     font-size:8px;
 }
 
-/* OCORRÊNCIAS */
+.activity-time{
+    color:var(--muted);
+
+    font-size:8px;
+}
+
+
+/* =====================================================
+   FILTROS OCORRÊNCIAS
+===================================================== */
 
 .filters{
     display:flex;
-    gap:7px;
+
     flex-wrap:wrap;
-    margin-bottom:13px;
+
+    gap:8px;
+
+    margin-bottom:14px;
 }
 
 .filter{
     border:0;
-    padding:8px 13px;
+
+    padding:9px 14px;
+
     border-radius:20px;
+
     background:white;
+
     color:var(--muted);
+
     font-size:8px;
     font-weight:800;
+
     cursor:pointer;
 }
 
@@ -588,175 +907,334 @@ main{
     color:white;
 }
 
+
+/* =====================================================
+   OCORRÊNCIAS
+===================================================== */
+
 .occurrence-list{
     display:flex;
     flex-direction:column;
-    gap:13px;
+    gap:14px;
 }
 
 .occurrence-card{
+    padding:17px;
+
+    border-radius:21px;
+
     background:white;
-    border-radius:20px;
-    padding:16px;
+
     box-shadow:var(--shadow);
 }
 
 .occurrence-top{
     display:flex;
+
+    align-items:flex-start;
+
     justify-content:space-between;
+
     gap:12px;
 }
 
-.protocol strong{
+.occurrence-protocol{
     color:var(--blue);
-    font-size:12px;
-}
 
-.protocol span{
-    display:block;
-    margin-top:4px;
-    color:var(--muted);
-    font-size:8px;
-}
-
-.status{
-    height:max-content;
-    padding:6px 9px;
-    border-radius:20px;
-    font-size:8px;
+    font-size:13px;
     font-weight:800;
 }
 
-.status.aberta{
+.occurrence-date{
+    margin-top:4px;
+
+    color:var(--muted);
+
+    font-size:8px;
+}
+
+.status-badge{
+    flex-shrink:0;
+
+    padding:7px 10px;
+
+    border-radius:20px;
+
+    font-size:8px;
+    font-weight:800;
+
+    text-transform:uppercase;
+}
+
+.status-aberta{
     background:var(--red-light);
     color:var(--red);
 }
 
-.status.atendimento{
+.status-atendimento{
     background:var(--yellow-light);
     color:var(--yellow);
 }
 
-.status.resolvida{
+.status-resolvida{
     background:var(--green-light);
     color:var(--green);
 }
 
-.occurrence-place{
-    margin-top:13px;
-    padding:10px 12px;
+.occurrence-location{
+    margin-top:14px;
+
+    padding:11px 13px;
+
     border-radius:13px;
+
     background:var(--blue-light);
     color:var(--blue);
+
     font-size:10px;
-    font-weight:700;
+    font-weight:750;
 }
 
 .occurrence-description{
-    margin-top:13px;
-    padding:12px;
+    margin-top:15px;
+
+    padding:0 12px;
+
     font-size:10px;
+
     line-height:1.55;
 }
 
 .return-box{
-    margin-top:10px;
-    padding:11px;
+    margin-top:14px;
+
+    padding:11px 13px;
+
     border-radius:13px;
-    background:#f7f5fc;
-    font-size:9px;
+
+    background:#f4f0fc;
+
+    color:var(--primary);
+
+    font-size:8px;
+
     line-height:1.5;
 }
 
 .return-box strong{
-    color:var(--primary);
+    display:block;
 }
 
-.management{
+.occurrence-photo{
     margin-top:14px;
-    padding-top:14px;
-    border-top:1px solid var(--border);
+
+    width:100%;
+
+    max-width:350px;
+
+    border:0;
+
+    padding:0;
+
+    background:none;
+
+    cursor:pointer;
+}
+
+.occurrence-photo img{
+    display:block;
+
+    width:100%;
+
+    max-height:300px;
+
+    object-fit:cover;
+
+    border-radius:14px;
+}
+
+
+/* =====================================================
+   GESTÃO OCORRÊNCIA
+===================================================== */
+
+.occurrence-management{
+    margin-top:17px;
+
+    padding-top:16px;
+
+    border-top:
+        1px solid
+        var(--border);
 }
 
 .management-title{
-    font-size:10px;
+    font-size:9px;
     font-weight:800;
 }
 
-.status-actions{
+.status-buttons{
     display:flex;
-    gap:7px;
+
     flex-wrap:wrap;
-    margin-top:10px;
+
+    gap:8px;
+
+    margin-top:11px;
 }
 
 .status-button{
-    border:1px solid var(--border);
-    padding:9px 12px;
-    border-radius:12px;
+    border:
+        1px solid
+        var(--border);
+
+    padding:10px 14px;
+
+    border-radius:13px;
+
     background:white;
+
     color:var(--muted);
+
     font-size:8px;
     font-weight:800;
+
     cursor:pointer;
 }
 
 .status-button.selected{
+    border-color:#c8bef1;
+
     background:var(--primary-light);
-    border-color:#d8d0f2;
+
     color:var(--primary);
 }
 
-.message-label{
+.status-button.resolved.selected{
+    border-color:#a8d2b7;
+
+    background:var(--green-light);
+
+    color:var(--green);
+}
+
+
+/* =====================================================
+   MENSAGEM FINAL
+===================================================== */
+
+.resolution-box{
+    display:none;
+
+    margin-top:16px;
+
+    padding:14px;
+
+    border-radius:16px;
+
+    background:#f7f5fc;
+
+    border:
+        1px solid
+        #e6e0f6;
+}
+
+.resolution-box.visible{
     display:block;
-    margin-top:13px;
-    font-size:9px;
-    font-weight:750;
 }
 
-.manager-message{
-    width:100%;
-    min-height:85px;
-    margin-top:7px;
-    padding:11px;
-    resize:vertical;
-    border:1px solid var(--border);
-    border-radius:13px;
-    outline:none;
-    color:var(--text);
-    background:#fafbfc;
-    font-size:10px;
-}
+.resolution-box label{
+    display:block;
 
-.manager-message:focus{
-    background:white;
-    border-color:#b8b1d6;
-}
+    margin-bottom:8px;
 
-.save-occurrence{
-    width:100%;
-    margin-top:10px;
-    padding:12px;
-    border:0;
-    border-radius:13px;
-    background:var(--primary);
-    color:white;
     font-size:9px;
     font-weight:800;
+
+    color:var(--text);
+}
+
+.resolution-box textarea{
+    width:100%;
+
+    min-height:105px;
+
+    padding:12px;
+
+    resize:vertical;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:13px;
+
+    outline:none;
+
+    background:white;
+
+    color:var(--text);
+
+    font-size:10px;
+
+    line-height:1.5;
+}
+
+.resolution-box textarea:focus{
+    border-color:#b7addf;
+}
+
+.resolution-box small{
+    display:block;
+
+    margin-top:7px;
+
+    color:var(--muted);
+
+    font-size:8px;
+
+    line-height:1.5;
+}
+
+.save-update{
+    width:100%;
+
+    margin-top:14px;
+
+    padding:13px;
+
+    border:0;
+
+    border-radius:13px;
+
+    background:var(--primary);
+
+    color:white;
+
+    font-size:9px;
+    font-weight:800;
+
     cursor:pointer;
 }
 
-.save-occurrence:disabled{
-    opacity:.5;
-    cursor:wait;
+.save-update:disabled{
+    opacity:.55;
+    cursor:not-allowed;
 }
 
-/* HISTÓRICO */
+
+/* =====================================================
+   HISTÓRICO
+===================================================== */
 
 .history{
-    margin-top:14px;
-    padding-top:13px;
-    border-top:1px solid var(--border);
+    margin-top:17px;
+
+    padding-top:15px;
+
+    border-top:
+        1px solid
+        var(--border);
 }
 
 .history-title{
@@ -764,85 +1242,169 @@ main{
     font-weight:800;
 }
 
-.history-items{
-    margin-top:9px;
-}
-
 .history-item{
     position:relative;
-    margin-left:5px;
-    padding:0 0 12px 16px;
-    border-left:1px solid #dce2e7;
+
+    margin-top:12px;
+
+    padding-left:22px;
+
+    font-size:8px;
+
+    line-height:1.55;
 }
 
 .history-item::before{
     content:"";
+
     position:absolute;
-    left:-4px;
-    top:3px;
+
+    left:2px;
+    top:4px;
+
     width:7px;
     height:7px;
+
     border-radius:50%;
+
     background:var(--primary);
 }
 
-.history-item:last-child{
-    padding-bottom:0;
+.history-item::after{
+    content:"";
+
+    position:absolute;
+
+    left:5px;
+    top:13px;
+
+    width:1px;
+    height:calc(100% + 8px);
+
+    background:#d9dce4;
+}
+
+.history-item:last-child::after{
+    display:none;
 }
 
 .history-item strong{
     display:block;
-    font-size:9px;
+
+    font-size:8px;
 }
 
 .history-item span{
     display:block;
-    margin-top:3px;
+
+    margin-top:2px;
+
     color:var(--muted);
-    font-size:8px;
-    line-height:1.5;
 }
 
-/* EMPTY / ERROR */
+.history-message{
+    margin-top:4px;
 
-.empty,
-.loading{
-    padding:28px 18px;
-    border-radius:18px;
+    color:#59636d;
+
+    white-space:pre-wrap;
+}
+
+
+/* =====================================================
+   VAZIO / LOADING / ERRO
+===================================================== */
+
+.empty{
+    padding:30px 18px;
+
+    border-radius:19px;
+
     background:white;
+
     box-shadow:var(--shadow);
+
     text-align:center;
-    color:var(--muted);
-    font-size:9px;
+}
+
+.empty-icon{
+    font-size:29px;
 }
 
 .empty strong{
     display:block;
-    color:var(--text);
-    margin-bottom:5px;
+
+    margin-top:9px;
+
+    font-size:11px;
+}
+
+.empty span{
+    display:block;
+
+    margin-top:5px;
+
+    color:var(--muted);
+
+    font-size:8px;
+
+    line-height:1.5;
+}
+
+.loading{
+    padding:28px;
+
+    border-radius:18px;
+
+    background:white;
+
+    box-shadow:var(--shadow);
+
+    text-align:center;
+
+    color:var(--muted);
+
+    font-size:9px;
 }
 
 .error-box{
     display:none;
-    margin-top:14px;
+
+    margin-top:15px;
+
     padding:12px;
-    border-radius:13px;
+
+    border-radius:14px;
+
     background:var(--red-light);
     color:var(--red);
+
     font-size:9px;
+
+    line-height:1.5;
 }
 
-/* PHOTO MODAL */
+
+/* =====================================================
+   FOTO MODAL
+===================================================== */
 
 .photo-modal{
     position:fixed;
+
     inset:0;
+
     z-index:999;
+
     display:none;
+
     align-items:center;
     justify-content:center;
+
     padding:18px;
-    background:rgba(0,0,0,.88);
+
+    background:
+        rgba(0,0,0,.88);
 }
 
 .photo-modal.visible{
@@ -851,1033 +1413,2840 @@ main{
 
 .photo-modal-content{
     position:relative;
+
     width:100%;
     max-width:650px;
 }
 
 .photo-modal img{
     display:block;
+
     width:100%;
     max-height:82vh;
+
     object-fit:contain;
+
     border-radius:18px;
 }
 
 .close-photo{
     position:absolute;
+
     top:-10px;
     right:-5px;
+
     width:42px;
     height:42px;
+
     border:0;
     border-radius:50%;
+
     background:white;
+    color:#222;
+
     font-size:20px;
+
     cursor:pointer;
 }
 
 .photo-caption{
     margin-top:10px;
+
     color:white;
+
     text-align:center;
+
     font-size:10px;
+
+    line-height:1.5;
 }
 
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+.toast{
+    position:fixed;
+
+    left:50%;
+    bottom:25px;
+
+    z-index:1200;
+
+    transform:
+        translateX(-50%)
+        translateY(30px);
+
+    opacity:0;
+
+    pointer-events:none;
+
+    padding:12px 18px;
+
+    border-radius:14px;
+
+    background:#25313c;
+
+    color:white;
+
+    font-size:9px;
+    font-weight:700;
+
+    transition:.25s;
+}
+
+.toast.visible{
+    opacity:1;
+
+    transform:
+        translateX(-50%)
+        translateY(0);
+}
+
+
+/* =====================================================
+   DESKTOP
+===================================================== */
+
 @media(min-width:700px){
+
     .kpis{
-        grid-template-columns:repeat(4,1fr);
+        grid-template-columns:
+            repeat(4,1fr);
     }
+
 }
 
 </style>
 </head>
 
+
 <body>
 
+
 <header>
+
 <div class="header-content">
 
     <div class="topbar">
 
         <div class="brand">
-            <div class="brand-icon">✓</div>
-            <div>
-                <strong>ORAQUI</strong>
-                <small>AGORA. AQUI. REGISTRADO.</small>
+
+            <div class="brand-icon">
+                ✓
             </div>
+
+            <div>
+
+                <strong>
+                    ORAQUI
+                </strong>
+
+                <small>
+                    AGORA. AQUI. REGISTRADO.
+                </small>
+
+            </div>
+
         </div>
 
-        <button class="logout" onclick="sair()">SAIR</button>
+
+        <button
+            class="logout"
+            onclick="sair()"
+        >
+            SAIR
+        </button>
 
     </div>
 
+
     <div class="header-title">
-        <small>RESERVA IGARA</small>
-        <h1>Painel de Gestão</h1>
-        <p>Operação e ocorrências em um único lugar.</p>
+
+        <small>
+            RESERVA IGARA
+        </small>
+
+        <h1>
+            Painel de Gestão
+        </h1>
+
+        <p>
+            Operação e ocorrências em um único lugar.
+        </p>
+
     </div>
 
 </div>
+
 </header>
+
+
 
 <main>
 
+
 <div class="manager-card">
 
-    <div class="manager-icon">📊</div>
-
-    <div class="manager-info">
-        <strong>Gestão • Reserva Igara</strong>
-        <span>Limpeza, zeladoria e ocorrências</span>
+    <div class="manager-icon">
+        📊
     </div>
 
-    <span class="online">● ONLINE</span>
+
+    <div class="manager-info">
+
+        <strong>
+            Gestão • Reserva Igara
+        </strong>
+
+        <span>
+            Limpeza, zeladoria e ocorrências
+        </span>
+
+    </div>
+
+
+    <span class="online">
+        ● ONLINE
+    </span>
 
 </div>
 
-<div class="main-tabs">
+
+
+<div
+    class="error-box"
+    id="errorBox"
+></div>
+
+
+
+<div class="tabs">
 
     <button
-        class="main-tab active"
-        id="tabOperation"
-        onclick="trocarAba('operacao')"
+        class="tab active"
+        id="tabOperacao"
+        onclick="abrirPainel('operacao')"
     >
         ✓ OPERAÇÃO
     </button>
 
+
     <button
-        class="main-tab"
-        id="tabOccurrences"
-        onclick="trocarAba('ocorrencias')"
+        class="tab"
+        id="tabOcorrencias"
+        onclick="abrirPainel('ocorrencias')"
     >
         ⚠ OCORRÊNCIAS
-        <span class="badge-tab" id="occurrenceBadge">0</span>
+
+        <span
+            class="tab-badge"
+            id="occurrenceBadge"
+        >
+            0
+        </span>
+
     </button>
 
 </div>
 
-<div class="error-box" id="errorBox"></div>
 
-<!-- OPERAÇÃO -->
 
-<div class="view active" id="operationView">
+<!-- =================================================
+     OPERAÇÃO
+================================================== -->
 
-    <div class="date-row">
-        <h2>Hoje</h2>
-        <div class="date-pill" id="todayDate">--</div>
+<div
+    class="panel active"
+    id="panelOperacao"
+>
+
+
+<div class="date-row">
+
+    <h2>
+        Hoje
+    </h2>
+
+    <div
+        class="date-pill"
+        id="todayDate"
+    >
+        --
     </div>
+
+</div>
+
+
+
+<div class="kpis">
+
+    <div class="kpi green">
+
+        <div class="kpi-icon">
+            ✓
+        </div>
+
+        <strong id="kpiItems">
+            0
+        </strong>
+
+        <span>
+            ITENS REGISTRADOS HOJE
+        </span>
+
+    </div>
+
+
+    <div class="kpi blue">
+
+        <div class="kpi-icon">
+            📷
+        </div>
+
+        <strong id="kpiPhotos">
+            0
+        </strong>
+
+        <span>
+            FOTOS RECEBIDAS
+        </span>
+
+    </div>
+
+
+    <div class="kpi purple">
+
+        <div class="kpi-icon">
+            👷
+        </div>
+
+        <strong id="kpiWorkers">
+            0
+        </strong>
+
+        <span>
+            COLABORADORES ATIVOS
+        </span>
+
+    </div>
+
+
+    <div class="kpi yellow">
+
+        <div class="kpi-icon">
+            📍
+        </div>
+
+        <strong id="kpiLocations">
+            0
+        </strong>
+
+        <span>
+            LOCAIS COM REGISTRO
+        </span>
+
+    </div>
+
+</div>
+
+
+
+<section class="section">
+
+    <div class="section-title">
+
+        <div>
+
+            <h2>
+                Torre E
+            </h2>
+
+            <p>
+                Limpeza • Débora
+            </p>
+
+        </div>
+
+
+        <button
+            class="refresh"
+            onclick="carregarDados()"
+        >
+            ↻ ATUALIZAR
+        </button>
+
+    </div>
+
+
+    <div class="tower-card">
+
+        <div class="tower-top">
+
+            <div class="tower-icon">
+                🏢
+            </div>
+
+
+            <div class="tower-info">
+
+                <strong>
+                    Operação de hoje
+                </strong>
+
+                <span id="towerStatus">
+                    Carregando registros...
+                </span>
+
+            </div>
+
+
+            <div
+                class="percent"
+                id="towerPercent"
+            >
+                0%
+            </div>
+
+        </div>
+
+
+        <div class="progress">
+
+            <div
+                class="progress-fill"
+                id="towerProgress"
+            ></div>
+
+        </div>
+
+
+        <div class="progress-info">
+
+            <span id="towerDone">
+                0 itens realizados
+            </span>
+
+            <span id="towerTotal">
+                0 previstos
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<section class="section">
+
+    <div class="section-title">
+
+        <div>
+
+            <h2>
+                Registros por local
+            </h2>
+
+            <p>
+                Toque no local para visualizar os itens e fotos.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div
+        id="locationList"
+        class="location-list"
+    >
+
+        <div class="loading">
+            Buscando registros...
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<section class="section">
+
+    <div class="section-title">
+
+        <div>
+
+            <h2>
+                Últimos registros
+            </h2>
+
+            <p>
+                Atividades recebidas hoje.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div id="activityContainer">
+
+        <div class="loading">
+            Carregando...
+        </div>
+
+    </div>
+
+</section>
+
+
+</div>
+
+
+
+<!-- =================================================
+     OCORRÊNCIAS
+================================================== -->
+
+<div
+    class="panel"
+    id="panelOcorrencias"
+>
+
+
+<section class="section">
+
+    <div class="section-title">
+
+        <div>
+
+            <h2>
+                Ocorrências
+            </h2>
+
+            <p>
+                Acompanhamento dos registros enviados.
+            </p>
+
+        </div>
+
+
+        <button
+            class="refresh"
+            onclick="carregarOcorrencias()"
+        >
+            ↻ ATUALIZAR
+        </button>
+
+    </div>
+
+
 
     <div class="kpis">
 
-        <div class="kpi green">
-            <div class="kpi-icon">✓</div>
-            <strong id="kpiItems">0</strong>
-            <span>ITENS REGISTRADOS HOJE</span>
+        <div class="kpi red">
+
+            <div class="kpi-icon">
+                ⚠
+            </div>
+
+            <strong id="occOpen">
+                0
+            </strong>
+
+            <span>
+                ABERTAS
+            </span>
+
         </div>
 
-        <div class="kpi blue">
-            <div class="kpi-icon">📷</div>
-            <strong id="kpiPhotos">0</strong>
-            <span>FOTOS RECEBIDAS</span>
-        </div>
-
-        <div class="kpi purple">
-            <div class="kpi-icon">👷</div>
-            <strong id="kpiWorkers">0</strong>
-            <span>COLABORADORES ATIVOS</span>
-        </div>
 
         <div class="kpi yellow">
-            <div class="kpi-icon">📍</div>
-            <strong id="kpiLocations">0</strong>
-            <span>LOCAIS COM REGISTRO</span>
+
+            <div class="kpi-icon">
+                ◷
+            </div>
+
+            <strong id="occProgress">
+                0
+            </strong>
+
+            <span>
+                EM ATENDIMENTO
+            </span>
+
+        </div>
+
+
+        <div class="kpi green">
+
+            <div class="kpi-icon">
+                ✓
+            </div>
+
+            <strong id="occResolved">
+                0
+            </strong>
+
+            <span>
+                RESOLVIDAS
+            </span>
+
+        </div>
+
+
+        <div class="kpi blue">
+
+            <div class="kpi-icon">
+                ✉
+            </div>
+
+            <strong id="occReturn">
+                0
+            </strong>
+
+            <span>
+                SOLICITAM RETORNO
+            </span>
+
         </div>
 
     </div>
 
-    <section class="section">
+</section>
 
-        <div class="section-title">
-            <div>
-                <h2>Torre E</h2>
-                <p>Limpeza • Débora</p>
-            </div>
 
-            <button class="refresh" onclick="carregarOperacao()">
-                ↻ ATUALIZAR
-            </button>
-        </div>
 
-        <div class="tower-card">
+<section class="section">
 
-            <div class="tower-top">
+    <div class="section-title">
 
-                <div class="tower-icon">🏢</div>
+        <div>
 
-                <div class="tower-info">
-                    <strong>Operação de hoje</strong>
-                    <span id="towerStatus">Carregando...</span>
-                </div>
+            <h2>
+                Registros recebidos
+            </h2>
 
-                <div class="percent" id="towerPercent">0%</div>
-
-            </div>
-
-            <div class="progress">
-                <div class="progress-fill" id="towerProgress"></div>
-            </div>
-
-            <div class="progress-info">
-                <span id="towerDone">0 itens realizados</span>
-                <span>76 previstos</span>
-            </div>
+            <p>
+                Comunicação enviada por moradores e visitantes.
+            </p>
 
         </div>
 
-    </section>
+    </div>
 
-    <section class="section">
 
-        <div class="section-title">
-            <div>
-                <h2>Registros por local</h2>
-                <p>Itens e fotos recebidos hoje.</p>
-            </div>
+    <div class="filters">
+
+        <button
+            class="filter active"
+            data-filter="todas"
+            onclick="filtrarOcorrencias(this,'todas')"
+        >
+            TODAS
+        </button>
+
+
+        <button
+            class="filter"
+            data-filter="aberta"
+            onclick="filtrarOcorrencias(this,'aberta')"
+        >
+            ABERTAS
+        </button>
+
+
+        <button
+            class="filter"
+            data-filter="em atendimento"
+            onclick="filtrarOcorrencias(this,'em atendimento')"
+        >
+            EM ATENDIMENTO
+        </button>
+
+
+        <button
+            class="filter"
+            data-filter="resolvida"
+            onclick="filtrarOcorrencias(this,'resolvida')"
+        >
+            RESOLVIDAS
+        </button>
+
+    </div>
+
+
+    <div
+        id="occurrenceList"
+        class="occurrence-list"
+    >
+
+        <div class="loading">
+            Buscando ocorrências...
         </div>
 
-        <div id="locationList" class="location-list">
-            <div class="loading">Carregando...</div>
-        </div>
+    </div>
 
-    </section>
+</section>
 
-    <section class="section">
-
-        <div class="section-title">
-            <div>
-                <h2>Últimos registros</h2>
-                <p>Atividades recebidas hoje.</p>
-            </div>
-        </div>
-
-        <div id="activityContainer">
-            <div class="loading">Carregando...</div>
-        </div>
-
-    </section>
 
 </div>
 
-<!-- OCORRÊNCIAS -->
-
-<div class="view" id="occurrencesView">
-
-    <section class="section">
-
-        <div class="section-title">
-
-            <div>
-                <h2>Ocorrências</h2>
-                <p>Acompanhamento dos registros enviados.</p>
-            </div>
-
-            <button class="refresh" onclick="carregarOcorrencias()">
-                ↻ ATUALIZAR
-            </button>
-
-        </div>
-
-        <div class="kpis">
-
-            <div class="kpi red">
-                <div class="kpi-icon">⚠</div>
-                <strong id="occOpen">0</strong>
-                <span>ABERTAS</span>
-            </div>
-
-            <div class="kpi yellow">
-                <div class="kpi-icon">◷</div>
-                <strong id="occProgress">0</strong>
-                <span>EM ATENDIMENTO</span>
-            </div>
-
-            <div class="kpi green">
-                <div class="kpi-icon">✓</div>
-                <strong id="occResolved">0</strong>
-                <span>RESOLVIDAS</span>
-            </div>
-
-            <div class="kpi blue">
-                <div class="kpi-icon">✉</div>
-                <strong id="occReturn">0</strong>
-                <span>SOLICITAM RETORNO</span>
-            </div>
-
-        </div>
-
-    </section>
-
-    <section class="section">
-
-        <div class="section-title">
-            <div>
-                <h2>Registros recebidos</h2>
-                <p>Comunicação enviada por moradores e visitantes.</p>
-            </div>
-        </div>
-
-        <div class="filters">
-
-            <button class="filter active" onclick="filtrarOcorrencias('todas',this)">
-                TODAS
-            </button>
-
-            <button class="filter" onclick="filtrarOcorrencias('Aberta',this)">
-                ABERTAS
-            </button>
-
-            <button class="filter" onclick="filtrarOcorrencias('Em atendimento',this)">
-                EM ATENDIMENTO
-            </button>
-
-            <button class="filter" onclick="filtrarOcorrencias('Resolvida',this)">
-                RESOLVIDAS
-            </button>
-
-        </div>
-
-        <div id="occurrenceList" class="occurrence-list">
-            <div class="loading">Carregando ocorrências...</div>
-        </div>
-
-    </section>
-
-</div>
 
 </main>
 
-<!-- FOTO -->
 
-<div class="photo-modal" id="photoModal" onclick="fecharFotoFundo(event)">
+
+<!-- =================================================
+     FOTO
+================================================== -->
+
+<div
+    class="photo-modal"
+    id="photoModal"
+    onclick="fecharFotoFundo(event)"
+>
 
     <div class="photo-modal-content">
 
-        <button class="close-photo" onclick="fecharFoto()">×</button>
+        <button
+            class="close-photo"
+            onclick="fecharFoto()"
+        >
+            ×
+        </button>
 
-        <img id="modalImage" alt="Foto">
 
-        <div class="photo-caption" id="photoCaption"></div>
+        <img
+            id="modalImage"
+            alt="Imagem"
+        >
+
+
+        <div
+            class="photo-caption"
+            id="photoCaption"
+        ></div>
 
     </div>
 
 </div>
 
+
+
+<div
+    class="toast"
+    id="toast"
+></div>
+
+
+
 <script>
 
-/* SUPABASE */
+/* =====================================================
+   SUPABASE
+===================================================== */
 
 const SUPABASE_URL =
-"https://rhiosvsohvqqrxzwohqu.supabase.co";
+    "https://rhiosvsohvqqrxzwohqu.supabase.co";
+
 
 const SUPABASE_KEY =
-"sb_publishable_vcjiMMCTxQJ7ArTGsQ-PuQ_5gaAfoIt";
+    "sb_publishable_vcjiMMCTxQJ7ArTGsQ-PuQ_5gaAfoIt";
+
 
 const db =
-window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-);
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
 
-/* SESSÃO */
+
+
+/* =====================================================
+   SESSÃO
+===================================================== */
 
 const sessao =
-JSON.parse(
-    localStorage.getItem("usuarioLogado")
-);
+    JSON.parse(
+        localStorage.getItem(
+            "usuarioLogado"
+        )
+    );
+
 
 if(!sessao){
-    window.location.href="index.html";
+
+    window.location.href =
+        "index.html";
+
 }
 
-/* ESTADO */
 
-let ocorrenciasCache=[];
-let filtroAtual="todas";
 
-const TOTAL_ITENS_TORRE_E=76;
+/* =====================================================
+   VARIÁVEIS
+===================================================== */
 
-/* DATA */
+const locationList =
+    document.getElementById(
+        "locationList"
+    );
+
+
+const activityContainer =
+    document.getElementById(
+        "activityContainer"
+    );
+
+
+const occurrenceList =
+    document.getElementById(
+        "occurrenceList"
+    );
+
+
+const errorBox =
+    document.getElementById(
+        "errorBox"
+    );
+
+
+let ocorrenciasCarregadas =
+    [];
+
+
+let filtroOcorrencias =
+    "todas";
+
+
+const statusSelecionado =
+    {};
+
+
+
+/* =====================================================
+   DATA
+===================================================== */
 
 function dataHojeBanco(){
 
-    const d=new Date();
+    const agora =
+        new Date();
 
-    return (
-        d.getFullYear()
-        +"-"+
-        String(d.getMonth()+1).padStart(2,"0")
-        +"-"+
-        String(d.getDate()).padStart(2,"0")
-    );
+
+    const ano =
+        agora.getFullYear();
+
+
+    const mes =
+        String(
+            agora.getMonth()+1
+        )
+        .padStart(
+            2,
+            "0"
+        );
+
+
+    const dia =
+        String(
+            agora.getDate()
+        )
+        .padStart(
+            2,
+            "0"
+        );
+
+
+    return `${ano}-${mes}-${dia}`;
+
 }
 
-document.getElementById("todayDate").textContent =
-new Date().toLocaleDateString("pt-BR");
 
-/* ESCAPE */
+document
+.getElementById(
+    "todayDate"
+)
+.textContent =
+    new Date()
+    .toLocaleDateString(
+        "pt-BR",
+        {
+            day:"2-digit",
+            month:"2-digit",
+            year:"numeric"
+        }
+    );
 
-function escapar(valor){
 
-    if(valor===null || valor===undefined){
+
+/* =====================================================
+   TOTAL TORRE E
+===================================================== */
+
+const TOTAL_ITENS_TORRE_E =
+    76;
+
+
+
+/* =====================================================
+   ESCAPAR HTML
+===================================================== */
+
+function escapar(texto){
+
+    if(
+        texto === null ||
+        texto === undefined
+    ){
+
         return "";
+
     }
 
-    return String(valor)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+
+    return String(texto)
+
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
+
 }
 
-function hora(valor){
+
+
+/* =====================================================
+   NORMALIZAR STATUS
+===================================================== */
+
+function normalizarStatus(
+    status
+){
+
+    return String(
+        status || ""
+    )
+    .trim()
+    .toLowerCase();
+
+}
+
+
+
+/* =====================================================
+   HORA
+===================================================== */
+
+function formatarHora(
+    hora
+){
+
+    if(!hora){
+
+        return "--:--";
+
+    }
+
+
+    return String(hora)
+        .slice(
+            0,
+            5
+        );
+
+}
+
+
+
+/* =====================================================
+   DATA/HORA
+===================================================== */
+
+function formatarDataHora(
+    valor
+){
 
     if(!valor){
-        return "--:--";
+
+        return "";
+
     }
 
-    return String(valor).slice(0,5);
+
+    const data =
+        new Date(
+            valor
+        );
+
+
+    if(
+        Number.isNaN(
+            data.getTime()
+        )
+    ){
+
+        return "";
+
+    }
+
+
+    return data
+        .toLocaleString(
+            "pt-BR",
+            {
+                day:"2-digit",
+                month:"2-digit",
+                hour:"2-digit",
+                minute:"2-digit"
+            }
+        );
+
 }
 
-/* ABAS */
 
-function trocarAba(aba){
+
+/* =====================================================
+   ABAS
+===================================================== */
+
+function abrirPainel(
+    painel
+){
+
+    const operacao =
+        painel ===
+        "operacao";
+
 
     document
-    .querySelectorAll(".main-tab")
-    .forEach(x=>x.classList.remove("active"));
+    .getElementById(
+        "panelOperacao"
+    )
+    .classList
+    .toggle(
+        "active",
+        operacao
+    );
+
 
     document
-    .querySelectorAll(".view")
-    .forEach(x=>x.classList.remove("active"));
+    .getElementById(
+        "panelOcorrencias"
+    )
+    .classList
+    .toggle(
+        "active",
+        !operacao
+    );
 
-    if(aba==="operacao"){
 
-        document
-        .getElementById("tabOperation")
-        .classList.add("active");
+    document
+    .getElementById(
+        "tabOperacao"
+    )
+    .classList
+    .toggle(
+        "active",
+        operacao
+    );
 
-        document
-        .getElementById("operationView")
-        .classList.add("active");
 
-    }else{
+    document
+    .getElementById(
+        "tabOcorrencias"
+    )
+    .classList
+    .toggle(
+        "active",
+        !operacao
+    );
 
-        document
-        .getElementById("tabOccurrences")
-        .classList.add("active");
 
-        document
-        .getElementById("occurrencesView")
-        .classList.add("active");
+    if(!operacao){
 
         carregarOcorrencias();
+
     }
+
 }
 
-/* OPERAÇÃO */
 
-async function carregarOperacao(){
+
+/* =====================================================
+   OPERAÇÃO
+===================================================== */
+
+async function carregarDados(){
+
+    esconderErro();
+
+
+    locationList.innerHTML =
+        `
+        <div class="loading">
+            Buscando registros...
+        </div>
+        `;
+
+
+    activityContainer.innerHTML =
+        `
+        <div class="loading">
+            Carregando...
+        </div>
+        `;
+
 
     try{
 
-        const {data,error} =
-        await db
-        .from("registros_atividade")
-        .select("*")
-        .eq("data",dataHojeBanco())
-        .order("created_at",{ascending:false});
+        const hoje =
+            dataHojeBanco();
+
+
+        const {
+            data,
+            error
+        } =
+            await db
+
+            .from(
+                "registros_atividade"
+            )
+
+            .select(
+                "*"
+            )
+
+            .eq(
+                "data",
+                hoje
+            )
+
+            .order(
+                "created_at",
+                {
+                    ascending:false
+                }
+            );
+
 
         if(error){
+
             throw error;
+
         }
 
-        const registros=data||[];
 
-        atualizarKPIs(registros);
-        atualizarTorre(registros);
-        montarLocais(registros);
-        montarUltimos(registros);
+        const registros =
+            data || [];
 
-    }catch(e){
+
+        atualizarKPIs(
+            registros
+        );
+
+
+        atualizarTorreE(
+            registros
+        );
+
+
+        montarLocais(
+            registros
+        );
+
+
+        montarUltimos(
+            registros
+        );
+
+
+    }catch(erro){
+
+        console.error(
+            erro
+        );
+
 
         mostrarErro(
-            "Não foi possível carregar a operação: "
-            +(e.message||e)
+            "Não foi possível carregar os registros: "
+            +
+            (
+                erro.message ||
+                "erro desconhecido"
+            )
         );
+
+
+        locationList.innerHTML =
+            vazioHTML(
+                "⚠️",
+                "Dados indisponíveis",
+                "Não foi possível consultar os registros."
+            );
+
+
+        activityContainer.innerHTML =
+            vazioHTML(
+                "⚠️",
+                "Dados indisponíveis",
+                "Tente atualizar novamente."
+            );
+
     }
+
 }
 
-function atualizarKPIs(registros){
 
-    document.getElementById("kpiItems").textContent =
+
+/* =====================================================
+   KPIs OPERAÇÃO
+===================================================== */
+
+function atualizarKPIs(
+    registros
+){
+
+    const fotos =
+        registros.filter(
+            item =>
+                item.foto_url
+        )
+        .length;
+
+
+    const trabalhadores =
+        new Set(
+            registros
+            .map(
+                item =>
+                    item.matricula
+            )
+            .filter(
+                Boolean
+            )
+        );
+
+
+    const locais =
+        new Set(
+            registros
+            .map(
+                item =>
+                    item.local
+            )
+            .filter(
+                Boolean
+            )
+        );
+
+
+    document
+    .getElementById(
+        "kpiItems"
+    )
+    .textContent =
         registros.length;
 
-    document.getElementById("kpiPhotos").textContent =
-        registros.filter(x=>x.foto_url).length;
 
-    document.getElementById("kpiWorkers").textContent =
-        new Set(
-            registros.map(x=>x.matricula).filter(Boolean)
-        ).size;
+    document
+    .getElementById(
+        "kpiPhotos"
+    )
+    .textContent =
+        fotos;
 
-    document.getElementById("kpiLocations").textContent =
-        new Set(
-            registros.map(x=>x.local).filter(Boolean)
-        ).size;
+
+    document
+    .getElementById(
+        "kpiWorkers"
+    )
+    .textContent =
+        trabalhadores.size;
+
+
+    document
+    .getElementById(
+        "kpiLocations"
+    )
+    .textContent =
+        locais.size;
+
 }
 
-function atualizarTorre(registros){
 
-    const torre =
-    registros.filter(
-        x=>
-        x.tipo==="limpeza"
-        &&
-        x.torre==="Torre E"
+
+/* =====================================================
+   TORRE E
+===================================================== */
+
+function atualizarTorreE(
+    registros
+){
+
+    const torreE =
+        registros.filter(
+            registro =>
+
+                registro.tipo ===
+                "limpeza"
+
+                &&
+
+                registro.torre ===
+                "Torre E"
+        );
+
+
+    const chaves =
+        new Set();
+
+
+    torreE.forEach(
+        registro => {
+
+            chaves.add(
+                registro.local
+                +
+                "|"
+                +
+                registro.item
+            );
+
+        }
     );
 
-    const unicos =
-    new Set(
-        torre.map(
-            x=>`${x.local}|${x.item}`
-        )
-    );
 
-    const feitos=unicos.size;
+    const realizados =
+        chaves.size;
+
 
     const percentual =
-    Math.min(
-        100,
-        Math.round(
-            feitos/TOTAL_ITENS_TORRE_E*100
-        )
-    );
+        Math.min(
+            100,
+            Math.round(
+                realizados
+                /
+                TOTAL_ITENS_TORRE_E
+                *
+                100
+            )
+        );
 
-    document.getElementById("towerPercent").textContent =
-        percentual+"%";
 
-    document.getElementById("towerProgress").style.width =
-        percentual+"%";
+    document
+    .getElementById(
+        "towerPercent"
+    )
+    .textContent =
+        percentual
+        +
+        "%";
 
-    document.getElementById("towerDone").textContent =
-        feitos+
-        (feitos===1
-            ?" item realizado"
-            :" itens realizados");
 
-    document.getElementById("towerStatus").textContent =
-        feitos===0
-        ?"Nenhum item registrado hoje."
-        :percentual>=100
-        ?"Rotina prevista registrada."
-        :"Atividade em andamento.";
-}
+    document
+    .getElementById(
+        "towerProgress"
+    )
+    .style.width =
+        percentual
+        +
+        "%";
 
-function montarLocais(registros){
 
-    const container =
-    document.getElementById("locationList");
+    document
+    .getElementById(
+        "towerDone"
+    )
+    .textContent =
+        realizados
+        +
+        (
+            realizados === 1
+            ?
+            " item realizado"
+            :
+            " itens realizados"
+        );
 
-    if(!registros.length){
 
-        container.innerHTML =
-        `<div class="empty">
-            <strong>Nenhum registro hoje</strong>
-            As atividades aparecerão aqui.
-        </div>`;
+    document
+    .getElementById(
+        "towerTotal"
+    )
+    .textContent =
+        TOTAL_ITENS_TORRE_E
+        +
+        " previstos";
 
-        return;
+
+    const status =
+        document.getElementById(
+            "towerStatus"
+        );
+
+
+    if(
+        realizados === 0
+    ){
+
+        status.textContent =
+            "Nenhum item registrado hoje.";
+
+    }
+    else if(
+        percentual >= 100
+    ){
+
+        status.textContent =
+            "Rotina prevista registrada.";
+
+    }
+    else{
+
+        status.textContent =
+            "Atividade em andamento.";
+
     }
 
-    const grupos={};
+}
 
-    registros.forEach(r=>{
 
-        const local=r.local||"Sem local";
 
-        if(!grupos[local]){
-            grupos[local]=[];
+/* =====================================================
+   LOCAIS
+===================================================== */
+
+function montarLocais(
+    registros
+){
+
+    if(
+        registros.length === 0
+    ){
+
+        locationList.innerHTML =
+            vazioHTML(
+                "📍",
+                "Nenhum registro hoje",
+                "As atividades aparecerão aqui assim que forem enviadas."
+            );
+
+
+        return;
+
+    }
+
+
+    const grupos =
+        {};
+
+
+    registros.forEach(
+        registro => {
+
+            const nome =
+                registro.local ||
+                "Sem local";
+
+
+            if(
+                !grupos[nome]
+            ){
+
+                grupos[nome] =
+                    [];
+
+            }
+
+
+            grupos[nome]
+                .push(
+                    registro
+                );
+
         }
+    );
 
-        grupos[local].push(r);
-    });
 
-    container.innerHTML="";
+    locationList.innerHTML =
+        "";
 
-    Object.entries(grupos)
-    .forEach(([local,itens],indice)=>{
 
-        const card=document.createElement("div");
+    Object
+    .entries(
+        grupos
+    )
+    .forEach(
+        (
+            [
+                local,
+                itens
+            ],
+            indice
+        ) => {
 
-        card.className=
-            "location-card"+
-            (indice===0?" open":"");
+            const card =
+                document.createElement(
+                    "div"
+                );
 
-        const registrosHTML =
-        itens.map(r=>{
 
-            const foto =
-            r.foto_url
-            ?`
-            <button
-                class="record-photo"
-                onclick='abrirFoto(
-                    ${JSON.stringify(r.foto_url)},
-                    ${JSON.stringify(local+" • "+r.item)}
-                )'
-            >
-                <img
-                    src="${escapar(r.foto_url)}"
-                    loading="lazy"
+            card.className =
+                "location-card";
+
+
+            if(
+                indice === 0
+            ){
+
+                card.classList.add(
+                    "open"
+                );
+
+            }
+
+
+            const pessoas =
+                [
+                    ...new Set(
+                        itens
+                        .map(
+                            item =>
+                                item.colaborador
+                        )
+                        .filter(
+                            Boolean
+                        )
+                    )
+                ]
+                .join(", ");
+
+
+            const registrosHTML =
+                itens
+                .map(
+                    registro =>
+                        criarRegistroHTML(
+                            registro
+                        )
+                )
+                .join("");
+
+
+            card.innerHTML = `
+
+                <div
+                    class="location-header"
+                    onclick="alternarLocal(this)"
                 >
-            </button>
-            `
-            :`<div class="record-photo"></div>`;
 
-            return `
-            <div class="record">
-
-                ${foto}
-
-                <div class="record-body">
-
-                    <strong>
-                        ✓ ${escapar(r.item)}
-                    </strong>
-
-                    <div class="record-meta">
-                        ${escapar(r.colaborador)}
-                        • ${hora(r.hora)}
-                        <br>
-                        ${escapar(r.torre||"Área comum")}
+                    <div class="location-icon">
+                        📍
                     </div>
 
+
+                    <div class="location-info">
+
+                        <strong>
+                            ${escapar(local)}
+                        </strong>
+
+                        <span>
+                            ${escapar(pessoas)}
+                        </span>
+
+                    </div>
+
+
+                    <span class="location-count">
+
+                        ${itens.length}
+
+                        ${
+                            itens.length === 1
+                            ?
+                            " ITEM"
+                            :
+                            " ITENS"
+                        }
+
+                    </span>
+
+
+                    <span class="location-arrow">
+                        ⌄
+                    </span>
+
+                </div>
+
+
+                <div class="location-content">
+
+                    ${registrosHTML}
+
+                </div>
+
+            `;
+
+
+            locationList
+            .appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   REGISTRO
+===================================================== */
+
+function criarRegistroHTML(
+    registro
+){
+
+    const foto =
+        registro.foto_url
+        ?
+        `
+        <button
+            class="record-photo"
+            onclick='abrirFoto(
+                ${JSON.stringify(registro.foto_url)},
+                ${JSON.stringify(
+                    (registro.local || "")
+                    +
+                    " • "
+                    +
+                    (registro.item || "")
+                )}
+            )'
+        >
+
+            <img
+                src="${escapar(registro.foto_url)}"
+                alt="Foto do registro"
+                loading="lazy"
+            >
+
+        </button>
+        `
+        :
+        `
+        <div class="record-photo">
+        </div>
+        `;
+
+
+    const observacao =
+        registro.observacao
+        ?
+        `
+        <div class="record-observation">
+            💬 ${escapar(registro.observacao)}
+        </div>
+        `
+        :
+        "";
+
+
+    return `
+
+        <div class="record">
+
+            ${foto}
+
+
+            <div class="record-body">
+
+                <strong>
+                    ✓ ${escapar(registro.item)}
+                </strong>
+
+
+                <div class="record-meta">
+
+                    ${escapar(registro.colaborador)}
+                    •
+                    ${formatarHora(registro.hora)}
+
+                    <br>
+
                     ${
-                        r.observacao
-                        ?`
-                        <div class="record-observation">
-                            💬 ${escapar(r.observacao)}
-                        </div>
-                        `
-                        :""
+                        registro.torre
+                        ?
+                        escapar(registro.torre)
+                        :
+                        "Área comum"
                     }
 
                 </div>
 
-            </div>`;
-        }).join("");
 
-        card.innerHTML=`
+                ${observacao}
 
-        <div
-            class="location-header"
-            onclick="this.parentElement.classList.toggle('open')"
-        >
-
-            <div class="location-icon">📍</div>
-
-            <div class="location-info">
-                <strong>${escapar(local)}</strong>
-                <span>
-                    ${escapar(
-                        [...new Set(
-                            itens.map(x=>x.colaborador)
-                        )].join(", ")
-                    )}
-                </span>
             </div>
-
-            <span class="location-count">
-                ${itens.length} ITENS
-            </span>
 
         </div>
 
-        <div class="location-content">
-            ${registrosHTML}
-        </div>`;
+    `;
 
-        container.appendChild(card);
-    });
 }
 
-function montarUltimos(registros){
 
-    const container =
-    document.getElementById("activityContainer");
 
-    if(!registros.length){
+/* =====================================================
+   ÚLTIMOS
+===================================================== */
 
-        container.innerHTML=
-        `<div class="empty">
-            <strong>Sem atividades</strong>
-            Nenhuma atividade recebida hoje.
-        </div>`;
+function montarUltimos(
+    registros
+){
+
+    if(
+        registros.length === 0
+    ){
+
+        activityContainer.innerHTML =
+            vazioHTML(
+                "🕘",
+                "Sem atividades",
+                "Nenhuma atividade foi recebida hoje."
+            );
+
 
         return;
+
     }
 
-    container.innerHTML =
-    `<div class="activity-list">
-    ${
-        registros.slice(0,20)
-        .map(r=>`
 
-        <div class="activity-row">
+    const ultimos =
+        registros.slice(
+            0,
+            20
+        );
 
-            ${
-                r.foto_url
-                ?`
-                <button
-                    class="activity-photo"
-                    onclick='abrirFoto(
-                        ${JSON.stringify(r.foto_url)},
-                        ${JSON.stringify(r.local+" • "+r.item)}
-                    )'
-                >
-                    <img
-                        src="${escapar(r.foto_url)}"
-                        loading="lazy"
+
+    const html =
+        ultimos
+        .map(
+            registro => {
+
+                const foto =
+                    registro.foto_url
+                    ?
+                    `
+                    <button
+                        class="activity-photo"
+                        onclick='abrirFoto(
+                            ${JSON.stringify(registro.foto_url)},
+                            ${JSON.stringify(
+                                (registro.local || "")
+                                +
+                                " • "
+                                +
+                                (registro.item || "")
+                            )}
+                        )'
                     >
-                </button>
-                `
-                :`<div class="activity-photo"></div>`
+
+                        <img
+                            src="${escapar(registro.foto_url)}"
+                            alt="Foto"
+                            loading="lazy"
+                        >
+
+                    </button>
+                    `
+                    :
+                    `
+                    <div class="activity-photo">
+                    </div>
+                    `;
+
+
+                return `
+
+                    <div class="activity-row">
+
+                        ${foto}
+
+
+                        <div class="activity-info">
+
+                            <strong>
+                                ${escapar(registro.item)}
+                            </strong>
+
+                            <span>
+
+                                ${escapar(registro.local)}
+                                •
+                                ${escapar(registro.colaborador)}
+
+                            </span>
+
+                        </div>
+
+
+                        <div class="activity-time">
+
+                            ${formatarHora(registro.hora)}
+
+                        </div>
+
+                    </div>
+
+                `;
+
             }
+        )
+        .join("");
 
-            <div class="activity-info">
-                <strong>${escapar(r.item)}</strong>
-                <span>
-                    ${escapar(r.local)}
-                    •
-                    ${escapar(r.colaborador)}
-                </span>
-            </div>
 
-            <div class="activity-time">
-                ${hora(r.hora)}
-            </div>
-
+    activityContainer.innerHTML =
+        `
+        <div class="activity-list">
+            ${html}
         </div>
+        `;
 
-        `).join("")
-    }
-    </div>`;
 }
 
-/* OCORRÊNCIAS */
+
+
+/* =====================================================
+   OCORRÊNCIAS
+===================================================== */
 
 async function carregarOcorrencias(){
 
-    const lista =
-    document.getElementById("occurrenceList");
+    occurrenceList.innerHTML =
+        `
+        <div class="loading">
+            Buscando ocorrências...
+        </div>
+        `;
 
-    lista.innerHTML =
-        `<div class="loading">
-            Carregando ocorrências...
-        </div>`;
 
     try{
 
-        const {data,error} =
-        await db
-        .from("ocorrencias")
-        .select("*")
-        .order("created_at",{ascending:false});
+        const {
+            data,
+            error
+        } =
+            await db
+
+            .from(
+                "ocorrencias"
+            )
+
+            .select(
+                "*"
+            )
+
+            .order(
+                "created_at",
+                {
+                    ascending:false
+                }
+            );
+
 
         if(error){
+
             throw error;
+
         }
 
-        ocorrenciasCache=data||[];
+
+        ocorrenciasCarregadas =
+            data || [];
+
+
+        ocorrenciasCarregadas
+        .forEach(
+            ocorrencia => {
+
+                statusSelecionado[
+                    ocorrencia.id
+                ] =
+                    ocorrencia.status ||
+                    "Aberta";
+
+            }
+        );
+
 
         atualizarKPIsOcorrencias();
 
-        await montarOcorrencias();
 
-    }catch(e){
+        renderizarOcorrencias();
 
-        lista.innerHTML =
-        `<div class="empty">
-            <strong>Não foi possível carregar</strong>
-            ${escapar(e.message||e)}
-        </div>`;
+
+    }catch(erro){
+
+        console.error(
+            erro
+        );
+
+
+        occurrenceList.innerHTML =
+            vazioHTML(
+                "⚠️",
+                "Não foi possível carregar",
+                erro.message ||
+                "Erro ao consultar ocorrências."
+            );
+
     }
+
 }
+
+
+
+/* =====================================================
+   KPI OCORRÊNCIAS
+===================================================== */
 
 function atualizarKPIsOcorrencias(){
 
     const abertas =
-    ocorrenciasCache.filter(
-        x=>normalizarStatus(x.status)==="Aberta"
-    ).length;
+        ocorrenciasCarregadas
+        .filter(
+            item =>
+                normalizarStatus(
+                    item.status
+                ) ===
+                "aberta"
+        )
+        .length;
+
 
     const atendimento =
-    ocorrenciasCache.filter(
-        x=>normalizarStatus(x.status)==="Em atendimento"
-    ).length;
+        ocorrenciasCarregadas
+        .filter(
+            item =>
+                normalizarStatus(
+                    item.status
+                ) ===
+                "em atendimento"
+        )
+        .length;
+
 
     const resolvidas =
-    ocorrenciasCache.filter(
-        x=>normalizarStatus(x.status)==="Resolvida"
-    ).length;
+        ocorrenciasCarregadas
+        .filter(
+            item =>
+                normalizarStatus(
+                    item.status
+                ) ===
+                "resolvida"
+        )
+        .length;
+
 
     const retorno =
-    ocorrenciasCache.filter(
-        x=>x.deseja_retorno===true
-    ).length;
+        ocorrenciasCarregadas
+        .filter(
+            item =>
+                item.deseja_retorno ===
+                true
+        )
+        .length;
 
-    document.getElementById("occOpen").textContent=abertas;
-    document.getElementById("occProgress").textContent=atendimento;
-    document.getElementById("occResolved").textContent=resolvidas;
-    document.getElementById("occReturn").textContent=retorno;
 
-    document.getElementById("occurrenceBadge").textContent =
-        abertas+atendimento;
+    document
+    .getElementById(
+        "occOpen"
+    )
+    .textContent =
+        abertas;
+
+
+    document
+    .getElementById(
+        "occProgress"
+    )
+    .textContent =
+        atendimento;
+
+
+    document
+    .getElementById(
+        "occResolved"
+    )
+    .textContent =
+        resolvidas;
+
+
+    document
+    .getElementById(
+        "occReturn"
+    )
+    .textContent =
+        retorno;
+
+
+    document
+    .getElementById(
+        "occurrenceBadge"
+    )
+    .textContent =
+        abertas;
+
 }
 
-function normalizarStatus(status){
 
-    const valor =
-    String(status||"")
-    .trim()
-    .toLowerCase();
 
-    if(valor==="resolvida" || valor==="resolvido"){
-        return "Resolvida";
-    }
+/* =====================================================
+   FILTRO
+===================================================== */
 
-    if(
-        valor==="em atendimento"
-        ||
-        valor==="atendimento"
-    ){
-        return "Em atendimento";
-    }
+function filtrarOcorrencias(
+    botao,
+    filtro
+){
 
-    return "Aberta";
-}
+    filtroOcorrencias =
+        filtro;
 
-async function montarOcorrencias(){
 
-    const lista =
-    document.getElementById("occurrenceList");
+    document
+    .querySelectorAll(
+        ".filter"
+    )
+    .forEach(
+        item => {
 
-    const dados =
-    filtroAtual==="todas"
-    ?ocorrenciasCache
-    :ocorrenciasCache.filter(
-        x=>normalizarStatus(x.status)===filtroAtual
+            item.classList.remove(
+                "active"
+            );
+
+        }
     );
 
-    if(!dados.length){
 
-        lista.innerHTML =
-        `<div class="empty">
-            <strong>Nenhuma ocorrência</strong>
-            Não existem registros neste filtro.
-        </div>`;
+    botao.classList.add(
+        "active"
+    );
+
+
+    renderizarOcorrencias();
+
+}
+
+
+
+/* =====================================================
+   RENDER OCORRÊNCIAS
+===================================================== */
+
+function renderizarOcorrencias(){
+
+    let lista =
+        ocorrenciasCarregadas;
+
+
+    if(
+        filtroOcorrencias !==
+        "todas"
+    ){
+
+        lista =
+            lista.filter(
+                item =>
+                    normalizarStatus(
+                        item.status
+                    ) ===
+                    filtroOcorrencias
+            );
+
+    }
+
+
+    if(
+        lista.length === 0
+    ){
+
+        occurrenceList.innerHTML =
+            vazioHTML(
+                "✓",
+                "Nenhuma ocorrência",
+                "Não há registros neste filtro."
+            );
+
 
         return;
+
     }
 
-    lista.innerHTML="";
 
-    for(const ocorrencia of dados){
+    occurrenceList.innerHTML =
+        lista
+        .map(
+            criarOcorrenciaHTML
+        )
+        .join("");
 
-        const historico =
-        await buscarHistorico(ocorrencia.id);
+}
 
-        lista.insertAdjacentHTML(
-            "beforeend",
-            criarOcorrenciaHTML(
-                ocorrencia,
-                historico
-            )
+
+
+/* =====================================================
+   CARD OCORRÊNCIA
+===================================================== */
+
+function criarOcorrenciaHTML(
+    ocorrencia
+){
+
+    const status =
+        normalizarStatus(
+            ocorrencia.status
         );
+
+
+    let classeStatus =
+        "status-aberta";
+
+
+    if(
+        status ===
+        "em atendimento"
+    ){
+
+        classeStatus =
+            "status-atendimento";
+
     }
-}
 
-async function buscarHistorico(id){
 
-    const {data,error} =
-    await db
-    .from("ocorrencias_historico")
-    .select("*")
-    .eq("ocorrencia_id",id)
-    .order("created_at",{ascending:true});
+    if(
+        status ===
+        "resolvida"
+    ){
 
-    if(error){
-        console.error(error);
-        return [];
+        classeStatus =
+            "status-resolvida";
+
     }
 
-    return data||[];
-}
-
-function criarOcorrenciaHTML(o,historico){
-
-    const status=normalizarStatus(o.status);
-
-    const classe =
-        status==="Resolvida"
-        ?"resolvida"
-        :status==="Em atendimento"
-        ?"atendimento"
-        :"aberta";
-
-    const data =
-        o.data
-        ?new Date(o.data+"T12:00:00")
-            .toLocaleDateString("pt-BR")
-        :"";
 
     const local =
-        o.local_completo
+        ocorrencia.local_completo
         ||
-        [o.area,o.detalhe]
-        .filter(Boolean)
+        [
+            ocorrencia.area,
+            ocorrencia.detalhe
+        ]
+        .filter(
+            Boolean
+        )
         .join(" • ");
 
-    const historicoHTML =
-        criarHistoricoHTML(
-            o,
-            historico
+
+    const retorno =
+        ocorrencia.deseja_retorno
+        ?
+        `
+        <div class="return-box">
+
+            <strong>
+                ✉ Solicita retorno
+            </strong>
+
+            ${escapar(ocorrencia.email)}
+
+        </div>
+        `
+        :
+        "";
+
+
+    const foto =
+        ocorrencia.foto_path
+        ?
+        `
+        <button
+            class="occurrence-photo"
+            onclick='abrirFoto(
+                ${JSON.stringify(ocorrencia.foto_path)},
+                ${JSON.stringify(
+                    ocorrencia.protocolo
+                )}
+            )'
+        >
+
+            <img
+                src="${escapar(ocorrencia.foto_path)}"
+                alt="Foto da ocorrência"
+                loading="lazy"
+            >
+
+        </button>
+        `
+        :
+        "";
+
+
+    const selecionado =
+        statusSelecionado[
+            ocorrencia.id
+        ]
+        ||
+        ocorrencia.status
+        ||
+        "Aberta";
+
+
+    const selecionadoNormal =
+        normalizarStatus(
+            selecionado
         );
+
+
+    const mostrarConclusao =
+        selecionadoNormal ===
+        "resolvida";
+
 
     return `
 
-    <article class="occurrence-card">
+        <article
+            class="occurrence-card"
+            id="occurrence-${ocorrencia.id}"
+        >
 
-        <div class="occurrence-top">
+            <div class="occurrence-top">
 
-            <div class="protocol">
+                <div>
 
-                <strong>
-                    ${escapar(o.protocolo)}
-                </strong>
+                    <div class="occurrence-protocol">
+                        ${escapar(ocorrencia.protocolo)}
+                    </div>
 
-                <span>
-                    ${escapar(data)}
-                    •
-                    ${hora(o.hora)}
-                    •
-                    ${escapar(o.origem||"Morador / visitante")}
+                    <div class="occurrence-date">
+
+                        ${escapar(ocorrencia.data)}
+                        •
+                        ${formatarHora(ocorrencia.hora)}
+                        •
+                        ${escapar(
+                            ocorrencia.origem ||
+                            "Morador / visitante"
+                        )}
+
+                    </div>
+
+                </div>
+
+
+                <span
+                    class="
+                        status-badge
+                        ${classeStatus}
+                    "
+                >
+
+                    ${escapar(
+                        ocorrencia.status ||
+                        "Aberta"
+                    )}
+
                 </span>
 
             </div>
 
-            <span class="status ${classe}">
-                ${escapar(status.toUpperCase())}
-            </span>
 
-        </div>
-
-        <div class="occurrence-place">
-            📍 ${escapar(local)}
-        </div>
-
-        <div class="occurrence-description">
-            ${
-                o.descricao
-                ?escapar(o.descricao)
-                :"Sem descrição."
-            }
-        </div>
-
-        ${
-            o.deseja_retorno
-            ?`
-            <div class="return-box">
-                <strong>✉ Solicita retorno</strong><br>
-                ${escapar(o.email||"E-mail não informado")}
+            <div class="occurrence-location">
+                📍 ${escapar(local)}
             </div>
-            `
-            :""
+
+
+            ${
+                ocorrencia.descricao
+                ?
+                `
+                <div class="occurrence-description">
+                    ${escapar(ocorrencia.descricao)}
+                </div>
+                `
+                :
+                ""
+            }
+
+
+            ${foto}
+
+            ${retorno}
+
+
+            <div class="occurrence-management">
+
+                <div class="management-title">
+                    Gestão da ocorrência
+                </div>
+
+
+                <div class="status-buttons">
+
+                    <button
+                        class="
+                            status-button
+                            ${
+                                selecionadoNormal ===
+                                "aberta"
+                                ?
+                                "selected"
+                                :
+                                ""
+                            }
+                        "
+                        onclick="
+                            selecionarStatus(
+                                ${ocorrencia.id},
+                                'Aberta'
+                            )
+                        "
+                    >
+                        ABERTA
+                    </button>
+
+
+                    <button
+                        class="
+                            status-button
+                            ${
+                                selecionadoNormal ===
+                                "em atendimento"
+                                ?
+                                "selected"
+                                :
+                                ""
+                            }
+                        "
+                        onclick="
+                            selecionarStatus(
+                                ${ocorrencia.id},
+                                'Em atendimento'
+                            )
+                        "
+                    >
+                        EM ATENDIMENTO
+                    </button>
+
+
+                    <button
+                        class="
+                            status-button
+                            resolved
+                            ${
+                                selecionadoNormal ===
+                                "resolvida"
+                                ?
+                                "selected"
+                                :
+                                ""
+                            }
+                        "
+                        onclick="
+                            selecionarStatus(
+                                ${ocorrencia.id},
+                                'Resolvida'
+                            )
+                        "
+                    >
+                        RESOLVIDA
+                    </button>
+
+                </div>
+
+
+                <div
+                    class="
+                        resolution-box
+                        ${
+                            mostrarConclusao
+                            ?
+                            "visible"
+                            :
+                            ""
+                        }
+                    "
+                    id="resolution-box-${ocorrencia.id}"
+                >
+
+                    <label>
+                        Mensagem de conclusão
+                    </label>
+
+
+                    <textarea
+                        id="resposta-${ocorrencia.id}"
+                        maxlength="600"
+                        placeholder="Informe o que foi realizado para solucionar a ocorrência."
+                    >${escapar(
+                        ocorrencia.resposta_gestor ||
+                        ""
+                    )}</textarea>
+
+
+                    <small>
+
+                        ${
+                            ocorrencia.deseja_retorno
+                            ?
+                            "Esta mensagem será utilizada no retorno ao solicitante."
+                            :
+                            "Esta mensagem ficará registrada como conclusão da ocorrência."
+                        }
+
+                    </small>
+
+                </div>
+
+
+                <button
+                    class="save-update"
+                    id="save-${ocorrencia.id}"
+                    onclick="
+                        salvarAtualizacao(
+                            ${ocorrencia.id}
+                        )
+                    "
+                >
+                    SALVAR ATUALIZAÇÃO
+                </button>
+
+
+                ${criarHistoricoHTML(
+                    ocorrencia
+                )}
+
+            </div>
+
+        </article>
+
+    `;
+
+}
+
+
+
+/* =====================================================
+   SELECIONAR STATUS
+===================================================== */
+
+function selecionarStatus(
+    id,
+    status
+){
+
+    statusSelecionado[
+        id
+    ] =
+        status;
+
+
+    const card =
+        document.getElementById(
+            `occurrence-${id}`
+        );
+
+
+    if(!card){
+
+        return;
+
+    }
+
+
+    const botoes =
+        card.querySelectorAll(
+            ".status-button"
+        );
+
+
+    botoes.forEach(
+        botao => {
+
+            botao.classList.remove(
+                "selected"
+            );
+
+        }
+    );
+
+
+    const normal =
+        normalizarStatus(
+            status
+        );
+
+
+    if(
+        normal ===
+        "aberta"
+    ){
+
+        botoes[0]
+        ?.classList
+        .add(
+            "selected"
+        );
+
+    }
+
+
+    if(
+        normal ===
+        "em atendimento"
+    ){
+
+        botoes[1]
+        ?.classList
+        .add(
+            "selected"
+        );
+
+    }
+
+
+    if(
+        normal ===
+        "resolvida"
+    ){
+
+        botoes[2]
+        ?.classList
+        .add(
+            "selected"
+        );
+
+    }
+
+
+    const box =
+        document.getElementById(
+            `resolution-box-${id}`
+        );
+
+
+    if(box){
+
+        box.classList.toggle(
+            "visible",
+            normal ===
+            "resolvida"
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   SALVAR ATUALIZAÇÃO
+===================================================== */
+
+async function salvarAtualizacao(
+    id
+){
+
+    const ocorrencia =
+        ocorrenciasCarregadas
+        .find(
+            item =>
+                item.id === id
+        );
+
+
+    if(!ocorrencia){
+
+        alert(
+            "Ocorrência não encontrada."
+        );
+
+        return;
+
+    }
+
+
+    const novoStatus =
+        statusSelecionado[
+            id
+        ]
+        ||
+        ocorrencia.status
+        ||
+        "Aberta";
+
+
+    const normal =
+        normalizarStatus(
+            novoStatus
+        );
+
+
+    const textarea =
+        document.getElementById(
+            `resposta-${id}`
+        );
+
+
+    const mensagem =
+        textarea
+        ?
+        textarea.value.trim()
+        :
+        "";
+
+
+    /*
+       RESOLVIDA EXIGE
+       MENSAGEM DE CONCLUSÃO
+    */
+
+    if(
+        normal ===
+        "resolvida"
+        &&
+        mensagem.length === 0
+    ){
+
+        alert(
+            "Informe a mensagem de conclusão antes de marcar a ocorrência como resolvida."
+        );
+
+
+        textarea?.focus();
+
+
+        return;
+
+    }
+
+
+    const botao =
+        document.getElementById(
+            `save-${id}`
+        );
+
+
+    if(botao){
+
+        botao.disabled =
+            true;
+
+
+        botao.textContent =
+            "SALVANDO...";
+
+    }
+
+
+    try{
+
+        const agora =
+            new Date()
+            .toISOString();
+
+
+        const alteracoes = {
+
+            status:
+                novoStatus,
+
+            updated_at:
+                agora
+
+        };
+
+
+        /*
+           A resposta ao morador
+           somente é gravada quando
+           a ocorrência é resolvida.
+        */
+
+        if(
+            normal ===
+            "resolvida"
+        ){
+
+            alteracoes.resposta_gestor =
+                mensagem;
+
+
+            alteracoes.respondido_em =
+                agora;
+
+
+            alteracoes.resolvido_em =
+                agora;
+
         }
 
-        <div class="management">
 
-            <div class="management-title">
-                Gestão da ocorrência
-            </div>
+        /*
+           Se sair de RESOLVIDA para
+           outro status, mantemos a
+           resposta anterior no histórico
+           do banco.
 
-            <div class="status-actions">
+           Não apagamos automaticamente.
+        */
 
-                <button
-                    class="status-button
-                    ${status==="Aberta"?"selected":""}"
-                    onclick="selecionarStatus(
-                        ${o.id},
-                        'Aberta',
-                        this
-                    )"
-                >
-                    ABERTA
-                </button>
 
-                <button
-                    class="status-button
-                    ${status==="Em atendimento"?"selected":""}"
-                    onclick="selecionarStatus(
-                        ${o.id},
-                        'Em atendimento',
-                        this
-                    )"
-                >
-                    EM ATENDIMENTO
-                </button>
+        const {
+            data,
+            error
+        } =
+            await db
 
-                <button
-                    class="status-button
-                    ${status==="Resolvida"?"selected":""}"
-                    onclick="selecionarStatus(
-                        ${o.id},
-                        'Resolvida',
-                        this
-                    )"
-                >
-                    RESOLVIDA
-                </button>
+            .from(
+                "ocorrencias"
+            )
 
-            </div>
+            .update(
+                alteracoes
+            )
 
-            <input
-                type="hidden"
-                id="status-${o.id}"
-                value="${escapar(status)}"
-            >
+            .eq(
+                "id",
+                id
+            )
 
-            <label class="message-label">
-                Mensagem da gestão
-            </label>
+            .select()
+            .single();
 
-            <textarea
-                class="manager-message"
-                id="message-${o.id}"
-                maxlength="500"
-                placeholder="Ex.: Equipe direcionada ao local..."
-            >${escapar(o.resposta_gestor||"")}</textarea>
 
-            <button
-                class="save-occurrence"
-                id="save-${o.id}"
-                onclick="salvarOcorrencia(${o.id})"
-            >
-                SALVAR ATUALIZAÇÃO
-            </button>
+        if(error){
 
-        </div>
+            throw error;
+
+        }
+
+
+        const indice =
+            ocorrenciasCarregadas
+            .findIndex(
+                item =>
+                    item.id === id
+            );
+
+
+        if(
+            indice !== -1
+        ){
+
+            ocorrenciasCarregadas[
+                indice
+            ] =
+                data;
+
+        }
+
+
+        statusSelecionado[
+            id
+        ] =
+            data.status;
+
+
+        atualizarKPIsOcorrencias();
+
+
+        renderizarOcorrencias();
+
+
+        mostrarToast(
+            normal ===
+            "resolvida"
+            ?
+            "Ocorrência marcada como resolvida."
+            :
+            "Status atualizado."
+        );
+
+
+    }catch(erro){
+
+        console.error(
+            erro
+        );
+
+
+        alert(
+            "Não foi possível salvar: "
+            +
+            (
+                erro.message ||
+                "erro desconhecido"
+            )
+        );
+
+
+        if(botao){
+
+            botao.disabled =
+                false;
+
+
+            botao.textContent =
+                "SALVAR ATUALIZAÇÃO";
+
+        }
+
+    }
+
+}
+
+
+
+/* =====================================================
+   HISTÓRICO
+===================================================== */
+
+function criarHistoricoHTML(
+    ocorrencia
+){
+
+    let html = `
 
         <div class="history">
 
@@ -1885,282 +4254,381 @@ function criarOcorrenciaHTML(o,historico){
                 HISTÓRICO
             </div>
 
-            <div class="history-items">
-                ${historicoHTML}
+
+            <div class="history-item">
+
+                <strong>
+                    Ocorrência recebida
+                </strong>
+
+                <span>
+                    ${
+                        formatarDataHora(
+                            ocorrencia.created_at
+                        )
+                        ||
+                        (
+                            escapar(
+                                ocorrencia.data
+                            )
+                            +
+                            " • "
+                            +
+                            formatarHora(
+                                ocorrencia.hora
+                            )
+                        )
+                    }
+                </span>
+
             </div>
 
-        </div>
+    `;
 
-    </article>`;
-}
 
-function criarHistoricoHTML(o,historico){
+    const status =
+        normalizarStatus(
+            ocorrencia.status
+        );
 
-    let html=`
 
-    <div class="history-item">
-        <strong>Ocorrência recebida</strong>
-        <span>
-            ${escapar(o.data||"")}
-            ${o.hora?" • "+hora(o.hora):""}
-        </span>
-    </div>`;
+    if(
+        status ===
+        "em atendimento"
+    ){
 
-    historico.forEach(h=>{
+        html += `
 
-        const momento =
-        h.created_at
-        ?new Date(h.created_at)
-            .toLocaleString(
-                "pt-BR",
-                {
-                    day:"2-digit",
-                    month:"2-digit",
-                    hour:"2-digit",
-                    minute:"2-digit"
-                }
-            )
-        :"";
+            <div class="history-item">
 
-        html+=`
+                <strong>
+                    Em atendimento
+                </strong>
 
-        <div class="history-item">
+                <span>
+                    ${
+                        formatarDataHora(
+                            ocorrencia.updated_at
+                        )
+                    }
+                </span>
 
-            <strong>
-                ${escapar(
-                    h.status
-                    ||h.tipo
-                    ||"Atualização"
-                )}
-            </strong>
+            </div>
 
-            <span>
-                ${escapar(momento)}
+        `;
+
+    }
+
+
+    if(
+        status ===
+        "resolvida"
+    ){
+
+        html += `
+
+            <div class="history-item">
+
+                <strong>
+                    Resolvida
+                </strong>
+
+                <span>
+                    ${
+                        formatarDataHora(
+                            ocorrencia.resolvido_em
+                            ||
+                            ocorrencia.updated_at
+                        )
+                    }
+                </span>
+
                 ${
-                    h.mensagem
-                    ?"<br>"+escapar(h.mensagem)
-                    :""
+                    ocorrencia.resposta_gestor
+                    ?
+                    `
+                    <div class="history-message">
+                        ${escapar(
+                            ocorrencia.resposta_gestor
+                        )}
+                    </div>
+                    `
+                    :
+                    ""
                 }
-            </span>
 
-        </div>`;
-    });
+            </div>
+
+        `;
+
+    }
+
+
+    html += `
+        </div>
+    `;
+
 
     return html;
+
 }
 
-function selecionarStatus(id,status,botao){
 
-    document.getElementById(
-        `status-${id}`
-    ).value=status;
 
-    const area =
-    botao.closest(".status-actions");
+/* =====================================================
+   LOCAL
+===================================================== */
 
-    area
-    .querySelectorAll(".status-button")
-    .forEach(
-        x=>x.classList.remove("selected")
+function alternarLocal(
+    elemento
+){
+
+    elemento
+    .closest(
+        ".location-card"
+    )
+    .classList
+    .toggle(
+        "open"
     );
 
-    botao.classList.add("selected");
 }
 
-async function salvarOcorrencia(id){
 
-    const ocorrencia =
-    ocorrenciasCache.find(
-        x=>Number(x.id)===Number(id)
-    );
 
-    if(!ocorrencia){
-        return;
-    }
+/* =====================================================
+   FOTO
+===================================================== */
 
-    const novoStatus =
-    document.getElementById(
-        `status-${id}`
-    ).value;
-
-    const mensagem =
-    document.getElementById(
-        `message-${id}`
-    ).value.trim();
-
-    const botao =
-    document.getElementById(
-        `save-${id}`
-    );
-
-    botao.disabled=true;
-    botao.textContent="SALVANDO...";
-
-    try{
-
-        const agora =
-        new Date().toISOString();
-
-        const alteracoes={
-            status:novoStatus,
-            resposta_gestor:
-                mensagem||null,
-            updated_at:agora
-        };
-
-        if(mensagem){
-            alteracoes.respondido_em=agora;
-        }
-
-        if(novoStatus==="Resolvida"){
-            alteracoes.resolvido_em=agora;
-        }
-
-        const {error:updateError} =
-        await db
-        .from("ocorrencias")
-        .update(alteracoes)
-        .eq("id",id);
-
-        if(updateError){
-            throw updateError;
-        }
-
-        const statusAnterior =
-            normalizarStatus(
-                ocorrencia.status
-            );
-
-        const mudouStatus =
-            statusAnterior!==novoStatus;
-
-        const mudouMensagem =
-            String(
-                ocorrencia.resposta_gestor||""
-            ).trim()!==mensagem;
-
-        if(mudouStatus || mudouMensagem){
-
-            const {error:historyError} =
-            await db
-            .from("ocorrencias_historico")
-            .insert({
-                ocorrencia_id:id,
-                protocolo:ocorrencia.protocolo,
-                tipo:
-                    mudouStatus
-                    ?"status"
-                    :"mensagem",
-                status:novoStatus,
-                mensagem:
-                    mensagem||null,
-                autor:"Gestão"
-            });
-
-            if(historyError){
-                throw historyError;
-            }
-        }
-
-        botao.textContent="✓ ATUALIZAÇÃO SALVA";
-
-        setTimeout(
-            carregarOcorrencias,
-            700
-        );
-
-    }catch(e){
-
-        console.error(e);
-
-        alert(
-            "Não foi possível salvar: "
-            +(e.message||e)
-        );
-
-        botao.disabled=false;
-        botao.textContent="SALVAR ATUALIZAÇÃO";
-    }
-}
-
-function filtrarOcorrencias(filtro,botao){
-
-    filtroAtual=filtro;
+function abrirFoto(
+    url,
+    legenda
+){
 
     document
-    .querySelectorAll(".filter")
-    .forEach(
-        x=>x.classList.remove("active")
-    );
+    .getElementById(
+        "modalImage"
+    )
+    .src =
+        url;
 
-    botao.classList.add("active");
 
-    montarOcorrencias();
-}
-
-/* FOTO */
-
-function abrirFoto(url,legenda){
-
-    document.getElementById("modalImage").src=url;
-
-    document.getElementById("photoCaption").textContent=
+    document
+    .getElementById(
+        "photoCaption"
+    )
+    .textContent =
         legenda;
 
-    document.getElementById("photoModal")
-        .classList.add("visible");
 
-    document.body.style.overflow="hidden";
+    document
+    .getElementById(
+        "photoModal"
+    )
+    .classList
+    .add(
+        "visible"
+    );
+
+
+    document.body.style.overflow =
+        "hidden";
+
 }
+
+
 
 function fecharFoto(){
 
-    document.getElementById("photoModal")
-        .classList.remove("visible");
+    document
+    .getElementById(
+        "photoModal"
+    )
+    .classList
+    .remove(
+        "visible"
+    );
 
-    document.getElementById("modalImage").src="";
 
-    document.body.style.overflow="";
+    document
+    .getElementById(
+        "modalImage"
+    )
+    .src =
+        "";
+
+
+    document.body.style.overflow =
+        "";
+
 }
 
-function fecharFotoFundo(e){
 
-    if(e.target.id==="photoModal"){
+
+function fecharFotoFundo(
+    evento
+){
+
+    if(
+        evento.target.id ===
+        "photoModal"
+    ){
+
         fecharFoto();
+
     }
+
 }
 
-/* ERRO */
 
-function mostrarErro(mensagem){
 
-    const box=
-    document.getElementById("errorBox");
+/* =====================================================
+   VAZIO
+===================================================== */
 
-    box.textContent=mensagem;
-    box.style.display="block";
+function vazioHTML(
+    icone,
+    titulo,
+    texto
+){
+
+    return `
+
+        <div class="empty">
+
+            <div class="empty-icon">
+                ${icone}
+            </div>
+
+            <strong>
+                ${titulo}
+            </strong>
+
+            <span>
+                ${texto}
+            </span>
+
+        </div>
+
+    `;
+
 }
 
-/* SAIR */
+
+
+/* =====================================================
+   ERRO
+===================================================== */
+
+function mostrarErro(
+    mensagem
+){
+
+    errorBox.textContent =
+        mensagem;
+
+
+    errorBox.style.display =
+        "block";
+
+}
+
+
+
+function esconderErro(){
+
+    errorBox.style.display =
+        "none";
+
+}
+
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+let toastTimer =
+    null;
+
+
+function mostrarToast(
+    mensagem
+){
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+
+    toast.textContent =
+        mensagem;
+
+
+    toast.classList.add(
+        "visible"
+    );
+
+
+    clearTimeout(
+        toastTimer
+    );
+
+
+    toastTimer =
+        setTimeout(
+            () => {
+
+                toast.classList.remove(
+                    "visible"
+                );
+
+            },
+            2600
+        );
+
+}
+
+
+
+/* =====================================================
+   SAIR
+===================================================== */
 
 function sair(){
 
-    localStorage.removeItem("usuarioLogado");
+    localStorage.removeItem(
+        "usuarioLogado"
+    );
 
-    window.location.href="index.html";
+
+    window.location.href =
+        "index.html";
+
 }
 
-/* INICIAR */
 
-carregarOperacao();
+
+/* =====================================================
+   INICIAR
+===================================================== */
+
+carregarDados();
+
 carregarOcorrencias();
 
-setInterval(()=>{
 
-    carregarOperacao();
-    carregarOcorrencias();
+setInterval(
+    () => {
 
-},60000);
+        carregarDados();
+
+        carregarOcorrencias();
+
+    },
+    60000
+);
 
 </script>
 
