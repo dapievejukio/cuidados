@@ -14,42 +14,52 @@
 
 <meta
     name="theme-color"
-    content="#eaf6ff"
+    content="#557a95"
 >
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 
 :root {
 
-    --blue:#287bd8;
-    --blue-dark:#173f70;
-    --blue-soft:#eaf5ff;
+    --primary:#557a95;
+    --primary-dark:#3f617a;
+    --primary-light:#edf4f8;
 
-    --coral:#f35b62;
-    --coral-dark:#df4850;
-    --coral-soft:#fff0f1;
+    --blue-soft:#eaf3f8;
 
-    --green:#4fa66c;
-    --green-soft:#eaf7ee;
+    --green:#5f9478;
+    --green-light:#edf7f1;
 
-    --text:#183653;
-    --muted:#6d8299;
+    --red:#c96c6c;
+    --red-light:#fbeeee;
 
-    --background:#f6fbff;
+    --yellow:#d2a75c;
+    --yellow-light:#fff7e8;
+
+    --text:#26333d;
+    --muted:#75828c;
+
+    --background:#f7f8f7;
     --card:#ffffff;
-    --border:#dce8f2;
+    --border:#e5e9eb;
 
     --shadow:
-        0 14px 40px
-        rgba(43,88,128,.09);
+        0 12px 32px
+        rgba(57,76,90,.07);
 
 }
 
+
 * {
+
     box-sizing:border-box;
     margin:0;
     padding:0;
+
 }
+
 
 body {
 
@@ -65,75 +75,54 @@ body {
         sans-serif;
 
     background:
-        linear-gradient(
-            180deg,
-            #e6f6ff 0,
-            #f6fbff 310px
-        );
+        var(--background);
 
-    color:var(--text);
+    color:
+        var(--text);
 
 }
+
 
 button,
 textarea,
 select,
 input {
+
     font-family:inherit;
+
 }
 
 
-/* =====================================
+/* =========================
    HEADER
-===================================== */
+========================= */
 
 header {
-
-    position:relative;
-    overflow:hidden;
-
-    padding:
-        calc(17px + env(safe-area-inset-top))
-        18px
-        47px;
 
     background:
         linear-gradient(
             135deg,
-            #eaf7ff,
-            #d9f1ff
+            #557a95,
+            #7194aa
         );
 
-}
+    color:white;
 
-header::after {
-
-    content:"";
-
-    position:absolute;
-
-    width:230px;
-    height:230px;
-
-    right:-100px;
-    top:-120px;
-
-    border-radius:50%;
-
-    background:
-        rgba(255,242,211,.60);
+    padding:
+        calc(18px + env(safe-area-inset-top))
+        18px
+        42px;
 
 }
+
 
 .header-content {
 
-    position:relative;
-    z-index:2;
-
-    max-width:640px;
+    max-width:620px;
     margin:auto;
 
 }
+
 
 .topbar {
 
@@ -143,27 +132,19 @@ header::after {
 
 }
 
-.back,
-.public {
 
-    width:43px;
-    height:43px;
+.back {
+
+    width:42px;
+    height:42px;
 
     border:0;
     border-radius:14px;
 
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-}
-
-.back {
-
     background:
-        rgba(255,255,255,.75);
+        rgba(255,255,255,.18);
 
-    color:var(--blue-dark);
+    color:white;
 
     font-size:23px;
 
@@ -171,16 +152,6 @@ header::after {
 
 }
 
-.public {
-
-    background:
-        var(--coral-soft);
-
-    color:var(--coral);
-
-    font-size:19px;
-
-}
 
 .brand {
 
@@ -188,65 +159,86 @@ header::after {
 
 }
 
+
 .brand strong {
 
     display:block;
 
-    color:var(--blue-dark);
-
     font-size:15px;
-    font-weight:900;
-
-    letter-spacing:.8px;
+    letter-spacing:1px;
 
 }
+
 
 .brand small {
 
     display:block;
 
-    margin-top:2px;
+    margin-top:3px;
 
-    color:#7190ae;
+    opacity:.78;
 
     font-size:9px;
+    letter-spacing:.5px;
 
 }
+
+
+.public-icon {
+
+    width:42px;
+    height:42px;
+
+    border-radius:14px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:
+        rgba(255,255,255,.18);
+
+    font-size:18px;
+
+}
+
 
 .intro {
 
-    margin-top:30px;
+    margin-top:29px;
 
 }
+
 
 .intro small {
 
-    color:#6194c6;
+    opacity:.78;
 
-    font-size:9px;
-    font-weight:850;
+    font-size:10px;
+    font-weight:700;
 
-    letter-spacing:.6px;
+    letter-spacing:.4px;
 
 }
+
 
 .intro h1 {
 
     margin-top:5px;
 
-    color:var(--blue-dark);
-
-    font-size:28px;
+    font-size:27px;
+    line-height:1.15;
 
 }
 
-.intro p {
 
-    max-width:450px;
+.intro p {
 
     margin-top:8px;
 
-    color:#64809d;
+    max-width:470px;
+
+    opacity:.82;
 
     font-size:11px;
     line-height:1.55;
@@ -254,66 +246,132 @@ header::after {
 }
 
 
-/* =====================================
+/* =========================
    MAIN
-===================================== */
+========================= */
 
 main {
 
-    max-width:640px;
+    max-width:620px;
 
     margin:-18px auto 55px;
 
-    padding:0 14px;
-
-    position:relative;
-    z-index:5;
+    padding:0 15px;
 
 }
+
 
 .card {
 
     margin-bottom:14px;
+
     padding:20px;
 
     border:
         1px solid
-        rgba(220,232,242,.85);
+        rgba(229,233,235,.8);
 
     border-radius:22px;
 
-    background:
-        rgba(255,255,255,.96);
+    background:white;
 
-    box-shadow:var(--shadow);
+    box-shadow:
+        var(--shadow);
 
 }
+
 
 .title {
 
-    color:var(--text);
-
     font-size:15px;
-    font-weight:800;
+    font-weight:750;
 
 }
+
 
 .description {
 
-    margin-top:4px;
+    margin-top:5px;
     margin-bottom:15px;
 
-    color:var(--muted);
+    color:
+        var(--muted);
 
     font-size:10px;
-    line-height:1.5;
+    line-height:1.55;
 
 }
 
 
-/* =====================================
-   LOCAL
-===================================== */
+/* =========================
+   LABEL
+========================= */
+
+.field {
+
+    margin-top:13px;
+
+}
+
+
+.field label {
+
+    display:block;
+
+    margin-bottom:6px;
+
+    color:
+        var(--muted);
+
+    font-size:9px;
+    font-weight:750;
+
+    letter-spacing:.3px;
+
+}
+
+
+/* =========================
+   SELECT / INPUT
+========================= */
+
+select,
+input[type="email"] {
+
+    width:100%;
+    height:52px;
+
+    padding:0 14px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:14px;
+
+    outline:none;
+
+    background:#fafcfc;
+
+    color:
+        var(--text);
+
+    font-size:13px;
+
+}
+
+
+select:focus,
+input[type="email"]:focus,
+textarea:focus {
+
+    border-color:
+        #9bb7c7;
+
+    background:white;
+
+}
+
 
 .location-highlight {
 
@@ -322,24 +380,22 @@ main {
 
     gap:12px;
 
-    margin-bottom:16px;
-    padding:12px;
+    margin-bottom:15px;
+
+    padding:13px;
 
     border-radius:15px;
 
     background:
-        linear-gradient(
-            135deg,
-            #edf8ff,
-            #f4fbff
-        );
+        var(--blue-soft);
 
 }
 
+
 .location-icon {
 
-    width:43px;
-    height:43px;
+    width:42px;
+    height:42px;
 
     flex-shrink:0;
 
@@ -351,105 +407,49 @@ main {
 
     background:white;
 
-    font-size:20px;
+    font-size:19px;
 
 }
 
-.location-info small {
+
+.location-highlight small {
 
     display:block;
 
-    color:#7891a8;
+    color:
+        var(--muted);
 
     font-size:8px;
-    font-weight:800;
+    font-weight:700;
 
 }
 
-.location-info strong {
+
+.location-highlight strong {
 
     display:block;
 
-    margin-top:2px;
-
-    color:var(--blue-dark);
+    margin-top:3px;
 
     font-size:13px;
 
 }
 
 
-/* =====================================
-   FORM
-===================================== */
+/* =========================
+   DETALHE TORRE
+========================= */
 
-.field {
+#detalheContainer {
 
-    margin-top:13px;
-
-}
-
-.field label {
-
-    display:block;
-
-    margin-bottom:6px;
-
-    color:#6c829a;
-
-    font-size:8px;
-    font-weight:850;
-
-    letter-spacing:.5px;
-
-}
-
-select,
-input[type="email"] {
-
-    width:100%;
-    height:51px;
-
-    padding:0 13px;
-
-    border:
-        1px solid
-        var(--border);
-
-    border-radius:14px;
-
-    outline:none;
-
-    background:#fbfdff;
-
-    color:var(--text);
-
-    font-size:12px;
-
-}
-
-select:focus,
-input[type="email"]:focus,
-textarea:focus {
-
-    border-color:#87bde8;
-
-    background:white;
-
-    box-shadow:
-        0 0 0 3px
-        rgba(80,150,210,.07);
-
-}
-
-#detalheLocalField {
     display:none;
+
 }
 
 
-/* =====================================
+/* =========================
    FOTO
-===================================== */
+========================= */
 
 .photo-box {
 
@@ -459,17 +459,18 @@ textarea:focus {
 
     border:
         2px dashed
-        #cbdce9;
+        #cfdadd;
 
     border-radius:18px;
 
-    background:#f9fcff;
+    background:#fbfcfc;
 
     text-align:center;
 
     cursor:pointer;
 
 }
+
 
 .photo-icon {
 
@@ -478,17 +479,19 @@ textarea:focus {
 
     margin:auto;
 
-    border-radius:18px;
-
     display:flex;
     align-items:center;
     justify-content:center;
 
-    background:var(--blue-soft);
+    border-radius:50%;
 
-    font-size:25px;
+    background:
+        var(--blue-soft);
+
+    font-size:24px;
 
 }
+
 
 .photo-box strong {
 
@@ -496,11 +499,10 @@ textarea:focus {
 
     margin-top:10px;
 
-    color:var(--blue-dark);
-
     font-size:13px;
 
 }
+
 
 .photo-box span {
 
@@ -508,15 +510,20 @@ textarea:focus {
 
     margin-top:4px;
 
-    color:var(--muted);
+    color:
+        var(--muted);
 
-    font-size:9px;
+    font-size:10px;
 
 }
+
 
 #photoInput {
+
     display:none;
+
 }
+
 
 .preview {
 
@@ -528,16 +535,20 @@ textarea:focus {
 
 }
 
+
 .preview img {
 
+    display:block;
+
     width:100%;
-    max-height:380px;
+    max-height:390px;
 
     object-fit:cover;
 
     border-radius:17px;
 
 }
+
 
 .remove {
 
@@ -546,14 +557,14 @@ textarea:focus {
     top:10px;
     right:10px;
 
-    width:36px;
-    height:36px;
+    width:37px;
+    height:37px;
 
     border:0;
     border-radius:50%;
 
     background:
-        rgba(0,0,0,.66);
+        rgba(25,35,40,.72);
 
     color:white;
 
@@ -564,9 +575,9 @@ textarea:focus {
 }
 
 
-/* =====================================
+/* =========================
    DIVISOR
-===================================== */
+========================= */
 
 .or {
 
@@ -575,9 +586,10 @@ textarea:focus {
 
     gap:10px;
 
-    margin:19px 0;
+    margin:20px 0;
 
 }
+
 
 .or::before,
 .or::after {
@@ -588,30 +600,33 @@ textarea:focus {
 
     flex:1;
 
-    background:var(--border);
+    background:
+        var(--border);
 
 }
+
 
 .or span {
 
-    color:#8b9aaa;
+    color:
+        var(--muted);
 
-    font-size:8px;
-    font-weight:800;
+    font-size:9px;
+    font-weight:700;
 
 }
 
 
-/* =====================================
-   TEXTO
-===================================== */
+/* =========================
+   TEXTAREA
+========================= */
 
 textarea {
 
     width:100%;
-    min-height:125px;
+    min-height:120px;
 
-    padding:13px;
+    padding:14px;
 
     resize:vertical;
 
@@ -623,60 +638,57 @@ textarea {
 
     outline:none;
 
-    background:#fbfdff;
+    background:#fafcfc;
 
-    color:var(--text);
+    color:
+        var(--text);
 
     font-size:12px;
     line-height:1.5;
 
 }
 
+
 .counter {
 
-    margin-top:5px;
+    margin-top:6px;
+
+    color:
+        var(--muted);
 
     text-align:right;
 
-    color:var(--muted);
-
-    font-size:8px;
+    font-size:9px;
 
 }
 
 
-/* =====================================
+/* =========================
    EMAIL
-===================================== */
+========================= */
 
-.email-box {
-
-    padding:15px;
-
-    border-radius:16px;
+.email-card {
 
     background:
-        linear-gradient(
-            135deg,
-            #f1f9ff,
-            #f7fcff
-        );
+        #fffdf9;
 
 }
 
-.email-head {
+
+.email-header {
 
     display:flex;
-    align-items:flex-start;
+    align-items:center;
 
-    gap:11px;
+    gap:12px;
 
 }
+
 
 .email-icon {
 
-    width:39px;
-    height:39px;
+    width:44px;
+    height:44px;
 
     flex-shrink:0;
 
@@ -684,41 +696,43 @@ textarea {
     align-items:center;
     justify-content:center;
 
-    border-radius:12px;
+    border-radius:14px;
 
-    background:white;
+    background:
+        var(--yellow-light);
 
-    font-size:18px;
+    font-size:19px;
 
 }
 
-.email-copy strong {
+
+.email-header strong {
 
     display:block;
 
-    color:var(--blue-dark);
-
-    font-size:12px;
+    font-size:13px;
 
 }
 
-.email-copy span {
+
+.email-header span {
 
     display:block;
 
     margin-top:3px;
 
-    color:var(--muted);
+    color:
+        var(--muted);
 
     font-size:9px;
-    line-height:1.45;
+    line-height:1.4;
 
 }
 
 
-/* =====================================
+/* =========================
    PRIVACIDADE
-===================================== */
+========================= */
 
 .info {
 
@@ -726,32 +740,36 @@ textarea {
 
     border-radius:14px;
 
-    background:#f1f8ff;
+    background:
+        var(--blue-soft);
 
-    color:#466d95;
+    color:
+        var(--primary-dark);
 
-    font-size:9px;
-    line-height:1.5;
+    font-size:10px;
+    line-height:1.55;
 
 }
 
 
-/* =====================================
-   ERRO
-===================================== */
+/* =========================
+   ERROR
+========================= */
 
 .error {
 
     display:none;
 
     margin-bottom:13px;
-    padding:12px;
+
+    padding:13px;
 
     border-radius:14px;
 
-    background:var(--coral-soft);
+    background:
+        var(--red-light);
 
-    color:#b93c44;
+    color:#a94e4e;
 
     font-size:10px;
     line-height:1.5;
@@ -759,49 +777,59 @@ textarea {
 }
 
 
-/* =====================================
-   ENVIAR
-===================================== */
+/* =========================
+   SEND
+========================= */
 
 .send {
 
     width:100%;
 
-    padding:17px;
+    min-height:54px;
+
+    padding:15px;
 
     border:0;
     border-radius:16px;
 
     background:
-        linear-gradient(
-            90deg,
-            #ff655d,
-            #f2495f
-        );
+        var(--primary);
 
     color:white;
 
     font-size:11px;
-    font-weight:850;
+    font-weight:800;
+
+    letter-spacing:.3px;
 
     cursor:pointer;
 
     box-shadow:
         0 9px 22px
-        rgba(242,73,95,.18);
+        rgba(85,122,149,.19);
 
 }
 
 
-/* =====================================
+.send:disabled {
+
+    opacity:.65;
+
+    cursor:not-allowed;
+
+}
+
+
+/* =========================
    SUCCESS
-===================================== */
+========================= */
 
 .overlay {
 
     display:none;
 
     position:fixed;
+
     inset:0;
 
     z-index:999;
@@ -812,12 +840,10 @@ textarea {
     justify-content:center;
 
     background:
-        rgba(20,55,85,.62);
-
-    backdrop-filter:
-        blur(5px);
+        rgba(38,51,61,.68);
 
 }
+
 
 .success {
 
@@ -832,104 +858,140 @@ textarea {
 
     text-align:center;
 
-    box-shadow:
-        0 25px 70px
-        rgba(20,50,80,.18);
-
 }
+
 
 .success-icon {
 
-    width:70px;
-    height:70px;
+    width:72px;
+    height:72px;
 
     margin:auto;
-
-    border-radius:50%;
 
     display:flex;
     align-items:center;
     justify-content:center;
 
-    background:var(--green-soft);
+    border-radius:50%;
 
-    color:var(--green);
+    background:
+        var(--green-light);
+
+    color:
+        var(--green);
 
     font-size:31px;
-    font-weight:900;
+    font-weight:800;
 
 }
+
 
 .success h2 {
 
     margin-top:15px;
 
-    color:var(--blue-dark);
-
     font-size:20px;
 
 }
+
 
 .success p {
 
     margin-top:8px;
 
-    color:var(--muted);
+    color:
+        var(--muted);
 
     font-size:11px;
     line-height:1.55;
 
 }
 
+
 .protocol {
 
-    margin-top:16px;
-    padding:13px;
+    margin-top:17px;
 
-    border-radius:14px;
+    padding:15px;
 
-    background:#f4f9fd;
+    border-radius:15px;
 
-    color:#416583;
+    background:
+        #f5f8f8;
 
-    font-size:10px;
-    line-height:1.7;
+    font-size:11px;
+    line-height:1.65;
 
 }
+
+
+.protocol strong {
+
+    font-size:17px;
+
+    color:
+        var(--primary-dark);
+
+}
+
+
+.access-code {
+
+    margin-top:10px;
+
+    padding-top:10px;
+
+    border-top:
+        1px solid
+        var(--border);
+
+    color:
+        var(--muted);
+
+    font-size:9px;
+
+}
+
 
 .success button {
 
     width:100%;
 
     margin-top:18px;
+
     padding:14px;
 
     border:0;
     border-radius:14px;
 
-    background:var(--blue);
+    background:
+        var(--primary);
 
     color:white;
 
-    font-weight:800;
+    font-weight:750;
 
     cursor:pointer;
 
 }
 
 
-/* =====================================
+/* =========================
    MOBILE
-===================================== */
+========================= */
 
 @media(max-width:480px) {
 
     .intro h1 {
+
         font-size:25px;
+
     }
 
     .card {
-        padding:17px;
+
+        padding:18px;
+
     }
 
 }
@@ -949,8 +1011,10 @@ textarea {
 
     <div class="topbar">
 
+
         <button
             class="back"
+            type="button"
             onclick="voltar()"
             aria-label="Voltar"
         >
@@ -965,15 +1029,16 @@ textarea {
             </strong>
 
             <small>
-                Reserva Igara
+                RESERVA IGARA
             </small>
 
         </div>
 
 
-        <div class="public">
-            ⚠
+        <div class="public-icon">
+            ⚠️
         </div>
+
 
     </div>
 
@@ -989,8 +1054,9 @@ textarea {
         </h1>
 
         <p>
-            Informe onde está o problema e envie
-            uma foto ou uma breve descrição.
+            Encontrou algo que precisa de atenção?
+            Informe o local e descreva o problema
+            ou envie uma foto.
         </p>
 
     </div>
@@ -1012,19 +1078,21 @@ textarea {
 
 
 
-<!-- =====================================
+<!-- =========================================
      LOCAL
-===================================== -->
+========================================= -->
 
 <section class="card">
+
 
     <div class="title">
         Onde está o problema?
     </div>
 
+
     <div class="description">
-        Selecione o local para direcionarmos
-        a ocorrência corretamente.
+        Selecione a área para direcionarmos
+        a ocorrência para a equipe responsável.
     </div>
 
 
@@ -1034,7 +1102,8 @@ textarea {
             📍
         </div>
 
-        <div class="location-info">
+
+        <div>
 
             <small>
                 CONDOMÍNIO
@@ -1049,11 +1118,13 @@ textarea {
     </div>
 
 
+
     <div class="field">
 
         <label for="area">
-            LOCAL
+            ÁREA
         </label>
+
 
         <select
             id="area"
@@ -1061,7 +1132,7 @@ textarea {
         >
 
             <option value="">
-                Selecione o local
+                Selecione a área
             </option>
 
             <optgroup label="Torres">
@@ -1089,7 +1160,7 @@ textarea {
             </optgroup>
 
 
-            <optgroup label="Garagens e estacionamento">
+            <optgroup label="Garagens">
 
                 <option value="Garagem G1">
                     Garagem G1
@@ -1128,14 +1199,6 @@ textarea {
                     Quiosque 2
                 </option>
 
-                <option value="Piscina">
-                    Piscina
-                </option>
-
-                <option value="Banheiros da piscina">
-                    Banheiros da piscina
-                </option>
-
                 <option value="Academia">
                     Academia
                 </option>
@@ -1144,8 +1207,16 @@ textarea {
                     Banheiros da academia
                 </option>
 
-                <option value="Praça infantil / Playground">
-                    Praça infantil / Playground
+                <option value="Piscina">
+                    Piscina
+                </option>
+
+                <option value="Banheiros da piscina">
+                    Banheiros da piscina
+                </option>
+
+                <option value="Praça infantil / Play">
+                    Praça infantil / Play
                 </option>
 
                 <option value="Espaço Pet">
@@ -1161,8 +1232,12 @@ textarea {
 
             <optgroup label="Áreas comuns">
 
-                <option value="Entrada / Frente do condomínio">
-                    Entrada / Frente do condomínio
+                <option value="Copa">
+                    Copa
+                </option>
+
+                <option value="Frente / Entrada">
+                    Frente / Entrada
                 </option>
 
                 <option value="Vias internas">
@@ -1181,10 +1256,6 @@ textarea {
                     Central de resíduos
                 </option>
 
-                <option value="Copa">
-                    Copa
-                </option>
-
                 <option value="Outro local">
                     Outro local
                 </option>
@@ -1199,113 +1270,68 @@ textarea {
 
     <div
         class="field"
-        id="detalheLocalField"
+        id="detalheContainer"
     >
 
-        <label for="detalheLocal">
-            ONDE NA TORRE?
+        <label for="detalhe">
+            LOCAL NA TORRE
         </label>
 
-        <select id="detalheLocal">
+
+        <select id="detalhe">
 
             <option value="">
-                Selecione o andar ou área
+                Selecione o local
             </option>
 
-            <option value="Térreo / Hall de entrada">
+            <option>
                 Térreo / Hall de entrada
             </option>
 
-            <option value="1º andar">
-                1º andar
-            </option>
+            <option>1º andar</option>
+            <option>2º andar</option>
+            <option>3º andar</option>
+            <option>4º andar</option>
+            <option>5º andar</option>
+            <option>6º andar</option>
+            <option>7º andar</option>
+            <option>8º andar</option>
+            <option>9º andar</option>
+            <option>10º andar</option>
+            <option>11º andar</option>
+            <option>12º andar</option>
 
-            <option value="2º andar">
-                2º andar
-            </option>
-
-            <option value="3º andar">
-                3º andar
-            </option>
-
-            <option value="4º andar">
-                4º andar
-            </option>
-
-            <option value="5º andar">
-                5º andar
-            </option>
-
-            <option value="6º andar">
-                6º andar
-            </option>
-
-            <option value="7º andar">
-                7º andar
-            </option>
-
-            <option value="8º andar">
-                8º andar
-            </option>
-
-            <option value="9º andar">
-                9º andar
-            </option>
-
-            <option value="10º andar">
-                10º andar
-            </option>
-
-            <option value="11º andar">
-                11º andar
-            </option>
-
-            <option value="12º andar">
-                12º andar
-            </option>
-
-            <option value="Escadas">
-                Escadas
-            </option>
-
-            <option value="Elevador 1">
-                Elevador 1
-            </option>
-
-            <option value="Elevador 2">
-                Elevador 2
-            </option>
-
-            <option value="Abrigo de resíduos">
-                Abrigo de resíduos
-            </option>
-
-            <option value="Entorno da torre">
-                Entorno da torre
-            </option>
+            <option>Escadas</option>
+            <option>Elevador 1</option>
+            <option>Elevador 2</option>
+            <option>Abrigo de resíduos</option>
 
         </select>
 
     </div>
 
+
 </section>
 
 
 
-<!-- =====================================
-     PROBLEMA
-===================================== -->
+<!-- =========================================
+     FOTO + DESCRIÇÃO
+========================================= -->
 
 <section class="card">
+
 
     <div class="title">
         O que aconteceu?
     </div>
 
+
     <div class="description">
-        Você pode enviar uma foto,
-        escrever o problema ou fazer os dois.
+        Envie uma foto, escreva uma descrição
+        ou faça os dois.
     </div>
+
 
 
     <label
@@ -1319,23 +1345,25 @@ textarea {
         </div>
 
         <strong>
-            Tirar ou enviar foto
+            Adicionar foto
         </strong>
 
         <span>
-            Toque para usar a câmera
-            ou escolher uma imagem.
+            Tire uma foto ou escolha
+            uma imagem do aparelho
         </span>
 
     </label>
 
 
+
     <input
         type="file"
         id="photoInput"
-        accept="image/*"
+        accept="image/jpeg,image/png,image/webp,image/heic,image/heif"
         capture="environment"
     >
+
 
 
     <div
@@ -1347,6 +1375,7 @@ textarea {
             id="photoPreview"
             alt="Foto da ocorrência"
         >
+
 
         <button
             type="button"
@@ -1360,15 +1389,17 @@ textarea {
     </div>
 
 
+
     <div class="or">
         <span>OU</span>
     </div>
 
 
+
     <textarea
         id="descricao"
-        maxlength="300"
-        placeholder="Ex.: há água acumulada próximo ao elevador..."
+        maxlength="500"
+        placeholder="Descreva o problema. Ex.: lâmpada apagada próxima ao elevador..."
         oninput="contador()"
     ></textarea>
 
@@ -1377,76 +1408,85 @@ textarea {
 
         <span id="count">
             0
-        </span>/300
+        </span>/500
 
     </div>
+
 
 </section>
 
 
 
-<!-- =====================================
-     EMAIL OPCIONAL
-===================================== -->
+<!-- =========================================
+     EMAIL
+========================================= -->
 
-<section class="card">
+<section class="card email-card">
 
-    <div class="email-box">
 
-        <div class="email-head">
+    <div class="email-header">
 
-            <div class="email-icon">
-                ✉️
-            </div>
 
-            <div class="email-copy">
-
-                <strong>
-                    Quer receber uma resposta?
-                </strong>
-
-                <span>
-                    Informe seu e-mail apenas se quiser
-                    receber atualizações sobre esta ocorrência.
-                    É opcional.
-                </span>
-
-            </div>
-
+        <div class="email-icon">
+            ✉️
         </div>
 
 
-        <div class="field">
+        <div>
 
-            <label for="email">
-                E-MAIL OPCIONAL
-            </label>
+            <strong>
+                Quer acompanhar esta ocorrência?
+            </strong>
 
-            <input
-                type="email"
-                id="email"
-                autocomplete="email"
-                placeholder="seuemail@exemplo.com"
-            >
+            <span>
+                Informe seu e-mail para receber
+                atualizações de status e respostas
+                da equipe.
+            </span>
 
         </div>
+
 
     </div>
+
+
+
+    <div class="field">
+
+        <label for="email">
+            E-MAIL — OPCIONAL
+        </label>
+
+
+        <input
+            id="email"
+            type="email"
+            inputmode="email"
+            autocomplete="email"
+            maxlength="180"
+            placeholder="seuemail@exemplo.com"
+        >
+
+    </div>
+
 
 </section>
 
 
-
-<!-- =====================================
-     PRIVACIDADE
-===================================== -->
 
 <section class="card">
 
     <div class="info">
-        🔒 Você pode enviar a ocorrência de forma anônima.
-        O e-mail só será registrado se você optar por
-        receber retorno sobre o atendimento.
+
+        🔒 Você não precisa informar nome,
+        apartamento ou telefone.
+
+        <br><br>
+
+        O e-mail também é opcional e será
+        utilizado somente para acompanhamento
+        desta ocorrência.
+
     </div>
 
 </section>
@@ -1455,9 +1495,11 @@ textarea {
 
 <button
     class="send"
+    id="sendButton"
+    type="button"
     onclick="enviar()"
 >
-    ENVIAR OCORRÊNCIA →
+    ENVIAR OCORRÊNCIA
 </button>
 
 
@@ -1465,16 +1507,18 @@ textarea {
 
 
 
-<!-- =====================================
+<!-- =========================================
      SUCESSO
-===================================== -->
+========================================= -->
 
 <div
     class="overlay"
     id="successOverlay"
 >
 
+
     <div class="success">
+
 
         <div class="success-icon">
             ✓
@@ -1486,8 +1530,9 @@ textarea {
         </h2>
 
 
-        <p id="successText">
-            A equipe responsável recebeu o registro.
+        <p>
+            O registro foi encaminhado
+            para a equipe responsável.
         </p>
 
 
@@ -1497,11 +1542,16 @@ textarea {
         ></div>
 
 
-        <button onclick="inicio()">
+        <button
+            type="button"
+            onclick="inicio()"
+        >
             CONCLUIR
         </button>
 
+
     </div>
+
 
 </div>
 
@@ -1509,56 +1559,29 @@ textarea {
 
 <script>
 
-/* =====================================
-   LOCAL
-===================================== */
+/* =========================================
+   SUPABASE
+========================================= */
 
-function alterarArea() {
-
-    const area =
-        document
-        .getElementById("area")
-        .value;
+const SUPABASE_URL =
+    "https://rhiosvsohvqqrxzwohqu.supabase.co";
 
 
-    const campo =
-        document
-        .getElementById(
-            "detalheLocalField"
-        );
+const SUPABASE_KEY =
+    "sb_publishable_vcjiMMCTxQJ7ArTGsQ-PuQ_5gaAfoIt";
 
 
-    const detalhe =
-        document
-        .getElementById(
-            "detalheLocal"
-        );
-
-
-    if (
-        area.startsWith("Torre ")
-    ) {
-
-        campo.style.display =
-            "block";
-
-    } else {
-
-        campo.style.display =
-            "none";
-
-        detalhe.value =
-            "";
-
-    }
-
-}
+const db =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
 
 
 
-/* =====================================
-   FOTO
-===================================== */
+/* =========================================
+   ESTADO
+========================================= */
 
 const photoInput =
     document.getElementById(
@@ -1567,8 +1590,77 @@ const photoInput =
 
 
 let fotoSelecionada =
+    null;
+
+
+let previewUrl =
+    null;
+
+
+let enviando =
     false;
 
+
+
+/* =========================================
+   LOCAL
+========================================= */
+
+function alterarArea() {
+
+    const area =
+        document
+            .getElementById(
+                "area"
+            )
+            .value;
+
+
+    const container =
+        document
+            .getElementById(
+                "detalheContainer"
+            );
+
+
+    const detalhe =
+        document
+            .getElementById(
+                "detalhe"
+            );
+
+
+    const ehTorre =
+        /^Torre [A-E]$/.test(
+            area
+        );
+
+
+    if (ehTorre) {
+
+        container.style.display =
+            "block";
+
+    } else {
+
+        container.style.display =
+            "none";
+
+        detalhe.value =
+            "";
+
+    }
+
+
+    esconderErro();
+
+}
+
+
+
+/* =========================================
+   FOTO
+========================================= */
 
 photoInput.addEventListener(
     "change",
@@ -1579,32 +1671,65 @@ photoInput.addEventListener(
 
 
         if (!file) {
+
             return;
+
         }
 
 
-        /*
-        LIMITE TEMPORÁRIO:
-        10 MB
-        */
+        const limite =
+            10 * 1024 * 1024;
+
 
         if (
             file.size >
-            10 * 1024 * 1024
+            limite
         ) {
-
-            this.value = "";
 
             mostrarErro(
                 "A foto deve ter no máximo 10 MB."
             );
 
+            this.value =
+                "";
+
             return;
 
         }
 
 
-        const url =
+        if (
+            !file.type.startsWith(
+                "image/"
+            )
+        ) {
+
+            mostrarErro(
+                "Selecione um arquivo de imagem."
+            );
+
+            this.value =
+                "";
+
+            return;
+
+        }
+
+
+        fotoSelecionada =
+            file;
+
+
+        if (previewUrl) {
+
+            URL.revokeObjectURL(
+                previewUrl
+            );
+
+        }
+
+
+        previewUrl =
             URL.createObjectURL(
                 file
             );
@@ -1614,7 +1739,8 @@ photoInput.addEventListener(
             .getElementById(
                 "photoPreview"
             )
-            .src = url;
+            .src =
+                previewUrl;
 
 
         document
@@ -1633,10 +1759,6 @@ photoInput.addEventListener(
                 "block";
 
 
-        fotoSelecionada =
-            true;
-
-
         esconderErro();
 
     }
@@ -1650,11 +1772,28 @@ function removerFoto() {
         "";
 
 
+    fotoSelecionada =
+        null;
+
+
+    if (previewUrl) {
+
+        URL.revokeObjectURL(
+            previewUrl
+        );
+
+        previewUrl =
+            null;
+
+    }
+
+
     document
         .getElementById(
             "photoPreview"
         )
-        .src = "";
+        .src =
+            "";
 
 
     document
@@ -1672,27 +1811,23 @@ function removerFoto() {
         .style.display =
             "block";
 
-
-    fotoSelecionada =
-        false;
-
 }
 
 
 
-/* =====================================
+/* =========================================
    CONTADOR
-===================================== */
+========================================= */
 
 function contador() {
 
     const tamanho =
         document
-        .getElementById(
-            "descricao"
-        )
-        .value
-        .length;
+            .getElementById(
+                "descricao"
+            )
+            .value
+            .length;
 
 
     document
@@ -1706,35 +1841,19 @@ function contador() {
 
 
 
-/* =====================================
-   EMAIL
-===================================== */
+/* =========================================
+   ERROS
+========================================= */
 
-function emailValido(email) {
-
-    if (!email) {
-        return true;
-    }
-
-
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-        .test(email);
-
-}
-
-
-
-/* =====================================
-   ERRO
-===================================== */
-
-function mostrarErro(texto) {
+function mostrarErro(
+    texto
+) {
 
     const error =
         document
-        .getElementById(
-            "error"
-        );
+            .getElementById(
+                "error"
+            );
 
 
     error.textContent =
@@ -1767,53 +1886,264 @@ function esconderErro() {
 
 
 
-/* =====================================
-   ENVIAR
-===================================== */
+/* =========================================
+   IDENTIFICADORES
+========================================= */
 
-function enviar() {
+function gerarProtocolo() {
+
+    const agora =
+        new Date();
+
+
+    const data =
+        agora
+            .toISOString()
+            .slice(0,10)
+            .replaceAll(
+                "-",
+                ""
+            );
+
+
+    const random =
+        Math.floor(
+            100000 +
+            Math.random() *
+            900000
+        );
+
+
+    return (
+        "OC-" +
+        data +
+        "-" +
+        random
+    );
+
+}
+
+
+
+function gerarCodigoAcesso() {
+
+    const bytes =
+        new Uint8Array(
+            12
+        );
+
+
+    crypto.getRandomValues(
+        bytes
+    );
+
+
+    return Array
+        .from(
+            bytes
+        )
+        .map(
+            numero =>
+                numero
+                    .toString(16)
+                    .padStart(
+                        2,
+                        "0"
+                    )
+        )
+        .join("")
+        .toUpperCase();
+
+}
+
+
+
+/* =========================================
+   NOME SEGURO
+========================================= */
+
+function normalizarArquivo(
+    texto
+) {
+
+    return texto
+        .normalize("NFD")
+        .replace(
+            /[\u0300-\u036f]/g,
+            ""
+        )
+        .replace(
+            /[^a-zA-Z0-9.-]/g,
+            "-"
+        )
+        .replace(
+            /-+/g,
+            "-"
+        )
+        .toLowerCase();
+
+}
+
+
+
+/* =========================================
+   UPLOAD FOTO
+========================================= */
+
+async function enviarFoto(
+    protocolo
+) {
+
+    if (
+        !fotoSelecionada
+    ) {
+
+        return null;
+
+    }
+
+
+    const nomeOriginal =
+        normalizarArquivo(
+            fotoSelecionada.name ||
+            "foto.jpg"
+        );
+
+
+    const extensaoOriginal =
+        nomeOriginal.includes(".")
+            ? nomeOriginal
+                .split(".")
+                .pop()
+            : "jpg";
+
+
+    const extensao =
+        extensaoOriginal
+            .substring(
+                0,
+                8
+            );
+
+
+    const caminho =
+        [
+            "reserva-igara",
+            new Date()
+                .getFullYear(),
+            protocolo +
+            "-" +
+            Date.now() +
+            "." +
+            extensao
+        ].join("/");
+
+
+    const {
+        error
+    } =
+        await db
+            .storage
+            .from(
+                "fotos-ocorrencias"
+            )
+            .upload(
+                caminho,
+                fotoSelecionada,
+                {
+                    cacheControl:
+                        "3600",
+
+                    upsert:
+                        false,
+
+                    contentType:
+                        fotoSelecionada.type
+                }
+            );
+
+
+    if (error) {
+
+        throw new Error(
+            "Não foi possível enviar a foto: " +
+            error.message
+        );
+
+    }
+
+
+    /*
+       O bucket é PRIVADO.
+
+       Gravamos somente o caminho.
+       NÃO usamos getPublicUrl().
+    */
+
+    return caminho;
+
+}
+
+
+
+/* =========================================
+   ENVIAR OCORRÊNCIA
+========================================= */
+
+async function enviar() {
+
+    if (enviando) {
+
+        return;
+
+    }
+
 
     esconderErro();
 
 
     const area =
         document
-        .getElementById(
-            "area"
-        )
-        .value;
+            .getElementById(
+                "area"
+            )
+            .value;
 
 
     const detalhe =
         document
-        .getElementById(
-            "detalheLocal"
-        )
-        .value;
+            .getElementById(
+                "detalhe"
+            )
+            .value;
 
 
     const descricao =
         document
-        .getElementById(
-            "descricao"
-        )
-        .value
-        .trim();
+            .getElementById(
+                "descricao"
+            )
+            .value
+            .trim();
 
 
     const email =
         document
-        .getElementById(
-            "email"
-        )
-        .value
-        .trim()
-        .toLowerCase();
+            .getElementById(
+                "email"
+            )
+            .value
+            .trim()
+            .toLowerCase();
 
 
-    /*
-       LOCAL OBRIGATÓRIO
-    */
+    const ehTorre =
+        /^Torre [A-E]$/.test(
+            area
+        );
+
+
+    /* LOCAL */
 
     if (!area) {
 
@@ -1826,18 +2156,13 @@ function enviar() {
     }
 
 
-    /*
-       TORRE EXIGE DETALHE
-    */
-
     if (
-        area.startsWith("Torre ")
-        &&
+        ehTorre &&
         !detalhe
     ) {
 
         mostrarErro(
-            "Selecione onde está o problema dentro da torre."
+            "Selecione o local dentro da torre."
         );
 
         return;
@@ -1845,13 +2170,10 @@ function enviar() {
     }
 
 
-    /*
-       FOTO OU TEXTO
-    */
+    /* FOTO OU TEXTO */
 
     if (
-        !fotoSelecionada
-        &&
+        !fotoSelecionada &&
         descricao.length === 0
     ) {
 
@@ -1864,14 +2186,13 @@ function enviar() {
     }
 
 
-    /*
-       EMAIL, SE INFORMADO
-    */
+    /* EMAIL */
 
     if (
-        email
-        &&
-        !emailValido(email)
+        email &&
+        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+            email
+        )
     ) {
 
         mostrarErro(
@@ -1883,167 +2204,293 @@ function enviar() {
     }
 
 
-    const agora =
-        new Date();
+    enviando =
+        true;
 
 
-    const protocolo =
-        "OC-" +
-        agora
-        .getTime()
-        .toString()
-        .slice(-7);
-
-
-    const localCompleto =
-        detalhe
-        ? `${area} • ${detalhe}`
-        : area;
-
-
-    const ocorrencia = {
-
-        protocolo:
-            protocolo,
-
-        condominio:
-            "Reserva Igara",
-
-        area:
-            area,
-
-        detalhe:
-            detalhe || null,
-
-        local:
-            localCompleto,
-
-        descricao:
-            descricao,
-
-        foto:
-            fotoSelecionada,
-
-        email:
-            email || null,
-
-        desejaRetorno:
-            Boolean(email),
-
-        status:
-            "Aberta",
-
-        origem:
-            "Morador / visitante",
-
-        data:
-            agora.toLocaleDateString(
-                "pt-BR"
-            ),
-
-        hora:
-            agora.toLocaleTimeString(
-                "pt-BR",
-                {
-                    hour:"2-digit",
-                    minute:"2-digit"
-                }
-            ),
-
-        timestamp:
-            agora.toISOString()
-
-    };
-
-
-    /*
-       TEMPORÁRIO:
-       SALVA NO NAVEGADOR.
-
-       Depois iremos salvar:
-       - ocorrência no Supabase
-       - foto no Storage
-       - e-mail para retorno
-    */
-
-    let ocorrencias =
-        JSON.parse(
-            localStorage.getItem(
-                "ocorrencias"
-            )
-        ) || [];
-
-
-    ocorrencias.unshift(
-        ocorrencia
-    );
-
-
-    localStorage.setItem(
-        "ocorrencias",
-        JSON.stringify(
-            ocorrencias
-        )
-    );
-
-
-    document
-        .getElementById(
-            "protocol"
-        )
-        .innerHTML = `
-
-            <strong>
-                ${protocolo}
-            </strong>
-
-            <br>
-
-            ${localCompleto}
-
-            <br>
-
-            ${ocorrencia.data}
-            às
-            ${ocorrencia.hora}
-
-        `;
-
-
-    const successText =
+    const botao =
         document
-        .getElementById(
-            "successText"
+            .getElementById(
+                "sendButton"
+            );
+
+
+    botao.disabled =
+        true;
+
+
+    botao.textContent =
+        "ENVIANDO...";
+
+
+    let fotoPath =
+        null;
+
+
+    try {
+
+
+        const protocolo =
+            gerarProtocolo();
+
+
+        const codigoAcesso =
+            gerarCodigoAcesso();
+
+
+        const agora =
+            new Date();
+
+
+        const localCompleto =
+            detalhe
+                ? area +
+                  " • " +
+                  detalhe
+                : area;
+
+
+        /*
+           Primeiro envia a foto,
+           se houver.
+        */
+
+        fotoPath =
+            await enviarFoto(
+                protocolo
+            );
+
+
+        /*
+           Depois grava a ocorrência.
+        */
+
+        const registro = {
+
+            protocolo:
+                protocolo,
+
+            codigo_acesso:
+                codigoAcesso,
+
+            condominio:
+                "Reserva Igara",
+
+            area:
+                area,
+
+            detalhe:
+                detalhe || null,
+
+            local_completo:
+                localCompleto,
+
+            descricao:
+                descricao || null,
+
+            foto_path:
+                fotoPath,
+
+            email:
+                email || null,
+
+            deseja_retorno:
+                Boolean(
+                    email
+                ),
+
+            status:
+                "Aberta",
+
+            origem:
+                "Morador / visitante",
+
+            data:
+                agora
+                    .toLocaleDateString(
+                        "en-CA"
+                    ),
+
+            hora:
+                agora
+                    .toLocaleTimeString(
+                        "pt-BR",
+                        {
+                            hour:"2-digit",
+                            minute:"2-digit",
+                            second:"2-digit"
+                        }
+                    )
+
+        };
+
+
+        const {
+            error
+        } =
+            await db
+                .from(
+                    "ocorrencias"
+                )
+                .insert(
+                    registro
+                );
+
+
+        if (error) {
+
+            throw new Error(
+                "Não foi possível registrar a ocorrência: " +
+                error.message
+            );
+
+        }
+
+
+        /*
+           SUCESSO
+        */
+
+        const dataBR =
+            agora
+                .toLocaleDateString(
+                    "pt-BR"
+                );
+
+
+        const horaBR =
+            agora
+                .toLocaleTimeString(
+                    "pt-BR",
+                    {
+                        hour:"2-digit",
+                        minute:"2-digit"
+                    }
+                );
+
+
+        document
+            .getElementById(
+                "protocol"
+            )
+            .innerHTML = `
+
+                <strong>
+                    ${protocolo}
+                </strong>
+
+                <br>
+
+                ${localCompleto}
+
+                <br>
+
+                ${dataBR}
+                às
+                ${horaBR}
+
+                ${
+                    email
+                    ?
+                    `
+                    <div class="access-code">
+                        ✉️ Atualizações serão enviadas para
+                        <strong style="font-size:9px">
+                            ${email}
+                        </strong>
+                    </div>
+                    `
+                    :
+                    `
+                    <div class="access-code">
+                        Ocorrência registrada sem e-mail
+                        de acompanhamento.
+                    </div>
+                    `
+                }
+
+            `;
+
+
+        document
+            .getElementById(
+                "successOverlay"
+            )
+            .style.display =
+                "flex";
+
+
+    } catch (erro) {
+
+
+        console.error(
+            erro
         );
 
 
-    if (email) {
+        /*
+           Se a foto foi enviada,
+           mas a gravação da ocorrência
+           falhou, tentamos remover
+           a foto órfã.
+        */
 
-        successText.textContent =
-            "A equipe recebeu o registro. Você informou um e-mail para receber atualizações sobre esta ocorrência.";
+        if (fotoPath) {
 
-    } else {
+            try {
 
-        successText.textContent =
-            "A equipe responsável recebeu o registro.";
+                await db
+                    .storage
+                    .from(
+                        "fotos-ocorrencias"
+                    )
+                    .remove([
+                        fotoPath
+                    ]);
+
+            } catch (
+                erroRemocao
+            ) {
+
+                console.warn(
+                    "Não foi possível remover a foto órfã.",
+                    erroRemocao
+                );
+
+            }
+
+        }
+
+
+        mostrarErro(
+            erro.message ||
+            "Não foi possível enviar a ocorrência. Tente novamente."
+        );
+
+
+    } finally {
+
+
+        enviando =
+            false;
+
+
+        botao.disabled =
+            false;
+
+
+        botao.textContent =
+            "ENVIAR OCORRÊNCIA";
 
     }
-
-
-    document
-        .getElementById(
-            "successOverlay"
-        )
-        .style.display =
-            "flex";
 
 }
 
 
 
-/* =====================================
+/* =========================================
    NAVEGAÇÃO
-===================================== */
+========================================= */
 
 function voltar() {
 
