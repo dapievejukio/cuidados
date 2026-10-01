@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>ORAQUI</title>
+
+    <meta
+        name="description"
+        content="ORAQUI — Agora. Aqui. Registrado."
+    >
+
+    <meta
+        name="theme-color"
+        content="#edf8ff"
+    >
+
+    <style>
+
+        :root {
+            --blue:#2367a8;
+            --blue-light:#4c91d0;
+            --text:#173f70;
+            --muted:#7892ad;
+        }
+
+        * {
+            box-sizing:border-box;
+            margin:0;
+            padding:0;
+        }
+
+        html,
+        body {
+            width:100%;
+            min-height:100%;
+        }
+
+        body {
+
+            min-height:100vh;
+
+            display:flex;
+            align-items:center;
+            justify-content:center;
+
+            overflow:hidden;
+
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                Helvetica,
+                Arial,
+                sans-serif;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #fffdf8 0%,
+                    #f4fbff 35%,
+                    #e6f6ff 100%
+                );
+
+        }
+
+
+        /* =====================================
+           FORMAS DE FUNDO
+        ===================================== */
+
+        .shape {
+
+            position:fixed;
+
+            border-radius:50%;
+
+            pointer-events:none;
+
+        }
+
+        .shape-one {
+
+            width:600px;
+            height:600px;
+
+            left:-350px;
+            top:-380px;
+
+            background:
+                rgba(255,235,197,.48);
+
+        }
+
+        .shape-two {
+
+            width:520px;
+            height:520px;
+
+            right:-310px;
+            bottom:-330px;
+
+            background:
+                rgba(177,222,249,.42);
+
+        }
+
+        .shape-three {
+
+            width:230px;
+            height:230px;
+
+            right:9%;
+            top:10%;
+
+            background:
+                rgba(190,225,184,.25);
+
+        }
+
+        .shape-four {
+
+            width:170px;
+            height:170px;
+
+            left:12%;
+            bottom:8%;
+
+            background:
+                rgba(232,215,250,.24);
+
+        }
+
+
+        /* =====================================
+           MARCA
+        ===================================== */
+
+        main {
+
+            position:relative;
+            z-index:2;
+
+            display:flex;
+            flex-direction:column;
+
+            align-items:center;
+
+            padding:30px;
+
+            text-align:center;
+
+        }
+
+        .logo {
+
+            width:82px;
+            height:82px;
+
+            display:flex;
+            align-items:center;
+            justify-content:center;
+
+            border-radius:25px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--blue),
+                    var(--blue-light)
+                );
+
+            color:white;
+
+            font-size:41px;
+            font-weight:900;
+
+            box-shadow:
+                0 18px 40px
+                rgba(35,103,168,.18);
+
+        }
+
+        h1 {
+
+            margin-top:24px;
+
+            color:var(--text);
+
+            font-size:50px;
+            font-weight:900;
+
+            letter-spacing:2px;
+
+        }
+
+        .tagline {
+
+            margin-top:7px;
+
+            color:var(--muted);
+
+            font-size:10px;
+            font-weight:800;
+
+            letter-spacing:2.3px;
+
+            text-transform:uppercase;
+
+        }
+
+
+        /* =====================================
+           DETALHE
+        ===================================== */
+
+        .detail {
+
+            width:38px;
+            height:4px;
+
+            margin-top:25px;
+
+            border-radius:10px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #78bde8,
+                    #94c98c
+                );
+
+            opacity:.75;
+
+        }
+
+
+        /* =====================================
+           MOBILE
+        ===================================== */
+
+        @media(max-width:600px) {
+
+            .logo {
+
+                width:70px;
+                height:70px;
+
+                border-radius:22px;
+
+                font-size:35px;
+
+            }
+
+            h1 {
+
+                margin-top:20px;
+
+                font-size:40px;
+
+            }
+
+            .tagline {
+
+                font-size:8px;
+
+                letter-spacing:1.8px;
+
+            }
+
+            .shape-one {
+
+                width:430px;
+                height:430px;
+
+                left:-280px;
+                top:-270px;
+
+            }
+
+            .shape-two {
+
+                width:400px;
+                height:400px;
+
+                right:-270px;
+                bottom:-250px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <div class="shape shape-one"></div>
+    <div class="shape shape-two"></div>
+    <div class="shape shape-three"></div>
+    <div class="shape shape-four"></div>
+
+
+    <main>
+
+        <div class="logo">
+            ✓
+        </div>
+
+        <h1>
+            ORAQUI
+        </h1>
+
+        <div class="tagline">
+            Agora. Aqui. Registrado.
+        </div>
+
+        <div class="detail"></div>
+
+    </main>
+
+
+</body>
+
+</html>
