@@ -1,0 +1,1837 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>ORAQUI — Ponto Teste</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --azul: #163b65;
+      --azul2: #0d2948;
+      --verde: #16835f;
+      --vermelho: #b63d3d;
+      --fundo: #f4f6f8;
+      --texto: #17202a;
+      --cinza: #697582;
+      --borda: #dfe4e8;
+      --branco: #ffffff;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        Helvetica, Arial, sans-serif;
+      background: var(--fundo);
+      color: var(--texto);
+      min-height: 100vh;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--azul2), var(--azul));
+      color: white;
+      padding: 24px 20px 28px;
+    }
+
+    .header-inner {
+      width: min(680px, 100%);
+      margin: auto;
+    }
+
+    .marca {
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: 2px;
+    }
+
+    .marca span {
+      font-weight: 400;
+      opacity: .72;
+    }
+
+    .subtitulo {
+      margin-top: 5px;
+      font-size: 13px;
+      opacity: .8;
+    }
+
+    main {
+      width: min(680px, calc(100% - 28px));
+      margin: -14px auto 40px;
+    }
+
+    .card {
+      background: var(--branco);
+      border-radius: 18px;
+      border: 1px solid var(--borda);
+      box-shadow: 0 5px 18px rgba(0, 0, 0, .06);
+      padding: 22px;
+      margin-bottom: 16px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .titulo {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 5px;
+    }
+
+    .descricao {
+      color: var(--cinza);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 800;
+      color: #4d5965;
+      text-transform: uppercase;
+      letter-spacing: .6px;
+      margin: 20px 0 7px;
+    }
+
+    input {
+      width: 100%;
+      padding: 15px;
+      border-radius: 12px;
+      border: 1px solid var(--borda);
+      font-size: 17px;
+      outline: none;
+      background: white;
+    }
+
+    input:focus {
+      border-color: var(--azul);
+      box-shadow: 0 0 0 3px rgba(22, 59, 101, .08);
+    }
+
+    button {
+      border: 0;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .btn {
+      width: 100%;
+      min-height: 52px;
+      border-radius: 13px;
+      font-weight: 800;
+      font-size: 15px;
+      padding: 14px 18px;
+      margin-top: 16px;
+      transition: .15s;
+    }
+
+    .btn:active {
+      transform: scale(.985);
+    }
+
+    .btn:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      background: var(--azul);
+      color: white;
+    }
+
+    .btn-verde {
+      background: var(--verde);
+      color: white;
+    }
+
+    .btn-vermelho {
+      background: var(--vermelho);
+      color: white;
+    }
+
+    .btn-claro {
+      background: #edf1f5;
+      color: #293745;
+    }
+
+    .erro {
+      display: none;
+      margin-top: 14px;
+      padding: 12px;
+      border-radius: 10px;
+      background: #fff0f0;
+      color: #a52f2f;
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    /* USUÁRIO */
+
+    .usuario {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .avatar {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: var(--azul);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .usuario-nome {
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .cargo {
+      display: inline-block;
+      margin-top: 3px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .8px;
+      color: var(--azul);
+    }
+
+    /* RELÓGIO */
+
+    .data-hoje {
+      text-align: center;
+      font-size: 13px;
+      color: var(--cinza);
+      margin-top: 4px;
+    }
+
+    .relogio {
+      text-align: center;
+      font-size: 38px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      margin-top: 9px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .status {
+      margin: 18px 0;
+      border-radius: 13px;
+      padding: 15px;
+      text-align: center;
+      background: #f2f4f6;
+    }
+
+    .status.aberta {
+      background: #eaf7f1;
+      color: #116847;
+    }
+
+    .status.encerrada {
+      background: #edf1f5;
+      color: #43515e;
+    }
+
+    .status-titulo {
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .8px;
+    }
+
+    .status-hora {
+      font-size: 18px;
+      font-weight: 800;
+      margin-top: 5px;
+    }
+
+    /* CONTADOR */
+
+    .contador-box {
+      text-align: center;
+      padding: 19px 10px;
+      background: #f7f9fb;
+      border: 1px solid var(--borda);
+      border-radius: 14px;
+      margin: 14px 0;
+    }
+
+    .contador-label {
+      color: var(--cinza);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .7px;
+    }
+
+    .contador {
+      font-size: 37px;
+      font-weight: 900;
+      color: var(--azul);
+      margin-top: 5px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* CAMERA */
+
+    .camera-modal {
+      position: fixed;
+      inset: 0;
+      background: #050607;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .camera-top {
+      color: white;
+      padding: 18px;
+      text-align: center;
+      font-weight: 800;
+    }
+
+    .camera-area {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scaleX(-1);
+    }
+
+    .camera-guia {
+      position: absolute;
+      width: 260px;
+      height: 340px;
+      border: 2px solid rgba(255,255,255,.65);
+      border-radius: 48%;
+      pointer-events: none;
+    }
+
+    .camera-bottom {
+      padding: 20px;
+      background: #0a0b0c;
+    }
+
+    .camera-buttons {
+      display: flex;
+      gap: 10px;
+      width: min(500px, 100%);
+      margin: auto;
+    }
+
+    .camera-buttons .btn {
+      margin: 0;
+    }
+
+    /* SELFIE */
+
+    .selfie-preview {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+      margin: 15px auto;
+      border: 4px solid white;
+      box-shadow: 0 3px 14px rgba(0,0,0,.18);
+    }
+
+    .confirmacao {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .72);
+      z-index: 1100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .confirmacao-card {
+      background: white;
+      width: min(420px, 100%);
+      border-radius: 20px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .confirmacao-card h2 {
+      font-size: 21px;
+      margin-bottom: 5px;
+    }
+
+    .confirmacao-card p {
+      color: var(--cinza);
+      font-size: 14px;
+    }
+
+    /* RESUMO */
+
+    .resumo {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .resumo-item {
+      padding: 14px;
+      background: #f7f9fb;
+      border-radius: 12px;
+      border: 1px solid var(--borda);
+    }
+
+    .resumo-item span {
+      display: block;
+      color: var(--cinza);
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+
+    .resumo-item strong {
+      display: block;
+      margin-top: 5px;
+      font-size: 17px;
+    }
+
+    .rodape {
+      text-align: center;
+      color: #9aa2aa;
+      font-size: 11px;
+      padding: 5px;
+    }
+
+    @media (max-width: 480px) {
+      .relogio {
+        font-size: 33px;
+      }
+
+      .contador {
+        font-size: 32px;
+      }
+
+      .card {
+        padding: 18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="marca">ORAQUI <span>| PONTO</span></div>
+    <div class="subtitulo">Agora. Aqui. Registrado.</div>
+  </div>
+</header>
+
+<main>
+
+  <!-- LOGIN -->
+  <section id="telaLogin" class="card">
+
+    <div class="titulo">Ponto teste</div>
+
+    <div class="descricao">
+      Identifique-se para registrar sua jornada.
+    </div>
+
+    <label for="usuario">Usuário</label>
+
+    <input
+      id="usuario"
+      type="text"
+      inputmode="numeric"
+      pattern="[0-9]*"
+      autocomplete="off"
+      placeholder="Digite o usuário"
+    >
+
+    <label for="pin">Senha / PIN</label>
+
+    <input
+      id="pin"
+      type="password"
+      inputmode="numeric"
+      pattern="[0-9]*"
+      autocomplete="off"
+      placeholder="Digite a senha"
+    >
+
+    <button
+      id="btnEntrar"
+      class="btn btn-primary"
+      onclick="entrar()"
+    >
+      ENTRAR
+    </button>
+
+    <div id="erroLogin" class="erro"></div>
+
+  </section>
+
+
+  <!-- PONTO -->
+  <section id="telaPonto" class="hidden">
+
+    <div class="card">
+
+      <div class="usuario">
+
+        <div class="avatar">B</div>
+
+        <div>
+          <div id="nomeUsuario" class="usuario-nome">
+            Bruno
+          </div>
+
+          <div id="cargoUsuario" class="cargo">
+            SUPERVISOR
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="card">
+
+      <div class="data-hoje" id="dataHoje"></div>
+
+      <div class="relogio" id="relogio">
+        00:00:00
+      </div>
+
+
+      <div id="statusJornada" class="status">
+
+        <div class="status-titulo">
+          JORNADA DE HOJE
+        </div>
+
+        <div class="status-hora">
+          Nenhuma entrada registrada
+        </div>
+
+      </div>
+
+
+      <div id="contadorContainer" class="contador-box hidden">
+
+        <div class="contador-label">
+          Tempo em jornada
+        </div>
+
+        <div id="contador" class="contador">
+          00:00:00
+        </div>
+
+      </div>
+
+
+      <div id="resumoJornada" class="resumo hidden">
+
+        <div class="resumo-item">
+          <span>Entrada</span>
+          <strong id="horaEntrada">--:--</strong>
+        </div>
+
+        <div class="resumo-item">
+          <span>Saída</span>
+          <strong id="horaSaida">--:--</strong>
+        </div>
+
+      </div>
+
+
+      <button
+        id="btnEntrada"
+        class="btn btn-verde"
+        onclick="iniciarCaptura('entrada')"
+      >
+        📷 REGISTRAR ENTRADA
+      </button>
+
+
+      <button
+        id="btnSaida"
+        class="btn btn-vermelho hidden"
+        onclick="iniciarCaptura('saida')"
+      >
+        📷 REGISTRAR SAÍDA
+      </button>
+
+
+      <button
+        class="btn btn-claro"
+        onclick="sair()"
+      >
+        SAIR
+      </button>
+
+    </div>
+
+
+    <div class="rodape">
+      ORAQUI • demonstração de registro de jornada
+    </div>
+
+  </section>
+
+</main>
+
+
+<!-- CÂMERA -->
+<div id="cameraModal" class="camera-modal hidden">
+
+  <div id="cameraTitulo" class="camera-top">
+    Selfie de entrada
+  </div>
+
+  <div class="camera-area">
+
+    <video
+      id="video"
+      autoplay
+      playsinline
+      muted
+    ></video>
+
+    <div class="camera-guia"></div>
+
+  </div>
+
+  <div class="camera-bottom">
+
+    <div class="camera-buttons">
+
+      <button
+        class="btn btn-claro"
+        onclick="fecharCamera()"
+      >
+        CANCELAR
+      </button>
+
+      <button
+        class="btn btn-verde"
+        onclick="tirarFoto()"
+      >
+        📷 TIRAR FOTO
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- CONFIRMAÇÃO SELFIE -->
+<div id="confirmacao" class="confirmacao hidden">
+
+  <div class="confirmacao-card">
+
+    <h2 id="tituloConfirmacao">
+      Confirmar entrada
+    </h2>
+
+    <p>
+      Confira a foto antes de registrar.
+    </p>
+
+    <img
+      id="previewSelfie"
+      class="selfie-preview"
+      alt="Selfie"
+    >
+
+    <button
+      id="btnConfirmarRegistro"
+      class="btn btn-verde"
+      onclick="confirmarRegistro()"
+    >
+      CONFIRMAR
+    </button>
+
+    <button
+      class="btn btn-claro"
+      onclick="repetirFoto()"
+    >
+      TIRAR OUTRA FOTO
+    </button>
+
+    <button
+      class="btn btn-claro"
+      onclick="cancelarConfirmacao()"
+    >
+      CANCELAR
+    </button>
+
+  </div>
+
+</div>
+
+
+<canvas id="canvas" class="hidden"></canvas>
+
+
+<script>
+
+  /* ==========================================================
+     ORAQUI — PONTO TESTE
+     ========================================================== */
+
+  const SUPABASE_URL =
+    "https://rhiosvsohvqqrxzwohqu.supabase.co";
+
+  const SUPABASE_KEY =
+    "sb_publishable_vcjiMMCTxQJ7ArTGsQ-PuQ_5gaAfoIt";
+
+  const db = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+
+  /* ==========================================================
+     CONFIGURAÇÃO DO TESTE
+     ========================================================== */
+
+  const CONDOMINIO = "Reserva Igara";
+
+  const USUARIO_TESTE = "5626";
+  const PIN_TESTE = "2026";
+
+  const NOME_TESTE = "BRUNO";
+  const FUNCAO_TESTE = "Supervisor";
+
+  const BUCKET_SELFIES = "selfies-colaboradores";
+
+
+  /* ==========================================================
+     ESTADO
+     ========================================================== */
+
+  let colaborador = null;
+  let jornadaAtual = null;
+
+  let streamCamera = null;
+  let selfieBlob = null;
+  let tipoRegistro = null;
+
+  let intervaloRelogio = null;
+  let intervaloContador = null;
+
+
+  /* ==========================================================
+     INICIALIZAÇÃO
+     ========================================================== */
+
+  document.addEventListener("DOMContentLoaded", () => {
+
+    atualizarRelogio();
+
+    intervaloRelogio = setInterval(
+      atualizarRelogio,
+      1000
+    );
+
+    document
+      .getElementById("pin")
+      .addEventListener("keydown", event => {
+
+        if (event.key === "Enter") {
+          entrar();
+        }
+
+      });
+
+  });
+
+
+  /* ==========================================================
+     LOGIN
+     ========================================================== */
+
+  async function entrar() {
+
+    const usuario =
+      somenteNumeros(
+        document.getElementById("usuario").value
+      );
+
+    const pin =
+      somenteNumeros(
+        document.getElementById("pin").value
+      );
+
+    esconderErroLogin();
+
+
+    if (!usuario || !pin) {
+
+      mostrarErroLogin(
+        "Informe usuário e senha."
+      );
+
+      return;
+    }
+
+
+    if (
+      usuario !== USUARIO_TESTE ||
+      pin !== PIN_TESTE
+    ) {
+
+      mostrarErroLogin(
+        "Usuário ou senha inválidos."
+      );
+
+      return;
+    }
+
+
+    const btn =
+      document.getElementById("btnEntrar");
+
+    btn.disabled = true;
+    btn.textContent = "ENTRANDO...";
+
+
+    try {
+
+      /*
+       * Primeiro procura BRUNO no cadastro real.
+       */
+
+      const {
+        data,
+        error
+      } = await db
+        .from("colaboradores")
+        .select("*")
+        .eq("condominio", CONDOMINIO)
+        .eq("matricula", USUARIO_TESTE)
+        .eq("ativo", true)
+        .maybeSingle();
+
+
+      if (error) {
+        throw error;
+      }
+
+
+      /*
+       * Se ainda não estiver cadastrado,
+       * cria automaticamente para esta DEMO.
+       */
+
+      if (!data) {
+
+        const {
+          data: novo,
+          error: erroCadastro
+        } = await db
+          .from("colaboradores")
+          .insert({
+            condominio: CONDOMINIO,
+            nome: NOME_TESTE,
+            matricula: USUARIO_TESTE,
+            pin: PIN_TESTE,
+            funcao: FUNCAO_TESTE,
+            ativo: true
+          })
+          .select()
+          .single();
+
+
+        if (erroCadastro) {
+          throw erroCadastro;
+        }
+
+        colaborador = novo;
+
+      } else {
+
+        colaborador = data;
+
+      }
+
+
+      document.getElementById(
+        "nomeUsuario"
+      ).textContent = colaborador.nome;
+
+
+      document.getElementById(
+        "cargoUsuario"
+      ).textContent =
+        String(
+          colaborador.funcao || FUNCAO_TESTE
+        ).toUpperCase();
+
+
+      await carregarJornadaHoje();
+
+
+      document
+        .getElementById("telaLogin")
+        .classList.add("hidden");
+
+
+      document
+        .getElementById("telaPonto")
+        .classList.remove("hidden");
+
+
+    } catch (erro) {
+
+      console.error(erro);
+
+      mostrarErroLogin(
+        "Não foi possível acessar o ponto. " +
+        (erro.message || "")
+      );
+
+    } finally {
+
+      btn.disabled = false;
+      btn.textContent = "ENTRAR";
+
+    }
+
+  }
+
+
+  function sair() {
+
+    pararContador();
+
+    colaborador = null;
+    jornadaAtual = null;
+
+    document
+      .getElementById("telaPonto")
+      .classList.add("hidden");
+
+    document
+      .getElementById("telaLogin")
+      .classList.remove("hidden");
+
+    document.getElementById("pin").value = "";
+
+    atualizarTelaJornada();
+
+  }
+
+
+  /* ==========================================================
+     JORNADA
+     ========================================================== */
+
+  async function carregarJornadaHoje() {
+
+    if (!colaborador) return;
+
+
+    const inicioHoje = new Date();
+
+    inicioHoje.setHours(
+      0,
+      0,
+      0,
+      0
+    );
+
+
+    const {
+      data,
+      error
+    } = await db
+      .from("jornadas")
+      .select("*")
+      .eq("colaborador_id", colaborador.id)
+      .gte(
+        "entrada_em",
+        inicioHoje.toISOString()
+      )
+      .order(
+        "entrada_em",
+        { ascending: false }
+      )
+      .limit(1);
+
+
+    if (error) {
+      throw error;
+    }
+
+
+    jornadaAtual =
+      data && data.length
+        ? data[0]
+        : null;
+
+
+    atualizarTelaJornada();
+
+  }
+
+
+  function atualizarTelaJornada() {
+
+    const status =
+      document.getElementById(
+        "statusJornada"
+      );
+
+    const btnEntrada =
+      document.getElementById(
+        "btnEntrada"
+      );
+
+    const btnSaida =
+      document.getElementById(
+        "btnSaida"
+      );
+
+    const contadorContainer =
+      document.getElementById(
+        "contadorContainer"
+      );
+
+    const resumo =
+      document.getElementById(
+        "resumoJornada"
+      );
+
+
+    pararContador();
+
+
+    /*
+     * SEM JORNADA
+     */
+
+    if (!jornadaAtual) {
+
+      status.className = "status";
+
+      status.innerHTML = `
+        <div class="status-titulo">
+          JORNADA DE HOJE
+        </div>
+
+        <div class="status-hora">
+          Nenhuma entrada registrada
+        </div>
+      `;
+
+      btnEntrada.classList.remove("hidden");
+      btnSaida.classList.add("hidden");
+
+      contadorContainer.classList.add("hidden");
+      resumo.classList.add("hidden");
+
+      return;
+    }
+
+
+    /*
+     * ENTRADA REGISTRADA
+     */
+
+    document.getElementById(
+      "horaEntrada"
+    ).textContent =
+      formatarHora(
+        jornadaAtual.entrada_em
+      );
+
+
+    resumo.classList.remove("hidden");
+
+
+    /*
+     * JORNADA ABERTA
+     */
+
+    if (
+      jornadaAtual.status === "Aberta" &&
+      !jornadaAtual.saida_em
+    ) {
+
+      status.className =
+        "status aberta";
+
+      status.innerHTML = `
+        <div class="status-titulo">
+          ✓ ENTRADA REGISTRADA
+        </div>
+
+        <div class="status-hora">
+          ${formatarHora(jornadaAtual.entrada_em)}
+        </div>
+      `;
+
+      document.getElementById(
+        "horaSaida"
+      ).textContent = "--:--";
+
+      btnEntrada.classList.add("hidden");
+      btnSaida.classList.remove("hidden");
+
+      contadorContainer.classList.remove(
+        "hidden"
+      );
+
+      iniciarContador();
+
+      return;
+    }
+
+
+    /*
+     * JORNADA ENCERRADA
+     */
+
+    status.className =
+      "status encerrada";
+
+    status.innerHTML = `
+      <div class="status-titulo">
+        ✓ JORNADA ENCERRADA
+      </div>
+
+      <div class="status-hora">
+        ${formatarHora(jornadaAtual.saida_em)}
+      </div>
+    `;
+
+
+    document.getElementById(
+      "horaSaida"
+    ).textContent =
+      formatarHora(
+        jornadaAtual.saida_em
+      );
+
+
+    btnEntrada.classList.add("hidden");
+    btnSaida.classList.add("hidden");
+
+    contadorContainer.classList.remove(
+      "hidden"
+    );
+
+
+    document.getElementById(
+      "contador"
+    ).textContent =
+      calcularDuracao(
+        jornadaAtual.entrada_em,
+        jornadaAtual.saida_em
+      );
+
+  }
+
+
+  /* ==========================================================
+     CÂMERA
+     ========================================================== */
+
+  async function iniciarCaptura(tipo) {
+
+    tipoRegistro = tipo;
+    selfieBlob = null;
+
+
+    document.getElementById(
+      "cameraTitulo"
+    ).textContent =
+      tipo === "entrada"
+        ? "Selfie de entrada"
+        : "Selfie de saída";
+
+
+    try {
+
+      streamCamera =
+        await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: "user",
+            width: {
+              ideal: 1280
+            },
+            height: {
+              ideal: 1280
+            }
+          },
+          audio: false
+        });
+
+
+      const video =
+        document.getElementById("video");
+
+      video.srcObject = streamCamera;
+
+
+      document
+        .getElementById("cameraModal")
+        .classList.remove("hidden");
+
+
+    } catch (erro) {
+
+      console.error(erro);
+
+      alert(
+        "Não foi possível abrir a câmera. " +
+        "Verifique a permissão do navegador."
+      );
+
+    }
+
+  }
+
+
+  function fecharCamera() {
+
+    if (streamCamera) {
+
+      streamCamera
+        .getTracks()
+        .forEach(track => track.stop());
+
+      streamCamera = null;
+
+    }
+
+
+    const video =
+      document.getElementById("video");
+
+    video.srcObject = null;
+
+
+    document
+      .getElementById("cameraModal")
+      .classList.add("hidden");
+
+  }
+
+
+  function tirarFoto() {
+
+    const video =
+      document.getElementById("video");
+
+    const canvas =
+      document.getElementById("canvas");
+
+
+    if (
+      !video.videoWidth ||
+      !video.videoHeight
+    ) {
+
+      alert(
+        "A câmera ainda está carregando."
+      );
+
+      return;
+    }
+
+
+    const tamanho = Math.min(
+      video.videoWidth,
+      video.videoHeight
+    );
+
+
+    canvas.width = 700;
+    canvas.height = 700;
+
+
+    const ctx =
+      canvas.getContext("2d");
+
+
+    const sx =
+      (video.videoWidth - tamanho) / 2;
+
+    const sy =
+      (video.videoHeight - tamanho) / 2;
+
+
+    /*
+     * Espelha a imagem para ficar
+     * igual ao preview da câmera frontal.
+     */
+
+    ctx.save();
+
+    ctx.translate(
+      canvas.width,
+      0
+    );
+
+    ctx.scale(
+      -1,
+      1
+    );
+
+
+    ctx.drawImage(
+      video,
+      sx,
+      sy,
+      tamanho,
+      tamanho,
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
+
+
+    ctx.restore();
+
+
+    canvas.toBlob(
+      blob => {
+
+        if (!blob) {
+
+          alert(
+            "Não foi possível gerar a foto."
+          );
+
+          return;
+        }
+
+
+        selfieBlob = blob;
+
+
+        const url =
+          URL.createObjectURL(blob);
+
+
+        document.getElementById(
+          "previewSelfie"
+        ).src = url;
+
+
+        document.getElementById(
+          "tituloConfirmacao"
+        ).textContent =
+          tipoRegistro === "entrada"
+            ? "Confirmar entrada"
+            : "Confirmar saída";
+
+
+        fecharCamera();
+
+
+        document
+          .getElementById("confirmacao")
+          .classList.remove("hidden");
+
+      },
+      "image/jpeg",
+      0.82
+    );
+
+  }
+
+
+  function repetirFoto() {
+
+    document
+      .getElementById("confirmacao")
+      .classList.add("hidden");
+
+    iniciarCaptura(
+      tipoRegistro
+    );
+
+  }
+
+
+  function cancelarConfirmacao() {
+
+    selfieBlob = null;
+    tipoRegistro = null;
+
+    document
+      .getElementById("confirmacao")
+      .classList.add("hidden");
+
+  }
+
+
+  /* ==========================================================
+     CONFIRMAR PONTO
+     ========================================================== */
+
+  async function confirmarRegistro() {
+
+    if (
+      !selfieBlob ||
+      !tipoRegistro ||
+      !colaborador
+    ) {
+
+      alert(
+        "Não foi possível confirmar o registro."
+      );
+
+      return;
+    }
+
+
+    const btn =
+      document.getElementById(
+        "btnConfirmarRegistro"
+      );
+
+    btn.disabled = true;
+    btn.textContent = "REGISTRANDO...";
+
+
+    try {
+
+      const agora =
+        new Date();
+
+
+      /*
+       * Faz upload da selfie.
+       */
+
+      const fotoURL =
+        await uploadSelfie(
+          selfieBlob,
+          tipoRegistro,
+          agora
+        );
+
+
+      /*
+       * ENTRADA
+       */
+
+      if (tipoRegistro === "entrada") {
+
+        const {
+          data,
+          error
+        } = await db
+          .from("jornadas")
+          .insert({
+            condominio: CONDOMINIO,
+            colaborador_id: colaborador.id,
+            colaborador_nome: colaborador.nome,
+            matricula: colaborador.matricula,
+            selfie_url: fotoURL,
+            entrada_em: agora.toISOString(),
+            saida_em: null,
+            status: "Aberta"
+          })
+          .select()
+          .single();
+
+
+        if (error) {
+          throw error;
+        }
+
+
+        jornadaAtual = data;
+
+      }
+
+
+      /*
+       * SAÍDA
+       *
+       * A tabela atual possui selfie_url para entrada.
+       * Para a demonstração, guardamos a selfie de saída
+       * no Storage. Depois adicionaremos selfie_saida_url
+       * na versão definitiva.
+       */
+
+      if (tipoRegistro === "saida") {
+
+        if (!jornadaAtual) {
+
+          throw new Error(
+            "Nenhuma jornada aberta encontrada."
+          );
+
+        }
+
+
+        const {
+          data,
+          error
+        } = await db
+          .from("jornadas")
+          .update({
+            saida_em: agora.toISOString(),
+            status: "Encerrada",
+            updated_at: agora.toISOString()
+          })
+          .eq(
+            "id",
+            jornadaAtual.id
+          )
+          .select()
+          .single();
+
+
+        if (error) {
+          throw error;
+        }
+
+
+        jornadaAtual = data;
+
+      }
+
+
+      document
+        .getElementById("confirmacao")
+        .classList.add("hidden");
+
+
+      selfieBlob = null;
+      tipoRegistro = null;
+
+
+      atualizarTelaJornada();
+
+
+      if (
+        jornadaAtual.status === "Aberta"
+      ) {
+
+        alert(
+          "✓ Entrada registrada com sucesso."
+        );
+
+      } else {
+
+        alert(
+          "✓ Saída registrada com sucesso."
+        );
+
+      }
+
+
+    } catch (erro) {
+
+      console.error(erro);
+
+      alert(
+        "Erro ao registrar o ponto:\n\n" +
+        (erro.message || erro)
+      );
+
+    } finally {
+
+      btn.disabled = false;
+      btn.textContent = "CONFIRMAR";
+
+    }
+
+  }
+
+
+  /* ==========================================================
+     STORAGE
+     ========================================================== */
+
+  async function uploadSelfie(
+    blob,
+    tipo,
+    data
+  ) {
+
+    const dataArquivo =
+      data
+        .toISOString()
+        .slice(0, 10);
+
+
+    const nomeArquivo =
+      `${CONDOMINIO
+        .toLowerCase()
+        .replace(/\s+/g, "-")}/` +
+      `${colaborador.matricula}/` +
+      `${dataArquivo}/` +
+      `${tipo}-${Date.now()}.jpg`;
+
+
+    const {
+      error
+    } = await db
+      .storage
+      .from(BUCKET_SELFIES)
+      .upload(
+        nomeArquivo,
+        blob,
+        {
+          contentType: "image/jpeg",
+          upsert: false
+        }
+      );
+
+
+    if (error) {
+      throw error;
+    }
+
+
+    /*
+     * Bucket privado:
+     * armazenamos o PATH da foto.
+     */
+
+    return nomeArquivo;
+
+  }
+
+
+  /* ==========================================================
+     CONTADOR
+     ========================================================== */
+
+  function iniciarContador() {
+
+    pararContador();
+
+
+    atualizarContador();
+
+
+    intervaloContador =
+      setInterval(
+        atualizarContador,
+        1000
+      );
+
+  }
+
+
+  function atualizarContador() {
+
+    if (
+      !jornadaAtual ||
+      !jornadaAtual.entrada_em
+    ) {
+
+      return;
+    }
+
+
+    document.getElementById(
+      "contador"
+    ).textContent =
+      calcularDuracao(
+        jornadaAtual.entrada_em,
+        new Date().toISOString()
+      );
+
+  }
+
+
+  function pararContador() {
+
+    if (intervaloContador) {
+
+      clearInterval(
+        intervaloContador
+      );
+
+      intervaloContador = null;
+
+    }
+
+  }
+
+
+  /* ==========================================================
+     RELÓGIO
+     ========================================================== */
+
+  function atualizarRelogio() {
+
+    const agora =
+      new Date();
+
+
+    document.getElementById(
+      "relogio"
+    ).textContent =
+      agora.toLocaleTimeString(
+        "pt-BR",
+        {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit"
+        }
+      );
+
+
+    document.getElementById(
+      "dataHoje"
+    ).textContent =
+      agora
+        .toLocaleDateString(
+          "pt-BR",
+          {
+            weekday: "long",
+            day: "2-digit",
+            month: "long",
+            year: "numeric"
+          }
+        );
+
+  }
+
+
+  /* ==========================================================
+     UTILITÁRIOS
+     ========================================================== */
+
+  function somenteNumeros(valor) {
+
+    return String(valor || "")
+      .replace(/\D/g, "");
+
+  }
+
+
+  function formatarHora(data) {
+
+    if (!data) {
+      return "--:--";
+    }
+
+
+    return new Date(data)
+      .toLocaleTimeString(
+        "pt-BR",
+        {
+          hour: "2-digit",
+          minute: "2-digit"
+        }
+      );
+
+  }
+
+
+  function calcularDuracao(
+    inicio,
+    fim
+  ) {
+
+    const inicioMs =
+      new Date(inicio).getTime();
+
+    const fimMs =
+      new Date(fim).getTime();
+
+
+    let segundos =
+      Math.max(
+        0,
+        Math.floor(
+          (fimMs - inicioMs) / 1000
+        )
+      );
+
+
+    const horas =
+      Math.floor(
+        segundos / 3600
+      );
+
+
+    segundos %= 3600;
+
+
+    const minutos =
+      Math.floor(
+        segundos / 60
+      );
+
+
+    segundos %= 60;
+
+
+    return (
+      String(horas).padStart(2, "0") +
+      ":" +
+      String(minutos).padStart(2, "0") +
+      ":" +
+      String(segundos).padStart(2, "0")
+    );
+
+  }
+
+
+  function mostrarErroLogin(texto) {
+
+    const erro =
+      document.getElementById(
+        "erroLogin"
+      );
+
+    erro.textContent = texto;
+    erro.style.display = "block";
+
+  }
+
+
+  function esconderErroLogin() {
+
+    document.getElementById(
+      "erroLogin"
+    ).style.display = "none";
+
+  }
+
+</script>
+
+</body>
+</html>
