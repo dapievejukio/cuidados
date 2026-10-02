@@ -11,10 +11,7 @@
 
 <title>Colaborador — ORAQUI</title>
 
-<meta
-    name="theme-color"
-    content="#342a67"
->
+<meta name="theme-color" content="#6d80a8">
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -29,11 +26,7 @@
     --blue-light:#eaf4f8;
 
     --green:#69a17f;
-    --green-dark:#508765;
     --green-light:#eaf5ee;
-
-    --yellow:#c4974d;
-    --yellow-light:#fff5df;
 
     --red:#c96565;
     --red-light:#fdecec;
@@ -73,8 +66,8 @@ body{
 }
 
 button,
-input,
-textarea{
+textarea,
+input{
     font-family:inherit;
 }
 
@@ -100,7 +93,7 @@ header{
     padding:
         calc(18px + env(safe-area-inset-top))
         18px
-        50px;
+        48px;
 }
 
 .header-content{
@@ -171,7 +164,7 @@ header{
 }
 
 .header-title{
-    margin-top:28px;
+    margin-top:27px;
 }
 
 .header-title small{
@@ -181,8 +174,6 @@ header{
     letter-spacing:1px;
 
     opacity:.72;
-
-    text-transform:uppercase;
 }
 
 .header-title h1{
@@ -214,7 +205,7 @@ main{
 
 
 /* =====================================================
-   CARD COLABORADOR
+   COLABORADOR
 ===================================================== */
 
 .user-card{
@@ -268,21 +259,16 @@ main{
     font-size:9px;
 }
 
-.status-tag{
+.user-tag{
     padding:7px 10px;
 
     border-radius:20px;
 
-    background:#eef1f4;
-    color:var(--muted);
+    background:var(--green-light);
+    color:var(--green);
 
     font-size:8px;
     font-weight:800;
-}
-
-.status-tag.active{
-    background:var(--green-light);
-    color:var(--green);
 }
 
 
@@ -311,11 +297,6 @@ main{
     line-height:1.55;
 }
 
-
-/* =====================================================
-   CARD BASE
-===================================================== */
-
 .card{
     padding:17px;
 
@@ -328,189 +309,7 @@ main{
 
 
 /* =====================================================
-   JORNADA
-===================================================== */
-
-.journey-status{
-    display:flex;
-    align-items:center;
-    gap:12px;
-}
-
-.journey-icon{
-    width:48px;
-    height:48px;
-
-    flex-shrink:0;
-
-    border-radius:15px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    background:var(--blue-light);
-
-    font-size:22px;
-}
-
-.journey-info{
-    flex:1;
-}
-
-.journey-info strong{
-    display:block;
-
-    font-size:12px;
-}
-
-.journey-info span{
-    display:block;
-
-    margin-top:4px;
-
-    color:var(--muted);
-
-    font-size:9px;
-    line-height:1.45;
-}
-
-.selfie-area{
-    margin-top:16px;
-
-    padding-top:15px;
-
-    border-top:1px solid var(--border);
-}
-
-.selfie-button{
-    width:100%;
-
-    min-height:54px;
-
-    border:1.5px dashed #b9b0dd;
-
-    border-radius:15px;
-
-    background:var(--primary-light);
-    color:var(--primary);
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
-
-    font-size:10px;
-    font-weight:800;
-
-    cursor:pointer;
-}
-
-.selfie-input{
-    display:none;
-}
-
-.selfie-preview{
-    display:none;
-
-    margin-top:12px;
-
-    width:100%;
-
-    max-height:350px;
-
-    object-fit:cover;
-
-    border-radius:16px;
-}
-
-.selfie-preview.visible{
-    display:block;
-}
-
-.start-journey{
-    width:100%;
-
-    min-height:53px;
-
-    margin-top:13px;
-
-    border:0;
-    border-radius:15px;
-
-    background:var(--green);
-    color:white;
-
-    font-size:10px;
-    font-weight:800;
-
-    cursor:pointer;
-}
-
-.start-journey:disabled{
-    opacity:.5;
-    cursor:not-allowed;
-}
-
-.journey-data{
-    display:grid;
-
-    grid-template-columns:1fr 1fr;
-
-    gap:9px;
-
-    margin-top:15px;
-}
-
-.journey-data-box{
-    padding:12px;
-
-    border-radius:14px;
-
-    background:#f6f8fa;
-}
-
-.journey-data-box span{
-    display:block;
-
-    color:var(--muted);
-
-    font-size:7px;
-    font-weight:700;
-
-    text-transform:uppercase;
-}
-
-.journey-data-box strong{
-    display:block;
-
-    margin-top:5px;
-
-    font-size:11px;
-}
-
-.end-journey{
-    width:100%;
-
-    min-height:48px;
-
-    margin-top:14px;
-
-    border:1px solid #efcaca;
-    border-radius:14px;
-
-    background:var(--red-light);
-    color:var(--red);
-
-    font-size:9px;
-    font-weight:800;
-
-    cursor:pointer;
-}
-
-
-/* =====================================================
-   ESCOLHA DE LOCAL
+   ABAS
 ===================================================== */
 
 .choice-tabs{
@@ -518,13 +317,13 @@ main{
 
     grid-template-columns:1fr 1fr;
 
-    gap:7px;
+    gap:8px;
 
-    margin-bottom:13px;
+    margin-bottom:15px;
 }
 
 .choice-tab{
-    min-height:47px;
+    min-height:48px;
 
     border:1px solid var(--border);
     border-radius:14px;
@@ -545,6 +344,11 @@ main{
     color:var(--primary);
 }
 
+
+/* =====================================================
+   OPÇÕES
+===================================================== */
+
 .option-grid{
     display:grid;
 
@@ -555,7 +359,7 @@ main{
 }
 
 .option-button{
-    min-height:52px;
+    min-height:54px;
 
     padding:10px;
 
@@ -578,14 +382,10 @@ main{
     color:var(--primary);
 }
 
-.option-button.full{
-    grid-column:1/-1;
-}
-
 .step-back{
     border:0;
 
-    margin-bottom:12px;
+    margin-bottom:14px;
 
     background:transparent;
     color:var(--primary);
@@ -596,12 +396,17 @@ main{
     cursor:pointer;
 }
 
+
+/* =====================================================
+   LOCAL SELECIONADO
+===================================================== */
+
 .selection-summary{
     display:none;
 
-    margin-top:14px;
+    margin-top:15px;
 
-    padding:13px;
+    padding:14px;
 
     border-radius:14px;
 
@@ -609,7 +414,7 @@ main{
     color:var(--blue);
 
     font-size:10px;
-    font-weight:750;
+    font-weight:800;
 
     line-height:1.5;
 }
@@ -618,109 +423,30 @@ main{
     display:block;
 }
 
-.start-activity{
+
+/* =====================================================
+   REGISTRO
+===================================================== */
+
+.register-area{
     display:none;
 
-    width:100%;
-
-    min-height:54px;
-
-    margin-top:13px;
-
-    border:0;
-    border-radius:15px;
-
-    background:var(--primary);
-    color:white;
-
-    font-size:10px;
-    font-weight:800;
-
-    cursor:pointer;
-}
-
-.start-activity.visible{
-    display:block;
-}
-
-
-/* =====================================================
-   ATIVIDADE ATIVA
-===================================================== */
-
-.active-card{
-    border:1px solid #d9d1f1;
-
-    background:
-        linear-gradient(
-            180deg,
-            #ffffff,
-            #fbfaff
-        );
-}
-
-.active-location{
-    padding:12px;
-
-    border-radius:14px;
-
-    background:var(--primary-light);
-    color:var(--primary);
-
-    font-size:11px;
-    font-weight:800;
-}
-
-.timer-area{
     margin-top:17px;
-
-    text-align:center;
-}
-
-.timer-label{
-    color:var(--muted);
-
-    font-size:8px;
-    font-weight:700;
-
-    text-transform:uppercase;
-}
-
-.timer{
-    margin-top:5px;
-
-    font-size:36px;
-    font-weight:800;
-
-    letter-spacing:1px;
-}
-
-.started-at{
-    margin-top:5px;
-
-    color:var(--muted);
-
-    font-size:9px;
-}
-
-
-/* =====================================================
-   EVIDÊNCIA
-===================================================== */
-
-.evidence-box{
-    margin-top:19px;
 
     padding-top:17px;
 
     border-top:1px solid var(--border);
 }
 
-.evidence-box h3{
-    font-size:12px;
+.register-area.visible{
+    display:block;
 }
 
-.evidence-box > p{
+.register-area h3{
+    font-size:13px;
+}
+
+.register-area > p{
     margin-top:5px;
 
     color:var(--muted);
@@ -729,14 +455,22 @@ main{
     line-height:1.5;
 }
 
+
+/* =====================================================
+   FOTO
+===================================================== */
+
 .photo-button{
     width:100%;
 
-    min-height:52px;
+    min-height:53px;
 
-    margin-top:13px;
+    margin-top:14px;
 
-    border:1.5px dashed #b8c6d4;
+    border:
+        1.5px dashed
+        #b8c6d4;
+
     border-radius:14px;
 
     background:#f7fafc;
@@ -808,12 +542,17 @@ main{
     cursor:pointer;
 }
 
+
+/* =====================================================
+   OU
+===================================================== */
+
 .or-divider{
     display:flex;
     align-items:center;
     gap:10px;
 
-    margin:15px 0;
+    margin:16px 0;
 
     color:#a1a9b1;
 
@@ -831,6 +570,11 @@ main{
 
     background:var(--border);
 }
+
+
+/* =====================================================
+   OBSERVAÇÃO
+===================================================== */
 
 textarea{
     width:100%;
@@ -866,7 +610,12 @@ textarea:focus{
     font-size:8px;
 }
 
-.finish-activity{
+
+/* =====================================================
+   BOTÃO REGISTRAR
+===================================================== */
+
+.register-button{
     width:100%;
 
     min-height:55px;
@@ -883,16 +632,20 @@ textarea:focus{
     font-weight:800;
 
     cursor:pointer;
+
+    box-shadow:
+        0 8px 20px
+        rgba(105,161,127,.20);
 }
 
-.finish-activity:disabled{
+.register-button:disabled{
     opacity:.5;
     cursor:not-allowed;
 }
 
 
 /* =====================================================
-   HISTÓRICO DO DIA
+   HISTÓRICO
 ===================================================== */
 
 .history-list{
@@ -941,7 +694,6 @@ textarea:focus{
     color:var(--muted);
 
     font-size:8px;
-    line-height:1.5;
 }
 
 .history-note{
@@ -961,7 +713,7 @@ textarea:focus{
 
 
 /* =====================================================
-   MENSAGENS
+   ERRO
 ===================================================== */
 
 .message{
@@ -984,31 +736,6 @@ textarea:focus{
 .message.error{
     background:var(--red-light);
     color:var(--red);
-}
-
-.message.info{
-    background:var(--blue-light);
-    color:var(--blue);
-}
-
-.loading{
-    padding:25px;
-
-    border-radius:18px;
-
-    background:white;
-
-    box-shadow:var(--shadow);
-
-    text-align:center;
-
-    color:var(--muted);
-
-    font-size:9px;
-}
-
-.hidden{
-    display:none !important;
 }
 
 
@@ -1101,10 +828,12 @@ textarea:focus{
 }
 
 </style>
+
 </head>
 
 
 <body>
+
 
 <header>
 
@@ -1132,6 +861,7 @@ textarea:focus{
 
         </div>
 
+
         <button
             class="logout"
             onclick="sair()"
@@ -1149,11 +879,11 @@ textarea:focus{
         </small>
 
         <h1>
-            Minha operação
+            Registrar atividade
         </h1>
 
         <p>
-            Registre sua jornada e as atividades realizadas.
+            Registre as áreas concluídas durante o trabalho.
         </p>
 
     </div>
@@ -1165,6 +895,7 @@ textarea:focus{
 
 <main>
 
+
 <div class="user-card">
 
     <div
@@ -1173,6 +904,7 @@ textarea:focus{
     >
         👷
     </div>
+
 
     <div class="user-info">
 
@@ -1186,11 +918,9 @@ textarea:focus{
 
     </div>
 
-    <span
-        class="status-tag"
-        id="journeyTag"
-    >
-        SEM JORNADA
+
+    <span class="user-tag">
+        ATIVO
     </span>
 
 </div>
@@ -1202,59 +932,16 @@ textarea:focus{
 ></div>
 
 
-<!-- =================================================
-     JORNADA
-================================================== -->
-
-<section
-    class="section"
-    id="journeySection"
->
+<section class="section">
 
     <div class="section-title">
 
         <h2>
-            Jornada
+            O que você concluiu?
         </h2>
 
         <p>
-            Registre sua entrada antes de iniciar as atividades.
-        </p>
-
-    </div>
-
-
-    <div
-        class="card"
-        id="journeyCard"
-    >
-
-        <div class="loading">
-            Verificando jornada...
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =================================================
-     ESCOLHER ATIVIDADE
-================================================== -->
-
-<section
-    class="section hidden"
-    id="choiceSection"
->
-
-    <div class="section-title">
-
-        <h2>
-            Onde você vai trabalhar?
-        </h2>
-
-        <p>
-            Escolha livremente o próximo local.
+            Escolha a área após concluir o serviço.
         </p>
 
     </div>
@@ -1262,89 +949,50 @@ textarea:focus{
 
     <div class="card">
 
-        <div
-            id="choiceContent"
-        ></div>
+
+        <div class="choice-tabs">
+
+            <button
+                class="choice-tab active"
+                id="towerTab"
+                onclick="selecionarTipo('torre')"
+            >
+                🏢 TORRES
+            </button>
+
+
+            <button
+                class="choice-tab"
+                id="commonTab"
+                onclick="selecionarTipo('comum')"
+            >
+                📍 ÁREAS COMUNS
+            </button>
+
+        </div>
+
+
+        <div id="choiceContent"></div>
+
 
         <div
             class="selection-summary"
             id="selectionSummary"
         ></div>
 
-        <button
-            class="start-activity"
-            id="startActivityButton"
-            onclick="iniciarAtividade()"
-        >
-            ▶ INICIAR ATIVIDADE
-        </button>
-
-    </div>
-
-</section>
-
-
-<!-- =================================================
-     ATIVIDADE EM ANDAMENTO
-================================================== -->
-
-<section
-    class="section hidden"
-    id="activeSection"
->
-
-    <div class="section-title">
-
-        <h2>
-            Atividade em andamento
-        </h2>
-
-        <p>
-            Finalize esta atividade antes de iniciar outra.
-        </p>
-
-    </div>
-
-
-    <div class="card active-card">
 
         <div
-            class="active-location"
-            id="activeLocation"
+            class="register-area"
+            id="registerArea"
         >
-            📍
-        </div>
-
-
-        <div class="timer-area">
-
-            <div class="timer-label">
-                TEMPO NESTA ATIVIDADE
-            </div>
-
-            <div
-                class="timer"
-                id="timer"
-            >
-                00:00:00
-            </div>
-
-            <div
-                class="started-at"
-                id="startedAt"
-            ></div>
-
-        </div>
-
-
-        <div class="evidence-box">
 
             <h3>
-                Finalização
+                Evidência da conclusão
             </h3>
 
             <p>
-                Para finalizar, envie uma foto ou escreva uma observação.
+                Envie uma foto ou escreva uma observação.
+                Pelo menos um dos dois é obrigatório.
             </p>
 
 
@@ -1363,7 +1011,7 @@ textarea:focus{
                 type="file"
                 accept="image/*"
                 capture="environment"
-                onchange="selecionarFotoAtividade(this)"
+                onchange="selecionarFoto(this)"
             >
 
 
@@ -1378,10 +1026,11 @@ textarea:focus{
                     alt="Foto da atividade"
                 >
 
+
                 <button
                     class="remove-photo"
                     type="button"
-                    onclick="removerFotoAtividade()"
+                    onclick="removerFoto()"
                 >
                     ×
                 </button>
@@ -1395,23 +1044,27 @@ textarea:focus{
 
 
             <textarea
-                id="activityObservation"
+                id="observation"
                 maxlength="600"
-                placeholder="Ex.: limpeza concluída. Mancha no piso não saiu..."
+                placeholder="Ex.: área concluída. Mancha próxima ao elevador não saiu..."
             ></textarea>
 
 
             <div class="counter">
-                <span id="observationCount">0</span>/600
+
+                <span id="observationCount">
+                    0
+                </span>/600
+
             </div>
 
 
             <button
-                class="finish-activity"
-                id="finishActivityButton"
-                onclick="finalizarAtividade()"
+                class="register-button"
+                id="registerButton"
+                onclick="registrarConclusao()"
             >
-                ✓ FINALIZAR ÁREA
+                ✓ REGISTRAR CONCLUSÃO
             </button>
 
         </div>
@@ -1421,26 +1074,24 @@ textarea:focus{
 </section>
 
 
-<!-- =================================================
-     HISTÓRICO
-================================================== -->
-
 <section
-    class="section hidden"
+    class="section"
     id="historySection"
+    style="display:none;"
 >
 
     <div class="section-title">
 
         <h2>
-            Hoje
+            Registros de hoje
         </h2>
 
         <p>
-            Atividades finalizadas nesta jornada.
+            Atividades concluídas por você hoje.
         </p>
 
     </div>
+
 
     <div
         class="history-list"
@@ -1449,12 +1100,9 @@ textarea:focus{
 
 </section>
 
+
 </main>
 
-
-<!-- =================================================
-     SUCESSO
-================================================== -->
 
 <div
     class="success-overlay"
@@ -1467,12 +1115,12 @@ textarea:focus{
             ✓
         </div>
 
-        <h2 id="successTitle">
-            Registrado
+        <h2>
+            Atividade registrada
         </h2>
 
         <p id="successText">
-            Registro realizado.
+            Registro realizado com sucesso.
         </p>
 
     </div>
@@ -1489,8 +1137,10 @@ textarea:focus{
 const SUPABASE_URL =
     "https://rhiosvsohvqqrxzwohqu.supabase.co";
 
+
 const SUPABASE_KEY =
     "sb_publishable_vcjiMMCTxQJ7ArTGsQ-PuQ_5gaAfoIt";
+
 
 const db =
     window.supabase.createClient(
@@ -1506,8 +1156,6 @@ const db =
 const CONDOMINIO =
     "Reserva Igara";
 
-const BUCKET_SELFIES =
-    "selfies-colaboradores";
 
 const BUCKET_ATIVIDADES =
     "fotos-atividades";
@@ -1518,6 +1166,7 @@ const BUCKET_ATIVIDADES =
 ===================================================== */
 
 let sessao = null;
+
 
 try{
 
@@ -1530,9 +1179,11 @@ try{
 
 }catch(e){
 
-    sessao = null;
+    sessao =
+        null;
 
 }
+
 
 if(
     !sessao ||
@@ -1552,35 +1203,26 @@ if(
 let colaborador =
     null;
 
-let jornada =
-    null;
-
-let atividadeAtual =
-    null;
-
-let selfieArquivo =
-    null;
-
-let selfiePreviewURL =
-    null;
-
-let fotoAtividade =
-    null;
-
-let fotoAtividadePreviewURL =
-    null;
-
-let timerInterval =
-    null;
 
 let tipoEscolha =
     "torre";
 
+
 let torreSelecionada =
     null;
 
+
 let localSelecionado =
     null;
+
+
+let fotoArquivo =
+    null;
+
+
+let fotoPreviewURL =
+    null;
+
 
 let processando =
     false;
@@ -1595,114 +1237,94 @@ const userName =
         "userName"
     );
 
+
 const userDescription =
     document.getElementById(
         "userDescription"
     );
+
 
 const userIcon =
     document.getElementById(
         "userIcon"
     );
 
-const journeyTag =
-    document.getElementById(
-        "journeyTag"
-    );
-
-const journeyCard =
-    document.getElementById(
-        "journeyCard"
-    );
-
-const choiceSection =
-    document.getElementById(
-        "choiceSection"
-    );
 
 const choiceContent =
     document.getElementById(
         "choiceContent"
     );
 
+
 const selectionSummary =
     document.getElementById(
         "selectionSummary"
     );
 
-const startActivityButton =
+
+const registerArea =
     document.getElementById(
-        "startActivityButton"
+        "registerArea"
     );
 
-const activeSection =
-    document.getElementById(
-        "activeSection"
-    );
-
-const activeLocation =
-    document.getElementById(
-        "activeLocation"
-    );
-
-const timer =
-    document.getElementById(
-        "timer"
-    );
-
-const startedAt =
-    document.getElementById(
-        "startedAt"
-    );
 
 const activityPhoto =
     document.getElementById(
         "activityPhoto"
     );
 
+
 const photoButton =
     document.getElementById(
         "photoButton"
     );
 
-const photoPreviewWrapper =
-    document.getElementById(
-        "photoPreviewWrapper"
-    );
 
 const photoPreview =
     document.getElementById(
         "photoPreview"
     );
 
-const activityObservation =
+
+const photoPreviewWrapper =
     document.getElementById(
-        "activityObservation"
+        "photoPreviewWrapper"
     );
+
+
+const observation =
+    document.getElementById(
+        "observation"
+    );
+
 
 const observationCount =
     document.getElementById(
         "observationCount"
     );
 
-const finishActivityButton =
+
+const registerButton =
     document.getElementById(
-        "finishActivityButton"
+        "registerButton"
     );
+
+
+const errorMessage =
+    document.getElementById(
+        "errorMessage"
+    );
+
 
 const historySection =
     document.getElementById(
         "historySection"
     );
 
+
 const historyList =
     document.getElementById(
         "historyList"
-    );
-
-const errorMessage =
-    document.getElementById(
-        "errorMessage"
     );
 
 
@@ -1712,20 +1334,34 @@ const errorMessage =
 
 function escapar(texto){
 
-    if(
-        texto === null ||
-        texto === undefined
-    ){
-        return "";
-    }
+    return String(
+        texto ?? ""
+    )
 
-    return String(texto)
+    .replaceAll(
+        "&",
+        "&amp;"
+    )
 
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+    .replaceAll(
+        "<",
+        "&lt;"
+    )
+
+    .replaceAll(
+        ">",
+        "&gt;"
+    )
+
+    .replaceAll(
+        '"',
+        "&quot;"
+    )
+
+    .replaceAll(
+        "'",
+        "&#039;"
+    );
 
 }
 
@@ -1746,16 +1382,21 @@ function limparNome(texto){
     return String(
         texto || ""
     )
+
     .normalize("NFD")
+
     .replace(
         /[\u0300-\u036f]/g,
         ""
     )
+
     .toLowerCase()
+
     .replace(
         /[^a-z0-9]+/g,
         "-"
     )
+
     .replace(
         /^-+|-+$/g,
         ""
@@ -1764,153 +1405,116 @@ function limparNome(texto){
 }
 
 
-function dataLocalBanco(){
+function obterDataLocal(){
 
     const agora =
         new Date();
 
+
     const ano =
         agora.getFullYear();
+
 
     const mes =
         String(
             agora.getMonth() + 1
         )
-        .padStart(2,"0");
+        .padStart(
+            2,
+            "0"
+        );
+
 
     const dia =
         String(
             agora.getDate()
         )
-        .padStart(2,"0");
+        .padStart(
+            2,
+            "0"
+        );
+
 
     return `${ano}-${mes}-${dia}`;
 
 }
 
 
-function horaLocalBanco(){
+function obterHoraLocal(){
 
     return new Date()
         .toTimeString()
-        .slice(0,8);
+        .slice(
+            0,
+            8
+        );
 
 }
 
 
-function formatarHoraData(valor){
+function formatarHora(valor){
 
     if(!valor){
-        return "--:--";
+        return "";
     }
 
-    const data =
-        new Date(valor);
 
-    if(
-        Number.isNaN(
-            data.getTime()
-        )
-    ){
-        return "--:--";
-    }
-
-    return data
-        .toLocaleTimeString(
-            "pt-BR",
-            {
-                hour:"2-digit",
-                minute:"2-digit"
-            }
+    return String(valor)
+        .slice(
+            0,
+            5
         );
 
 }
 
 
-function formatarDuracao(
-    inicio,
-    fim
-){
-
-    if(
-        !inicio ||
-        !fim
-    ){
-        return "";
-    }
-
-    const ms =
-        new Date(fim).getTime()
-        -
-        new Date(inicio).getTime();
-
-    if(ms < 0){
-        return "";
-    }
-
-    const minutos =
-        Math.floor(
-            ms / 60000
-        );
-
-    const horas =
-        Math.floor(
-            minutos / 60
-        );
-
-    const resto =
-        minutos % 60;
-
-    if(horas > 0){
-
-        return `${horas}h ${resto}min`;
-
-    }
-
-    if(minutos === 0){
-
-        return "< 1 min";
-
-    }
-
-    return `${minutos} min`;
-
-}
-
-
-function extensaoArquivo(
-    arquivo
-){
+function obterExtensao(arquivo){
 
     if(
         arquivo.type ===
         "image/png"
     ){
+
         return "png";
+
     }
+
 
     if(
         arquivo.type ===
         "image/webp"
     ){
+
         return "webp";
+
     }
+
+
+    if(
+        arquivo.type ===
+        "image/heic"
+    ){
+
+        return "heic";
+
+    }
+
 
     return "jpg";
 
 }
 
 
-function mostrarErro(
-    mensagem
-){
+function mostrarErro(mensagem){
 
     errorMessage.textContent =
         mensagem;
 
+
     errorMessage.classList.add(
         "visible"
     );
+
 
     errorMessage.scrollIntoView({
         behavior:"smooth",
@@ -1929,56 +1533,14 @@ function esconderErro(){
 }
 
 
-function mostrarSucesso(
-    titulo,
-    texto,
-    duracao = 1300
-){
-
-    document
-    .getElementById(
-        "successTitle"
-    )
-    .textContent =
-        titulo;
-
-    document
-    .getElementById(
-        "successText"
-    )
-    .textContent =
-        texto;
-
-    const overlay =
-        document.getElementById(
-            "successOverlay"
-        );
-
-    overlay.classList.add(
-        "visible"
-    );
-
-    setTimeout(
-        () => {
-
-            overlay.classList.remove(
-                "visible"
-            );
-
-        },
-        duracao
-    );
-
-}
-
-
 /* =====================================================
-   CARREGAR COLABORADOR
+   COLABORADOR
 ===================================================== */
 
 async function carregarColaborador(){
 
     esconderErro();
+
 
     try{
 
@@ -2065,472 +1627,8 @@ async function carregarColaborador(){
             "🧹";
 
 
-        await recuperarJornada();
+        renderizarEscolhaInicial();
 
-
-    }catch(erro){
-
-        console.error(
-            erro
-        );
-
-        journeyCard.innerHTML =
-            `
-            <div class="message error visible">
-                ${escapar(
-                    erro.message ||
-                    "Não foi possível carregar o colaborador."
-                )}
-            </div>
-            `;
-
-    }
-
-}
-
-
-/* =====================================================
-   RECUPERAR JORNADA
-===================================================== */
-
-async function recuperarJornada(){
-
-    const {
-        data,
-        error
-    } =
-        await db
-
-        .from(
-            "jornadas"
-        )
-
-        .select(
-            "*"
-        )
-
-        .eq(
-            "colaborador_id",
-            colaborador.id
-        )
-
-        .eq(
-            "status",
-            "Aberta"
-        )
-
-        .order(
-            "entrada_em",
-            {
-                ascending:false
-            }
-        )
-
-        .limit(1)
-
-        .maybeSingle();
-
-
-    if(error){
-        throw error;
-    }
-
-
-    jornada =
-        data || null;
-
-
-    if(jornada){
-
-        renderizarJornadaAberta();
-
-        await recuperarAtividadeAberta();
-
-        await carregarHistorico();
-
-    }else{
-
-        renderizarInicioJornada();
-
-    }
-
-}
-
-
-/* =====================================================
-   JORNADA NÃO INICIADA
-===================================================== */
-
-function renderizarInicioJornada(){
-
-    journeyTag.textContent =
-        "SEM JORNADA";
-
-    journeyTag.classList.remove(
-        "active"
-    );
-
-    choiceSection.classList.add(
-        "hidden"
-    );
-
-    activeSection.classList.add(
-        "hidden"
-    );
-
-    historySection.classList.add(
-        "hidden"
-    );
-
-
-    journeyCard.innerHTML = `
-
-        <div class="journey-status">
-
-            <div class="journey-icon">
-                📷
-            </div>
-
-            <div class="journey-info">
-
-                <strong>
-                    Registre sua entrada
-                </strong>
-
-                <span>
-                    Tire uma selfie para iniciar a jornada.
-                </span>
-
-            </div>
-
-        </div>
-
-
-        <div class="selfie-area">
-
-            <label
-                class="selfie-button"
-                for="selfieInput"
-                id="selfieButton"
-            >
-                📷 TIRAR SELFIE
-            </label>
-
-
-            <input
-                class="selfie-input"
-                id="selfieInput"
-                type="file"
-                accept="image/*"
-                capture="user"
-                onchange="selecionarSelfie(this)"
-            >
-
-
-            <img
-                class="selfie-preview"
-                id="selfiePreview"
-                alt="Selfie do colaborador"
-            >
-
-
-            <button
-                class="start-journey"
-                id="startJourneyButton"
-                onclick="iniciarJornada()"
-                disabled
-            >
-                ✓ REGISTRAR ENTRADA
-            </button>
-
-        </div>
-
-    `;
-
-}
-
-
-/* =====================================================
-   SELFIE
-===================================================== */
-
-function selecionarSelfie(
-    input
-){
-
-    esconderErro();
-
-    const arquivo =
-        input.files?.[0];
-
-
-    if(!arquivo){
-        return;
-    }
-
-
-    if(
-        !arquivo.type.startsWith(
-            "image/"
-        )
-    ){
-
-        mostrarErro(
-            "Selecione uma imagem válida."
-        );
-
-        input.value = "";
-
-        return;
-
-    }
-
-
-    if(
-        arquivo.size >
-        10 * 1024 * 1024
-    ){
-
-        mostrarErro(
-            "A selfie deve ter no máximo 10 MB."
-        );
-
-        input.value = "";
-
-        return;
-
-    }
-
-
-    selfieArquivo =
-        arquivo;
-
-
-    if(
-        selfiePreviewURL
-    ){
-
-        URL.revokeObjectURL(
-            selfiePreviewURL
-        );
-
-    }
-
-
-    selfiePreviewURL =
-        URL.createObjectURL(
-            arquivo
-        );
-
-
-    const preview =
-        document.getElementById(
-            "selfiePreview"
-        );
-
-
-    preview.src =
-        selfiePreviewURL;
-
-    preview.classList.add(
-        "visible"
-    );
-
-
-    document
-    .getElementById(
-        "selfieButton"
-    )
-    .textContent =
-        "📷 TIRAR OUTRA SELFIE";
-
-
-    document
-    .getElementById(
-        "startJourneyButton"
-    )
-    .disabled =
-        false;
-
-}
-
-
-/* =====================================================
-   UPLOAD SELFIE
-===================================================== */
-
-async function enviarSelfie(){
-
-    if(!selfieArquivo){
-
-        throw new Error(
-            "Tire uma selfie antes de registrar a entrada."
-        );
-
-    }
-
-
-    const extensao =
-        extensaoArquivo(
-            selfieArquivo
-        );
-
-
-    const data =
-        dataLocalBanco();
-
-
-    const nome =
-        `${Date.now()}-${colaborador.matricula}.${extensao}`;
-
-
-    const caminho =
-        `reserva-igara/${data}/${colaborador.matricula}/${nome}`;
-
-
-    const {
-        error
-    } =
-        await db
-
-        .storage
-
-        .from(
-            BUCKET_SELFIES
-        )
-
-        .upload(
-            caminho,
-            selfieArquivo,
-            {
-                cacheControl:"3600",
-                upsert:false,
-                contentType:
-                    selfieArquivo.type
-            }
-        );
-
-
-    if(error){
-
-        throw new Error(
-            "Erro ao enviar selfie: "
-            +
-            error.message
-        );
-
-    }
-
-
-    return caminho;
-
-}
-
-
-/* =====================================================
-   INICIAR JORNADA
-===================================================== */
-
-async function iniciarJornada(){
-
-    if(processando){
-        return;
-    }
-
-    esconderErro();
-
-    const botao =
-        document.getElementById(
-            "startJourneyButton"
-        );
-
-
-    try{
-
-        processando =
-            true;
-
-        if(botao){
-
-            botao.disabled =
-                true;
-
-            botao.textContent =
-                "REGISTRANDO...";
-
-        }
-
-
-        const selfiePath =
-            await enviarSelfie();
-
-
-        const agora =
-            new Date()
-            .toISOString();
-
-
-        const {
-            data,
-            error
-        } =
-            await db
-
-            .from(
-                "jornadas"
-            )
-
-            .insert({
-
-                condominio:
-                    CONDOMINIO,
-
-                colaborador_id:
-                    colaborador.id,
-
-                colaborador_nome:
-                    colaborador.nome,
-
-                matricula:
-                    colaborador.matricula,
-
-                selfie_url:
-                    selfiePath,
-
-                entrada_em:
-                    agora,
-
-                status:
-                    "Aberta",
-
-                updated_at:
-                    agora
-
-            })
-
-            .select()
-
-            .single();
-
-
-        if(error){
-            throw error;
-        }
-
-
-        jornada =
-            data;
-
-
-        mostrarSucesso(
-            "Entrada registrada",
-            `Jornada iniciada às ${formatarHoraData(jornada.entrada_em)}.`
-        );
-
-
-        renderizarJornadaAberta();
-
-        mostrarEscolha();
 
         await carregarHistorico();
 
@@ -2540,278 +1638,80 @@ async function iniciarJornada(){
         console.error(
             erro
         );
+
 
         mostrarErro(
             erro.message ||
-            "Não foi possível iniciar a jornada."
+            "Não foi possível carregar o colaborador."
         );
 
-
-        if(botao){
-
-            botao.disabled =
-                false;
-
-            botao.textContent =
-                "✓ REGISTRAR ENTRADA";
-
-        }
-
-
-    }finally{
-
-        processando =
-            false;
-
     }
 
 }
 
 
 /* =====================================================
-   JORNADA ABERTA
+   TIPO
 ===================================================== */
 
-function renderizarJornadaAberta(){
-
-    journeyTag.textContent =
-        "EM JORNADA";
-
-    journeyTag.classList.add(
-        "active"
-    );
-
-
-    journeyCard.innerHTML = `
-
-        <div class="journey-status">
-
-            <div class="journey-icon">
-                🟢
-            </div>
-
-            <div class="journey-info">
-
-                <strong>
-                    Jornada em andamento
-                </strong>
-
-                <span>
-                    Entrada registrada com sucesso.
-                </span>
-
-            </div>
-
-        </div>
-
-
-        <div class="journey-data">
-
-            <div class="journey-data-box">
-
-                <span>
-                    ENTRADA
-                </span>
-
-                <strong>
-                    ${formatarHoraData(
-                        jornada.entrada_em
-                    )}
-                </strong>
-
-            </div>
-
-
-            <div class="journey-data-box">
-
-                <span>
-                    DATA
-                </span>
-
-                <strong>
-                    ${new Date(
-                        jornada.entrada_em
-                    ).toLocaleDateString(
-                        "pt-BR"
-                    )}
-                </strong>
-
-            </div>
-
-        </div>
-
-
-        <button
-            class="end-journey"
-            onclick="encerrarJornada()"
-        >
-            ENCERRAR TURNO
-        </button>
-
-    `;
-
-}
-
-
-/* =====================================================
-   RECUPERAR ATIVIDADE ABERTA
-===================================================== */
-
-async function recuperarAtividadeAberta(){
-
-    const {
-        data,
-        error
-    } =
-        await db
-
-        .from(
-            "registros_atividade"
-        )
-
-        .select(
-            "*"
-        )
-
-        .eq(
-            "jornada_id",
-            jornada.id
-        )
-
-        .eq(
-            "status",
-            "Em andamento"
-        )
-
-        .order(
-            "iniciado_em",
-            {
-                ascending:false
-            }
-        )
-
-        .limit(1)
-
-        .maybeSingle();
-
-
-    if(error){
-        throw error;
-    }
-
-
-    atividadeAtual =
-        data || null;
-
-
-    if(atividadeAtual){
-
-        mostrarAtividadeAtual();
-
-    }else{
-
-        mostrarEscolha();
-
-    }
-
-}
-
-
-/* =====================================================
-   ESCOLHA
-===================================================== */
-
-function mostrarEscolha(){
-
-    atividadeAtual =
-        null;
-
-    pararTimer();
-
-    activeSection.classList.add(
-        "hidden"
-    );
-
-    choiceSection.classList.remove(
-        "hidden"
-    );
+function selecionarTipo(tipo){
 
     tipoEscolha =
-        "torre";
+        tipo;
+
 
     torreSelecionada =
         null;
 
+
     localSelecionado =
         null;
 
-    selectionSummary.classList.remove(
-        "visible"
+
+    limparRegistro();
+
+
+    document
+    .getElementById(
+        "towerTab"
+    )
+    .classList
+    .toggle(
+        "active",
+        tipo === "torre"
     );
 
-    startActivityButton.classList.remove(
-        "visible"
+
+    document
+    .getElementById(
+        "commonTab"
+    )
+    .classList
+    .toggle(
+        "active",
+        tipo === "comum"
     );
+
 
     renderizarEscolhaInicial();
 
 }
 
 
+/* =====================================================
+   ESCOLHA INICIAL
+===================================================== */
+
 function renderizarEscolhaInicial(){
 
-    choiceContent.innerHTML = `
-
-        <div class="choice-tabs">
-
-            <button
-                class="
-                    choice-tab
-                    ${
-                        tipoEscolha === "torre"
-                        ?
-                        "active"
-                        :
-                        ""
-                    }
-                "
-                onclick="selecionarTipo('torre')"
-            >
-                🏢 TORRES
-            </button>
+    selectionSummary.classList.remove(
+        "visible"
+    );
 
 
-            <button
-                class="
-                    choice-tab
-                    ${
-                        tipoEscolha === "comum"
-                        ?
-                        "active"
-                        :
-                        ""
-                    }
-                "
-                onclick="selecionarTipo('comum')"
-            >
-                📍 ÁREAS COMUNS
-            </button>
-
-        </div>
-
-
-        <div
-            class="option-grid"
-            id="mainOptions"
-        ></div>
-
-    `;
-
-
-    const container =
-        document.getElementById(
-            "mainOptions"
-        );
+    registerArea.classList.remove(
+        "visible"
+    );
 
 
     if(
@@ -2819,94 +1719,95 @@ function renderizarEscolhaInicial(){
         "torre"
     ){
 
-        [
+        const torres = [
+
             "Torre A",
             "Torre B",
             "Torre C",
             "Torre D",
             "Torre E"
-        ]
-        .forEach(
+
+        ];
+
+
+        choiceContent.innerHTML =
+            `
+            <div
+                class="option-grid"
+                id="options"
+            ></div>
+            `;
+
+
+        const container =
+            document.getElementById(
+                "options"
+            );
+
+
+        torres.forEach(
             torre => {
 
-                container.innerHTML += `
+                const botao =
+                    document.createElement(
+                        "button"
+                    );
 
-                    <button
-                        class="option-button"
-                        onclick='selecionarTorre(${JSON.stringify(torre)})'
-                    >
-                        🏢 ${torre}
-                    </button>
 
-                `;
+                botao.className =
+                    "option-button";
+
+
+                botao.textContent =
+                    "🏢 " + torre;
+
+
+                botao.onclick =
+                    () =>
+                        selecionarTorre(
+                            torre
+                        );
+
+
+                container.appendChild(
+                    botao
+                );
 
             }
         );
+
 
     }else{
 
-        areasComuns()
-        .forEach(
-            area => {
-
-                container.innerHTML += `
-
-                    <button
-                        class="option-button"
-                        onclick='selecionarAreaComum(${JSON.stringify(area)})'
-                    >
-                        ${escapar(area)}
-                    </button>
-
-                `;
-
-            }
-        );
+        renderizarAreasComuns();
 
     }
 
 }
 
 
-function selecionarTipo(
-    tipo
-){
+/* =====================================================
+   TORRE
+===================================================== */
 
-    tipoEscolha =
-        tipo;
+function selecionarTorre(torre){
 
     torreSelecionada =
-        null;
+        torre;
+
 
     localSelecionado =
         null;
+
 
     selectionSummary.classList.remove(
         "visible"
     );
 
-    startActivityButton.classList.remove(
+
+    registerArea.classList.remove(
         "visible"
     );
-
-    renderizarEscolhaInicial();
-
-}
-
-
-/* =====================================================
-   TORRES
-===================================================== */
-
-function selecionarTorre(
-    torre
-){
-
-    torreSelecionada =
-        torre;
-
-    localSelecionado =
-        null;
 
 
     const locais = [
@@ -2925,6 +1826,10 @@ function selecionarTorre(
         "10º andar",
         "11º andar",
         "12º andar",
+
+        "Elevador 1",
+
+        "Elevador 2",
 
         "Escadas",
 
@@ -2950,7 +1855,7 @@ function selecionarTorre(
             </h2>
 
             <p>
-                Selecione o local que será realizado agora.
+                Qual área foi concluída?
             </p>
 
         </div>
@@ -2958,7 +1863,7 @@ function selecionarTorre(
 
         <div
             class="option-grid"
-            id="towerLocations"
+            id="towerOptions"
         ></div>
 
     `;
@@ -2966,25 +1871,37 @@ function selecionarTorre(
 
     const container =
         document.getElementById(
-            "towerLocations"
+            "towerOptions"
         );
 
 
     locais.forEach(
         local => {
 
-            container.innerHTML += `
+            const botao =
+                document.createElement(
+                    "button"
+                );
 
-                <button
-                    class="option-button"
-                    onclick='selecionarLocalTorre(
-                        ${JSON.stringify(local)}
-                    )'
-                >
-                    ${escapar(local)}
-                </button>
 
-            `;
+            botao.className =
+                "option-button";
+
+
+            botao.textContent =
+                local;
+
+
+            botao.onclick =
+                () =>
+                    selecionarLocal(
+                        local
+                    );
+
+
+            container.appendChild(
+                botao
+            );
 
         }
     );
@@ -2996,9 +1913,9 @@ function selecionarTorre(
    ÁREAS COMUNS
 ===================================================== */
 
-function areasComuns(){
+function renderizarAreasComuns(){
 
-    return [
+    const areas = [
 
         "Salão de festas",
 
@@ -3040,346 +1957,104 @@ function areasComuns(){
 
     ];
 
+
+    choiceContent.innerHTML =
+        `
+        <div
+            class="option-grid"
+            id="commonOptions"
+        ></div>
+        `;
+
+
+    const container =
+        document.getElementById(
+            "commonOptions"
+        );
+
+
+    areas.forEach(
+        area => {
+
+            const botao =
+                document.createElement(
+                    "button"
+                );
+
+
+            botao.className =
+                "option-button";
+
+
+            botao.textContent =
+                area;
+
+
+            botao.onclick =
+                () => {
+
+                    torreSelecionada =
+                        null;
+
+
+                    selecionarLocal(
+                        area
+                    );
+
+                };
+
+
+            container.appendChild(
+                botao
+            );
+
+        }
+    );
+
 }
 
 
-function selecionarAreaComum(
-    area
-){
+/* =====================================================
+   LOCAL SELECIONADO
+===================================================== */
 
-    torreSelecionada =
-        null;
-
-    localSelecionado =
-        area;
-
-    atualizarResumoEscolha();
-
-}
-
-
-function selecionarLocalTorre(
-    local
-){
+function selecionarLocal(local){
 
     localSelecionado =
         local;
 
-    atualizarResumoEscolha();
 
-}
-
-
-function atualizarResumoEscolha(){
-
-    if(!localSelecionado){
-        return;
-    }
-
-
-    const texto =
+    const completo =
         torreSelecionada
         ?
-        `${torreSelecionada} • ${localSelecionado}`
+        torreSelecionada
+        +
+        " • "
+        +
+        localSelecionado
         :
         localSelecionado;
 
 
     selectionSummary.innerHTML =
-        `📍 ${escapar(texto)}`;
+        "📍 "
+        +
+        escapar(
+            completo
+        );
+
 
     selectionSummary.classList.add(
         "visible"
     );
 
-    startActivityButton.classList.add(
+
+    registerArea.classList.add(
         "visible"
     );
 
-}
 
-
-/* =====================================================
-   INICIAR ATIVIDADE
-===================================================== */
-
-async function iniciarAtividade(){
-
-    if(
-        processando ||
-        !jornada ||
-        !localSelecionado
-    ){
-        return;
-    }
-
-
-    esconderErro();
-
-
-    try{
-
-        processando =
-            true;
-
-        startActivityButton.disabled =
-            true;
-
-        startActivityButton.textContent =
-            "INICIANDO...";
-
-
-        /*
-         * Segunda verificação:
-         * impede outra atividade aberta
-         * na mesma jornada.
-         */
-
-        const {
-            data:aberta,
-            error:erroConsulta
-        } =
-            await db
-
-            .from(
-                "registros_atividade"
-            )
-
-            .select(
-                "*"
-            )
-
-            .eq(
-                "jornada_id",
-                jornada.id
-            )
-
-            .eq(
-                "status",
-                "Em andamento"
-            )
-
-            .limit(1)
-
-            .maybeSingle();
-
-
-        if(erroConsulta){
-            throw erroConsulta;
-        }
-
-
-        if(aberta){
-
-            atividadeAtual =
-                aberta;
-
-            mostrarAtividadeAtual();
-
-            return;
-
-        }
-
-
-        const agora =
-            new Date()
-            .toISOString();
-
-
-        const tipo =
-            normalizar(
-                colaborador.funcao
-            )
-            .includes(
-                "zel"
-            )
-            ?
-            "zeladoria"
-            :
-            "limpeza";
-
-
-        const localCompleto =
-            torreSelecionada
-            ?
-            `${torreSelecionada} • ${localSelecionado}`
-            :
-            localSelecionado;
-
-
-        const {
-            data,
-            error
-        } =
-            await db
-
-            .from(
-                "registros_atividade"
-            )
-
-            .insert({
-
-                tipo:
-                    tipo,
-
-                condominio:
-                    CONDOMINIO,
-
-                torre:
-                    torreSelecionada,
-
-                local:
-                    localCompleto,
-
-                item:
-                    "Atividade da área",
-
-                colaborador:
-                    colaborador.nome,
-
-                matricula:
-                    colaborador.matricula,
-
-                cargo:
-                    colaborador.funcao,
-
-                colaborador_id:
-                    colaborador.id,
-
-                jornada_id:
-                    jornada.id,
-
-                area:
-                    torreSelecionada
-                    ?
-                    torreSelecionada
-                    :
-                    "Área comum",
-
-                detalhe_area:
-                    localSelecionado,
-
-                iniciado_em:
-                    agora,
-
-                status:
-                    "Em andamento",
-
-                data:
-                    dataLocalBanco(),
-
-                hora:
-                    horaLocalBanco(),
-
-                foto_url:
-                    null,
-
-                observacao:
-                    null
-
-            })
-
-            .select()
-
-            .single();
-
-
-        if(error){
-            throw error;
-        }
-
-
-        atividadeAtual =
-            data;
-
-
-        mostrarAtividadeAtual();
-
-        await carregarHistorico();
-
-
-    }catch(erro){
-
-        console.error(
-            erro
-        );
-
-        mostrarErro(
-            "Não foi possível iniciar a atividade: "
-            +
-            (
-                erro.message ||
-                "erro desconhecido"
-            )
-        );
-
-
-    }finally{
-
-        processando =
-            false;
-
-        startActivityButton.disabled =
-            false;
-
-        startActivityButton.textContent =
-            "▶ INICIAR ATIVIDADE";
-
-    }
-
-}
-
-
-/* =====================================================
-   ATIVIDADE ATUAL
-===================================================== */
-
-function mostrarAtividadeAtual(){
-
-    if(!atividadeAtual){
-        return;
-    }
-
-
-    choiceSection.classList.add(
-        "hidden"
-    );
-
-    activeSection.classList.remove(
-        "hidden"
-    );
-
-
-    activeLocation.textContent =
-        "📍 "
-        +
-        atividadeAtual.local;
-
-
-    startedAt.textContent =
-        "Iniciada às "
-        +
-        formatarHoraData(
-            atividadeAtual.iniciado_em
-        );
-
-
-    activityObservation.value =
-        "";
-
-    observationCount.textContent =
-        "0";
-
-
-    removerFotoAtividade(
-        true
-    );
-
-
-    iniciarTimer();
-
-
-    activeSection.scrollIntoView({
+    registerArea.scrollIntoView({
         behavior:"smooth",
         block:"start"
     });
@@ -3388,123 +2063,13 @@ function mostrarAtividadeAtual(){
 
 
 /* =====================================================
-   TIMER
+   FOTO
 ===================================================== */
 
-function iniciarTimer(){
-
-    pararTimer();
-
-    atualizarTimer();
-
-    timerInterval =
-        setInterval(
-            atualizarTimer,
-            1000
-        );
-
-}
-
-
-function atualizarTimer(){
-
-    if(
-        !atividadeAtual ||
-        !atividadeAtual.iniciado_em
-    ){
-        return;
-    }
-
-
-    const inicio =
-        new Date(
-            atividadeAtual.iniciado_em
-        )
-        .getTime();
-
-
-    const agora =
-        Date.now();
-
-
-    const segundos =
-        Math.max(
-            0,
-            Math.floor(
-                (agora - inicio)
-                /
-                1000
-            )
-        );
-
-
-    const horas =
-        String(
-            Math.floor(
-                segundos / 3600
-            )
-        )
-        .padStart(
-            2,
-            "0"
-        );
-
-
-    const minutos =
-        String(
-            Math.floor(
-                (segundos % 3600)
-                /
-                60
-            )
-        )
-        .padStart(
-            2,
-            "0"
-        );
-
-
-    const resto =
-        String(
-            segundos % 60
-        )
-        .padStart(
-            2,
-            "0"
-        );
-
-
-    timer.textContent =
-        `${horas}:${minutos}:${resto}`;
-
-}
-
-
-function pararTimer(){
-
-    if(timerInterval){
-
-        clearInterval(
-            timerInterval
-        );
-
-        timerInterval =
-            null;
-
-    }
-
-}
-
-
-/* =====================================================
-   FOTO ATIVIDADE
-===================================================== */
-
-function selecionarFotoAtividade(
-    input
-){
+function selecionarFoto(input){
 
     esconderErro();
+
 
     const arquivo =
         input.files?.[0];
@@ -3525,7 +2090,10 @@ function selecionarFotoAtividade(
             "Selecione uma imagem válida."
         );
 
-        input.value = "";
+
+        input.value =
+            "";
+
 
         return;
 
@@ -3541,36 +2109,39 @@ function selecionarFotoAtividade(
             "A foto deve ter no máximo 10 MB."
         );
 
-        input.value = "";
+
+        input.value =
+            "";
+
 
         return;
 
     }
 
 
-    fotoAtividade =
+    fotoArquivo =
         arquivo;
 
 
     if(
-        fotoAtividadePreviewURL
+        fotoPreviewURL
     ){
 
         URL.revokeObjectURL(
-            fotoAtividadePreviewURL
+            fotoPreviewURL
         );
 
     }
 
 
-    fotoAtividadePreviewURL =
+    fotoPreviewURL =
         URL.createObjectURL(
             arquivo
         );
 
 
     photoPreview.src =
-        fotoAtividadePreviewURL;
+        fotoPreviewURL;
 
 
     photoPreviewWrapper.classList.add(
@@ -3589,71 +2160,50 @@ function selecionarFotoAtividade(
 }
 
 
-function removerFotoAtividade(
-    silencioso = false
-){
+function removerFoto(){
 
-    fotoAtividade =
+    fotoArquivo =
         null;
 
 
     if(
-        fotoAtividadePreviewURL
+        fotoPreviewURL
     ){
 
         URL.revokeObjectURL(
-            fotoAtividadePreviewURL
+            fotoPreviewURL
         );
 
-        fotoAtividadePreviewURL =
+
+        fotoPreviewURL =
             null;
 
     }
 
 
-    if(activityPhoto){
-
-        activityPhoto.value =
-            "";
-
-    }
+    activityPhoto.value =
+        "";
 
 
-    if(photoPreview){
-
-        photoPreview.src =
-            "";
-
-    }
+    photoPreview.src =
+        "";
 
 
-    photoPreviewWrapper
-    ?.classList
-    .remove(
+    photoPreviewWrapper.classList.remove(
         "visible"
     );
 
 
-    photoButton
-    ?.classList
-    .remove(
+    photoButton.classList.remove(
         "has-photo"
     );
 
 
-    if(photoButton){
-
-        photoButton.textContent =
-            "📷 TIRAR FOTO";
-
-    }
+    photoButton.textContent =
+        "📷 TIRAR FOTO";
 
 
-    if(!silencioso){
-
-        esconderErro();
-
-    }
+    esconderErro();
 
 }
 
@@ -3662,13 +2212,13 @@ function removerFotoAtividade(
    OBSERVAÇÃO
 ===================================================== */
 
-activityObservation
-.addEventListener(
+observation.addEventListener(
     "input",
     function(){
 
         observationCount.textContent =
             this.value.length;
+
 
         esconderErro();
 
@@ -3677,44 +2227,58 @@ activityObservation
 
 
 /* =====================================================
-   UPLOAD FOTO ATIVIDADE
+   UPLOAD FOTO
 ===================================================== */
 
-async function enviarFotoAtividade(){
+async function enviarFoto(){
 
-    if(!fotoAtividade){
+    if(!fotoArquivo){
+
         return null;
+
     }
 
 
     const extensao =
-        extensaoArquivo(
-            fotoAtividade
+        obterExtensao(
+            fotoArquivo
         );
 
 
-    const localSeguro =
-        limparNome(
-            atividadeAtual.local
-        )
-        ||
-        "atividade";
+    const localCompleto =
+        torreSelecionada
+        ?
+        torreSelecionada
+        +
+        "-"
+        +
+        localSelecionado
+        :
+        localSelecionado;
 
 
     const caminho =
-        `${
-            limparNome(
-                colaborador.funcao
-            )
-        }/${
-            colaborador.matricula
-        }/${
-            dataLocalBanco()
-        }/${
-            Date.now()
-        }-${
-            localSeguro
-        }.${extensao}`;
+        "limpeza/"
+        +
+        colaborador.matricula
+        +
+        "/"
+        +
+        obterDataLocal()
+        +
+        "/"
+        +
+        Date.now()
+        +
+        "-"
+        +
+        limparNome(
+            localCompleto
+        )
+        +
+        "."
+        +
+        extensao;
 
 
     const {
@@ -3730,12 +2294,16 @@ async function enviarFotoAtividade(){
 
         .upload(
             caminho,
-            fotoAtividade,
+            fotoArquivo,
             {
-                cacheControl:"3600",
-                upsert:false,
+                cacheControl:
+                    "3600",
+
+                upsert:
+                    false,
+
                 contentType:
-                    fotoAtividade.type
+                    fotoArquivo.type
             }
         );
 
@@ -3776,41 +2344,44 @@ async function enviarFotoAtividade(){
 
 
 /* =====================================================
-   FINALIZAR ATIVIDADE
+   REGISTRAR CONCLUSÃO
 ===================================================== */
 
-async function finalizarAtividade(){
+async function registrarConclusao(){
 
     if(
         processando ||
-        !atividadeAtual
+        !colaborador ||
+        !localSelecionado
     ){
+
         return;
+
     }
 
 
     esconderErro();
 
 
-    const observacao =
-        activityObservation
+    const texto =
+        observation
         .value
         .trim();
 
 
     /*
-     * REGRA CENTRAL:
-     * FOTO OU TEXTO.
-     */
+       FOTO OU TEXTO
+    */
 
     if(
-        !fotoAtividade &&
-        observacao.length === 0
+        !fotoArquivo &&
+        texto.length === 0
     ){
 
         mostrarErro(
-            "Para finalizar a área, tire uma foto ou escreva uma observação."
+            "Para registrar a conclusão, tire uma foto ou escreva uma observação."
         );
+
 
         return;
 
@@ -3823,32 +2394,120 @@ async function finalizarAtividade(){
             true;
 
 
-        finishActivityButton.disabled =
+        registerButton.disabled =
             true;
 
-        finishActivityButton.textContent =
-            fotoAtividade
+
+        registerButton.textContent =
+            fotoArquivo
             ?
             "ENVIANDO FOTO..."
             :
-            "FINALIZANDO...";
+            "REGISTRANDO...";
 
 
-        let fotoURL =
-            null;
-
-
-        if(fotoAtividade){
-
-            fotoURL =
-                await enviarFotoAtividade();
-
-        }
+        const fotoURL =
+            await enviarFoto();
 
 
         const agora =
-            new Date()
-            .toISOString();
+            new Date();
+
+
+        const agoraISO =
+            agora.toISOString();
+
+
+        const localCompleto =
+            torreSelecionada
+            ?
+            torreSelecionada
+            +
+            " • "
+            +
+            localSelecionado
+            :
+            localSelecionado;
+
+
+        const tipo =
+            normalizar(
+                colaborador.funcao
+            )
+            .includes(
+                "zel"
+            )
+            ?
+            "zeladoria"
+            :
+            "limpeza";
+
+
+        const registro = {
+
+            tipo:
+                tipo,
+
+            condominio:
+                CONDOMINIO,
+
+            torre:
+                torreSelecionada,
+
+            local:
+                localCompleto,
+
+            item:
+                "Área concluída",
+
+            colaborador:
+                colaborador.nome,
+
+            matricula:
+                colaborador.matricula,
+
+            cargo:
+                colaborador.funcao,
+
+            colaborador_id:
+                colaborador.id,
+
+            jornada_id:
+                null,
+
+            area:
+                torreSelecionada
+                ?
+                torreSelecionada
+                :
+                "Área comum",
+
+            detalhe_area:
+                localSelecionado,
+
+            iniciado_em:
+                null,
+
+            finalizado_em:
+                agoraISO,
+
+            status:
+                "Finalizada",
+
+            observacao:
+                texto ||
+                null,
+
+            foto_url:
+                fotoURL,
+
+            data:
+                obterDataLocal(),
+
+            hora:
+                obterHoraLocal()
+
+        };
 
 
         const {
@@ -3861,29 +2520,8 @@ async function finalizarAtividade(){
                 "registros_atividade"
             )
 
-            .update({
-
-                foto_url:
-                    fotoURL,
-
-                observacao:
-                    observacao ||
-                    null,
-
-                finalizado_em:
-                    agora,
-
-                status:
-                    "Finalizada",
-
-                hora:
-                    horaLocalBanco()
-
-            })
-
-            .eq(
-                "id",
-                atividadeAtual.id
+            .insert(
+                registro
             )
 
             .select()
@@ -3896,36 +2534,31 @@ async function finalizarAtividade(){
         }
 
 
-        const duracao =
-            formatarDuracao(
-                data.iniciado_em,
-                data.finalizado_em
+        const hora =
+            formatarHora(
+                data.hora
             );
 
 
-        mostrarSucesso(
-            "Área finalizada",
-            `${data.local} • ${duracao}`
+        document
+        .getElementById(
+            "successText"
+        )
+        .textContent =
+            localCompleto
+            +
+            " • "
+            +
+            hora;
+
+
+        document
+        .getElementById(
+            "successOverlay"
+        )
+        .classList.add(
+            "visible"
         );
-
-
-        atividadeAtual =
-            null;
-
-
-        activityObservation.value =
-            "";
-
-        observationCount.textContent =
-            "0";
-
-
-        removerFotoAtividade(
-            true
-        );
-
-
-        pararTimer();
 
 
         await carregarHistorico();
@@ -3934,10 +2567,20 @@ async function finalizarAtividade(){
         setTimeout(
             () => {
 
-                mostrarEscolha();
+                document
+                .getElementById(
+                    "successOverlay"
+                )
+                .classList
+                .remove(
+                    "visible"
+                );
+
+
+                prepararNovoRegistro();
 
             },
-            600
+            1200
         );
 
 
@@ -3947,8 +2590,9 @@ async function finalizarAtividade(){
             erro
         );
 
+
         mostrarErro(
-            "Não foi possível finalizar: "
+            "Não foi possível registrar: "
             +
             (
                 erro.message ||
@@ -3962,11 +2606,13 @@ async function finalizarAtividade(){
         processando =
             false;
 
-        finishActivityButton.disabled =
+
+        registerButton.disabled =
             false;
 
-        finishActivityButton.textContent =
-            "✓ FINALIZAR ÁREA";
+
+        registerButton.textContent =
+            "✓ REGISTRAR CONCLUSÃO";
 
     }
 
@@ -3974,20 +2620,97 @@ async function finalizarAtividade(){
 
 
 /* =====================================================
-   HISTÓRICO
+   NOVO REGISTRO
+===================================================== */
+
+function prepararNovoRegistro(){
+
+    torreSelecionada =
+        null;
+
+
+    localSelecionado =
+        null;
+
+
+    limparRegistro();
+
+
+    tipoEscolha =
+        "torre";
+
+
+    document
+    .getElementById(
+        "towerTab"
+    )
+    .classList.add(
+        "active"
+    );
+
+
+    document
+    .getElementById(
+        "commonTab"
+    )
+    .classList.remove(
+        "active"
+    );
+
+
+    renderizarEscolhaInicial();
+
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =====================================================
+   LIMPAR
+===================================================== */
+
+function limparRegistro(){
+
+    removerFoto();
+
+
+    observation.value =
+        "";
+
+
+    observationCount.textContent =
+        "0";
+
+
+    selectionSummary.classList.remove(
+        "visible"
+    );
+
+
+    registerArea.classList.remove(
+        "visible"
+    );
+
+}
+
+
+/* =====================================================
+   HISTÓRICO DE HOJE
 ===================================================== */
 
 async function carregarHistorico(){
 
-    if(!jornada){
-
-        historySection.classList.add(
-            "hidden"
-        );
-
+    if(!colaborador){
         return;
-
     }
+
+
+    const hoje =
+        obterDataLocal();
 
 
     const {
@@ -4005,8 +2728,18 @@ async function carregarHistorico(){
         )
 
         .eq(
-            "jornada_id",
-            jornada.id
+            "condominio",
+            CONDOMINIO
+        )
+
+        .eq(
+            "colaborador_id",
+            colaborador.id
+        )
+
+        .eq(
+            "data",
+            hoje
         )
 
         .eq(
@@ -4015,7 +2748,7 @@ async function carregarHistorico(){
         )
 
         .order(
-            "finalizado_em",
+            "created_at",
             {
                 ascending:false
             }
@@ -4027,6 +2760,7 @@ async function carregarHistorico(){
         console.error(
             error
         );
+
 
         return;
 
@@ -4041,251 +2775,80 @@ async function carregarHistorico(){
         registros.length === 0
     ){
 
-        historySection.classList.add(
-            "hidden"
-        );
+        historySection.style.display =
+            "none";
+
 
         return;
 
     }
 
 
-    historySection.classList.remove(
-        "hidden"
-    );
+    historySection.style.display =
+        "block";
 
 
     historyList.innerHTML =
         registros
+
         .map(
-            registro => {
+            registro => `
 
-                const duracao =
-                    formatarDuracao(
-                        registro.iniciado_em,
-                        registro.finalizado_em
-                    );
+                <div class="history-item">
 
+                    <div class="history-top">
 
-                return `
-
-                    <div class="history-item">
-
-                        <div class="history-top">
-
-                            <div class="history-location">
-                                📍 ${escapar(registro.local)}
-                            </div>
-
-                            <span class="history-status">
-                                FINALIZADA
-                            </span>
-
+                        <div class="history-location">
+                            📍 ${escapar(
+                                registro.local
+                            )}
                         </div>
 
 
-                        <div class="history-meta">
+                        <span class="history-status">
+                            REGISTRADO
+                        </span>
 
-                            ${formatarHoraData(
-                                registro.iniciado_em
-                            )}
+                    </div>
 
-                            →
 
-                            ${formatarHoraData(
-                                registro.finalizado_em
-                            )}
+                    <div class="history-meta">
 
-                            ${
-                                duracao
-                                ?
-                                " • " + duracao
-                                :
-                                ""
-                            }
-
-                            ${
-                                registro.foto_url
-                                ?
-                                " • 📷 Foto"
-                                :
-                                ""
-                            }
-
-                        </div>
-
+                        🕒 ${formatarHora(
+                            registro.hora
+                        )}
 
                         ${
-                            registro.observacao
+                            registro.foto_url
                             ?
-                            `
-                            <div class="history-note">
-                                💬 ${escapar(registro.observacao)}
-                            </div>
-                            `
+                            " • 📷 Foto"
                             :
                             ""
                         }
 
                     </div>
 
-                `;
 
-            }
+                    ${
+                        registro.observacao
+                        ?
+                        `
+                        <div class="history-note">
+                            💬 ${escapar(
+                                registro.observacao
+                            )}
+                        </div>
+                        `
+                        :
+                        ""
+                    }
+
+                </div>
+
+            `
         )
+
         .join("");
-
-}
-
-
-/* =====================================================
-   ENCERRAR JORNADA
-===================================================== */
-
-async function encerrarJornada(){
-
-    if(
-        processando ||
-        !jornada
-    ){
-        return;
-    }
-
-
-    if(atividadeAtual){
-
-        alert(
-            "Finalize a atividade em andamento antes de encerrar o turno."
-        );
-
-        return;
-
-    }
-
-
-    const confirmar =
-        confirm(
-            "Deseja encerrar sua jornada agora?"
-        );
-
-
-    if(!confirmar){
-        return;
-    }
-
-
-    try{
-
-        processando =
-            true;
-
-        esconderErro();
-
-
-        const agora =
-            new Date()
-            .toISOString();
-
-
-        const {
-            data,
-            error
-        } =
-            await db
-
-            .from(
-                "jornadas"
-            )
-
-            .update({
-
-                saida_em:
-                    agora,
-
-                status:
-                    "Encerrada",
-
-                updated_at:
-                    agora
-
-            })
-
-            .eq(
-                "id",
-                jornada.id
-            )
-
-            .select()
-
-            .single();
-
-
-        if(error){
-            throw error;
-        }
-
-
-        mostrarSucesso(
-            "Jornada encerrada",
-            `Saída registrada às ${formatarHoraData(data.saida_em)}.`,
-            1800
-        );
-
-
-        jornada =
-            null;
-
-        atividadeAtual =
-            null;
-
-        pararTimer();
-
-
-        choiceSection.classList.add(
-            "hidden"
-        );
-
-        activeSection.classList.add(
-            "hidden"
-        );
-
-        historySection.classList.add(
-            "hidden"
-        );
-
-
-        setTimeout(
-            () => {
-
-                renderizarInicioJornada();
-
-            },
-            1000
-        );
-
-
-    }catch(erro){
-
-        console.error(
-            erro
-        );
-
-        mostrarErro(
-            "Não foi possível encerrar a jornada: "
-            +
-            (
-                erro.message ||
-                "erro desconhecido"
-            )
-        );
-
-
-    }finally{
-
-        processando =
-            false;
-
-    }
 
 }
 
@@ -4295,20 +2858,6 @@ async function encerrarJornada(){
 ===================================================== */
 
 function sair(){
-
-    if(atividadeAtual){
-
-        const confirmar =
-            confirm(
-                "Existe uma atividade em andamento. Ela continuará aberta se você sair. Deseja sair mesmo assim?"
-            );
-
-        if(!confirmar){
-            return;
-        }
-
-    }
-
 
     localStorage.removeItem(
         "usuarioLogado"
@@ -4322,7 +2871,7 @@ function sair(){
 
 
 /* =====================================================
-   INICIALIZAR
+   INICIAR
 ===================================================== */
 
 carregarColaborador();
