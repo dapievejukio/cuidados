@@ -6,53 +6,57 @@
 
 <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
 >
 
-<title>Atividade — CUIDADOS</title>
+<title>Colaborador — ORAQUI</title>
 
 <meta
     name="theme-color"
-    content="#12355b"
+    content="#342a67"
 >
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 
-:root {
-    --primary:#12355b;
-    --primary-dark:#0b2745;
-    --primary-light:#eaf2fb;
+:root{
+    --primary:#7667b9;
+    --primary-dark:#5f559c;
+    --primary-light:#eeeafd;
 
-    --green:#178c58;
-    --green-light:#e8f6ef;
+    --blue:#5d88a5;
+    --blue-light:#eaf4f8;
 
-    --yellow:#d89b19;
-    --yellow-light:#fff4d6;
+    --green:#69a17f;
+    --green-dark:#508765;
+    --green-light:#eaf5ee;
 
-    --red:#d94b4b;
+    --yellow:#c4974d;
+    --yellow-light:#fff5df;
+
+    --red:#c96565;
     --red-light:#fdecec;
 
-    --text:#17202a;
-    --muted:#687483;
+    --text:#2d3742;
+    --muted:#75808c;
 
-    --background:#f4f7fa;
+    --background:#f4f6f8;
     --card:#ffffff;
-    --border:#e2e8ef;
+    --border:#e4e9ee;
 
     --shadow:
-        0 8px 25px
-        rgba(20,45,75,.07);
+        0 10px 30px
+        rgba(35,48,65,.07);
 }
 
-* {
+*{
     box-sizing:border-box;
     margin:0;
     padding:0;
 }
 
-body {
+body{
     min-height:100vh;
 
     font-family:
@@ -70,8 +74,12 @@ body {
 
 button,
 input,
-textarea {
+textarea{
     font-family:inherit;
+}
+
+button{
+    -webkit-tap-highlight-color:transparent;
 }
 
 
@@ -79,12 +87,12 @@ textarea {
    HEADER
 ===================================================== */
 
-header {
+header{
     background:
         linear-gradient(
             135deg,
-            var(--primary-dark),
-            var(--primary)
+            #6d80a8,
+            #7c72ae
         );
 
     color:white;
@@ -92,76 +100,103 @@ header {
     padding:
         calc(18px + env(safe-area-inset-top))
         18px
-        35px;
+        50px;
 }
 
-.header-content {
+.header-content{
     max-width:720px;
     margin:auto;
 }
 
-.topbar {
+.topbar{
     display:flex;
     align-items:center;
     justify-content:space-between;
 }
 
-.back {
-    width:42px;
-    height:42px;
+.brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
 
-    border:0;
-    border-radius:13px;
+.brand-icon{
+    width:39px;
+    height:39px;
 
-    background:rgba(255,255,255,.14);
-    color:white;
+    border-radius:12px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:rgba(255,255,255,.18);
 
     font-size:20px;
+    font-weight:800;
+}
+
+.brand strong{
+    display:block;
+
+    font-size:17px;
+    letter-spacing:.4px;
+}
+
+.brand small{
+    display:block;
+
+    margin-top:2px;
+
+    font-size:7px;
+    letter-spacing:1.1px;
+
+    opacity:.75;
+}
+
+.logout{
+    border:0;
+
+    padding:10px 13px;
+
+    border-radius:14px;
+
+    background:rgba(255,255,255,.16);
+    color:white;
+
+    font-size:9px;
+    font-weight:800;
+
     cursor:pointer;
 }
 
-.brand {
-    text-align:right;
+.header-title{
+    margin-top:28px;
 }
 
-.brand strong {
+.header-title small{
     display:block;
-    font-size:14px;
-}
-
-.brand small {
-    display:block;
-    margin-top:2px;
-    opacity:.7;
-    font-size:9px;
-}
-
-.header-title {
-    margin-top:25px;
-}
-
-.header-title small {
-    display:block;
-
-    opacity:.7;
 
     font-size:9px;
-    font-weight:700;
+    letter-spacing:1px;
+
+    opacity:.72;
 
     text-transform:uppercase;
 }
 
-.header-title h1 {
-    margin-top:5px;
-    font-size:25px;
-}
-
-.header-title p {
+.header-title h1{
     margin-top:6px;
 
-    opacity:.72;
+    font-size:27px;
+}
 
-    font-size:10px;
+.header-title p{
+    margin-top:7px;
+
+    font-size:11px;
+
+    opacity:.8;
 }
 
 
@@ -169,34 +204,140 @@ header {
    MAIN
 ===================================================== */
 
-main {
+main{
     max-width:720px;
 
-    margin:-15px auto 60px;
+    margin:-18px auto 80px;
 
     padding:0 15px;
 }
 
 
 /* =====================================================
-   COLABORADOR
+   CARD COLABORADOR
 ===================================================== */
 
-.user-card {
+.user-card{
+    padding:16px;
+
+    border-radius:21px;
+
     background:white;
-
-    border-radius:20px;
-
-    padding:15px;
 
     box-shadow:var(--shadow);
 
     display:flex;
     align-items:center;
+    gap:13px;
+}
+
+.user-icon{
+    width:49px;
+    height:49px;
+
+    flex-shrink:0;
+
+    border-radius:15px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:var(--primary-light);
+
+    font-size:23px;
+}
+
+.user-info{
+    flex:1;
+}
+
+.user-info strong{
+    display:block;
+
+    font-size:13px;
+}
+
+.user-info span{
+    display:block;
+
+    margin-top:4px;
+
+    color:var(--muted);
+
+    font-size:9px;
+}
+
+.status-tag{
+    padding:7px 10px;
+
+    border-radius:20px;
+
+    background:#eef1f4;
+    color:var(--muted);
+
+    font-size:8px;
+    font-weight:800;
+}
+
+.status-tag.active{
+    background:var(--green-light);
+    color:var(--green);
+}
+
+
+/* =====================================================
+   SEÇÕES
+===================================================== */
+
+.section{
+    margin-top:23px;
+}
+
+.section-title{
+    margin-bottom:11px;
+}
+
+.section-title h2{
+    font-size:17px;
+}
+
+.section-title p{
+    margin-top:5px;
+
+    color:var(--muted);
+
+    font-size:9px;
+    line-height:1.55;
+}
+
+
+/* =====================================================
+   CARD BASE
+===================================================== */
+
+.card{
+    padding:17px;
+
+    border-radius:21px;
+
+    background:white;
+
+    box-shadow:var(--shadow);
+}
+
+
+/* =====================================================
+   JORNADA
+===================================================== */
+
+.journey-status{
+    display:flex;
+    align-items:center;
     gap:12px;
 }
 
-.user-icon {
+.journey-icon{
     width:48px;
     height:48px;
 
@@ -208,21 +349,22 @@ main {
     align-items:center;
     justify-content:center;
 
-    background:var(--primary-light);
+    background:var(--blue-light);
 
     font-size:22px;
 }
 
-.user-info {
+.journey-info{
     flex:1;
 }
 
-.user-info strong {
+.journey-info strong{
     display:block;
-    font-size:13px;
+
+    font-size:12px;
 }
 
-.user-info span {
+.journey-info span{
     display:block;
 
     margin-top:4px;
@@ -230,360 +372,430 @@ main {
     color:var(--muted);
 
     font-size:9px;
+    line-height:1.45;
 }
 
-.type-tag {
-    padding:6px 9px;
+.selfie-area{
+    margin-top:16px;
 
-    border-radius:20px;
+    padding-top:15px;
+
+    border-top:1px solid var(--border);
+}
+
+.selfie-button{
+    width:100%;
+
+    min-height:54px;
+
+    border:1.5px dashed #b9b0dd;
+
+    border-radius:15px;
 
     background:var(--primary-light);
     color:var(--primary);
 
-    font-size:8px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+
+    font-size:10px;
     font-weight:800;
+
+    cursor:pointer;
 }
 
-
-/* =====================================================
-   SEÇÕES
-===================================================== */
-
-.section {
-    margin-top:22px;
+.selfie-input{
+    display:none;
 }
 
-.section-title {
-    margin-bottom:11px;
+.selfie-preview{
+    display:none;
+
+    margin-top:12px;
+
+    width:100%;
+
+    max-height:350px;
+
+    object-fit:cover;
+
+    border-radius:16px;
 }
 
-.section-title h2 {
-    font-size:16px;
+.selfie-preview.visible{
+    display:block;
 }
 
-.section-title p {
-    margin-top:4px;
+.start-journey{
+    width:100%;
+
+    min-height:53px;
+
+    margin-top:13px;
+
+    border:0;
+    border-radius:15px;
+
+    background:var(--green);
+    color:white;
+
+    font-size:10px;
+    font-weight:800;
+
+    cursor:pointer;
+}
+
+.start-journey:disabled{
+    opacity:.5;
+    cursor:not-allowed;
+}
+
+.journey-data{
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:9px;
+
+    margin-top:15px;
+}
+
+.journey-data-box{
+    padding:12px;
+
+    border-radius:14px;
+
+    background:#f6f8fa;
+}
+
+.journey-data-box span{
+    display:block;
 
     color:var(--muted);
 
-    font-size:9px;
-    line-height:1.5;
+    font-size:7px;
+    font-weight:700;
+
+    text-transform:uppercase;
 }
 
+.journey-data-box strong{
+    display:block;
 
-/* =====================================================
-   RESUMO
-===================================================== */
+    margin-top:5px;
 
-.progress-card {
-    margin-top:15px;
-
-    padding:14px;
-
-    border-radius:17px;
-
-    background:white;
-
-    box-shadow:var(--shadow);
-}
-
-.progress-top {
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-
-    font-size:10px;
-}
-
-.progress-top strong {
     font-size:11px;
 }
 
-.progress-top span {
-    color:var(--muted);
-}
+.end-journey{
+    width:100%;
 
-.progress-bar {
-    height:8px;
+    min-height:48px;
 
-    margin-top:10px;
+    margin-top:14px;
 
-    border-radius:20px;
+    border:1px solid #efcaca;
+    border-radius:14px;
 
-    overflow:hidden;
+    background:var(--red-light);
+    color:var(--red);
 
-    background:#e8edf2;
-}
+    font-size:9px;
+    font-weight:800;
 
-.progress-fill {
-    height:100%;
-    width:0%;
-
-    background:var(--green);
-
-    transition:.25s;
+    cursor:pointer;
 }
 
 
 /* =====================================================
-   AVISO
+   ESCOLHA DE LOCAL
 ===================================================== */
 
-.notice {
-    display:none;
+.choice-tabs{
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:7px;
+
+    margin-bottom:13px;
+}
+
+.choice-tab{
+    min-height:47px;
+
+    border:1px solid var(--border);
+    border-radius:14px;
+
+    background:white;
+    color:var(--muted);
+
+    font-size:9px;
+    font-weight:800;
+
+    cursor:pointer;
+}
+
+.choice-tab.active{
+    border-color:#c7bdec;
+
+    background:var(--primary-light);
+    color:var(--primary);
+}
+
+.option-grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap:9px;
+}
+
+.option-button{
+    min-height:52px;
+
+    padding:10px;
+
+    border:1px solid var(--border);
+    border-radius:14px;
+
+    background:white;
+    color:var(--text);
+
+    font-size:9px;
+    font-weight:750;
+
+    cursor:pointer;
+}
+
+.option-button.selected{
+    border-color:#b8addf;
+
+    background:var(--primary-light);
+    color:var(--primary);
+}
+
+.option-button.full{
+    grid-column:1/-1;
+}
+
+.step-back{
+    border:0;
 
     margin-bottom:12px;
 
-    padding:13px;
-
-    border-radius:15px;
-
-    background:var(--yellow-light);
-
-    color:#79580c;
+    background:transparent;
+    color:var(--primary);
 
     font-size:9px;
+    font-weight:800;
+
+    cursor:pointer;
+}
+
+.selection-summary{
+    display:none;
+
+    margin-top:14px;
+
+    padding:13px;
+
+    border-radius:14px;
+
+    background:var(--blue-light);
+    color:var(--blue);
+
+    font-size:10px;
+    font-weight:750;
+
     line-height:1.5;
+}
+
+.selection-summary.visible{
+    display:block;
+}
+
+.start-activity{
+    display:none;
+
+    width:100%;
+
+    min-height:54px;
+
+    margin-top:13px;
+
+    border:0;
+    border-radius:15px;
+
+    background:var(--primary);
+    color:white;
+
+    font-size:10px;
+    font-weight:800;
+
+    cursor:pointer;
+}
+
+.start-activity.visible{
+    display:block;
 }
 
 
 /* =====================================================
-   ITEM
+   ATIVIDADE ATIVA
 ===================================================== */
 
-.items-list {
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-}
-
-.item-card {
-    background:white;
-
-    border:
-        1px solid
-        transparent;
-
-    border-radius:20px;
-
-    padding:15px;
-
-    box-shadow:var(--shadow);
-
-    transition:.2s;
-}
-
-.item-card.selected {
-    border-color:
-        #b9dfcc;
+.active-card{
+    border:1px solid #d9d1f1;
 
     background:
         linear-gradient(
             180deg,
             #ffffff,
-            #fbfffd
+            #fbfaff
         );
 }
 
-.item-top {
-    display:flex;
-    align-items:flex-start;
-    gap:11px;
-}
+.active-location{
+    padding:12px;
 
-.check-control {
-    position:relative;
+    border-radius:14px;
 
-    width:27px;
-    height:27px;
+    background:var(--primary-light);
+    color:var(--primary);
 
-    flex-shrink:0;
-
-    margin-top:1px;
-}
-
-.check-control input {
-    position:absolute;
-
-    opacity:0;
-
-    pointer-events:none;
-}
-
-.fake-check {
-    width:27px;
-    height:27px;
-
-    border:
-        2px solid
-        #c5ced8;
-
-    border-radius:9px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    color:white;
-
-    cursor:pointer;
-
-    font-size:15px;
+    font-size:11px;
     font-weight:800;
 }
 
-.check-control
-input:checked
-+
-.fake-check {
-    border-color:var(--green);
-    background:var(--green);
+.timer-area{
+    margin-top:17px;
+
+    text-align:center;
 }
 
-.check-control
-input:checked
-+
-.fake-check::after {
-    content:"✓";
-}
-
-.item-text {
-    flex:1;
-}
-
-.item-text strong {
-    display:block;
-
-    font-size:12px;
-
-    line-height:1.3;
-}
-
-.item-text small {
-    display:block;
-
-    margin-top:4px;
-
+.timer-label{
     color:var(--muted);
 
     font-size:8px;
-    line-height:1.45;
+    font-weight:700;
+
+    text-transform:uppercase;
 }
 
-.item-status {
-    padding:5px 8px;
+.timer{
+    margin-top:5px;
 
-    border-radius:20px;
+    font-size:36px;
+    font-weight:800;
 
-    background:#f0f3f6;
+    letter-spacing:1px;
+}
+
+.started-at{
+    margin-top:5px;
 
     color:var(--muted);
 
-    font-size:7px;
-    font-weight:800;
-
-    white-space:nowrap;
-}
-
-.item-card.selected
-.item-status {
-    background:var(--green-light);
-    color:var(--green);
+    font-size:9px;
 }
 
 
 /* =====================================================
-   FOTO POR ITEM
+   EVIDÊNCIA
 ===================================================== */
 
-.item-photo-area {
-    display:none;
+.evidence-box{
+    margin-top:19px;
 
-    margin-top:14px;
+    padding-top:17px;
 
-    padding-top:13px;
-
-    border-top:
-        1px solid
-        var(--border);
+    border-top:1px solid var(--border);
 }
 
-.item-card.selected
-.item-photo-area {
-    display:block;
+.evidence-box h3{
+    font-size:12px;
 }
 
-.photo-label {
+.evidence-box > p{
+    margin-top:5px;
+
+    color:var(--muted);
+
+    font-size:9px;
+    line-height:1.5;
+}
+
+.photo-button{
     width:100%;
-    min-height:50px;
 
-    border:
-        1.5px dashed
-        #b8c6d4;
+    min-height:52px;
 
-    border-radius:13px;
+    margin-top:13px;
+
+    border:1.5px dashed #b8c6d4;
+    border-radius:14px;
+
+    background:#f7fafc;
+    color:var(--blue);
 
     display:flex;
     align-items:center;
     justify-content:center;
     gap:7px;
 
-    background:#f7fafc;
-
-    color:var(--primary);
-
-    cursor:pointer;
-
     font-size:9px;
     font-weight:800;
+
+    cursor:pointer;
 }
 
-.photo-label.has-photo {
-    border-color:
-        #a9d9bf;
+.photo-button.has-photo{
+    border-color:#a9d9bf;
 
-    background:
-        var(--green-light);
-
-    color:
-        var(--green);
+    background:var(--green-light);
+    color:var(--green);
 }
 
-.photo-input {
+.photo-input{
     display:none;
 }
 
-.photo-preview-wrapper {
+.photo-preview-wrapper{
     display:none;
 
     position:relative;
 
-    margin-top:10px;
+    margin-top:11px;
 }
 
-.photo-preview-wrapper.visible {
+.photo-preview-wrapper.visible{
     display:block;
 }
 
-.photo-preview {
+.photo-preview{
     display:block;
 
     width:100%;
-    max-height:280px;
+
+    max-height:340px;
 
     object-fit:cover;
 
-    border-radius:14px;
+    border-radius:15px;
 }
 
-.remove-photo {
+.remove-photo{
     position:absolute;
 
     top:8px;
     right:8px;
 
-    width:34px;
-    height:34px;
+    width:36px;
+    height:36px;
 
     border:0;
     border-radius:50%;
@@ -591,59 +803,60 @@ input:checked
     background:rgba(0,0,0,.68);
     color:white;
 
-    cursor:pointer;
+    font-size:18px;
 
-    font-size:17px;
+    cursor:pointer;
 }
 
-.photo-ok {
-    display:none;
+.or-divider{
+    display:flex;
+    align-items:center;
+    gap:10px;
 
-    margin-top:8px;
+    margin:15px 0;
 
-    color:var(--green);
+    color:#a1a9b1;
 
     font-size:8px;
     font-weight:800;
 }
 
-.photo-ok.visible {
-    display:block;
+.or-divider::before,
+.or-divider::after{
+    content:"";
+
+    height:1px;
+
+    flex:1;
+
+    background:var(--border);
 }
 
-
-/* =====================================================
-   OBSERVAÇÃO
-===================================================== */
-
-textarea {
+textarea{
     width:100%;
-    min-height:100px;
 
-    resize:vertical;
-
-    border:
-        1px solid
-        var(--border);
-
-    border-radius:16px;
+    min-height:110px;
 
     padding:13px;
 
-    background:white;
+    border:1px solid var(--border);
+    border-radius:15px;
 
     outline:none;
+    resize:vertical;
+
+    background:white;
+    color:var(--text);
 
     font-size:11px;
-
-    box-shadow:var(--shadow);
+    line-height:1.5;
 }
 
-textarea:focus {
-    border-color:var(--primary);
+textarea:focus{
+    border-color:#b8addf;
 }
 
-.counter {
+.counter{
     margin-top:5px;
 
     text-align:right;
@@ -653,99 +866,149 @@ textarea:focus {
     font-size:8px;
 }
 
-
-/* =====================================================
-   REPORTAR
-===================================================== */
-
-.problem-button {
+.finish-activity{
     width:100%;
 
-    padding:13px;
+    min-height:55px;
 
-    border:
-        1px solid
-        #efc7c7;
-
-    border-radius:14px;
-
-    background:var(--red-light);
-    color:var(--red);
-
-    font-size:9px;
-    font-weight:800;
-
-    cursor:pointer;
-}
-
-
-/* =====================================================
-   FINALIZAR
-===================================================== */
-
-.finish {
-    margin-top:22px;
-}
-
-.finish-button {
-    width:100%;
-    min-height:54px;
+    margin-top:16px;
 
     border:0;
-    border-radius:16px;
+    border-radius:15px;
 
     background:var(--green);
     color:white;
 
-    font-size:11px;
+    font-size:10px;
     font-weight:800;
 
     cursor:pointer;
-
-    box-shadow:
-        0 8px 20px
-        rgba(23,140,88,.20);
 }
 
-.finish-button:disabled {
-    opacity:.55;
+.finish-activity:disabled{
+    opacity:.5;
     cursor:not-allowed;
 }
 
-.upload-status {
-    display:none;
 
-    margin-top:10px;
+/* =====================================================
+   HISTÓRICO DO DIA
+===================================================== */
 
-    padding:12px;
+.history-list{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
 
-    border-radius:13px;
+.history-item{
+    padding:14px;
 
-    background:var(--primary-light);
-    color:var(--primary);
+    border-radius:17px;
 
-    text-align:center;
+    background:white;
 
-    font-size:9px;
+    box-shadow:var(--shadow);
+}
+
+.history-top{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.history-location{
+    font-size:11px;
     font-weight:800;
 }
 
-.error {
+.history-status{
+    padding:5px 8px;
+
+    border-radius:20px;
+
+    background:var(--green-light);
+    color:var(--green);
+
+    font-size:7px;
+    font-weight:800;
+}
+
+.history-meta{
+    margin-top:6px;
+
+    color:var(--muted);
+
+    font-size:8px;
+    line-height:1.5;
+}
+
+.history-note{
+    margin-top:8px;
+
+    padding:8px 10px;
+
+    border-radius:10px;
+
+    background:#f6f8fa;
+
+    color:#59636d;
+
+    font-size:8px;
+    line-height:1.5;
+}
+
+
+/* =====================================================
+   MENSAGENS
+===================================================== */
+
+.message{
     display:none;
 
-    margin-top:10px;
+    margin-top:13px;
 
-    padding:11px;
+    padding:12px;
 
-    border-radius:13px;
-
-    background:var(--red-light);
-    color:var(--red);
-
-    text-align:center;
+    border-radius:14px;
 
     font-size:9px;
     line-height:1.5;
+}
+
+.message.visible{
+    display:block;
+}
+
+.message.error{
+    background:var(--red-light);
+    color:var(--red);
+}
+
+.message.info{
+    background:var(--blue-light);
+    color:var(--blue);
+}
+
+.loading{
+    padding:25px;
+
+    border-radius:18px;
+
+    background:white;
+
+    box-shadow:var(--shadow);
+
+    text-align:center;
+
+    color:var(--muted);
+
+    font-size:9px;
+}
+
+.hidden{
+    display:none !important;
 }
 
 
@@ -753,11 +1016,12 @@ textarea:focus {
    SUCESSO
 ===================================================== */
 
-.success-overlay {
+.success-overlay{
     position:fixed;
+
     inset:0;
 
-    z-index:999;
+    z-index:1000;
 
     display:none;
 
@@ -766,14 +1030,16 @@ textarea:focus {
 
     padding:20px;
 
-    background:
-        rgba(10,30,50,.72);
+    background:rgba(25,32,45,.72);
 
-    backdrop-filter:
-        blur(5px);
+    backdrop-filter:blur(5px);
 }
 
-.success-card {
+.success-overlay.visible{
+    display:flex;
+}
+
+.success-card{
     width:100%;
     max-width:350px;
 
@@ -786,7 +1052,7 @@ textarea:focus {
     text-align:center;
 }
 
-.success-icon {
+.success-icon{
     width:70px;
     height:70px;
 
@@ -801,17 +1067,17 @@ textarea:focus {
     background:var(--green-light);
     color:var(--green);
 
-    font-size:32px;
+    font-size:31px;
     font-weight:800;
 }
 
-.success-card h2 {
-    margin-top:16px;
+.success-card h2{
+    margin-top:15px;
 
-    font-size:20px;
+    font-size:19px;
 }
 
-.success-card p {
+.success-card p{
     margin-top:8px;
 
     color:var(--muted);
@@ -820,12 +1086,25 @@ textarea:focus {
     line-height:1.5;
 }
 
+
+/* =====================================================
+   DESKTOP
+===================================================== */
+
+@media(min-width:600px){
+
+    .option-grid{
+        grid-template-columns:
+            repeat(3,1fr);
+    }
+
+}
+
 </style>
 </head>
 
 
 <body>
-
 
 <header>
 
@@ -833,41 +1112,48 @@ textarea:focus {
 
     <div class="topbar">
 
-        <button
-            class="back"
-            onclick="voltar()"
-        >
-            ‹
-        </button>
-
-
         <div class="brand">
 
-            <strong>
-                CUIDADOS
-            </strong>
+            <div class="brand-icon">
+                ✓
+            </div>
 
-            <small>
-                Reserva Igara
-            </small>
+            <div>
+
+                <strong>
+                    ORAQUI
+                </strong>
+
+                <small>
+                    AGORA. AQUI. REGISTRADO.
+                </small>
+
+            </div>
 
         </div>
+
+        <button
+            class="logout"
+            onclick="sair()"
+        >
+            SAIR
+        </button>
 
     </div>
 
 
     <div class="header-title">
 
-        <small id="headerType">
-            ATIVIDADE
+        <small>
+            RESERVA IGARA
         </small>
 
-        <h1 id="localTitle">
-            Carregando...
+        <h1>
+            Minha operação
         </h1>
 
-        <p id="locationSubtitle">
-            Reserva Igara
+        <p>
+            Registre sua jornada e as atividades realizadas.
         </p>
 
     </div>
@@ -877,11 +1163,7 @@ textarea:focus {
 </header>
 
 
-
 <main>
-
-
-<!-- COLABORADOR -->
 
 <div class="user-card">
 
@@ -892,11 +1174,10 @@ textarea:focus {
         👷
     </div>
 
-
     <div class="user-info">
 
         <strong id="userName">
-            Colaborador
+            Carregando...
         </strong>
 
         <span id="userDescription">
@@ -905,164 +1186,275 @@ textarea:focus {
 
     </div>
 
-
     <span
-        class="type-tag"
-        id="typeTag"
+        class="status-tag"
+        id="journeyTag"
     >
-        ATIVIDADE
+        SEM JORNADA
     </span>
 
 </div>
 
 
+<div
+    class="message error"
+    id="errorMessage"
+></div>
 
-<!-- PROGRESSO -->
 
-<div class="progress-card">
+<!-- =================================================
+     JORNADA
+================================================== -->
 
-    <div class="progress-top">
+<section
+    class="section"
+    id="journeySection"
+>
 
-        <strong>
-            Registro atual
-        </strong>
+    <div class="section-title">
 
-        <span id="progressText">
-            0 de 0 selecionados
-        </span>
+        <h2>
+            Jornada
+        </h2>
+
+        <p>
+            Registre sua entrada antes de iniciar as atividades.
+        </p>
 
     </div>
 
 
-    <div class="progress-bar">
+    <div
+        class="card"
+        id="journeyCard"
+    >
+
+        <div class="loading">
+            Verificando jornada...
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =================================================
+     ESCOLHER ATIVIDADE
+================================================== -->
+
+<section
+    class="section hidden"
+    id="choiceSection"
+>
+
+    <div class="section-title">
+
+        <h2>
+            Onde você vai trabalhar?
+        </h2>
+
+        <p>
+            Escolha livremente o próximo local.
+        </p>
+
+    </div>
+
+
+    <div class="card">
 
         <div
-            class="progress-fill"
-            id="progressFill"
+            id="choiceContent"
         ></div>
 
+        <div
+            class="selection-summary"
+            id="selectionSummary"
+        ></div>
+
+        <button
+            class="start-activity"
+            id="startActivityButton"
+            onclick="iniciarAtividade()"
+        >
+            ▶ INICIAR ATIVIDADE
+        </button>
+
     </div>
 
-</div>
+</section>
 
 
+<!-- =================================================
+     ATIVIDADE EM ANDAMENTO
+================================================== -->
 
-<!-- ITENS -->
-
-<section class="section">
+<section
+    class="section hidden"
+    id="activeSection"
+>
 
     <div class="section-title">
 
         <h2>
-            O que foi realizado?
+            Atividade em andamento
         </h2>
 
         <p>
-            Marque somente os itens executados.
-            Cada item registrado precisa de sua própria foto.
+            Finalize esta atividade antes de iniciar outra.
         </p>
 
     </div>
 
 
-    <div
-        class="notice"
-        id="specialNotice"
-    ></div>
+    <div class="card active-card">
+
+        <div
+            class="active-location"
+            id="activeLocation"
+        >
+            📍
+        </div>
 
 
-    <div
-        class="items-list"
-        id="itemsList"
-    ></div>
+        <div class="timer-area">
+
+            <div class="timer-label">
+                TEMPO NESTA ATIVIDADE
+            </div>
+
+            <div
+                class="timer"
+                id="timer"
+            >
+                00:00:00
+            </div>
+
+            <div
+                class="started-at"
+                id="startedAt"
+            ></div>
+
+        </div>
+
+
+        <div class="evidence-box">
+
+            <h3>
+                Finalização
+            </h3>
+
+            <p>
+                Para finalizar, envie uma foto ou escreva uma observação.
+            </p>
+
+
+            <label
+                class="photo-button"
+                id="photoButton"
+                for="activityPhoto"
+            >
+                📷 TIRAR FOTO
+            </label>
+
+
+            <input
+                class="photo-input"
+                id="activityPhoto"
+                type="file"
+                accept="image/*"
+                capture="environment"
+                onchange="selecionarFotoAtividade(this)"
+            >
+
+
+            <div
+                class="photo-preview-wrapper"
+                id="photoPreviewWrapper"
+            >
+
+                <img
+                    class="photo-preview"
+                    id="photoPreview"
+                    alt="Foto da atividade"
+                >
+
+                <button
+                    class="remove-photo"
+                    type="button"
+                    onclick="removerFotoAtividade()"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="or-divider">
+                OU
+            </div>
+
+
+            <textarea
+                id="activityObservation"
+                maxlength="600"
+                placeholder="Ex.: limpeza concluída. Mancha no piso não saiu..."
+            ></textarea>
+
+
+            <div class="counter">
+                <span id="observationCount">0</span>/600
+            </div>
+
+
+            <button
+                class="finish-activity"
+                id="finishActivityButton"
+                onclick="finalizarAtividade()"
+            >
+                ✓ FINALIZAR ÁREA
+            </button>
+
+        </div>
+
+    </div>
 
 </section>
 
 
+<!-- =================================================
+     HISTÓRICO
+================================================== -->
 
-<!-- OBSERVAÇÃO -->
-
-<section class="section">
+<section
+    class="section hidden"
+    id="historySection"
+>
 
     <div class="section-title">
 
         <h2>
-            Observação geral
+            Hoje
         </h2>
 
         <p>
-            Opcional. Será vinculada aos itens
-            registrados nesta atividade.
+            Atividades finalizadas nesta jornada.
         </p>
 
     </div>
 
-
-    <textarea
-        id="observation"
-        maxlength="300"
-        placeholder="Ex.: vidro não realizado porque havia moradores no local..."
-    ></textarea>
-
-
-    <div class="counter">
-
-        <span id="charCount">
-            0
-        </span>/300
-
-    </div>
-
-</section>
-
-
-
-<section class="section">
-
-    <button
-        class="problem-button"
-        type="button"
-        onclick="problemaEmConstrucao()"
-    >
-        ⚠️ REPORTAR PROBLEMA — EM CONSTRUÇÃO
-    </button>
-
-</section>
-
-
-
-<div class="finish">
-
-    <button
-        class="finish-button"
-        id="finishButton"
-        onclick="registrarItens()"
-    >
-        ✓ REGISTRAR ITENS REALIZADOS
-    </button>
-
-
     <div
-        class="upload-status"
-        id="uploadStatus"
-    >
-        Enviando...
-    </div>
-
-
-    <div
-        class="error"
-        id="errorMessage"
+        class="history-list"
+        id="historyList"
     ></div>
 
-</div>
-
+</section>
 
 </main>
 
 
-
-<!-- SUCESSO -->
+<!-- =================================================
+     SUCESSO
+================================================== -->
 
 <div
     class="success-overlay"
@@ -1075,18 +1467,17 @@ textarea:focus {
             ✓
         </div>
 
-        <h2>
-            Registro enviado
+        <h2 id="successTitle">
+            Registrado
         </h2>
 
         <p id="successText">
-            Os itens foram registrados.
+            Registro realizado.
         </p>
 
     </div>
 
 </div>
-
 
 
 <script>
@@ -1098,10 +1489,8 @@ textarea:focus {
 const SUPABASE_URL =
     "https://rhiosvsohvqqrxzwohqu.supabase.co";
 
-
 const SUPABASE_KEY =
     "sb_publishable_vcjiMMCTxQJ7ArTGsQ-PuQ_5gaAfoIt";
-
 
 const db =
     window.supabase.createClient(
@@ -1110,20 +1499,45 @@ const db =
     );
 
 
+/* =====================================================
+   CONFIGURAÇÃO
+===================================================== */
+
+const CONDOMINIO =
+    "Reserva Igara";
+
+const BUCKET_SELFIES =
+    "selfies-colaboradores";
+
+const BUCKET_ATIVIDADES =
+    "fotos-atividades";
+
 
 /* =====================================================
    SESSÃO
 ===================================================== */
 
-const sessao =
-    JSON.parse(
-        localStorage.getItem(
-            "usuarioLogado"
-        )
-    );
+let sessao = null;
 
+try{
 
-if (!sessao) {
+    sessao =
+        JSON.parse(
+            localStorage.getItem(
+                "usuarioLogado"
+            )
+        );
+
+}catch(e){
+
+    sessao = null;
+
+}
+
+if(
+    !sessao ||
+    !sessao.matricula
+){
 
     window.location.href =
         "index.html";
@@ -1131,141 +1545,160 @@ if (!sessao) {
 }
 
 
-
-/* =====================================================
-   USUÁRIO
-===================================================== */
-
-const perfis = {
-
-    "0001": {
-
-        nome:"Débora",
-        matricula:"0001",
-        cargo:"Auxiliar de Limpeza",
-        tipo:"limpeza"
-
-    },
-
-    "0002": {
-
-        nome:"Zelador",
-        matricula:"0002",
-        cargo:"Zelador",
-        tipo:"zeladoria"
-
-    }
-
-};
-
-
-const usuario =
-    perfis[sessao.matricula]
-    ||
-    {
-
-        nome:
-            sessao.nome ||
-            "Colaborador",
-
-        matricula:
-            sessao.matricula ||
-            "",
-
-        cargo:
-            sessao.cargo ||
-            "Colaborador",
-
-        tipo:
-            sessao.tipo ||
-            "limpeza"
-
-    };
-
-
-
-/* =====================================================
-   LOCAL
-===================================================== */
-
-const local =
-    localStorage.getItem(
-        "localSelecionado"
-    )
-    ||
-    "Atividade";
-
-
-const torre =
-    localStorage.getItem(
-        "torreSelecionada"
-    )
-    ||
-    "Reserva Igara";
-
-
-let tipoAtividade =
-    localStorage.getItem(
-        "tipoAtividadeAtual"
-    )
-    ||
-    usuario.tipo;
-
-
-if (
-    usuario.tipo ===
-    "zeladoria"
-) {
-
-    tipoAtividade =
-        "zeladoria";
-
-}
-
-
-
 /* =====================================================
    ESTADO
 ===================================================== */
 
-let itensAtividade =
-    [];
+let colaborador =
+    null;
 
+let jornada =
+    null;
 
-let fotosItens =
-    {};
+let atividadeAtual =
+    null;
 
+let selfieArquivo =
+    null;
 
-let previewURLs =
-    {};
+let selfiePreviewURL =
+    null;
 
+let fotoAtividade =
+    null;
 
-let enviando =
+let fotoAtividadePreviewURL =
+    null;
+
+let timerInterval =
+    null;
+
+let tipoEscolha =
+    "torre";
+
+let torreSelecionada =
+    null;
+
+let localSelecionado =
+    null;
+
+let processando =
     false;
-
 
 
 /* =====================================================
    ELEMENTOS
 ===================================================== */
 
-const itemsList =
+const userName =
     document.getElementById(
-        "itemsList"
+        "userName"
     );
 
-
-const observation =
+const userDescription =
     document.getElementById(
-        "observation"
+        "userDescription"
     );
 
-
-const charCount =
+const userIcon =
     document.getElementById(
-        "charCount"
+        "userIcon"
     );
 
+const journeyTag =
+    document.getElementById(
+        "journeyTag"
+    );
+
+const journeyCard =
+    document.getElementById(
+        "journeyCard"
+    );
+
+const choiceSection =
+    document.getElementById(
+        "choiceSection"
+    );
+
+const choiceContent =
+    document.getElementById(
+        "choiceContent"
+    );
+
+const selectionSummary =
+    document.getElementById(
+        "selectionSummary"
+    );
+
+const startActivityButton =
+    document.getElementById(
+        "startActivityButton"
+    );
+
+const activeSection =
+    document.getElementById(
+        "activeSection"
+    );
+
+const activeLocation =
+    document.getElementById(
+        "activeLocation"
+    );
+
+const timer =
+    document.getElementById(
+        "timer"
+    );
+
+const startedAt =
+    document.getElementById(
+        "startedAt"
+    );
+
+const activityPhoto =
+    document.getElementById(
+        "activityPhoto"
+    );
+
+const photoButton =
+    document.getElementById(
+        "photoButton"
+    );
+
+const photoPreviewWrapper =
+    document.getElementById(
+        "photoPreviewWrapper"
+    );
+
+const photoPreview =
+    document.getElementById(
+        "photoPreview"
+    );
+
+const activityObservation =
+    document.getElementById(
+        "activityObservation"
+    );
+
+const observationCount =
+    document.getElementById(
+        "observationCount"
+    );
+
+const finishActivityButton =
+    document.getElementById(
+        "finishActivityButton"
+    );
+
+const historySection =
+    document.getElementById(
+        "historySection"
+    );
+
+const historyList =
+    document.getElementById(
+        "historyList"
+    );
 
 const errorMessage =
     document.getElementById(
@@ -1273,1330 +1706,1950 @@ const errorMessage =
     );
 
 
-const uploadStatus =
-    document.getElementById(
-        "uploadStatus"
-    );
-
-
-const finishButton =
-    document.getElementById(
-        "finishButton"
-    );
-
-
-const progressText =
-    document.getElementById(
-        "progressText"
-    );
-
-
-const progressFill =
-    document.getElementById(
-        "progressFill"
-    );
-
-
-const specialNotice =
-    document.getElementById(
-        "specialNotice"
-    );
-
-
-
 /* =====================================================
-   CABEÇALHO
+   UTILIDADES
 ===================================================== */
 
-document
-.getElementById(
-    "localTitle"
-)
-.textContent =
-    local;
+function escapar(texto){
 
+    if(
+        texto === null ||
+        texto === undefined
+    ){
+        return "";
+    }
 
-document
-.getElementById(
-    "userName"
-)
-.textContent =
-    usuario.nome;
+    return String(texto)
 
-
-document
-.getElementById(
-    "userDescription"
-)
-.textContent =
-    usuario.cargo
-    +
-    " • #"
-    +
-    usuario.matricula;
-
-
-if (
-    tipoAtividade ===
-    "zeladoria"
-) {
-
-    document
-    .getElementById(
-        "headerType"
-    )
-    .textContent =
-        "ZELADORIA";
-
-
-    document
-    .getElementById(
-        "typeTag"
-    )
-    .textContent =
-        "ZELADORIA";
-
-
-    document
-    .getElementById(
-        "userIcon"
-    )
-    .textContent =
-        "🛠️";
-
-
-    document
-    .getElementById(
-        "locationSubtitle"
-    )
-    .textContent =
-        "Reserva Igara • Área comum";
-
-} else {
-
-    document
-    .getElementById(
-        "headerType"
-    )
-    .textContent =
-        "LIMPEZA";
-
-
-    document
-    .getElementById(
-        "typeTag"
-    )
-    .textContent =
-        "LIMPEZA";
-
-
-    document
-    .getElementById(
-        "userIcon"
-    )
-    .textContent =
-        "🧹";
-
-
-    document
-    .getElementById(
-        "locationSubtitle"
-    )
-    .textContent =
-        torre
-        +
-        " • Reserva Igara";
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
 
 }
 
 
+function normalizar(texto){
 
-/* =====================================================
-   CHECKLIST LIMPEZA
-===================================================== */
+    return String(
+        texto || ""
+    )
+    .trim()
+    .toLowerCase();
 
-function checklistLimpeza() {
-
-    const nome =
-        local.toLowerCase();
+}
 
 
-    if (
-        nome.includes("abrigo")
-        ||
-        nome.includes("resíduo")
-        ||
-        nome.includes("residuo")
-    ) {
+function limparNome(texto){
 
-        return [
+    return String(
+        texto || ""
+    )
+    .normalize("NFD")
+    .replace(
+        /[\u0300-\u036f]/g,
+        ""
+    )
+    .toLowerCase()
+    .replace(
+        /[^a-z0-9]+/g,
+        "-"
+    )
+    .replace(
+        /^-+|-+$/g,
+        ""
+    );
 
+}
+
+
+function dataLocalBanco(){
+
+    const agora =
+        new Date();
+
+    const ano =
+        agora.getFullYear();
+
+    const mes =
+        String(
+            agora.getMonth() + 1
+        )
+        .padStart(2,"0");
+
+    const dia =
+        String(
+            agora.getDate()
+        )
+        .padStart(2,"0");
+
+    return `${ano}-${mes}-${dia}`;
+
+}
+
+
+function horaLocalBanco(){
+
+    return new Date()
+        .toTimeString()
+        .slice(0,8);
+
+}
+
+
+function formatarHoraData(valor){
+
+    if(!valor){
+        return "--:--";
+    }
+
+    const data =
+        new Date(valor);
+
+    if(
+        Number.isNaN(
+            data.getTime()
+        )
+    ){
+        return "--:--";
+    }
+
+    return data
+        .toLocaleTimeString(
+            "pt-BR",
             {
-                titulo:"Piso",
-                descricao:
-                    "Limpeza do piso."
-            },
-
-            {
-                titulo:"Lixeiras",
-                descricao:
-                    "Limpeza e organização."
-            },
-
-            {
-                titulo:"Resíduos",
-                descricao:
-                    "Acondicionamento dos resíduos."
-            },
-
-            {
-                titulo:"Sacos",
-                descricao:
-                    "Substituição quando necessária."
-            },
-
-            {
-                titulo:"Porta e acesso",
-                descricao:
-                    "Limpeza do acesso."
+                hour:"2-digit",
+                minute:"2-digit"
             }
-
-        ];
-
-    }
-
-
-    if (
-        nome.includes(
-            "elevador"
-        )
-    ) {
-
-        return [
-
-            { titulo:"Piso da cabine" },
-
-            { titulo:"Espelho" },
-
-            { titulo:"Botoeiras" },
-
-            { titulo:"Portas internas" },
-
-            { titulo:"Paredes da cabine" },
-
-            { titulo:"Trilhos e canaletas" }
-
-        ];
-
-    }
-
-
-    if (
-        nome.includes(
-            "escada"
-        )
-    ) {
-
-        return [
-
-            { titulo:"Degraus" },
-
-            { titulo:"Patamares" },
-
-            { titulo:"Corrimãos" },
-
-            { titulo:"Rodapés" },
-
-            { titulo:"Portas" }
-
-        ];
-
-    }
-
-
-    if (
-        nome.includes("térreo")
-        ||
-        nome.includes("terreo")
-        ||
-        nome.includes(
-            "hall de entrada"
-        )
-    ) {
-
-        return [
-
-            { titulo:"Piso / Hall" },
-
-            { titulo:"Rodapés" },
-
-            { titulo:"Vidros" },
-
-            { titulo:"Porta de entrada" },
-
-            { titulo:"Portas dos elevadores" },
-
-            { titulo:"Áreas de contato" }
-
-        ];
-
-    }
-
-
-    if (
-        nome.includes(
-            "academia"
-        )
-    ) {
-
-        return [
-
-            { titulo:"Piso" },
-
-            { titulo:"Espelhos" },
-
-            { titulo:"Equipamentos" },
-
-            { titulo:"Áreas de contato" },
-
-            { titulo:"Lixeiras" }
-
-        ];
-
-    }
-
-
-    if (
-        nome.includes(
-            "banheiro"
-        )
-    ) {
-
-        return [
-
-            { titulo:"Piso" },
-
-            { titulo:"Vasos sanitários" },
-
-            { titulo:"Pias" },
-
-            { titulo:"Espelhos" },
-
-            { titulo:"Lixeiras" },
-
-            { titulo:"Reposição de materiais" },
-
-            { titulo:"Áreas de contato" }
-
-        ];
-
-    }
-
-
-    /*
-       ANDARES
-
-       Escadas não entram aqui porque
-       possuem atividade própria.
-    */
-
-    return [
-
-        { titulo:"Piso / Hall" },
-
-        { titulo:"Rodapés" },
-
-        { titulo:"Portas dos elevadores" },
-
-        { titulo:"Áreas de contato" }
-
-    ];
+        );
 
 }
 
 
+function formatarDuracao(
+    inicio,
+    fim
+){
 
-/* =====================================================
-   CHECKLIST ZELADORIA
-===================================================== */
+    if(
+        !inicio ||
+        !fim
+    ){
+        return "";
+    }
 
-function checklistZeladoria() {
+    const ms =
+        new Date(fim).getTime()
+        -
+        new Date(inicio).getTime();
 
-    const nome =
-        local.toLowerCase();
+    if(ms < 0){
+        return "";
+    }
 
-
-    if (
-        nome.includes(
-            "garagem"
-        )
-    ) {
-
-        mostrarAviso(
-            "📅 Frequência programada: 1 vez por semana."
+    const minutos =
+        Math.floor(
+            ms / 60000
         );
 
-
-        return [
-
-            { titulo:"Circulação" },
-
-            { titulo:"Vagas" },
-
-            { titulo:"Cantos e laterais" },
-
-            { titulo:"Acessos" },
-
-            { titulo:"Recolhimento de resíduos" }
-
-        ];
-
-    }
-
-
-    if (
-        nome.includes(
-            "rua lateral"
-        )
-    ) {
-
-        mostrarAviso(
-            "📅 Frequência programada: 1 vez por semana."
+    const horas =
+        Math.floor(
+            minutos / 60
         );
 
+    const resto =
+        minutos % 60;
 
-        return [
+    if(horas > 0){
 
-            { titulo:"Via" },
-
-            { titulo:"Folhas" },
-
-            { titulo:"Papéis e plásticos" },
-
-            { titulo:"Meio-fio" },
-
-            { titulo:"Circulação" }
-
-        ];
+        return `${horas}h ${resto}min`;
 
     }
 
+    if(minutos === 0){
 
-    if (
-        nome.includes(
-            "quiosque"
-        )
-    ) {
-
-        mostrarAviso(
-            "🛖 Executar conforme uso ou reserva de morador."
-        );
-
-
-        return [
-
-            { titulo:"Piso" },
-
-            { titulo:"Mesas e superfícies" },
-
-            { titulo:"Lixeiras" },
-
-            { titulo:"Recolhimento de resíduos" },
-
-            { titulo:"Entorno" },
-
-            { titulo:"Organização do espaço" }
-
-        ];
+        return "< 1 min";
 
     }
 
-
-    if (
-        nome.includes(
-            "entorno torre"
-        )
-    ) {
-
-        return [
-
-            {
-                titulo:"Gramado / área verde",
-                descricao:
-                    "Somente recolhimento de resíduos. Não inclui jardinagem."
-            },
-
-            { titulo:"Calçada" },
-
-            { titulo:"Acesso da torre" },
-
-            { titulo:"Folhas e resíduos" },
-
-            { titulo:"Objetos abandonados" }
-
-        ];
-
-    }
-
-
-    if (
-        nome.includes("áreas verdes")
-        ||
-        nome.includes("areas verdes")
-    ) {
-
-        mostrarAviso(
-            "🌿 Limpeza e recolhimento de resíduos. Não inclui jardinagem."
-        );
-
-
-        return [
-
-            { titulo:"Papéis" },
-
-            { titulo:"Plásticos" },
-
-            { titulo:"Outros resíduos" },
-
-            { titulo:"Gramados" },
-
-            { titulo:"Circulação" }
-
-        ];
-
-    }
-
-
-    if (
-        nome.includes(
-            "frente"
-        )
-    ) {
-
-        return [
-
-            { titulo:"Calçada" },
-
-            { titulo:"Entrada de pedestres" },
-
-            { titulo:"Entrada de veículos" },
-
-            { titulo:"Folhas" },
-
-            { titulo:"Papéis e resíduos" }
-
-        ];
-
-    }
-
-
-    if (
-        nome.includes("resíduo")
-        ||
-        nome.includes("residuo")
-    ) {
-
-        return [
-
-            { titulo:"Resíduos acondicionados" },
-
-            { titulo:"Lixeiras" },
-
-            { titulo:"Sacos" },
-
-            { titulo:"Piso" },
-
-            { titulo:"Porta / acesso" },
-
-            { titulo:"Área ao redor" }
-
-        ];
-
-    }
-
-
-    if (
-        nome.includes(
-            "lixeira"
-        )
-    ) {
-
-        return [
-
-            { titulo:"Lixeiras verificadas" },
-
-            { titulo:"Esvaziamento" },
-
-            { titulo:"Sacos" },
-
-            { titulo:"Área ao redor" }
-
-        ];
-
-    }
-
-
-    if (
-        nome.includes(
-            "chimarr"
-        )
-    ) {
-
-        return [
-
-            { titulo:"Piso" },
-
-            { titulo:"Mesas" },
-
-            { titulo:"Bancos" },
-
-            { titulo:"Lixeira" },
-
-            { titulo:"Entorno" }
-
-        ];
-
-    }
-
-
-    if (
-        nome.includes("play")
-        ||
-        nome.includes("praça infantil")
-        ||
-        nome.includes("praca infantil")
-    ) {
-
-        return [
-
-            { titulo:"Piso / área" },
-
-            { titulo:"Resíduos" },
-
-            { titulo:"Lixeira" },
-
-            { titulo:"Entorno" },
-
-            {
-                titulo:"Inspeção visual dos brinquedos",
-                descricao:
-                    "Registrar na observação se houver dano aparente."
-            }
-
-        ];
-
-    }
-
-
-    if (
-        nome.includes(
-            "pet"
-        )
-    ) {
-
-        return [
-
-            { titulo:"Resíduos" },
-
-            { titulo:"Piso / área" },
-
-            { titulo:"Lixeira" },
-
-            { titulo:"Entorno" },
-
-            { titulo:"Condição de uso" }
-
-        ];
-
-    }
-
-
-    if (
-        nome.includes(
-            "piscina"
-        )
-    ) {
-
-        return [
-
-            { titulo:"Circulação" },
-
-            { titulo:"Resíduos" },
-
-            { titulo:"Lixeiras" },
-
-            { titulo:"Entorno" },
-
-            { titulo:"Acessos" }
-
-        ];
-
-    }
-
-
-    if (
-        nome.includes("iluminação")
-        ||
-        nome.includes("iluminacao")
-    ) {
-
-        return [
-
-            { titulo:"Torres" },
-
-            { titulo:"Garagens" },
-
-            { titulo:"Áreas externas" },
-
-            { titulo:"Áreas de lazer" }
-
-        ];
-
-    }
-
-
-    if (
-        nome.includes(
-            "portas"
-        )
-        ||
-        nome.includes(
-            "portões"
-        )
-        ||
-        nome.includes(
-            "portoes"
-        )
-    ) {
-
-        return [
-
-            { titulo:"Portões" },
-
-            { titulo:"Portas comuns" },
-
-            { titulo:"Fechamentos" },
-
-            { titulo:"Danos aparentes" }
-
-        ];
-
-    }
-
-
-    if (
-        nome.includes(
-            "vazamento"
-        )
-    ) {
-
-        return [
-
-            { titulo:"Áreas comuns" },
-
-            { titulo:"Garagens" },
-
-            { titulo:"Áreas técnicas visíveis" },
-
-            { titulo:"Água acumulada" },
-
-            { titulo:"Vazamentos aparentes" }
-
-        ];
-
-    }
-
-
-    if (
-        nome.includes("conservação")
-        ||
-        nome.includes("conservacao")
-    ) {
-
-        return [
-
-            { titulo:"Áreas comuns" },
-
-            { titulo:"Objetos abandonados" },
-
-            { titulo:"Obstruções" },
-
-            { titulo:"Danos aparentes" },
-
-            { titulo:"Situações de risco" }
-
-        ];
-
-    }
-
-
-    return [
-
-        { titulo:"Área limpa" },
-
-        { titulo:"Resíduos recolhidos" },
-
-        { titulo:"Acesso desobstruído" },
-
-        { titulo:"Local organizado" }
-
-    ];
+    return `${minutos} min`;
 
 }
 
 
+function extensaoArquivo(
+    arquivo
+){
 
-/* =====================================================
-   AVISO
-===================================================== */
+    if(
+        arquivo.type ===
+        "image/png"
+    ){
+        return "png";
+    }
 
-function mostrarAviso(
-    texto
-) {
+    if(
+        arquivo.type ===
+        "image/webp"
+    ){
+        return "webp";
+    }
 
-    specialNotice.textContent =
+    return "jpg";
+
+}
+
+
+function mostrarErro(
+    mensagem
+){
+
+    errorMessage.textContent =
+        mensagem;
+
+    errorMessage.classList.add(
+        "visible"
+    );
+
+    errorMessage.scrollIntoView({
+        behavior:"smooth",
+        block:"center"
+    });
+
+}
+
+
+function esconderErro(){
+
+    errorMessage.classList.remove(
+        "visible"
+    );
+
+}
+
+
+function mostrarSucesso(
+    titulo,
+    texto,
+    duracao = 1300
+){
+
+    document
+    .getElementById(
+        "successTitle"
+    )
+    .textContent =
+        titulo;
+
+    document
+    .getElementById(
+        "successText"
+    )
+    .textContent =
         texto;
 
+    const overlay =
+        document.getElementById(
+            "successOverlay"
+        );
 
-    specialNotice.style.display =
-        "block";
-
-}
-
-
-
-/* =====================================================
-   CRIAR ITENS
-===================================================== */
-
-function carregarItens() {
-
-    specialNotice.style.display =
-        "none";
-
-
-    itensAtividade =
-        tipoAtividade ===
-        "zeladoria"
-        ?
-        checklistZeladoria()
-        :
-        checklistLimpeza();
-
-
-    itemsList.innerHTML =
-        "";
-
-
-    itensAtividade.forEach(
-        (item,index) => {
-
-            const card =
-                document.createElement(
-                    "div"
-                );
-
-
-            card.className =
-                "item-card";
-
-
-            card.id =
-                "itemCard-"
-                +
-                index;
-
-
-            card.innerHTML = `
-
-                <div class="item-top">
-
-                    <label
-                        class="check-control"
-                    >
-
-                        <input
-                            type="checkbox"
-                            class="item-check"
-                            data-index="${index}"
-                            onchange="
-                                alterarItem(${index})
-                            "
-                        >
-
-                        <span
-                            class="fake-check"
-                        ></span>
-
-                    </label>
-
-
-                    <div class="item-text">
-
-                        <strong>
-                            ${item.titulo}
-                        </strong>
-
-                        ${
-                            item.descricao
-                            ?
-                            `
-                            <small>
-                                ${item.descricao}
-                            </small>
-                            `
-                            :
-                            ""
-                        }
-
-                    </div>
-
-
-                    <span
-                        class="item-status"
-                        id="itemStatus-${index}"
-                    >
-                        PENDENTE
-                    </span>
-
-                </div>
-
-
-                <div
-                    class="item-photo-area"
-                >
-
-                    <label
-                        class="photo-label"
-                        id="photoLabel-${index}"
-                        for="photoInput-${index}"
-                    >
-
-                        <span>
-                            📷
-                        </span>
-
-                        <span
-                            id="photoLabelText-${index}"
-                        >
-                            TIRAR FOTO DESTE ITEM
-                        </span>
-
-                    </label>
-
-
-                    <input
-                        class="photo-input"
-                        id="photoInput-${index}"
-                        type="file"
-                        accept="image/*"
-                        capture="environment"
-                        onchange="
-                            selecionarFoto(
-                                ${index},
-                                this
-                            )
-                        "
-                    >
-
-
-                    <div
-                        class="photo-preview-wrapper"
-                        id="previewWrapper-${index}"
-                    >
-
-                        <img
-                            class="photo-preview"
-                            id="preview-${index}"
-                            alt="Foto do item"
-                        >
-
-
-                        <button
-                            class="remove-photo"
-                            type="button"
-                            onclick="
-                                removerFoto(
-                                    ${index}
-                                )
-                            "
-                        >
-                            ×
-                        </button>
-
-                    </div>
-
-
-                    <div
-                        class="photo-ok"
-                        id="photoOk-${index}"
-                    >
-                        ✓ Foto pronta para envio
-                    </div>
-
-                </div>
-
-            `;
-
-
-            itemsList.appendChild(
-                card
-            );
-
-        }
+    overlay.classList.add(
+        "visible"
     );
 
+    setTimeout(
+        () => {
 
-    atualizarProgresso();
+            overlay.classList.remove(
+                "visible"
+            );
+
+        },
+        duracao
+    );
 
 }
 
 
-
 /* =====================================================
-   MARCAR / DESMARCAR ITEM
+   CARREGAR COLABORADOR
 ===================================================== */
 
-function alterarItem(
-    index
-) {
-
-    const checkbox =
-        document.querySelector(
-            `.item-check[data-index="${index}"]`
-        );
-
-
-    const card =
-        document.getElementById(
-            "itemCard-"
-            +
-            index
-        );
-
-
-    const status =
-        document.getElementById(
-            "itemStatus-"
-            +
-            index
-        );
-
-
-    if (
-        checkbox.checked
-    ) {
-
-        card.classList.add(
-            "selected"
-        );
-
-
-        status.textContent =
-            "REALIZADO";
-
-    } else {
-
-        card.classList.remove(
-            "selected"
-        );
-
-
-        status.textContent =
-            "PENDENTE";
-
-
-        /*
-           Ao desmarcar, descartamos
-           a foto daquele item.
-        */
-
-        removerFoto(
-            index,
-            true
-        );
-
-    }
-
+async function carregarColaborador(){
 
     esconderErro();
 
-    atualizarProgresso();
+    try{
+
+        const {
+            data,
+            error
+        } =
+            await db
+
+            .from(
+                "colaboradores"
+            )
+
+            .select(
+                "*"
+            )
+
+            .eq(
+                "condominio",
+                CONDOMINIO
+            )
+
+            .eq(
+                "matricula",
+                String(
+                    sessao.matricula
+                )
+            )
+
+            .eq(
+                "ativo",
+                true
+            )
+
+            .maybeSingle();
+
+
+        if(error){
+            throw error;
+        }
+
+
+        if(!data){
+
+            throw new Error(
+                "Colaborador não encontrado ou inativo."
+            );
+
+        }
+
+
+        colaborador =
+            data;
+
+
+        userName.textContent =
+            colaborador.nome;
+
+
+        userDescription.textContent =
+            (
+                colaborador.funcao ||
+                "Colaborador"
+            )
+            +
+            " • #"
+            +
+            colaborador.matricula;
+
+
+        const funcao =
+            normalizar(
+                colaborador.funcao
+            );
+
+
+        userIcon.textContent =
+            funcao.includes(
+                "zel"
+            )
+            ?
+            "🛠️"
+            :
+            "🧹";
+
+
+        await recuperarJornada();
+
+
+    }catch(erro){
+
+        console.error(
+            erro
+        );
+
+        journeyCard.innerHTML =
+            `
+            <div class="message error visible">
+                ${escapar(
+                    erro.message ||
+                    "Não foi possível carregar o colaborador."
+                )}
+            </div>
+            `;
+
+    }
 
 }
 
 
-
 /* =====================================================
-   FOTO DO ITEM
+   RECUPERAR JORNADA
 ===================================================== */
 
-function selecionarFoto(
-    index,
-    input
-) {
+async function recuperarJornada(){
 
-    const arquivo =
-        input.files[0];
+    const {
+        data,
+        error
+    } =
+        await db
+
+        .from(
+            "jornadas"
+        )
+
+        .select(
+            "*"
+        )
+
+        .eq(
+            "colaborador_id",
+            colaborador.id
+        )
+
+        .eq(
+            "status",
+            "Aberta"
+        )
+
+        .order(
+            "entrada_em",
+            {
+                ascending:false
+            }
+        )
+
+        .limit(1)
+
+        .maybeSingle();
 
 
-    if (!arquivo) {
-
-        return;
-
+    if(error){
+        throw error;
     }
 
 
-    if (
+    jornada =
+        data || null;
+
+
+    if(jornada){
+
+        renderizarJornadaAberta();
+
+        await recuperarAtividadeAberta();
+
+        await carregarHistorico();
+
+    }else{
+
+        renderizarInicioJornada();
+
+    }
+
+}
+
+
+/* =====================================================
+   JORNADA NÃO INICIADA
+===================================================== */
+
+function renderizarInicioJornada(){
+
+    journeyTag.textContent =
+        "SEM JORNADA";
+
+    journeyTag.classList.remove(
+        "active"
+    );
+
+    choiceSection.classList.add(
+        "hidden"
+    );
+
+    activeSection.classList.add(
+        "hidden"
+    );
+
+    historySection.classList.add(
+        "hidden"
+    );
+
+
+    journeyCard.innerHTML = `
+
+        <div class="journey-status">
+
+            <div class="journey-icon">
+                📷
+            </div>
+
+            <div class="journey-info">
+
+                <strong>
+                    Registre sua entrada
+                </strong>
+
+                <span>
+                    Tire uma selfie para iniciar a jornada.
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="selfie-area">
+
+            <label
+                class="selfie-button"
+                for="selfieInput"
+                id="selfieButton"
+            >
+                📷 TIRAR SELFIE
+            </label>
+
+
+            <input
+                class="selfie-input"
+                id="selfieInput"
+                type="file"
+                accept="image/*"
+                capture="user"
+                onchange="selecionarSelfie(this)"
+            >
+
+
+            <img
+                class="selfie-preview"
+                id="selfiePreview"
+                alt="Selfie do colaborador"
+            >
+
+
+            <button
+                class="start-journey"
+                id="startJourneyButton"
+                onclick="iniciarJornada()"
+                disabled
+            >
+                ✓ REGISTRAR ENTRADA
+            </button>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+   SELFIE
+===================================================== */
+
+function selecionarSelfie(
+    input
+){
+
+    esconderErro();
+
+    const arquivo =
+        input.files?.[0];
+
+
+    if(!arquivo){
+        return;
+    }
+
+
+    if(
         !arquivo.type.startsWith(
             "image/"
         )
-    ) {
+    ){
 
         mostrarErro(
             "Selecione uma imagem válida."
         );
 
-        input.value =
-            "";
+        input.value = "";
 
         return;
 
     }
 
 
-    if (
+    if(
         arquivo.size >
         10 * 1024 * 1024
-    ) {
+    ){
 
         mostrarErro(
-            "Cada foto deve ter no máximo 10 MB."
+            "A selfie deve ter no máximo 10 MB."
         );
 
-        input.value =
-            "";
+        input.value = "";
 
         return;
 
     }
 
 
-    fotosItens[index] =
+    selfieArquivo =
         arquivo;
 
 
-    if (
-        previewURLs[index]
-    ) {
+    if(
+        selfiePreviewURL
+    ){
 
         URL.revokeObjectURL(
-            previewURLs[index]
+            selfiePreviewURL
         );
 
     }
 
 
-    previewURLs[index] =
+    selfiePreviewURL =
         URL.createObjectURL(
             arquivo
         );
 
 
-    document
-    .getElementById(
-        "preview-"
-        +
-        index
-    )
-    .src =
-        previewURLs[index];
+    const preview =
+        document.getElementById(
+            "selfiePreview"
+        );
 
 
-    document
-    .getElementById(
-        "previewWrapper-"
-        +
-        index
-    )
-    .classList
-    .add(
+    preview.src =
+        selfiePreviewURL;
+
+    preview.classList.add(
         "visible"
     );
 
 
     document
     .getElementById(
-        "photoOk-"
-        +
-        index
-    )
-    .classList
-    .add(
-        "visible"
-    );
-
-
-    document
-    .getElementById(
-        "photoLabel-"
-        +
-        index
-    )
-    .classList
-    .add(
-        "has-photo"
-    );
-
-
-    document
-    .getElementById(
-        "photoLabelText-"
-        +
-        index
+        "selfieButton"
     )
     .textContent =
-        "TROCAR FOTO";
+        "📷 TIRAR OUTRA SELFIE";
 
 
-    esconderErro();
+    document
+    .getElementById(
+        "startJourneyButton"
+    )
+    .disabled =
+        false;
 
 }
 
 
-
 /* =====================================================
-   REMOVER FOTO
+   UPLOAD SELFIE
 ===================================================== */
 
-function removerFoto(
-    index,
-    silencioso = false
-) {
+async function enviarSelfie(){
 
-    if (
-        enviando
-    ) {
+    if(!selfieArquivo){
+
+        throw new Error(
+            "Tire uma selfie antes de registrar a entrada."
+        );
+
+    }
+
+
+    const extensao =
+        extensaoArquivo(
+            selfieArquivo
+        );
+
+
+    const data =
+        dataLocalBanco();
+
+
+    const nome =
+        `${Date.now()}-${colaborador.matricula}.${extensao}`;
+
+
+    const caminho =
+        `reserva-igara/${data}/${colaborador.matricula}/${nome}`;
+
+
+    const {
+        error
+    } =
+        await db
+
+        .storage
+
+        .from(
+            BUCKET_SELFIES
+        )
+
+        .upload(
+            caminho,
+            selfieArquivo,
+            {
+                cacheControl:"3600",
+                upsert:false,
+                contentType:
+                    selfieArquivo.type
+            }
+        );
+
+
+    if(error){
+
+        throw new Error(
+            "Erro ao enviar selfie: "
+            +
+            error.message
+        );
+
+    }
+
+
+    return caminho;
+
+}
+
+
+/* =====================================================
+   INICIAR JORNADA
+===================================================== */
+
+async function iniciarJornada(){
+
+    if(processando){
+        return;
+    }
+
+    esconderErro();
+
+    const botao =
+        document.getElementById(
+            "startJourneyButton"
+        );
+
+
+    try{
+
+        processando =
+            true;
+
+        if(botao){
+
+            botao.disabled =
+                true;
+
+            botao.textContent =
+                "REGISTRANDO...";
+
+        }
+
+
+        const selfiePath =
+            await enviarSelfie();
+
+
+        const agora =
+            new Date()
+            .toISOString();
+
+
+        const {
+            data,
+            error
+        } =
+            await db
+
+            .from(
+                "jornadas"
+            )
+
+            .insert({
+
+                condominio:
+                    CONDOMINIO,
+
+                colaborador_id:
+                    colaborador.id,
+
+                colaborador_nome:
+                    colaborador.nome,
+
+                matricula:
+                    colaborador.matricula,
+
+                selfie_url:
+                    selfiePath,
+
+                entrada_em:
+                    agora,
+
+                status:
+                    "Aberta",
+
+                updated_at:
+                    agora
+
+            })
+
+            .select()
+
+            .single();
+
+
+        if(error){
+            throw error;
+        }
+
+
+        jornada =
+            data;
+
+
+        mostrarSucesso(
+            "Entrada registrada",
+            `Jornada iniciada às ${formatarHoraData(jornada.entrada_em)}.`
+        );
+
+
+        renderizarJornadaAberta();
+
+        mostrarEscolha();
+
+        await carregarHistorico();
+
+
+    }catch(erro){
+
+        console.error(
+            erro
+        );
+
+        mostrarErro(
+            erro.message ||
+            "Não foi possível iniciar a jornada."
+        );
+
+
+        if(botao){
+
+            botao.disabled =
+                false;
+
+            botao.textContent =
+                "✓ REGISTRAR ENTRADA";
+
+        }
+
+
+    }finally{
+
+        processando =
+            false;
+
+    }
+
+}
+
+
+/* =====================================================
+   JORNADA ABERTA
+===================================================== */
+
+function renderizarJornadaAberta(){
+
+    journeyTag.textContent =
+        "EM JORNADA";
+
+    journeyTag.classList.add(
+        "active"
+    );
+
+
+    journeyCard.innerHTML = `
+
+        <div class="journey-status">
+
+            <div class="journey-icon">
+                🟢
+            </div>
+
+            <div class="journey-info">
+
+                <strong>
+                    Jornada em andamento
+                </strong>
+
+                <span>
+                    Entrada registrada com sucesso.
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="journey-data">
+
+            <div class="journey-data-box">
+
+                <span>
+                    ENTRADA
+                </span>
+
+                <strong>
+                    ${formatarHoraData(
+                        jornada.entrada_em
+                    )}
+                </strong>
+
+            </div>
+
+
+            <div class="journey-data-box">
+
+                <span>
+                    DATA
+                </span>
+
+                <strong>
+                    ${new Date(
+                        jornada.entrada_em
+                    ).toLocaleDateString(
+                        "pt-BR"
+                    )}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="end-journey"
+            onclick="encerrarJornada()"
+        >
+            ENCERRAR TURNO
+        </button>
+
+    `;
+
+}
+
+
+/* =====================================================
+   RECUPERAR ATIVIDADE ABERTA
+===================================================== */
+
+async function recuperarAtividadeAberta(){
+
+    const {
+        data,
+        error
+    } =
+        await db
+
+        .from(
+            "registros_atividade"
+        )
+
+        .select(
+            "*"
+        )
+
+        .eq(
+            "jornada_id",
+            jornada.id
+        )
+
+        .eq(
+            "status",
+            "Em andamento"
+        )
+
+        .order(
+            "iniciado_em",
+            {
+                ascending:false
+            }
+        )
+
+        .limit(1)
+
+        .maybeSingle();
+
+
+    if(error){
+        throw error;
+    }
+
+
+    atividadeAtual =
+        data || null;
+
+
+    if(atividadeAtual){
+
+        mostrarAtividadeAtual();
+
+    }else{
+
+        mostrarEscolha();
+
+    }
+
+}
+
+
+/* =====================================================
+   ESCOLHA
+===================================================== */
+
+function mostrarEscolha(){
+
+    atividadeAtual =
+        null;
+
+    pararTimer();
+
+    activeSection.classList.add(
+        "hidden"
+    );
+
+    choiceSection.classList.remove(
+        "hidden"
+    );
+
+    tipoEscolha =
+        "torre";
+
+    torreSelecionada =
+        null;
+
+    localSelecionado =
+        null;
+
+    selectionSummary.classList.remove(
+        "visible"
+    );
+
+    startActivityButton.classList.remove(
+        "visible"
+    );
+
+    renderizarEscolhaInicial();
+
+}
+
+
+function renderizarEscolhaInicial(){
+
+    choiceContent.innerHTML = `
+
+        <div class="choice-tabs">
+
+            <button
+                class="
+                    choice-tab
+                    ${
+                        tipoEscolha === "torre"
+                        ?
+                        "active"
+                        :
+                        ""
+                    }
+                "
+                onclick="selecionarTipo('torre')"
+            >
+                🏢 TORRES
+            </button>
+
+
+            <button
+                class="
+                    choice-tab
+                    ${
+                        tipoEscolha === "comum"
+                        ?
+                        "active"
+                        :
+                        ""
+                    }
+                "
+                onclick="selecionarTipo('comum')"
+            >
+                📍 ÁREAS COMUNS
+            </button>
+
+        </div>
+
+
+        <div
+            class="option-grid"
+            id="mainOptions"
+        ></div>
+
+    `;
+
+
+    const container =
+        document.getElementById(
+            "mainOptions"
+        );
+
+
+    if(
+        tipoEscolha ===
+        "torre"
+    ){
+
+        [
+            "Torre A",
+            "Torre B",
+            "Torre C",
+            "Torre D",
+            "Torre E"
+        ]
+        .forEach(
+            torre => {
+
+                container.innerHTML += `
+
+                    <button
+                        class="option-button"
+                        onclick='selecionarTorre(${JSON.stringify(torre)})'
+                    >
+                        🏢 ${torre}
+                    </button>
+
+                `;
+
+            }
+        );
+
+    }else{
+
+        areasComuns()
+        .forEach(
+            area => {
+
+                container.innerHTML += `
+
+                    <button
+                        class="option-button"
+                        onclick='selecionarAreaComum(${JSON.stringify(area)})'
+                    >
+                        ${escapar(area)}
+                    </button>
+
+                `;
+
+            }
+        );
+
+    }
+
+}
+
+
+function selecionarTipo(
+    tipo
+){
+
+    tipoEscolha =
+        tipo;
+
+    torreSelecionada =
+        null;
+
+    localSelecionado =
+        null;
+
+    selectionSummary.classList.remove(
+        "visible"
+    );
+
+    startActivityButton.classList.remove(
+        "visible"
+    );
+
+    renderizarEscolhaInicial();
+
+}
+
+
+/* =====================================================
+   TORRES
+===================================================== */
+
+function selecionarTorre(
+    torre
+){
+
+    torreSelecionada =
+        torre;
+
+    localSelecionado =
+        null;
+
+
+    const locais = [
+
+        "Térreo / Hall",
+
+        "1º andar",
+        "2º andar",
+        "3º andar",
+        "4º andar",
+        "5º andar",
+        "6º andar",
+        "7º andar",
+        "8º andar",
+        "9º andar",
+        "10º andar",
+        "11º andar",
+        "12º andar",
+
+        "Escadas",
+
+        "Abrigo de resíduos"
+
+    ];
+
+
+    choiceContent.innerHTML = `
+
+        <button
+            class="step-back"
+            onclick="renderizarEscolhaInicial()"
+        >
+            ‹ TROCAR TORRE
+        </button>
+
+
+        <div class="section-title">
+
+            <h2>
+                ${escapar(torre)}
+            </h2>
+
+            <p>
+                Selecione o local que será realizado agora.
+            </p>
+
+        </div>
+
+
+        <div
+            class="option-grid"
+            id="towerLocations"
+        ></div>
+
+    `;
+
+
+    const container =
+        document.getElementById(
+            "towerLocations"
+        );
+
+
+    locais.forEach(
+        local => {
+
+            container.innerHTML += `
+
+                <button
+                    class="option-button"
+                    onclick='selecionarLocalTorre(
+                        ${JSON.stringify(local)}
+                    )'
+                >
+                    ${escapar(local)}
+                </button>
+
+            `;
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   ÁREAS COMUNS
+===================================================== */
+
+function areasComuns(){
+
+    return [
+
+        "Salão de festas",
+
+        "Quiosque 1",
+
+        "Quiosque 2",
+
+        "Garagem G1",
+
+        "Garagem G2",
+
+        "Garagem G3",
+
+        "Garagem G4",
+
+        "Academia",
+
+        "Banheiros da academia",
+
+        "Piscina",
+
+        "Banheiros da piscina",
+
+        "Playground",
+
+        "Espaço Pet",
+
+        "Chimarródromo",
+
+        "Copa",
+
+        "Frente do condomínio",
+
+        "Rua lateral",
+
+        "Vagas externas",
+
+        "Áreas verdes internas"
+
+    ];
+
+}
+
+
+function selecionarAreaComum(
+    area
+){
+
+    torreSelecionada =
+        null;
+
+    localSelecionado =
+        area;
+
+    atualizarResumoEscolha();
+
+}
+
+
+function selecionarLocalTorre(
+    local
+){
+
+    localSelecionado =
+        local;
+
+    atualizarResumoEscolha();
+
+}
+
+
+function atualizarResumoEscolha(){
+
+    if(!localSelecionado){
+        return;
+    }
+
+
+    const texto =
+        torreSelecionada
+        ?
+        `${torreSelecionada} • ${localSelecionado}`
+        :
+        localSelecionado;
+
+
+    selectionSummary.innerHTML =
+        `📍 ${escapar(texto)}`;
+
+    selectionSummary.classList.add(
+        "visible"
+    );
+
+    startActivityButton.classList.add(
+        "visible"
+    );
+
+}
+
+
+/* =====================================================
+   INICIAR ATIVIDADE
+===================================================== */
+
+async function iniciarAtividade(){
+
+    if(
+        processando ||
+        !jornada ||
+        !localSelecionado
+    ){
+        return;
+    }
+
+
+    esconderErro();
+
+
+    try{
+
+        processando =
+            true;
+
+        startActivityButton.disabled =
+            true;
+
+        startActivityButton.textContent =
+            "INICIANDO...";
+
+
+        /*
+         * Segunda verificação:
+         * impede outra atividade aberta
+         * na mesma jornada.
+         */
+
+        const {
+            data:aberta,
+            error:erroConsulta
+        } =
+            await db
+
+            .from(
+                "registros_atividade"
+            )
+
+            .select(
+                "*"
+            )
+
+            .eq(
+                "jornada_id",
+                jornada.id
+            )
+
+            .eq(
+                "status",
+                "Em andamento"
+            )
+
+            .limit(1)
+
+            .maybeSingle();
+
+
+        if(erroConsulta){
+            throw erroConsulta;
+        }
+
+
+        if(aberta){
+
+            atividadeAtual =
+                aberta;
+
+            mostrarAtividadeAtual();
+
+            return;
+
+        }
+
+
+        const agora =
+            new Date()
+            .toISOString();
+
+
+        const tipo =
+            normalizar(
+                colaborador.funcao
+            )
+            .includes(
+                "zel"
+            )
+            ?
+            "zeladoria"
+            :
+            "limpeza";
+
+
+        const localCompleto =
+            torreSelecionada
+            ?
+            `${torreSelecionada} • ${localSelecionado}`
+            :
+            localSelecionado;
+
+
+        const {
+            data,
+            error
+        } =
+            await db
+
+            .from(
+                "registros_atividade"
+            )
+
+            .insert({
+
+                tipo:
+                    tipo,
+
+                condominio:
+                    CONDOMINIO,
+
+                torre:
+                    torreSelecionada,
+
+                local:
+                    localCompleto,
+
+                item:
+                    "Atividade da área",
+
+                colaborador:
+                    colaborador.nome,
+
+                matricula:
+                    colaborador.matricula,
+
+                cargo:
+                    colaborador.funcao,
+
+                colaborador_id:
+                    colaborador.id,
+
+                jornada_id:
+                    jornada.id,
+
+                area:
+                    torreSelecionada
+                    ?
+                    torreSelecionada
+                    :
+                    "Área comum",
+
+                detalhe_area:
+                    localSelecionado,
+
+                iniciado_em:
+                    agora,
+
+                status:
+                    "Em andamento",
+
+                data:
+                    dataLocalBanco(),
+
+                hora:
+                    horaLocalBanco(),
+
+                foto_url:
+                    null,
+
+                observacao:
+                    null
+
+            })
+
+            .select()
+
+            .single();
+
+
+        if(error){
+            throw error;
+        }
+
+
+        atividadeAtual =
+            data;
+
+
+        mostrarAtividadeAtual();
+
+        await carregarHistorico();
+
+
+    }catch(erro){
+
+        console.error(
+            erro
+        );
+
+        mostrarErro(
+            "Não foi possível iniciar a atividade: "
+            +
+            (
+                erro.message ||
+                "erro desconhecido"
+            )
+        );
+
+
+    }finally{
+
+        processando =
+            false;
+
+        startActivityButton.disabled =
+            false;
+
+        startActivityButton.textContent =
+            "▶ INICIAR ATIVIDADE";
+
+    }
+
+}
+
+
+/* =====================================================
+   ATIVIDADE ATUAL
+===================================================== */
+
+function mostrarAtividadeAtual(){
+
+    if(!atividadeAtual){
+        return;
+    }
+
+
+    choiceSection.classList.add(
+        "hidden"
+    );
+
+    activeSection.classList.remove(
+        "hidden"
+    );
+
+
+    activeLocation.textContent =
+        "📍 "
+        +
+        atividadeAtual.local;
+
+
+    startedAt.textContent =
+        "Iniciada às "
+        +
+        formatarHoraData(
+            atividadeAtual.iniciado_em
+        );
+
+
+    activityObservation.value =
+        "";
+
+    observationCount.textContent =
+        "0";
+
+
+    removerFotoAtividade(
+        true
+    );
+
+
+    iniciarTimer();
+
+
+    activeSection.scrollIntoView({
+        behavior:"smooth",
+        block:"start"
+    });
+
+}
+
+
+/* =====================================================
+   TIMER
+===================================================== */
+
+function iniciarTimer(){
+
+    pararTimer();
+
+    atualizarTimer();
+
+    timerInterval =
+        setInterval(
+            atualizarTimer,
+            1000
+        );
+
+}
+
+
+function atualizarTimer(){
+
+    if(
+        !atividadeAtual ||
+        !atividadeAtual.iniciado_em
+    ){
+        return;
+    }
+
+
+    const inicio =
+        new Date(
+            atividadeAtual.iniciado_em
+        )
+        .getTime();
+
+
+    const agora =
+        Date.now();
+
+
+    const segundos =
+        Math.max(
+            0,
+            Math.floor(
+                (agora - inicio)
+                /
+                1000
+            )
+        );
+
+
+    const horas =
+        String(
+            Math.floor(
+                segundos / 3600
+            )
+        )
+        .padStart(
+            2,
+            "0"
+        );
+
+
+    const minutos =
+        String(
+            Math.floor(
+                (segundos % 3600)
+                /
+                60
+            )
+        )
+        .padStart(
+            2,
+            "0"
+        );
+
+
+    const resto =
+        String(
+            segundos % 60
+        )
+        .padStart(
+            2,
+            "0"
+        );
+
+
+    timer.textContent =
+        `${horas}:${minutos}:${resto}`;
+
+}
+
+
+function pararTimer(){
+
+    if(timerInterval){
+
+        clearInterval(
+            timerInterval
+        );
+
+        timerInterval =
+            null;
+
+    }
+
+}
+
+
+/* =====================================================
+   FOTO ATIVIDADE
+===================================================== */
+
+function selecionarFotoAtividade(
+    input
+){
+
+    esconderErro();
+
+    const arquivo =
+        input.files?.[0];
+
+
+    if(!arquivo){
+        return;
+    }
+
+
+    if(
+        !arquivo.type.startsWith(
+            "image/"
+        )
+    ){
+
+        mostrarErro(
+            "Selecione uma imagem válida."
+        );
+
+        input.value = "";
 
         return;
 
     }
 
 
-    delete fotosItens[
-        index
-    ];
+    if(
+        arquivo.size >
+        10 * 1024 * 1024
+    ){
 
-
-    const input =
-        document.getElementById(
-            "photoInput-"
-            +
-            index
+        mostrarErro(
+            "A foto deve ter no máximo 10 MB."
         );
 
+        input.value = "";
 
-    if (
-        input
-    ) {
-
-        input.value =
-            "";
+        return;
 
     }
 
 
-    if (
-        previewURLs[index]
-    ) {
+    fotoAtividade =
+        arquivo;
+
+
+    if(
+        fotoAtividadePreviewURL
+    ){
 
         URL.revokeObjectURL(
-            previewURLs[index]
+            fotoAtividadePreviewURL
         );
-
-
-        delete previewURLs[
-            index
-        ];
 
     }
 
 
-    const preview =
-        document.getElementById(
-            "preview-"
-            +
-            index
+    fotoAtividadePreviewURL =
+        URL.createObjectURL(
+            arquivo
         );
 
 
-    if (
-        preview
-    ) {
+    photoPreview.src =
+        fotoAtividadePreviewURL;
 
-        preview.src =
+
+    photoPreviewWrapper.classList.add(
+        "visible"
+    );
+
+
+    photoButton.classList.add(
+        "has-photo"
+    );
+
+
+    photoButton.textContent =
+        "📷 TROCAR FOTO";
+
+}
+
+
+function removerFotoAtividade(
+    silencioso = false
+){
+
+    fotoAtividade =
+        null;
+
+
+    if(
+        fotoAtividadePreviewURL
+    ){
+
+        URL.revokeObjectURL(
+            fotoAtividadePreviewURL
+        );
+
+        fotoAtividadePreviewURL =
+            null;
+
+    }
+
+
+    if(activityPhoto){
+
+        activityPhoto.value =
             "";
 
     }
 
 
-    document
-    .getElementById(
-        "previewWrapper-"
-        +
-        index
-    )
+    if(photoPreview){
+
+        photoPreview.src =
+            "";
+
+    }
+
+
+    photoPreviewWrapper
     ?.classList
     .remove(
         "visible"
     );
 
 
-    document
-    .getElementById(
-        "photoOk-"
-        +
-        index
-    )
-    ?.classList
-    .remove(
-        "visible"
-    );
-
-
-    document
-    .getElementById(
-        "photoLabel-"
-        +
-        index
-    )
+    photoButton
     ?.classList
     .remove(
         "has-photo"
     );
 
 
-    const texto =
-        document.getElementById(
-            "photoLabelText-"
-            +
-            index
-        );
+    if(photoButton){
 
-
-    if (
-        texto
-    ) {
-
-        texto.textContent =
-            "TIRAR FOTO DESTE ITEM";
+        photoButton.textContent =
+            "📷 TIRAR FOTO";
 
     }
 
 
-    if (
-        !silencioso
-    ) {
+    if(!silencioso){
 
         esconderErro();
 
@@ -2605,399 +3658,92 @@ function removerFoto(
 }
 
 
-
-/* =====================================================
-   PROGRESSO
-===================================================== */
-
-function obterSelecionados() {
-
-    return [
-        ...document.querySelectorAll(
-            ".item-check:checked"
-        )
-    ];
-
-}
-
-
-
-function atualizarProgresso() {
-
-    const total =
-        itensAtividade.length;
-
-
-    const realizados =
-        obterSelecionados()
-        .length;
-
-
-    progressText.textContent =
-        realizados
-        +
-        " de "
-        +
-        total
-        +
-        " selecionados";
-
-
-    const percentual =
-        total > 0
-        ?
-        Math.round(
-            realizados /
-            total *
-            100
-        )
-        :
-        0;
-
-
-    progressFill.style.width =
-        percentual
-        +
-        "%";
-
-
-    finishButton.textContent =
-        realizados === 0
-        ?
-        "✓ REGISTRAR ITENS REALIZADOS"
-        :
-        "✓ REGISTRAR "
-        +
-        realizados
-        +
-        (
-            realizados === 1
-            ?
-            " ITEM"
-            :
-            " ITENS"
-        );
-
-}
-
-
-
 /* =====================================================
    OBSERVAÇÃO
 ===================================================== */
 
-observation.addEventListener(
+activityObservation
+.addEventListener(
     "input",
-    function() {
+    function(){
 
-        charCount.textContent =
+        observationCount.textContent =
             this.value.length;
+
+        esconderErro();
 
     }
 );
 
 
-
 /* =====================================================
-   NOME SEGURO
+   UPLOAD FOTO ATIVIDADE
 ===================================================== */
 
-function limparNome(
-    texto
-) {
+async function enviarFotoAtividade(){
 
-    return String(
-        texto
-    )
-
-    .normalize(
-        "NFD"
-    )
-
-    .replace(
-        /[\u0300-\u036f]/g,
-        ""
-    )
-
-    .toLowerCase()
-
-    .replace(
-        /[^a-z0-9]+/g,
-        "-"
-    )
-
-    .replace(
-        /^-+|-+$/g,
-        "");
-
-}
-
-
-
-/* =====================================================
-   EXTENSÃO
-===================================================== */
-
-function obterExtensao(
-    arquivo
-) {
-
-    const nome =
-        arquivo.name ||
-        "";
-
-
-    if (
-        nome.includes(".")
-    ) {
-
-        const ext =
-            nome
-            .split(".")
-            .pop()
-            .toLowerCase();
-
-
-        if (
-            ext &&
-            ext.length <= 5
-        ) {
-
-            return ext;
-
-        }
-
-    }
-
-
-    if (
-        arquivo.type ===
-        "image/png"
-    ) {
-
-        return "png";
-
-    }
-
-
-    if (
-        arquivo.type ===
-        "image/webp"
-    ) {
-
-        return "webp";
-
-    }
-
-
-    if (
-        arquivo.type ===
-        "image/heic"
-    ) {
-
-        return "heic";
-
-    }
-
-
-    return "jpg";
-
-}
-
-
-
-/* =====================================================
-   DATA LOCAL
-===================================================== */
-
-function obterDataHora() {
-
-    const agora =
-        new Date();
-
-
-    const ano =
-        agora.getFullYear();
-
-
-    const mes =
-        String(
-            agora.getMonth() + 1
-        )
-        .padStart(
-            2,
-            "0"
-        );
-
-
-    const dia =
-        String(
-            agora.getDate()
-        )
-        .padStart(
-            2,
-            "0"
-        );
-
-
-    return {
-
-        dataBanco:
-            `${ano}-${mes}-${dia}`,
-
-        horaBanco:
-            agora
-            .toTimeString()
-            .slice(
-                0,
-                8
-            ),
-
-        dataBR:
-            agora
-            .toLocaleDateString(
-                "pt-BR"
-            ),
-
-        horaBR:
-            agora
-            .toLocaleTimeString(
-                "pt-BR",
-                {
-                    hour:"2-digit",
-                    minute:"2-digit"
-                }
-            )
-
-    };
-
-}
-
-
-
-/* =====================================================
-   UPLOAD DE UMA FOTO
-===================================================== */
-
-async function enviarFotoItem(
-    index,
-    item
-) {
-
-    const arquivo =
-        fotosItens[index];
-
-
-    if (!arquivo) {
-
-        throw new Error(
-            'Falta a foto de "'
-            +
-            item.titulo
-            +
-            '".'
-        );
-
+    if(!fotoAtividade){
+        return null;
     }
 
 
     const extensao =
-        obterExtensao(
-            arquivo
+        extensaoArquivo(
+            fotoAtividade
         );
-
-
-    const pastaTipo =
-        tipoAtividade ===
-        "zeladoria"
-        ?
-        "zeladoria"
-        :
-        "limpeza";
 
 
     const localSeguro =
         limparNome(
-            local
+            atividadeAtual.local
         )
         ||
         "atividade";
 
 
-    const itemSeguro =
-        limparNome(
-            item.titulo
-        )
-        ||
-        "item";
-
-
-    const nomeArquivo =
-        Date.now()
-        +
-        "-"
-        +
-        index
-        +
-        "-"
-        +
-        localSeguro
-        +
-        "-"
-        +
-        itemSeguro
-        +
-        "."
-        +
-        extensao;
-
-
     const caminho =
-        pastaTipo
-        +
-        "/"
-        +
-        usuario.matricula
-        +
-        "/"
-        +
-        nomeArquivo;
+        `${
+            limparNome(
+                colaborador.funcao
+            )
+        }/${
+            colaborador.matricula
+        }/${
+            dataLocalBanco()
+        }/${
+            Date.now()
+        }-${
+            localSeguro
+        }.${extensao}`;
 
 
     const {
         error
     } =
         await db
+
         .storage
+
         .from(
-            "fotos-atividades"
+            BUCKET_ATIVIDADES
         )
+
         .upload(
             caminho,
-            arquivo,
+            fotoAtividade,
             {
-                cacheControl:
-                    "3600",
-
-                upsert:
-                    false,
-
+                cacheControl:"3600",
+                upsert:false,
                 contentType:
-                    arquivo.type
+                    fotoAtividade.type
             }
         );
 
 
-    if (
-        error
-    ) {
+    if(error){
 
         throw new Error(
-            "Erro ao enviar a foto de "
-            +
-            item.titulo
-            +
-            ": "
+            "Erro ao enviar foto: "
             +
             error.message
         );
@@ -3009,91 +3755,239 @@ async function enviarFotoItem(
         data
     } =
         db
+
         .storage
+
         .from(
-            "fotos-atividades"
+            BUCKET_ATIVIDADES
         )
+
         .getPublicUrl(
             caminho
         );
 
 
-    if (
-        !data ||
-        !data.publicUrl
-    ) {
-
-        throw new Error(
-            "Não foi possível gerar o endereço da foto."
-        );
-
-    }
-
-
-    return data.publicUrl;
+    return (
+        data?.publicUrl ||
+        null
+    );
 
 }
 
 
-
 /* =====================================================
-   SALVAR UM REGISTRO
+   FINALIZAR ATIVIDADE
 ===================================================== */
 
-async function salvarRegistro(
-    item,
-    fotoURL,
-    dataHora
-) {
+async function finalizarAtividade(){
 
-    const registro = {
+    if(
+        processando ||
+        !atividadeAtual
+    ){
+        return;
+    }
 
-        tipo:
-            tipoAtividade,
 
-        condominio:
-            "Reserva Igara",
+    esconderErro();
 
-        torre:
-            tipoAtividade ===
-            "zeladoria"
+
+    const observacao =
+        activityObservation
+        .value
+        .trim();
+
+
+    /*
+     * REGRA CENTRAL:
+     * FOTO OU TEXTO.
+     */
+
+    if(
+        !fotoAtividade &&
+        observacao.length === 0
+    ){
+
+        mostrarErro(
+            "Para finalizar a área, tire uma foto ou escreva uma observação."
+        );
+
+        return;
+
+    }
+
+
+    try{
+
+        processando =
+            true;
+
+
+        finishActivityButton.disabled =
+            true;
+
+        finishActivityButton.textContent =
+            fotoAtividade
             ?
-            null
+            "ENVIANDO FOTO..."
             :
-            torre,
+            "FINALIZANDO...";
 
-        local:
-            local,
 
-        item:
-            item.titulo,
+        let fotoURL =
+            null;
 
-        colaborador:
-            usuario.nome,
 
-        matricula:
-            usuario.matricula,
+        if(fotoAtividade){
 
-        cargo:
-            usuario.cargo,
+            fotoURL =
+                await enviarFotoAtividade();
 
-        observacao:
-            observation
-            .value
-            .trim()
-            ||
-            null,
+        }
 
-        foto_url:
-            fotoURL,
 
-        data:
-            dataHora.dataBanco,
+        const agora =
+            new Date()
+            .toISOString();
 
-        hora:
-            dataHora.horaBanco
 
-    };
+        const {
+            data,
+            error
+        } =
+            await db
+
+            .from(
+                "registros_atividade"
+            )
+
+            .update({
+
+                foto_url:
+                    fotoURL,
+
+                observacao:
+                    observacao ||
+                    null,
+
+                finalizado_em:
+                    agora,
+
+                status:
+                    "Finalizada",
+
+                hora:
+                    horaLocalBanco()
+
+            })
+
+            .eq(
+                "id",
+                atividadeAtual.id
+            )
+
+            .select()
+
+            .single();
+
+
+        if(error){
+            throw error;
+        }
+
+
+        const duracao =
+            formatarDuracao(
+                data.iniciado_em,
+                data.finalizado_em
+            );
+
+
+        mostrarSucesso(
+            "Área finalizada",
+            `${data.local} • ${duracao}`
+        );
+
+
+        atividadeAtual =
+            null;
+
+
+        activityObservation.value =
+            "";
+
+        observationCount.textContent =
+            "0";
+
+
+        removerFotoAtividade(
+            true
+        );
+
+
+        pararTimer();
+
+
+        await carregarHistorico();
+
+
+        setTimeout(
+            () => {
+
+                mostrarEscolha();
+
+            },
+            600
+        );
+
+
+    }catch(erro){
+
+        console.error(
+            erro
+        );
+
+        mostrarErro(
+            "Não foi possível finalizar: "
+            +
+            (
+                erro.message ||
+                "erro desconhecido"
+            )
+        );
+
+
+    }finally{
+
+        processando =
+            false;
+
+        finishActivityButton.disabled =
+            false;
+
+        finishActivityButton.textContent =
+            "✓ FINALIZAR ÁREA";
+
+    }
+
+}
+
+
+/* =====================================================
+   HISTÓRICO
+===================================================== */
+
+async function carregarHistorico(){
+
+    if(!jornada){
+
+        historySection.classList.add(
+            "hidden"
+        );
+
+        return;
+
+    }
 
 
     const {
@@ -3101,143 +3995,37 @@ async function salvarRegistro(
         error
     } =
         await db
+
         .from(
             "registros_atividade"
         )
-        .insert(
-            registro
+
+        .select(
+            "*"
         )
-        .select()
-        .single();
 
+        .eq(
+            "jornada_id",
+            jornada.id
+        )
 
-    if (
-        error
-    ) {
+        .eq(
+            "status",
+            "Finalizada"
+        )
 
-        throw new Error(
-            "Erro ao registrar "
-            +
-            item.titulo
-            +
-            ": "
-            +
-            error.message
+        .order(
+            "finalizado_em",
+            {
+                ascending:false
+            }
         );
 
-    }
 
+    if(error){
 
-    return data;
-
-}
-
-
-
-/* =====================================================
-   CÓPIA LOCAL
-===================================================== */
-
-function salvarLocalmente(
-    registros,
-    dataHora
-) {
-
-    let historico =
-        JSON.parse(
-            localStorage.getItem(
-                "registrosAtividade"
-            )
-        )
-        ||
-        [];
-
-
-    registros.forEach(
-        registro => {
-
-            historico.push({
-
-                id:
-                    registro.id,
-
-                tipo:
-                    tipoAtividade,
-
-                torre:
-                    tipoAtividade ===
-                    "zeladoria"
-                    ?
-                    null
-                    :
-                    torre,
-
-                local:
-                    local,
-
-                item:
-                    registro.item,
-
-                colaborador:
-                    usuario.nome,
-
-                matricula:
-                    usuario.matricula,
-
-                data:
-                    dataHora.dataBR,
-
-                hora:
-                    dataHora.horaBR,
-
-                foto_url:
-                    registro.foto_url
-
-            });
-
-        }
-    );
-
-
-    localStorage.setItem(
-        "registrosAtividade",
-        JSON.stringify(
-            historico
-        )
-    );
-
-}
-
-
-
-/* =====================================================
-   REGISTRAR
-===================================================== */
-
-async function registrarItens() {
-
-    if (
-        enviando
-    ) {
-
-        return;
-
-    }
-
-
-    esconderErro();
-
-
-    const selecionados =
-        obterSelecionados();
-
-
-    if (
-        selecionados.length === 0
-    ) {
-
-        mostrarErro(
-            "Marque pelo menos um item realizado."
+        console.error(
+            error
         );
 
         return;
@@ -3245,322 +4033,299 @@ async function registrarItens() {
     }
 
 
-    /*
-       Antes de enviar qualquer coisa,
-       verificamos se TODOS os itens
-       selecionados possuem foto.
-    */
-
-    for (
-        const checkbox
-        of selecionados
-    ) {
-
-        const index =
-            Number(
-                checkbox.dataset.index
-            );
+    const registros =
+        data || [];
 
 
-        if (
-            !fotosItens[index]
-        ) {
+    if(
+        registros.length === 0
+    ){
 
-            mostrarErro(
-                'Adicione uma foto para "'
-                +
-                itensAtividade[index]
-                .titulo
-                +
-                '".'
-            );
+        historySection.classList.add(
+            "hidden"
+        );
 
-
-            document
-            .getElementById(
-                "itemCard-"
-                +
-                index
-            )
-            .scrollIntoView({
-                behavior:"smooth",
-                block:"center"
-            });
-
-
-            return;
-
-        }
+        return;
 
     }
 
 
-    enviando =
-        true;
+    historySection.classList.remove(
+        "hidden"
+    );
 
 
-    finishButton.disabled =
-        true;
+    historyList.innerHTML =
+        registros
+        .map(
+            registro => {
+
+                const duracao =
+                    formatarDuracao(
+                        registro.iniciado_em,
+                        registro.finalizado_em
+                    );
 
 
-    uploadStatus.style.display =
-        "block";
+                return `
+
+                    <div class="history-item">
+
+                        <div class="history-top">
+
+                            <div class="history-location">
+                                📍 ${escapar(registro.local)}
+                            </div>
+
+                            <span class="history-status">
+                                FINALIZADA
+                            </span>
+
+                        </div>
 
 
-    const dataHora =
-        obterDataHora();
+                        <div class="history-meta">
+
+                            ${formatarHoraData(
+                                registro.iniciado_em
+                            )}
+
+                            →
+
+                            ${formatarHoraData(
+                                registro.finalizado_em
+                            )}
+
+                            ${
+                                duracao
+                                ?
+                                " • " + duracao
+                                :
+                                ""
+                            }
+
+                            ${
+                                registro.foto_url
+                                ?
+                                " • 📷 Foto"
+                                :
+                                ""
+                            }
+
+                        </div>
 
 
-    const registrosSalvos =
-        [];
+                        ${
+                            registro.observacao
+                            ?
+                            `
+                            <div class="history-note">
+                                💬 ${escapar(registro.observacao)}
+                            </div>
+                            `
+                            :
+                            ""
+                        }
+
+                    </div>
+
+                `;
+
+            }
+        )
+        .join("");
+
+}
 
 
-    try {
+/* =====================================================
+   ENCERRAR JORNADA
+===================================================== */
 
-        let atual =
-            0;
+async function encerrarJornada(){
 
-
-        for (
-            const checkbox
-            of selecionados
-        ) {
-
-            atual++;
-
-
-            const index =
-                Number(
-                    checkbox.dataset.index
-                );
+    if(
+        processando ||
+        !jornada
+    ){
+        return;
+    }
 
 
-            const item =
-                itensAtividade[index];
+    if(atividadeAtual){
+
+        alert(
+            "Finalize a atividade em andamento antes de encerrar o turno."
+        );
+
+        return;
+
+    }
 
 
-            uploadStatus.textContent =
-                "📷 Enviando "
-                +
-                atual
-                +
-                " de "
-                +
-                selecionados.length
-                +
-                ": "
-                +
-                item.titulo;
-
-
-            /*
-               FOTO
-            */
-
-            const fotoURL =
-                await enviarFotoItem(
-                    index,
-                    item
-                );
-
-
-            /*
-               BANCO
-            */
-
-            uploadStatus.textContent =
-                "☁️ Registrando "
-                +
-                atual
-                +
-                " de "
-                +
-                selecionados.length
-                +
-                "...";
-
-
-            const registro =
-                await salvarRegistro(
-                    item,
-                    fotoURL,
-                    dataHora
-                );
-
-
-            registrosSalvos.push(
-                registro
-            );
-
-        }
-
-
-        /*
-           CÓPIA LOCAL
-        */
-
-        salvarLocalmente(
-            registrosSalvos,
-            dataHora
+    const confirmar =
+        confirm(
+            "Deseja encerrar sua jornada agora?"
         );
 
 
-        /*
-           SUCESSO
-        */
-
-        uploadStatus.style.display =
-            "none";
+    if(!confirmar){
+        return;
+    }
 
 
-        document
-        .getElementById(
-            "successText"
-        )
-        .textContent =
-            registrosSalvos.length
-            +
-            (
-                registrosSalvos.length === 1
-                ?
-                " item foi registrado"
-                :
-                " itens foram registrados"
+    try{
+
+        processando =
+            true;
+
+        esconderErro();
+
+
+        const agora =
+            new Date()
+            .toISOString();
+
+
+        const {
+            data,
+            error
+        } =
+            await db
+
+            .from(
+                "jornadas"
             )
-            +
-            " com sucesso.";
+
+            .update({
+
+                saida_em:
+                    agora,
+
+                status:
+                    "Encerrada",
+
+                updated_at:
+                    agora
+
+            })
+
+            .eq(
+                "id",
+                jornada.id
+            )
+
+            .select()
+
+            .single();
 
 
-        document
-        .getElementById(
-            "successOverlay"
-        )
-        .style.display =
-            "flex";
+        if(error){
+            throw error;
+        }
+
+
+        mostrarSucesso(
+            "Jornada encerrada",
+            `Saída registrada às ${formatarHoraData(data.saida_em)}.`,
+            1800
+        );
+
+
+        jornada =
+            null;
+
+        atividadeAtual =
+            null;
+
+        pararTimer();
+
+
+        choiceSection.classList.add(
+            "hidden"
+        );
+
+        activeSection.classList.add(
+            "hidden"
+        );
+
+        historySection.classList.add(
+            "hidden"
+        );
 
 
         setTimeout(
             () => {
 
-                window.location.href =
-                    "colaborador.html";
+                renderizarInicioJornada();
 
             },
-            1700
+            1000
         );
 
 
-    } catch (
-        erro
-    ) {
+    }catch(erro){
 
         console.error(
             erro
         );
 
-
-        enviando =
-            false;
-
-
-        finishButton.disabled =
-            false;
-
-
-        uploadStatus.style.display =
-            "none";
-
-
-        atualizarProgresso();
-
-
         mostrarErro(
-            erro.message
-            ||
-            "Não foi possível registrar os itens."
+            "Não foi possível encerrar a jornada: "
+            +
+            (
+                erro.message ||
+                "erro desconhecido"
+            )
         );
 
+
+    }finally{
+
+        processando =
+            false;
+
     }
 
 }
 
 
-
 /* =====================================================
-   ERRO
+   SAIR
 ===================================================== */
 
-function mostrarErro(
-    mensagem
-) {
+function sair(){
 
-    errorMessage.textContent =
-        mensagem;
+    if(atividadeAtual){
 
+        const confirmar =
+            confirm(
+                "Existe uma atividade em andamento. Ela continuará aberta se você sair. Deseja sair mesmo assim?"
+            );
 
-    errorMessage.style.display =
-        "block";
+        if(!confirmar){
+            return;
+        }
 
-
-    errorMessage.scrollIntoView({
-        behavior:"smooth",
-        block:"center"
-    });
-
-}
+    }
 
 
-
-function esconderErro() {
-
-    errorMessage.style.display =
-        "none";
-
-}
-
-
-
-/* =====================================================
-   OCORRÊNCIA
-===================================================== */
-
-function problemaEmConstrucao() {
-
-    alert(
-        "O registro de ocorrências está em construção."
+    localStorage.removeItem(
+        "usuarioLogado"
     );
-
-}
-
-
-
-/* =====================================================
-   VOLTAR
-===================================================== */
-
-function voltar() {
-
-    if (
-        enviando
-    ) {
-
-        return;
-
-    }
 
 
     window.location.href =
-        "colaborador.html";
+        "index.html";
 
 }
 
 
-
 /* =====================================================
-   INICIAR
+   INICIALIZAR
 ===================================================== */
 
-carregarItens();
+carregarColaborador();
 
 </script>
 
