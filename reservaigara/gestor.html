@@ -24,29 +24,20 @@
     --primary:#7667b9;
     --primary-dark:#6477a4;
     --primary-light:#eeeafd;
-
     --blue:#5d88a5;
     --blue-light:#eaf4f8;
-
     --green:#69a17f;
     --green-light:#eaf5ee;
-
     --yellow:#c4974d;
     --yellow-light:#fff5df;
-
     --red:#c96565;
     --red-light:#fdecec;
-
     --text:#2d3742;
     --muted:#75808c;
-
     --background:#f4f6f8;
     --card:#ffffff;
     --border:#e4e9ee;
-
-    --shadow:
-        0 10px 30px
-        rgba(35,48,65,.06);
+    --shadow:0 10px 30px rgba(35,48,65,.06);
 }
 
 *{
@@ -57,16 +48,7 @@
 
 body{
     min-height:100vh;
-
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Roboto,
-        Helvetica,
-        Arial,
-        sans-serif;
-
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     background:var(--background);
     color:var(--text);
 }
@@ -76,25 +58,12 @@ textarea{
     font-family:inherit;
 }
 
-
-/* =====================================================
-   HEADER
-===================================================== */
+/* HEADER */
 
 header{
-    background:
-        linear-gradient(
-            135deg,
-            #6d80a8,
-            #7c72ae
-        );
-
+    background:linear-gradient(135deg,#6d80a8,#7c72ae);
     color:white;
-
-    padding:
-        calc(18px + env(safe-area-inset-top))
-        18px
-        52px;
+    padding:calc(18px + env(safe-area-inset-top)) 18px 52px;
 }
 
 .header-content{
@@ -117,16 +86,11 @@ header{
 .brand-icon{
     width:39px;
     height:39px;
-
     border-radius:12px;
-
     display:flex;
     align-items:center;
     justify-content:center;
-
-    background:
-        rgba(255,255,255,.18);
-
+    background:rgba(255,255,255,.18);
     font-size:20px;
     font-weight:800;
 }
@@ -139,31 +103,20 @@ header{
 
 .brand small{
     display:block;
-
     margin-top:2px;
-
     font-size:7px;
-
     letter-spacing:1.2px;
-
     opacity:.75;
 }
 
 .logout{
     border:0;
-
     padding:10px 13px;
-
     border-radius:14px;
-
-    background:
-        rgba(255,255,255,.16);
-
+    background:rgba(255,255,255,.16);
     color:white;
-
     font-size:9px;
     font-weight:800;
-
     cursor:pointer;
 }
 
@@ -173,57 +126,38 @@ header{
 
 .header-title small{
     display:block;
-
     font-size:9px;
-
     letter-spacing:1px;
-
     opacity:.72;
-
     text-transform:uppercase;
 }
 
 .header-title h1{
     margin-top:6px;
-
     font-size:28px;
 }
 
 .header-title p{
     margin-top:7px;
-
     font-size:11px;
-
     opacity:.8;
 }
 
-
-/* =====================================================
-   MAIN
-===================================================== */
+/* MAIN */
 
 main{
     max-width:980px;
-
     margin:-18px auto 80px;
-
     padding:0 16px;
 }
 
-
-/* =====================================================
-   GESTOR
-===================================================== */
+/* GESTOR */
 
 .manager-card{
     padding:16px;
-
     border-radius:21px;
-
     background:white;
-
     box-shadow:var(--shadow);
-
     display:flex;
     align-items:center;
     gap:13px;
@@ -232,17 +166,12 @@ main{
 .manager-icon{
     width:48px;
     height:48px;
-
     border-radius:15px;
-
     flex-shrink:0;
-
     display:flex;
     align-items:center;
     justify-content:center;
-
     background:var(--primary-light);
-
     font-size:22px;
 }
 
@@ -252,106 +181,69 @@ main{
 
 .manager-info strong{
     display:block;
-
     font-size:13px;
 }
 
 .manager-info span{
     display:block;
-
     margin-top:4px;
-
     color:var(--muted);
-
     font-size:9px;
 }
 
 .online{
     padding:7px 10px;
-
     border-radius:20px;
-
     background:var(--green-light);
     color:var(--green);
-
     font-size:8px;
     font-weight:800;
 }
 
-
-/* =====================================================
-   ABAS
-===================================================== */
+/* ABAS */
 
 .tabs{
     display:grid;
-
-    grid-template-columns:
-        1fr 1fr;
-
+    grid-template-columns:1fr 1fr;
     gap:5px;
-
     margin-top:16px;
-
     padding:5px;
-
     border-radius:17px;
-
     background:#e9edf1;
 }
 
 .tab{
     border:0;
-
     padding:14px 10px;
-
     border-radius:13px;
-
     background:transparent;
-
     color:var(--muted);
-
     font-size:9px;
     font-weight:800;
-
     cursor:pointer;
 }
 
 .tab.active{
     background:white;
-
     color:var(--primary);
-
-    box-shadow:
-        0 3px 10px
-        rgba(30,40,60,.05);
+    box-shadow:0 3px 10px rgba(30,40,60,.05);
 }
 
 .tab-badge{
     display:inline-flex;
-
     min-width:20px;
     height:20px;
-
     margin-left:5px;
-
     padding:0 6px;
-
     align-items:center;
     justify-content:center;
-
     border-radius:20px;
-
     background:var(--red-light);
     color:var(--red);
-
     font-size:8px;
 }
 
-
-/* =====================================================
-   PAINÉIS
-===================================================== */
+/* PAINÉIS */
 
 .panel{
     display:none;
@@ -361,14 +253,10 @@ main{
     display:block;
 }
 
-
-/* =====================================================
-   DATA
-===================================================== */
+/* DATA */
 
 .date-row{
     margin-top:24px;
-
     display:flex;
     align-items:center;
     justify-content:space-between;
@@ -380,43 +268,27 @@ main{
 
 .date-pill{
     padding:8px 11px;
-
     border-radius:14px;
-
     background:white;
-
     box-shadow:var(--shadow);
-
     color:var(--muted);
-
     font-size:9px;
 }
 
-
-/* =====================================================
-   KPIs
-===================================================== */
+/* KPIs */
 
 .kpis{
     display:grid;
-
-    grid-template-columns:
-        repeat(2,1fr);
-
+    grid-template-columns:repeat(2,1fr);
     gap:10px;
-
     margin-top:12px;
 }
 
 .kpi{
     min-height:105px;
-
     padding:16px;
-
     border-radius:19px;
-
     background:white;
-
     box-shadow:var(--shadow);
 }
 
@@ -426,46 +298,24 @@ main{
 
 .kpi strong{
     display:block;
-
     margin-top:9px;
-
     font-size:24px;
 }
 
 .kpi span{
     display:block;
-
     margin-top:4px;
-
     color:var(--muted);
-
     font-size:8px;
 }
 
-.kpi.green strong{
-    color:var(--green);
-}
+.kpi.green strong{color:var(--green);}
+.kpi.blue strong{color:var(--blue);}
+.kpi.purple strong{color:var(--primary);}
+.kpi.yellow strong{color:var(--yellow);}
+.kpi.red strong{color:var(--red);}
 
-.kpi.blue strong{
-    color:var(--blue);
-}
-
-.kpi.purple strong{
-    color:var(--primary);
-}
-
-.kpi.yellow strong{
-    color:var(--yellow);
-}
-
-.kpi.red strong{
-    color:var(--red);
-}
-
-
-/* =====================================================
-   SEÇÕES
-===================================================== */
+/* SEÇÕES */
 
 .section{
     margin-top:27px;
@@ -475,9 +325,7 @@ main{
     display:flex;
     align-items:flex-end;
     justify-content:space-between;
-
     gap:10px;
-
     margin-bottom:12px;
 }
 
@@ -487,40 +335,27 @@ main{
 
 .section-title p{
     margin-top:4px;
-
     color:var(--muted);
-
     font-size:9px;
 }
 
 .refresh{
     border:0;
-
     padding:9px 11px;
-
     border-radius:12px;
-
     background:var(--blue-light);
     color:var(--blue);
-
     font-size:8px;
     font-weight:800;
-
     cursor:pointer;
 }
 
-
-/* =====================================================
-   TORRE
-===================================================== */
+/* TORRE */
 
 .tower-card{
     padding:17px;
-
     border-radius:21px;
-
     background:white;
-
     box-shadow:var(--shadow);
 }
 
@@ -533,15 +368,11 @@ main{
 .tower-icon{
     width:48px;
     height:48px;
-
     border-radius:15px;
-
     display:flex;
     align-items:center;
     justify-content:center;
-
     background:var(--blue-light);
-
     font-size:22px;
 }
 
@@ -551,63 +382,46 @@ main{
 
 .tower-info strong{
     display:block;
-
     font-size:13px;
 }
 
 .tower-info span{
     display:block;
-
     margin-top:4px;
-
     color:var(--muted);
-
     font-size:8px;
 }
 
 .percent{
     font-size:20px;
     font-weight:800;
-
     color:var(--green);
 }
 
 .progress{
     height:9px;
-
     margin-top:15px;
-
     border-radius:20px;
-
     overflow:hidden;
-
     background:#e9edf2;
 }
 
 .progress-fill{
     height:100%;
     width:0;
-
     background:var(--green);
-
     transition:.3s;
 }
 
 .progress-info{
     margin-top:9px;
-
     display:flex;
     justify-content:space-between;
-
     color:var(--muted);
-
     font-size:8px;
 }
 
-
-/* =====================================================
-   LOCAIS
-===================================================== */
+/* LOCAIS */
 
 .location-list{
     display:flex;
@@ -617,38 +431,28 @@ main{
 
 .location-card{
     border-radius:18px;
-
     background:white;
-
     box-shadow:var(--shadow);
-
     overflow:hidden;
 }
 
 .location-header{
     padding:14px;
-
     display:flex;
     align-items:center;
     gap:11px;
-
     cursor:pointer;
 }
 
 .location-icon{
     width:40px;
     height:40px;
-
     flex-shrink:0;
-
     border-radius:12px;
-
     display:flex;
     align-items:center;
     justify-content:center;
-
     background:var(--blue-light);
-
     font-size:18px;
 }
 
@@ -658,161 +462,109 @@ main{
 
 .location-info strong{
     display:block;
-
     font-size:11px;
 }
 
 .location-info span{
     display:block;
-
     margin-top:4px;
-
     color:var(--muted);
-
     font-size:8px;
 }
 
 .location-count{
     padding:5px 8px;
-
     border-radius:20px;
-
     background:var(--green-light);
     color:var(--green);
-
     font-size:8px;
     font-weight:800;
 }
 
 .location-arrow{
     color:var(--muted);
-
     font-size:17px;
-
     transition:.2s;
 }
 
-.location-card.open
-.location-arrow{
+.location-card.open .location-arrow{
     transform:rotate(180deg);
 }
 
 .location-content{
     display:none;
-
-    padding:
-        0 14px
-        14px;
+    padding:0 14px 14px;
 }
 
-.location-card.open
-.location-content{
+.location-card.open .location-content{
     display:block;
 }
 
-
-/* =====================================================
-   REGISTROS OPERAÇÃO
-===================================================== */
+/* REGISTROS */
 
 .record{
     padding:12px 0;
-
-    border-top:
-        1px solid
-        var(--border);
-
+    border-top:1px solid var(--border);
     display:grid;
-
-    grid-template-columns:
-        54px 1fr;
-
+    grid-template-columns:54px 1fr;
     gap:11px;
 }
 
 .record-photo{
     width:54px;
     height:54px;
-
     border:0;
-
     border-radius:11px;
-
     overflow:hidden;
-
     padding:0;
-
     background:#edf1f5;
-
     cursor:pointer;
 }
 
 .record-photo img{
     display:block;
-
     width:100%;
     height:100%;
-
     object-fit:cover;
 }
 
 .record-body strong{
     display:block;
-
     font-size:10px;
 }
 
 .record-meta{
     margin-top:4px;
-
     color:var(--muted);
-
     font-size:8px;
-
     line-height:1.5;
 }
 
 .record-observation{
     margin-top:6px;
-
     padding:7px 9px;
-
     border-radius:9px;
-
     background:#f6f8fa;
-
     color:#56616e;
-
     font-size:8px;
-
     line-height:1.4;
 }
 
-
-/* =====================================================
-   ÚLTIMOS REGISTROS
-===================================================== */
+/* ÚLTIMOS */
 
 .activity-list{
     border-radius:20px;
-
     background:white;
-
     padding:0 15px;
-
     box-shadow:var(--shadow);
 }
 
 .activity-row{
     min-height:67px;
-
     display:flex;
     align-items:center;
     gap:11px;
-
-    border-bottom:
-        1px solid
-        var(--border);
+    border-bottom:1px solid var(--border);
 }
 
 .activity-row:last-child{
@@ -822,25 +574,18 @@ main{
 .activity-photo{
     width:44px;
     height:44px;
-
     flex-shrink:0;
-
     border:0;
     border-radius:11px;
-
     overflow:hidden;
-
     padding:0;
-
     cursor:pointer;
-
     background:#edf1f5;
 }
 
 .activity-photo img{
     width:100%;
     height:100%;
-
     object-fit:cover;
 }
 
@@ -850,55 +595,38 @@ main{
 
 .activity-info strong{
     display:block;
-
     font-size:10px;
 }
 
 .activity-info span{
     display:block;
-
     margin-top:4px;
-
     color:var(--muted);
-
     font-size:8px;
 }
 
 .activity-time{
     color:var(--muted);
-
     font-size:8px;
 }
 
-
-/* =====================================================
-   FILTROS OCORRÊNCIAS
-===================================================== */
+/* FILTROS */
 
 .filters{
     display:flex;
-
     flex-wrap:wrap;
-
     gap:8px;
-
     margin-bottom:14px;
 }
 
 .filter{
     border:0;
-
     padding:9px 14px;
-
     border-radius:20px;
-
     background:white;
-
     color:var(--muted);
-
     font-size:8px;
     font-weight:800;
-
     cursor:pointer;
 }
 
@@ -907,10 +635,7 @@ main{
     color:white;
 }
 
-
-/* =====================================================
-   OCORRÊNCIAS
-===================================================== */
+/* OCORRÊNCIAS */
 
 .occurrence-list{
     display:flex;
@@ -920,49 +645,36 @@ main{
 
 .occurrence-card{
     padding:17px;
-
     border-radius:21px;
-
     background:white;
-
     box-shadow:var(--shadow);
 }
 
 .occurrence-top{
     display:flex;
-
     align-items:flex-start;
-
     justify-content:space-between;
-
     gap:12px;
 }
 
 .occurrence-protocol{
     color:var(--blue);
-
     font-size:13px;
     font-weight:800;
 }
 
 .occurrence-date{
     margin-top:4px;
-
     color:var(--muted);
-
     font-size:8px;
 }
 
 .status-badge{
     flex-shrink:0;
-
     padding:7px 10px;
-
     border-radius:20px;
-
     font-size:8px;
     font-weight:800;
-
     text-transform:uppercase;
 }
 
@@ -983,41 +695,28 @@ main{
 
 .occurrence-location{
     margin-top:14px;
-
     padding:11px 13px;
-
     border-radius:13px;
-
     background:var(--blue-light);
     color:var(--blue);
-
     font-size:10px;
     font-weight:750;
 }
 
 .occurrence-description{
     margin-top:15px;
-
     padding:0 12px;
-
     font-size:10px;
-
     line-height:1.55;
 }
 
 .return-box{
     margin-top:14px;
-
     padding:11px 13px;
-
     border-radius:13px;
-
     background:#f4f0fc;
-
     color:var(--primary);
-
     font-size:8px;
-
     line-height:1.5;
 }
 
@@ -1027,45 +726,28 @@ main{
 
 .occurrence-photo{
     margin-top:14px;
-
     width:100%;
-
     max-width:350px;
-
     border:0;
-
     padding:0;
-
     background:none;
-
     cursor:pointer;
 }
 
 .occurrence-photo img{
     display:block;
-
     width:100%;
-
     max-height:300px;
-
     object-fit:cover;
-
     border-radius:14px;
 }
 
-
-/* =====================================================
-   GESTÃO OCORRÊNCIA
-===================================================== */
+/* GESTÃO OCORRÊNCIA */
 
 .occurrence-management{
     margin-top:17px;
-
     padding-top:16px;
-
-    border-top:
-        1px solid
-        var(--border);
+    border-top:1px solid var(--border);
 }
 
 .management-title{
@@ -1075,68 +757,43 @@ main{
 
 .status-buttons{
     display:flex;
-
     flex-wrap:wrap;
-
     gap:8px;
-
     margin-top:11px;
 }
 
 .status-button{
-    border:
-        1px solid
-        var(--border);
-
+    border:1px solid var(--border);
     padding:10px 14px;
-
     border-radius:13px;
-
     background:white;
-
     color:var(--muted);
-
     font-size:8px;
     font-weight:800;
-
     cursor:pointer;
 }
 
 .status-button.selected{
     border-color:#c8bef1;
-
     background:var(--primary-light);
-
     color:var(--primary);
 }
 
 .status-button.resolved.selected{
     border-color:#a8d2b7;
-
     background:var(--green-light);
-
     color:var(--green);
 }
 
-
-/* =====================================================
-   MENSAGEM FINAL
-===================================================== */
+/* MENSAGEM */
 
 .resolution-box{
     display:none;
-
     margin-top:16px;
-
     padding:14px;
-
     border-radius:16px;
-
     background:#f7f5fc;
-
-    border:
-        1px solid
-        #e6e0f6;
+    border:1px solid #e6e0f6;
 }
 
 .resolution-box.visible{
@@ -1145,38 +802,22 @@ main{
 
 .resolution-box label{
     display:block;
-
     margin-bottom:8px;
-
     font-size:9px;
     font-weight:800;
-
-    color:var(--text);
 }
 
 .resolution-box textarea{
     width:100%;
-
     min-height:105px;
-
     padding:12px;
-
     resize:vertical;
-
-    border:
-        1px solid
-        var(--border);
-
+    border:1px solid var(--border);
     border-radius:13px;
-
     outline:none;
-
     background:white;
-
     color:var(--text);
-
     font-size:10px;
-
     line-height:1.5;
 }
 
@@ -1186,34 +827,22 @@ main{
 
 .resolution-box small{
     display:block;
-
     margin-top:7px;
-
     color:var(--muted);
-
     font-size:8px;
-
     line-height:1.5;
 }
 
 .save-update{
     width:100%;
-
     margin-top:14px;
-
     padding:13px;
-
     border:0;
-
     border-radius:13px;
-
     background:var(--primary);
-
     color:white;
-
     font-size:9px;
     font-weight:800;
-
     cursor:pointer;
 }
 
@@ -1222,19 +851,12 @@ main{
     cursor:not-allowed;
 }
 
-
-/* =====================================================
-   HISTÓRICO
-===================================================== */
+/* HISTÓRICO */
 
 .history{
     margin-top:17px;
-
     padding-top:15px;
-
-    border-top:
-        1px solid
-        var(--border);
+    border-top:1px solid var(--border);
 }
 
 .history-title{
@@ -1244,43 +866,30 @@ main{
 
 .history-item{
     position:relative;
-
     margin-top:12px;
-
     padding-left:22px;
-
     font-size:8px;
-
     line-height:1.55;
 }
 
 .history-item::before{
     content:"";
-
     position:absolute;
-
     left:2px;
     top:4px;
-
     width:7px;
     height:7px;
-
     border-radius:50%;
-
     background:var(--primary);
 }
 
 .history-item::after{
     content:"";
-
     position:absolute;
-
     left:5px;
     top:13px;
-
     width:1px;
     height:calc(100% + 8px);
-
     background:#d9dce4;
 }
 
@@ -1290,40 +899,28 @@ main{
 
 .history-item strong{
     display:block;
-
     font-size:8px;
 }
 
 .history-item span{
     display:block;
-
     margin-top:2px;
-
     color:var(--muted);
 }
 
 .history-message{
     margin-top:4px;
-
     color:#59636d;
-
     white-space:pre-wrap;
 }
 
-
-/* =====================================================
-   VAZIO / LOADING / ERRO
-===================================================== */
+/* VAZIO */
 
 .empty{
     padding:30px 18px;
-
     border-radius:19px;
-
     background:white;
-
     box-shadow:var(--shadow);
-
     text-align:center;
 }
 
@@ -1333,78 +930,50 @@ main{
 
 .empty strong{
     display:block;
-
     margin-top:9px;
-
     font-size:11px;
 }
 
 .empty span{
     display:block;
-
     margin-top:5px;
-
     color:var(--muted);
-
     font-size:8px;
-
     line-height:1.5;
 }
 
 .loading{
     padding:28px;
-
     border-radius:18px;
-
     background:white;
-
     box-shadow:var(--shadow);
-
     text-align:center;
-
     color:var(--muted);
-
     font-size:9px;
 }
 
 .error-box{
     display:none;
-
     margin-top:15px;
-
     padding:12px;
-
     border-radius:14px;
-
     background:var(--red-light);
     color:var(--red);
-
     font-size:9px;
-
     line-height:1.5;
 }
 
-
-/* =====================================================
-   FOTO MODAL
-===================================================== */
+/* FOTO */
 
 .photo-modal{
     position:fixed;
-
     inset:0;
-
     z-index:999;
-
     display:none;
-
     align-items:center;
     justify-content:center;
-
     padding:18px;
-
-    background:
-        rgba(0,0,0,.88);
+    background:rgba(0,0,0,.88);
 }
 
 .photo-modal.visible{
@@ -1413,117 +982,74 @@ main{
 
 .photo-modal-content{
     position:relative;
-
     width:100%;
     max-width:650px;
 }
 
 .photo-modal img{
     display:block;
-
     width:100%;
     max-height:82vh;
-
     object-fit:contain;
-
     border-radius:18px;
 }
 
 .close-photo{
     position:absolute;
-
     top:-10px;
     right:-5px;
-
     width:42px;
     height:42px;
-
     border:0;
     border-radius:50%;
-
     background:white;
     color:#222;
-
     font-size:20px;
-
     cursor:pointer;
 }
 
 .photo-caption{
     margin-top:10px;
-
     color:white;
-
     text-align:center;
-
     font-size:10px;
-
     line-height:1.5;
 }
 
-
-/* =====================================================
-   TOAST
-===================================================== */
+/* TOAST */
 
 .toast{
     position:fixed;
-
     left:50%;
     bottom:25px;
-
     z-index:1200;
-
-    transform:
-        translateX(-50%)
-        translateY(30px);
-
+    transform:translateX(-50%) translateY(30px);
     opacity:0;
-
     pointer-events:none;
-
     padding:12px 18px;
-
     border-radius:14px;
-
     background:#25313c;
-
     color:white;
-
     font-size:9px;
     font-weight:700;
-
     transition:.25s;
 }
 
 .toast.visible{
     opacity:1;
-
-    transform:
-        translateX(-50%)
-        translateY(0);
+    transform:translateX(-50%) translateY(0);
 }
 
-
-/* =====================================================
-   DESKTOP
-===================================================== */
-
 @media(min-width:700px){
-
     .kpis{
-        grid-template-columns:
-            repeat(4,1fr);
+        grid-template-columns:repeat(4,1fr);
     }
-
 }
 
 </style>
 </head>
 
-
 <body>
-
 
 <header>
 
@@ -1533,24 +1059,14 @@ main{
 
         <div class="brand">
 
-            <div class="brand-icon">
-                ✓
-            </div>
+            <div class="brand-icon">✓</div>
 
             <div>
-
-                <strong>
-                    ORAQUI
-                </strong>
-
-                <small>
-                    AGORA. AQUI. REGISTRADO.
-                </small>
-
+                <strong>ORAQUI</strong>
+                <small>AGORA. AQUI. REGISTRADO.</small>
             </div>
 
         </div>
-
 
         <button
             class="logout"
@@ -1561,16 +1077,11 @@ main{
 
     </div>
 
-
     <div class="header-title">
 
-        <small>
-            RESERVA IGARA
-        </small>
+        <small>RESERVA IGARA</small>
 
-        <h1>
-            Painel de Gestão
-        </h1>
+        <h1>Painel de Gestão</h1>
 
         <p>
             Operação e ocorrências em um único lugar.
@@ -1582,17 +1093,11 @@ main{
 
 </header>
 
-
-
 <main>
-
 
 <div class="manager-card">
 
-    <div class="manager-icon">
-        📊
-    </div>
-
+    <div class="manager-icon">📊</div>
 
     <div class="manager-info">
 
@@ -1606,21 +1111,16 @@ main{
 
     </div>
 
-
     <span class="online">
         ● ONLINE
     </span>
 
 </div>
 
-
-
 <div
     class="error-box"
     id="errorBox"
 ></div>
-
-
 
 <div class="tabs">
 
@@ -1631,7 +1131,6 @@ main{
     >
         ✓ OPERAÇÃO
     </button>
-
 
     <button
         class="tab"
@@ -1651,23 +1150,16 @@ main{
 
 </div>
 
-
-
-<!-- =================================================
-     OPERAÇÃO
-================================================== -->
+<!-- OPERAÇÃO -->
 
 <div
     class="panel active"
     id="panelOperacao"
 >
 
-
 <div class="date-row">
 
-    <h2>
-        Hoje
-    </h2>
+    <h2>Hoje</h2>
 
     <div
         class="date-pill"
@@ -1678,97 +1170,42 @@ main{
 
 </div>
 
-
-
 <div class="kpis">
 
     <div class="kpi green">
-
-        <div class="kpi-icon">
-            ✓
-        </div>
-
-        <strong id="kpiItems">
-            0
-        </strong>
-
-        <span>
-            ITENS REGISTRADOS HOJE
-        </span>
-
+        <div class="kpi-icon">✓</div>
+        <strong id="kpiItems">0</strong>
+        <span>ITENS REGISTRADOS HOJE</span>
     </div>
-
 
     <div class="kpi blue">
-
-        <div class="kpi-icon">
-            📷
-        </div>
-
-        <strong id="kpiPhotos">
-            0
-        </strong>
-
-        <span>
-            FOTOS RECEBIDAS
-        </span>
-
+        <div class="kpi-icon">📷</div>
+        <strong id="kpiPhotos">0</strong>
+        <span>FOTOS RECEBIDAS</span>
     </div>
-
 
     <div class="kpi purple">
-
-        <div class="kpi-icon">
-            👷
-        </div>
-
-        <strong id="kpiWorkers">
-            0
-        </strong>
-
-        <span>
-            COLABORADORES ATIVOS
-        </span>
-
+        <div class="kpi-icon">👷</div>
+        <strong id="kpiWorkers">0</strong>
+        <span>COLABORADORES ATIVOS</span>
     </div>
 
-
     <div class="kpi yellow">
-
-        <div class="kpi-icon">
-            📍
-        </div>
-
-        <strong id="kpiLocations">
-            0
-        </strong>
-
-        <span>
-            LOCAIS COM REGISTRO
-        </span>
-
+        <div class="kpi-icon">📍</div>
+        <strong id="kpiLocations">0</strong>
+        <span>LOCAIS COM REGISTRO</span>
     </div>
 
 </div>
-
-
 
 <section class="section">
 
     <div class="section-title">
 
         <div>
-
-            <h2>
-                Torre E
-            </h2>
-
-            <p>
-                Limpeza • Débora
-            </p>
-
+            <h2>Torre E</h2>
+            <p>Limpeza • Débora</p>
         </div>
-
 
         <button
             class="refresh"
@@ -1779,28 +1216,18 @@ main{
 
     </div>
 
-
     <div class="tower-card">
 
         <div class="tower-top">
 
-            <div class="tower-icon">
-                🏢
-            </div>
-
+            <div class="tower-icon">🏢</div>
 
             <div class="tower-info">
-
-                <strong>
-                    Operação de hoje
-                </strong>
-
+                <strong>Operação de hoje</strong>
                 <span id="towerStatus">
                     Carregando registros...
                 </span>
-
             </div>
-
 
             <div
                 class="percent"
@@ -1811,16 +1238,12 @@ main{
 
         </div>
 
-
         <div class="progress">
-
             <div
                 class="progress-fill"
                 id="towerProgress"
             ></div>
-
         </div>
-
 
         <div class="progress-info">
 
@@ -1838,60 +1261,40 @@ main{
 
 </section>
 
-
-
 <section class="section">
 
     <div class="section-title">
 
         <div>
-
-            <h2>
-                Registros por local
-            </h2>
-
+            <h2>Registros por local</h2>
             <p>
                 Toque no local para visualizar os itens e fotos.
             </p>
-
         </div>
 
     </div>
-
 
     <div
         id="locationList"
         class="location-list"
     >
-
         <div class="loading">
             Buscando registros...
         </div>
-
     </div>
 
 </section>
-
-
 
 <section class="section">
 
     <div class="section-title">
 
         <div>
-
-            <h2>
-                Últimos registros
-            </h2>
-
-            <p>
-                Atividades recebidas hoje.
-            </p>
-
+            <h2>Últimos registros</h2>
+            <p>Atividades recebidas hoje.</p>
         </div>
 
     </div>
-
 
     <div id="activityContainer">
 
@@ -1903,37 +1306,25 @@ main{
 
 </section>
 
-
 </div>
 
-
-
-<!-- =================================================
-     OCORRÊNCIAS
-================================================== -->
+<!-- OCORRÊNCIAS -->
 
 <div
     class="panel"
     id="panelOcorrencias"
 >
 
-
 <section class="section">
 
     <div class="section-title">
 
         <div>
-
-            <h2>
-                Ocorrências
-            </h2>
-
+            <h2>Ocorrências</h2>
             <p>
                 Acompanhamento dos registros enviados.
             </p>
-
         </div>
-
 
         <button
             class="refresh"
@@ -1944,134 +1335,74 @@ main{
 
     </div>
 
-
-
     <div class="kpis">
 
         <div class="kpi red">
-
-            <div class="kpi-icon">
-                ⚠
-            </div>
-
-            <strong id="occOpen">
-                0
-            </strong>
-
-            <span>
-                ABERTAS
-            </span>
-
+            <div class="kpi-icon">⚠</div>
+            <strong id="occOpen">0</strong>
+            <span>ABERTAS</span>
         </div>
-
 
         <div class="kpi yellow">
-
-            <div class="kpi-icon">
-                ◷
-            </div>
-
-            <strong id="occProgress">
-                0
-            </strong>
-
-            <span>
-                EM ATENDIMENTO
-            </span>
-
+            <div class="kpi-icon">◷</div>
+            <strong id="occProgress">0</strong>
+            <span>EM ATENDIMENTO</span>
         </div>
-
 
         <div class="kpi green">
-
-            <div class="kpi-icon">
-                ✓
-            </div>
-
-            <strong id="occResolved">
-                0
-            </strong>
-
-            <span>
-                RESOLVIDAS
-            </span>
-
+            <div class="kpi-icon">✓</div>
+            <strong id="occResolved">0</strong>
+            <span>RESOLVIDAS</span>
         </div>
 
-
         <div class="kpi blue">
-
-            <div class="kpi-icon">
-                ✉
-            </div>
-
-            <strong id="occReturn">
-                0
-            </strong>
-
-            <span>
-                SOLICITAM RETORNO
-            </span>
-
+            <div class="kpi-icon">✉</div>
+            <strong id="occReturn">0</strong>
+            <span>SOLICITAM RETORNO</span>
         </div>
 
     </div>
 
 </section>
 
-
-
 <section class="section">
 
     <div class="section-title">
 
         <div>
-
-            <h2>
-                Registros recebidos
-            </h2>
-
+            <h2>Registros recebidos</h2>
             <p>
                 Comunicação enviada por moradores e visitantes.
             </p>
-
         </div>
 
     </div>
-
 
     <div class="filters">
 
         <button
             class="filter active"
-            data-filter="todas"
             onclick="filtrarOcorrencias(this,'todas')"
         >
             TODAS
         </button>
 
-
         <button
             class="filter"
-            data-filter="aberta"
             onclick="filtrarOcorrencias(this,'aberta')"
         >
             ABERTAS
         </button>
 
-
         <button
             class="filter"
-            data-filter="em atendimento"
             onclick="filtrarOcorrencias(this,'em atendimento')"
         >
             EM ATENDIMENTO
         </button>
 
-
         <button
             class="filter"
-            data-filter="resolvida"
             onclick="filtrarOcorrencias(this,'resolvida')"
         >
             RESOLVIDAS
@@ -2079,31 +1410,20 @@ main{
 
     </div>
 
-
     <div
         id="occurrenceList"
         class="occurrence-list"
     >
-
         <div class="loading">
             Buscando ocorrências...
         </div>
-
     </div>
 
 </section>
 
-
 </div>
 
-
 </main>
-
-
-
-<!-- =================================================
-     FOTO
-================================================== -->
 
 <div
     class="photo-modal"
@@ -2120,12 +1440,10 @@ main{
             ×
         </button>
 
-
         <img
             id="modalImage"
             alt="Imagem"
         >
-
 
         <div
             class="photo-caption"
@@ -2136,28 +1454,20 @@ main{
 
 </div>
 
-
-
 <div
     class="toast"
     id="toast"
 ></div>
 
-
-
 <script>
 
-/* =====================================================
-   SUPABASE
-===================================================== */
+/* SUPABASE */
 
 const SUPABASE_URL =
     "https://rhiosvsohvqqrxzwohqu.supabase.co";
 
-
 const SUPABASE_KEY =
     "sb_publishable_vcjiMMCTxQJ7ArTGsQ-PuQ_5gaAfoIt";
-
 
 const db =
     window.supabase.createClient(
@@ -2165,11 +1475,7 @@ const db =
         SUPABASE_KEY
     );
 
-
-
-/* =====================================================
-   SESSÃO
-===================================================== */
+/* SESSÃO */
 
 const sessao =
     JSON.parse(
@@ -2178,95 +1484,64 @@ const sessao =
         )
     );
 
-
 if(!sessao){
-
     window.location.href =
         "index.html";
-
 }
 
-
-
-/* =====================================================
-   VARIÁVEIS
-===================================================== */
+/* VARIÁVEIS */
 
 const locationList =
     document.getElementById(
         "locationList"
     );
 
-
 const activityContainer =
     document.getElementById(
         "activityContainer"
     );
-
 
 const occurrenceList =
     document.getElementById(
         "occurrenceList"
     );
 
-
 const errorBox =
     document.getElementById(
         "errorBox"
     );
 
-
-let ocorrenciasCarregadas =
-    [];
-
+let ocorrenciasCarregadas = [];
 
 let filtroOcorrencias =
     "todas";
 
+const statusSelecionado = {};
 
-const statusSelecionado =
-    {};
-
-
-
-/* =====================================================
-   DATA
-===================================================== */
+/* DATA */
 
 function dataHojeBanco(){
 
     const agora =
         new Date();
 
-
     const ano =
         agora.getFullYear();
-
 
     const mes =
         String(
             agora.getMonth()+1
         )
-        .padStart(
-            2,
-            "0"
-        );
-
+        .padStart(2,"0");
 
     const dia =
         String(
             agora.getDate()
         )
-        .padStart(
-            2,
-            "0"
-        );
-
+        .padStart(2,"0");
 
     return `${ano}-${mes}-${dia}`;
-
 }
-
 
 document
 .getElementById(
@@ -2283,20 +1558,9 @@ document
         }
     );
 
+const TOTAL_ITENS_TORRE_E = 76;
 
-
-/* =====================================================
-   TOTAL TORRE E
-===================================================== */
-
-const TOTAL_ITENS_TORRE_E =
-    76;
-
-
-
-/* =====================================================
-   ESCAPAR HTML
-===================================================== */
+/* ESCAPAR */
 
 function escapar(texto){
 
@@ -2304,295 +1568,150 @@ function escapar(texto){
         texto === null ||
         texto === undefined
     ){
-
         return "";
-
     }
-
 
     return String(texto)
-
-        .replaceAll(
-            "&",
-            "&amp;"
-        )
-
-        .replaceAll(
-            "<",
-            "&lt;"
-        )
-
-        .replaceAll(
-            ">",
-            "&gt;"
-        )
-
-        .replaceAll(
-            '"',
-            "&quot;"
-        )
-
-        .replaceAll(
-            "'",
-            "&#039;"
-        );
-
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
 }
 
+/* STATUS */
 
+function normalizarStatus(status){
 
-/* =====================================================
-   NORMALIZAR STATUS
-===================================================== */
-
-function normalizarStatus(
-    status
-){
-
-    return String(
-        status || ""
-    )
-    .trim()
-    .toLowerCase();
-
+    return String(status || "")
+        .trim()
+        .toLowerCase();
 }
 
+/* HORA */
 
-
-/* =====================================================
-   HORA
-===================================================== */
-
-function formatarHora(
-    hora
-){
+function formatarHora(hora){
 
     if(!hora){
-
         return "--:--";
-
     }
-
 
     return String(hora)
-        .slice(
-            0,
-            5
-        );
-
+        .slice(0,5);
 }
 
+/* DATA/HORA */
 
-
-/* =====================================================
-   DATA/HORA
-===================================================== */
-
-function formatarDataHora(
-    valor
-){
+function formatarDataHora(valor){
 
     if(!valor){
-
         return "";
-
     }
 
-
     const data =
-        new Date(
-            valor
-        );
-
+        new Date(valor);
 
     if(
         Number.isNaN(
             data.getTime()
         )
     ){
-
         return "";
-
     }
 
-
-    return data
-        .toLocaleString(
-            "pt-BR",
-            {
-                day:"2-digit",
-                month:"2-digit",
-                hour:"2-digit",
-                minute:"2-digit"
-            }
-        );
-
+    return data.toLocaleString(
+        "pt-BR",
+        {
+            day:"2-digit",
+            month:"2-digit",
+            hour:"2-digit",
+            minute:"2-digit"
+        }
+    );
 }
 
+/* ABAS */
 
-
-/* =====================================================
-   ABAS
-===================================================== */
-
-function abrirPainel(
-    painel
-){
+function abrirPainel(painel){
 
     const operacao =
-        painel ===
-        "operacao";
-
+        painel === "operacao";
 
     document
-    .getElementById(
-        "panelOperacao"
-    )
+    .getElementById("panelOperacao")
     .classList
-    .toggle(
-        "active",
-        operacao
-    );
-
+    .toggle("active",operacao);
 
     document
-    .getElementById(
-        "panelOcorrencias"
-    )
+    .getElementById("panelOcorrencias")
     .classList
-    .toggle(
-        "active",
-        !operacao
-    );
-
+    .toggle("active",!operacao);
 
     document
-    .getElementById(
-        "tabOperacao"
-    )
+    .getElementById("tabOperacao")
     .classList
-    .toggle(
-        "active",
-        operacao
-    );
-
+    .toggle("active",operacao);
 
     document
-    .getElementById(
-        "tabOcorrencias"
-    )
+    .getElementById("tabOcorrencias")
     .classList
-    .toggle(
-        "active",
-        !operacao
-    );
-
+    .toggle("active",!operacao);
 
     if(!operacao){
-
         carregarOcorrencias();
-
     }
-
 }
 
-
-
-/* =====================================================
-   OPERAÇÃO
-===================================================== */
+/* OPERAÇÃO */
 
 async function carregarDados(){
 
     esconderErro();
 
-
     locationList.innerHTML =
-        `
-        <div class="loading">
+        `<div class="loading">
             Buscando registros...
-        </div>
-        `;
-
+        </div>`;
 
     activityContainer.innerHTML =
-        `
-        <div class="loading">
+        `<div class="loading">
             Carregando...
-        </div>
-        `;
-
+        </div>`;
 
     try{
 
         const hoje =
             dataHojeBanco();
 
-
         const {
             data,
             error
         } =
             await db
-
-            .from(
-                "registros_atividade"
-            )
-
-            .select(
-                "*"
-            )
-
-            .eq(
-                "data",
-                hoje
-            )
-
+            .from("registros_atividade")
+            .select("*")
+            .eq("data",hoje)
             .order(
                 "created_at",
-                {
-                    ascending:false
-                }
+                {ascending:false}
             );
 
-
         if(error){
-
             throw error;
-
         }
-
 
         const registros =
             data || [];
 
+        atualizarKPIs(registros);
+        atualizarTorreE(registros);
+        montarLocais(registros);
+        montarUltimos(registros);
 
-        atualizarKPIs(
-            registros
-        );
+    }
+    catch(erro){
 
-
-        atualizarTorreE(
-            registros
-        );
-
-
-        montarLocais(
-            registros
-        );
-
-
-        montarUltimos(
-            registros
-        );
-
-
-    }catch(erro){
-
-        console.error(
-            erro
-        );
-
+        console.error(erro);
 
         mostrarErro(
             "Não foi possível carregar os registros: "
@@ -2603,7 +1722,6 @@ async function carregarDados(){
             )
         );
 
-
         locationList.innerHTML =
             vazioHTML(
                 "⚠️",
@@ -2611,126 +1729,78 @@ async function carregarDados(){
                 "Não foi possível consultar os registros."
             );
 
-
         activityContainer.innerHTML =
             vazioHTML(
                 "⚠️",
                 "Dados indisponíveis",
                 "Tente atualizar novamente."
             );
-
     }
-
 }
 
+/* KPIs */
 
-
-/* =====================================================
-   KPIs OPERAÇÃO
-===================================================== */
-
-function atualizarKPIs(
-    registros
-){
+function atualizarKPIs(registros){
 
     const fotos =
         registros.filter(
-            item =>
-                item.foto_url
-        )
-        .length;
-
+            item => item.foto_url
+        ).length;
 
     const trabalhadores =
         new Set(
             registros
-            .map(
-                item =>
-                    item.matricula
-            )
-            .filter(
-                Boolean
-            )
+            .map(item => item.matricula)
+            .filter(Boolean)
         );
-
 
     const locais =
         new Set(
             registros
-            .map(
-                item =>
-                    item.local
-            )
-            .filter(
-                Boolean
-            )
+            .map(item => item.local)
+            .filter(Boolean)
         );
 
-
     document
-    .getElementById(
-        "kpiItems"
-    )
+    .getElementById("kpiItems")
     .textContent =
         registros.length;
 
-
     document
-    .getElementById(
-        "kpiPhotos"
-    )
+    .getElementById("kpiPhotos")
     .textContent =
         fotos;
 
-
     document
-    .getElementById(
-        "kpiWorkers"
-    )
+    .getElementById("kpiWorkers")
     .textContent =
         trabalhadores.size;
 
-
     document
-    .getElementById(
-        "kpiLocations"
-    )
+    .getElementById("kpiLocations")
     .textContent =
         locais.size;
-
 }
 
+/* TORRE E */
 
-
-/* =====================================================
-   TORRE E
-===================================================== */
-
-function atualizarTorreE(
-    registros
-){
+function atualizarTorreE(registros){
 
     const torreE =
         registros.filter(
             registro =>
-
                 registro.tipo ===
                 "limpeza"
-
                 &&
-
                 registro.torre ===
                 "Torre E"
         );
 
-
     const chaves =
         new Set();
 
-
     torreE.forEach(
         registro => {
-
             chaves.add(
                 registro.local
                 +
@@ -2738,52 +1808,34 @@ function atualizarTorreE(
                 +
                 registro.item
             );
-
         }
     );
 
-
     const realizados =
         chaves.size;
-
 
     const percentual =
         Math.min(
             100,
             Math.round(
-                realizados
-                /
-                TOTAL_ITENS_TORRE_E
-                *
+                realizados /
+                TOTAL_ITENS_TORRE_E *
                 100
             )
         );
 
-
     document
-    .getElementById(
-        "towerPercent"
-    )
+    .getElementById("towerPercent")
     .textContent =
-        percentual
-        +
-        "%";
-
+        percentual + "%";
 
     document
-    .getElementById(
-        "towerProgress"
-    )
+    .getElementById("towerProgress")
     .style.width =
-        percentual
-        +
-        "%";
-
+        percentual + "%";
 
     document
-    .getElementById(
-        "towerDone"
-    )
+    .getElementById("towerDone")
     .textContent =
         realizados
         +
@@ -2795,34 +1847,25 @@ function atualizarTorreE(
             " itens realizados"
         );
 
-
     document
-    .getElementById(
-        "towerTotal"
-    )
+    .getElementById("towerTotal")
     .textContent =
         TOTAL_ITENS_TORRE_E
         +
         " previstos";
-
 
     const status =
         document.getElementById(
             "towerStatus"
         );
 
-
-    if(
-        realizados === 0
-    ){
+    if(realizados === 0){
 
         status.textContent =
             "Nenhum item registrado hoje.";
 
     }
-    else if(
-        percentual >= 100
-    ){
+    else if(percentual >= 100){
 
         status.textContent =
             "Rotina prevista registrada.";
@@ -2834,22 +1877,13 @@ function atualizarTorreE(
             "Atividade em andamento.";
 
     }
-
 }
 
+/* LOCAIS */
 
+function montarLocais(registros){
 
-/* =====================================================
-   LOCAIS
-===================================================== */
-
-function montarLocais(
-    registros
-){
-
-    if(
-        registros.length === 0
-    ){
+    if(registros.length === 0){
 
         locationList.innerHTML =
             vazioHTML(
@@ -2858,15 +1892,10 @@ function montarLocais(
                 "As atividades aparecerão aqui assim que forem enviadas."
             );
 
-
         return;
-
     }
 
-
-    const grupos =
-        {};
-
+    const grupos = {};
 
     registros.forEach(
         registro => {
@@ -2875,40 +1904,23 @@ function montarLocais(
                 registro.local ||
                 "Sem local";
 
-
-            if(
-                !grupos[nome]
-            ){
-
-                grupos[nome] =
-                    [];
-
+            if(!grupos[nome]){
+                grupos[nome] = [];
             }
 
-
-            grupos[nome]
-                .push(
-                    registro
-                );
-
+            grupos[nome].push(
+                registro
+            );
         }
     );
 
-
-    locationList.innerHTML =
-        "";
-
+    locationList.innerHTML = "";
 
     Object
-    .entries(
-        grupos
-    )
+    .entries(grupos)
     .forEach(
         (
-            [
-                local,
-                itens
-            ],
+            [local,itens],
             indice
         ) => {
 
@@ -2917,21 +1929,14 @@ function montarLocais(
                     "div"
                 );
 
-
             card.className =
                 "location-card";
 
-
-            if(
-                indice === 0
-            ){
-
+            if(indice === 0){
                 card.classList.add(
                     "open"
                 );
-
             }
-
 
             const pessoas =
                 [
@@ -2941,13 +1946,10 @@ function montarLocais(
                             item =>
                                 item.colaborador
                         )
-                        .filter(
-                            Boolean
-                        )
+                        .filter(Boolean)
                     )
                 ]
                 .join(", ");
-
 
             const registrosHTML =
                 itens
@@ -2958,7 +1960,6 @@ function montarLocais(
                         )
                 )
                 .join("");
-
 
             card.innerHTML = `
 
@@ -2971,7 +1972,6 @@ function montarLocais(
                         📍
                     </div>
 
-
                     <div class="location-info">
 
                         <strong>
@@ -2983,7 +1983,6 @@ function montarLocais(
                         </span>
 
                     </div>
-
 
                     <span class="location-count">
 
@@ -2999,42 +1998,27 @@ function montarLocais(
 
                     </span>
 
-
                     <span class="location-arrow">
                         ⌄
                     </span>
 
                 </div>
 
-
                 <div class="location-content">
-
                     ${registrosHTML}
-
                 </div>
-
             `;
 
-
-            locationList
-            .appendChild(
+            locationList.appendChild(
                 card
             );
-
         }
     );
-
 }
 
+/* REGISTRO */
 
-
-/* =====================================================
-   REGISTRO
-===================================================== */
-
-function criarRegistroHTML(
-    registro
-){
+function criarRegistroHTML(registro){
 
     const foto =
         registro.foto_url
@@ -3063,11 +2047,7 @@ function criarRegistroHTML(
         </button>
         `
         :
-        `
-        <div class="record-photo">
-        </div>
-        `;
-
+        `<div class="record-photo"></div>`;
 
     const observacao =
         registro.observacao
@@ -3080,20 +2060,17 @@ function criarRegistroHTML(
         :
         "";
 
-
     return `
 
         <div class="record">
 
             ${foto}
 
-
             <div class="record-body">
 
                 <strong>
                     ✓ ${escapar(registro.item)}
                 </strong>
-
 
                 <div class="record-meta">
 
@@ -3113,30 +2090,19 @@ function criarRegistroHTML(
 
                 </div>
 
-
                 ${observacao}
 
             </div>
 
         </div>
-
     `;
-
 }
 
+/* ÚLTIMOS */
 
+function montarUltimos(registros){
 
-/* =====================================================
-   ÚLTIMOS
-===================================================== */
-
-function montarUltimos(
-    registros
-){
-
-    if(
-        registros.length === 0
-    ){
+    if(registros.length === 0){
 
         activityContainer.innerHTML =
             vazioHTML(
@@ -3145,18 +2111,11 @@ function montarUltimos(
                 "Nenhuma atividade foi recebida hoje."
             );
 
-
         return;
-
     }
 
-
     const ultimos =
-        registros.slice(
-            0,
-            20
-        );
-
+        registros.slice(0,20);
 
     const html =
         ultimos
@@ -3190,18 +2149,13 @@ function montarUltimos(
                     </button>
                     `
                     :
-                    `
-                    <div class="activity-photo">
-                    </div>
-                    `;
-
+                    `<div class="activity-photo"></div>`;
 
                 return `
 
                     <div class="activity-row">
 
                         ${foto}
-
 
                         <div class="activity-info">
 
@@ -3210,30 +2164,22 @@ function montarUltimos(
                             </strong>
 
                             <span>
-
                                 ${escapar(registro.local)}
                                 •
                                 ${escapar(registro.colaborador)}
-
                             </span>
 
                         </div>
 
-
                         <div class="activity-time">
-
                             ${formatarHora(registro.hora)}
-
                         </div>
 
                     </div>
-
                 `;
-
             }
         )
         .join("");
-
 
     activityContainer.innerHTML =
         `
@@ -3241,14 +2187,9 @@ function montarUltimos(
             ${html}
         </div>
         `;
-
 }
 
-
-
-/* =====================================================
-   OCORRÊNCIAS
-===================================================== */
+/* OCORRÊNCIAS */
 
 async function carregarOcorrencias(){
 
@@ -3259,7 +2200,6 @@ async function carregarOcorrencias(){
         </div>
         `;
 
-
     try{
 
         const {
@@ -3267,33 +2207,19 @@ async function carregarOcorrencias(){
             error
         } =
             await db
-
-            .from(
-                "ocorrencias"
-            )
-
-            .select(
-                "*"
-            )
-
+            .from("ocorrencias")
+            .select("*")
             .order(
                 "created_at",
-                {
-                    ascending:false
-                }
+                {ascending:false}
             );
 
-
         if(error){
-
             throw error;
-
         }
-
 
         ocorrenciasCarregadas =
             data || [];
-
 
         ocorrenciasCarregadas
         .forEach(
@@ -3304,23 +2230,16 @@ async function carregarOcorrencias(){
                 ] =
                     ocorrencia.status ||
                     "Aberta";
-
             }
         );
 
-
         atualizarKPIsOcorrencias();
-
-
         renderizarOcorrencias();
 
+    }
+    catch(erro){
 
-    }catch(erro){
-
-        console.error(
-            erro
-        );
-
+        console.error(erro);
 
         occurrenceList.innerHTML =
             vazioHTML(
@@ -3329,16 +2248,10 @@ async function carregarOcorrencias(){
                 erro.message ||
                 "Erro ao consultar ocorrências."
             );
-
     }
-
 }
 
-
-
-/* =====================================================
-   KPI OCORRÊNCIAS
-===================================================== */
+/* KPI OCORRÊNCIAS */
 
 function atualizarKPIsOcorrencias(){
 
@@ -3348,11 +2261,9 @@ function atualizarKPIsOcorrencias(){
             item =>
                 normalizarStatus(
                     item.status
-                ) ===
-                "aberta"
+                ) === "aberta"
         )
         .length;
-
 
     const atendimento =
         ocorrenciasCarregadas
@@ -3365,18 +2276,15 @@ function atualizarKPIsOcorrencias(){
         )
         .length;
 
-
     const resolvidas =
         ocorrenciasCarregadas
         .filter(
             item =>
                 normalizarStatus(
                     item.status
-                ) ===
-                "resolvida"
+                ) === "resolvida"
         )
         .length;
-
 
     const retorno =
         ocorrenciasCarregadas
@@ -3387,53 +2295,33 @@ function atualizarKPIsOcorrencias(){
         )
         .length;
 
-
     document
-    .getElementById(
-        "occOpen"
-    )
+    .getElementById("occOpen")
     .textContent =
         abertas;
 
-
     document
-    .getElementById(
-        "occProgress"
-    )
+    .getElementById("occProgress")
     .textContent =
         atendimento;
 
-
     document
-    .getElementById(
-        "occResolved"
-    )
+    .getElementById("occResolved")
     .textContent =
         resolvidas;
 
-
     document
-    .getElementById(
-        "occReturn"
-    )
+    .getElementById("occReturn")
     .textContent =
         retorno;
 
-
     document
-    .getElementById(
-        "occurrenceBadge"
-    )
+    .getElementById("occurrenceBadge")
     .textContent =
         abertas;
-
 }
 
-
-
-/* =====================================================
-   FILTRO
-===================================================== */
+/* FILTRO */
 
 function filtrarOcorrencias(
     botao,
@@ -3443,42 +2331,29 @@ function filtrarOcorrencias(
     filtroOcorrencias =
         filtro;
 
-
     document
-    .querySelectorAll(
-        ".filter"
-    )
+    .querySelectorAll(".filter")
     .forEach(
         item => {
-
             item.classList.remove(
                 "active"
             );
-
         }
     );
-
 
     botao.classList.add(
         "active"
     );
 
-
     renderizarOcorrencias();
-
 }
 
-
-
-/* =====================================================
-   RENDER OCORRÊNCIAS
-===================================================== */
+/* RENDER */
 
 function renderizarOcorrencias(){
 
     let lista =
         ocorrenciasCarregadas;
-
 
     if(
         filtroOcorrencias !==
@@ -3493,13 +2368,9 @@ function renderizarOcorrencias(){
                     ) ===
                     filtroOcorrencias
             );
-
     }
 
-
-    if(
-        lista.length === 0
-    ){
+    if(lista.length === 0){
 
         occurrenceList.innerHTML =
             vazioHTML(
@@ -3508,26 +2379,16 @@ function renderizarOcorrencias(){
                 "Não há registros neste filtro."
             );
 
-
         return;
-
     }
-
 
     occurrenceList.innerHTML =
         lista
-        .map(
-            criarOcorrenciaHTML
-        )
+        .map(criarOcorrenciaHTML)
         .join("");
-
 }
 
-
-
-/* =====================================================
-   CARD OCORRÊNCIA
-===================================================== */
+/* CARD OCORRÊNCIA */
 
 function criarOcorrenciaHTML(
     ocorrencia
@@ -3538,32 +2399,24 @@ function criarOcorrenciaHTML(
             ocorrencia.status
         );
 
-
     let classeStatus =
         "status-aberta";
-
 
     if(
         status ===
         "em atendimento"
     ){
-
         classeStatus =
             "status-atendimento";
-
     }
-
 
     if(
         status ===
         "resolvida"
     ){
-
         classeStatus =
             "status-resolvida";
-
     }
-
 
     const local =
         ocorrencia.local_completo
@@ -3572,11 +2425,8 @@ function criarOcorrenciaHTML(
             ocorrencia.area,
             ocorrencia.detalhe
         ]
-        .filter(
-            Boolean
-        )
+        .filter(Boolean)
         .join(" • ");
-
 
     const retorno =
         ocorrencia.deseja_retorno
@@ -3595,7 +2445,6 @@ function criarOcorrenciaHTML(
         :
         "";
 
-
     const foto =
         ocorrencia.foto_path
         ?
@@ -3604,9 +2453,7 @@ function criarOcorrenciaHTML(
             class="occurrence-photo"
             onclick='abrirFoto(
                 ${JSON.stringify(ocorrencia.foto_path)},
-                ${JSON.stringify(
-                    ocorrencia.protocolo
-                )}
+                ${JSON.stringify(ocorrencia.protocolo)}
             )'
         >
 
@@ -3621,7 +2468,6 @@ function criarOcorrenciaHTML(
         :
         "";
 
-
     const selecionado =
         statusSelecionado[
             ocorrencia.id
@@ -3631,17 +2477,14 @@ function criarOcorrenciaHTML(
         ||
         "Aberta";
 
-
     const selecionadoNormal =
         normalizarStatus(
             selecionado
         );
 
-
     const mostrarConclusao =
         selecionadoNormal ===
         "resolvida";
-
 
     return `
 
@@ -3673,28 +2516,23 @@ function criarOcorrenciaHTML(
 
                 </div>
 
-
                 <span
                     class="
                         status-badge
                         ${classeStatus}
                     "
                 >
-
                     ${escapar(
                         ocorrencia.status ||
                         "Aberta"
                     )}
-
                 </span>
 
             </div>
 
-
             <div class="occurrence-location">
                 📍 ${escapar(local)}
             </div>
-
 
             ${
                 ocorrencia.descricao
@@ -3708,18 +2546,15 @@ function criarOcorrenciaHTML(
                 ""
             }
 
-
             ${foto}
 
             ${retorno}
-
 
             <div class="occurrence-management">
 
                 <div class="management-title">
                     Gestão da ocorrência
                 </div>
-
 
                 <div class="status-buttons">
 
@@ -3745,7 +2580,6 @@ function criarOcorrenciaHTML(
                         ABERTA
                     </button>
 
-
                     <button
                         class="
                             status-button
@@ -3767,7 +2601,6 @@ function criarOcorrenciaHTML(
                     >
                         EM ATENDIMENTO
                     </button>
-
 
                     <button
                         class="
@@ -3794,7 +2627,6 @@ function criarOcorrenciaHTML(
 
                 </div>
 
-
                 <div
                     class="
                         resolution-box
@@ -3813,7 +2645,6 @@ function criarOcorrenciaHTML(
                         Mensagem de conclusão
                     </label>
 
-
                     <textarea
                         id="resposta-${ocorrencia.id}"
                         maxlength="600"
@@ -3823,13 +2654,12 @@ function criarOcorrenciaHTML(
                         ""
                     )}</textarea>
 
-
                     <small>
 
                         ${
                             ocorrencia.deseja_retorno
                             ?
-                            "Esta mensagem será utilizada no retorno ao solicitante."
+                            "Ao resolver, esta mensagem será enviada ao e-mail informado pelo solicitante."
                             :
                             "Esta mensagem ficará registrada como conclusão da ocorrência."
                         }
@@ -3837,7 +2667,6 @@ function criarOcorrenciaHTML(
                     </small>
 
                 </div>
-
 
                 <button
                     class="save-update"
@@ -3851,7 +2680,6 @@ function criarOcorrenciaHTML(
                     SALVAR ATUALIZAÇÃO
                 </button>
 
-
                 ${criarHistoricoHTML(
                     ocorrencia
                 )}
@@ -3859,133 +2687,185 @@ function criarOcorrenciaHTML(
             </div>
 
         </article>
-
     `;
-
 }
 
-
-
-/* =====================================================
-   SELECIONAR STATUS
-===================================================== */
+/* SELECIONAR STATUS */
 
 function selecionarStatus(
     id,
     status
 ){
 
-    statusSelecionado[
-        id
-    ] =
+    statusSelecionado[id] =
         status;
-
 
     const card =
         document.getElementById(
             `occurrence-${id}`
         );
 
-
     if(!card){
-
         return;
-
     }
-
 
     const botoes =
         card.querySelectorAll(
             ".status-button"
         );
 
-
     botoes.forEach(
         botao => {
-
             botao.classList.remove(
                 "selected"
             );
-
         }
     );
 
-
     const normal =
-        normalizarStatus(
-            status
-        );
+        normalizarStatus(status);
 
-
-    if(
-        normal ===
-        "aberta"
-    ){
-
-        botoes[0]
-        ?.classList
-        .add(
+    if(normal === "aberta"){
+        botoes[0]?.classList.add(
             "selected"
         );
-
     }
-
 
     if(
         normal ===
         "em atendimento"
     ){
-
-        botoes[1]
-        ?.classList
-        .add(
+        botoes[1]?.classList.add(
             "selected"
         );
-
     }
 
-
-    if(
-        normal ===
-        "resolvida"
-    ){
-
-        botoes[2]
-        ?.classList
-        .add(
+    if(normal === "resolvida"){
+        botoes[2]?.classList.add(
             "selected"
         );
-
     }
-
 
     const box =
         document.getElementById(
             `resolution-box-${id}`
         );
 
-
     if(box){
 
         box.classList.toggle(
             "visible",
-            normal ===
-            "resolvida"
+            normal === "resolvida"
         );
-
     }
-
 }
 
+/* =====================================================
+   ENVIAR E-MAIL
+===================================================== */
 
+async function enviarEmailResolucao(
+    ocorrencia,
+    mensagem
+){
+
+    const local =
+        ocorrencia.local_completo
+        ||
+        [
+            ocorrencia.area,
+            ocorrencia.detalhe
+        ]
+        .filter(Boolean)
+        .join(" • ");
+
+    const {
+        data,
+        error
+    } =
+        await db.functions.invoke(
+            "enviar-email-resolucao",
+            {
+                body:{
+                    email:
+                        ocorrencia.email,
+
+                    protocolo:
+                        ocorrencia.protocolo,
+
+                    condominio:
+                        ocorrencia.condominio
+                        ||
+                        "Reserva Igara",
+
+                    local:
+                        local,
+
+                    mensagem:
+                        mensagem
+                }
+            }
+        );
+
+    if(error){
+
+        let detalhe =
+            error.message ||
+            "Falha ao chamar a função de e-mail.";
+
+        /*
+           Algumas versões do cliente Supabase
+           disponibilizam o corpo da resposta
+           no objeto context.
+        */
+
+        try{
+
+            if(
+                error.context &&
+                typeof error.context.json ===
+                "function"
+            ){
+
+                const corpo =
+                    await error.context.json();
+
+                detalhe =
+                    corpo?.error
+                    ||
+                    corpo?.message
+                    ||
+                    detalhe;
+            }
+
+        }
+        catch{
+            // mantém a mensagem original
+        }
+
+        throw new Error(detalhe);
+    }
+
+    if(
+        !data ||
+        data.success !== true
+    ){
+
+        throw new Error(
+            data?.error
+            ||
+            "A função não confirmou o envio do e-mail."
+        );
+    }
+
+    return data;
+}
 
 /* =====================================================
    SALVAR ATUALIZAÇÃO
 ===================================================== */
 
-async function salvarAtualizacao(
-    id
-){
+async function salvarAtualizacao(id){
 
     const ocorrencia =
         ocorrenciasCarregadas
@@ -3994,7 +2874,6 @@ async function salvarAtualizacao(
                 item.id === id
         );
 
-
     if(!ocorrencia){
 
         alert(
@@ -4002,31 +2881,29 @@ async function salvarAtualizacao(
         );
 
         return;
-
     }
 
-
     const novoStatus =
-        statusSelecionado[
-            id
-        ]
+        statusSelecionado[id]
         ||
         ocorrencia.status
         ||
         "Aberta";
-
 
     const normal =
         normalizarStatus(
             novoStatus
         );
 
+    const statusAnterior =
+        normalizarStatus(
+            ocorrencia.status
+        );
 
     const textarea =
         document.getElementById(
             `resposta-${id}`
         );
-
 
     const mensagem =
         textarea
@@ -4035,15 +2912,12 @@ async function salvarAtualizacao(
         :
         "";
 
-
     /*
-       RESOLVIDA EXIGE
-       MENSAGEM DE CONCLUSÃO
+       RESOLVIDA EXIGE MENSAGEM
     */
 
     if(
-        normal ===
-        "resolvida"
+        normal === "resolvida"
         &&
         mensagem.length === 0
     ){
@@ -4052,39 +2926,30 @@ async function salvarAtualizacao(
             "Informe a mensagem de conclusão antes de marcar a ocorrência como resolvida."
         );
 
-
         textarea?.focus();
 
-
         return;
-
     }
-
 
     const botao =
         document.getElementById(
             `save-${id}`
         );
 
-
     if(botao){
 
         botao.disabled =
             true;
 
-
         botao.textContent =
             "SALVANDO...";
-
     }
-
 
     try{
 
         const agora =
             new Date()
             .toISOString();
-
 
         const alteracoes = {
 
@@ -4093,74 +2958,49 @@ async function salvarAtualizacao(
 
             updated_at:
                 agora
-
         };
 
-
-        /*
-           A resposta ao morador
-           somente é gravada quando
-           a ocorrência é resolvida.
-        */
-
-        if(
-            normal ===
-            "resolvida"
-        ){
+        if(normal === "resolvida"){
 
             alteracoes.resposta_gestor =
                 mensagem;
 
-
             alteracoes.respondido_em =
                 agora;
 
+            /*
+               Preserva a primeira data
+               de resolução caso a
+               ocorrência já estivesse
+               resolvida.
+            */
 
             alteracoes.resolvido_em =
+                ocorrencia.resolvido_em
+                ||
                 agora;
-
         }
 
-
-        /*
-           Se sair de RESOLVIDA para
-           outro status, mantemos a
-           resposta anterior no histórico
-           do banco.
-
-           Não apagamos automaticamente.
-        */
-
+        /* SALVA NO BANCO */
 
         const {
             data,
             error
         } =
             await db
-
-            .from(
-                "ocorrencias"
-            )
-
-            .update(
-                alteracoes
-            )
-
-            .eq(
-                "id",
-                id
-            )
-
+            .from("ocorrencias")
+            .update(alteracoes)
+            .eq("id",id)
             .select()
             .single();
 
-
         if(error){
-
             throw error;
-
         }
 
+        /*
+           ATUALIZA CACHE LOCAL
+        */
 
         const indice =
             ocorrenciasCarregadas
@@ -4169,47 +3009,176 @@ async function salvarAtualizacao(
                     item.id === id
             );
 
-
-        if(
-            indice !== -1
-        ){
+        if(indice !== -1){
 
             ocorrenciasCarregadas[
                 indice
             ] =
                 data;
-
         }
 
-
-        statusSelecionado[
-            id
-        ] =
+        statusSelecionado[id] =
             data.status;
 
+        /*
+           E-MAIL SOMENTE QUANDO:
+
+           - novo status é Resolvida
+           - status anterior NÃO era Resolvida
+           - solicitante pediu retorno
+           - existe endereço de e-mail
+
+           Isso evita disparo duplicado.
+        */
+
+        const deveEnviarEmail =
+
+            normal ===
+            "resolvida"
+
+            &&
+
+            statusAnterior !==
+            "resolvida"
+
+            &&
+
+            data.deseja_retorno ===
+            true
+
+            &&
+
+            Boolean(
+                data.email
+            );
+
+        let emailEnviado =
+            false;
+
+        let erroEmail =
+            null;
+
+        if(deveEnviarEmail){
+
+            if(botao){
+
+                botao.textContent =
+                    "ENVIANDO E-MAIL...";
+            }
+
+            try{
+
+                await enviarEmailResolucao(
+                    data,
+                    mensagem
+                );
+
+                emailEnviado =
+                    true;
+
+            }
+            catch(erro){
+
+                console.error(
+                    "Erro ao enviar e-mail:",
+                    erro
+                );
+
+                erroEmail =
+                    erro;
+            }
+        }
 
         atualizarKPIsOcorrencias();
 
-
         renderizarOcorrencias();
 
+        /*
+           RESULTADO
+        */
+
+        if(normal === "resolvida"){
+
+            if(
+                deveEnviarEmail
+                &&
+                emailEnviado
+            ){
+
+                mostrarToast(
+                    "✓ Ocorrência resolvida e e-mail enviado."
+                );
+
+                return;
+            }
+
+            if(
+                deveEnviarEmail
+                &&
+                !emailEnviado
+            ){
+
+                alert(
+                    "A ocorrência foi marcada como resolvida, mas o e-mail não foi enviado.\n\n"
+                    +
+                    (
+                        erroEmail?.message
+                        ||
+                        "Erro desconhecido no envio."
+                    )
+                );
+
+                return;
+            }
+
+            if(
+                statusAnterior ===
+                "resolvida"
+            ){
+
+                mostrarToast(
+                    "Ocorrência atualizada. Nenhum novo e-mail foi enviado."
+                );
+
+                return;
+            }
+
+            if(
+                data.deseja_retorno !==
+                true
+            ){
+
+                mostrarToast(
+                    "✓ Ocorrência resolvida. Solicitante não pediu retorno."
+                );
+
+                return;
+            }
+
+            if(!data.email){
+
+                mostrarToast(
+                    "✓ Ocorrência resolvida, mas não há e-mail para retorno."
+                );
+
+                return;
+            }
+
+            mostrarToast(
+                "✓ Ocorrência resolvida."
+            );
+
+            return;
+        }
 
         mostrarToast(
-            normal ===
-            "resolvida"
-            ?
-            "Ocorrência marcada como resolvida."
-            :
             "Status atualizado."
         );
 
+    }
+    catch(erro){
 
-    }catch(erro){
-
-        console.error(
-            erro
-        );
-
+        console.error(erro);
 
         alert(
             "Não foi possível salvar: "
@@ -4220,27 +3189,18 @@ async function salvarAtualizacao(
             )
         );
 
-
         if(botao){
 
             botao.disabled =
                 false;
 
-
             botao.textContent =
                 "SALVAR ATUALIZAÇÃO";
-
         }
-
     }
-
 }
 
-
-
-/* =====================================================
-   HISTÓRICO
-===================================================== */
+/* HISTÓRICO */
 
 function criarHistoricoHTML(
     ocorrencia
@@ -4253,7 +3213,6 @@ function criarHistoricoHTML(
             <div class="history-title">
                 HISTÓRICO
             </div>
-
 
             <div class="history-item">
 
@@ -4282,15 +3241,12 @@ function criarHistoricoHTML(
                 </span>
 
             </div>
-
     `;
-
 
     const status =
         normalizarStatus(
             ocorrencia.status
         );
-
 
     if(
         status ===
@@ -4314,16 +3270,10 @@ function criarHistoricoHTML(
                 </span>
 
             </div>
-
         `;
-
     }
 
-
-    if(
-        status ===
-        "resolvida"
-    ){
+    if(status === "resolvida"){
 
         html += `
 
@@ -4358,47 +3308,25 @@ function criarHistoricoHTML(
                 }
 
             </div>
-
         `;
-
     }
 
-
-    html += `
-        </div>
-    `;
-
+    html += `</div>`;
 
     return html;
-
 }
 
+/* LOCAL */
 
-
-/* =====================================================
-   LOCAL
-===================================================== */
-
-function alternarLocal(
-    elemento
-){
+function alternarLocal(elemento){
 
     elemento
-    .closest(
-        ".location-card"
-    )
+    .closest(".location-card")
     .classList
-    .toggle(
-        "open"
-    );
-
+    .toggle("open");
 }
 
-
-
-/* =====================================================
-   FOTO
-===================================================== */
+/* FOTO */
 
 function abrirFoto(
     url,
@@ -4406,85 +3334,51 @@ function abrirFoto(
 ){
 
     document
-    .getElementById(
-        "modalImage"
-    )
+    .getElementById("modalImage")
     .src =
         url;
 
-
     document
-    .getElementById(
-        "photoCaption"
-    )
+    .getElementById("photoCaption")
     .textContent =
         legenda;
 
-
     document
-    .getElementById(
-        "photoModal"
-    )
+    .getElementById("photoModal")
     .classList
-    .add(
-        "visible"
-    );
-
+    .add("visible");
 
     document.body.style.overflow =
         "hidden";
-
 }
-
-
 
 function fecharFoto(){
 
     document
-    .getElementById(
-        "photoModal"
-    )
+    .getElementById("photoModal")
     .classList
-    .remove(
-        "visible"
-    );
-
+    .remove("visible");
 
     document
-    .getElementById(
-        "modalImage"
-    )
+    .getElementById("modalImage")
     .src =
         "";
 
-
     document.body.style.overflow =
         "";
-
 }
 
-
-
-function fecharFotoFundo(
-    evento
-){
+function fecharFotoFundo(evento){
 
     if(
         evento.target.id ===
         "photoModal"
     ){
-
         fecharFoto();
-
     }
-
 }
 
-
-
-/* =====================================================
-   VAZIO
-===================================================== */
+/* VAZIO */
 
 function vazioHTML(
     icone,
@@ -4509,72 +3403,48 @@ function vazioHTML(
             </span>
 
         </div>
-
     `;
-
 }
 
+/* ERRO */
 
-
-/* =====================================================
-   ERRO
-===================================================== */
-
-function mostrarErro(
-    mensagem
-){
+function mostrarErro(mensagem){
 
     errorBox.textContent =
         mensagem;
 
-
     errorBox.style.display =
         "block";
-
 }
-
-
 
 function esconderErro(){
 
     errorBox.style.display =
         "none";
-
 }
 
-
-
-/* =====================================================
-   TOAST
-===================================================== */
+/* TOAST */
 
 let toastTimer =
     null;
 
-
-function mostrarToast(
-    mensagem
-){
+function mostrarToast(mensagem){
 
     const toast =
         document.getElementById(
             "toast"
         );
 
-
     toast.textContent =
         mensagem;
-
 
     toast.classList.add(
         "visible"
     );
 
-
     clearTimeout(
         toastTimer
     );
-
 
     toastTimer =
         setTimeout(
@@ -4585,16 +3455,11 @@ function mostrarToast(
                 );
 
             },
-            2600
+            3000
         );
-
 }
 
-
-
-/* =====================================================
-   SAIR
-===================================================== */
+/* SAIR */
 
 function sair(){
 
@@ -4602,28 +3467,20 @@ function sair(){
         "usuarioLogado"
     );
 
-
     window.location.href =
         "index.html";
-
 }
 
-
-
-/* =====================================================
-   INICIAR
-===================================================== */
+/* INICIAR */
 
 carregarDados();
 
 carregarOcorrencias();
 
-
 setInterval(
     () => {
 
         carregarDados();
-
         carregarOcorrencias();
 
     },
