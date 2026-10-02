@@ -10,7 +10,7 @@
     content="width=device-width, initial-scale=1.0"
 >
 
-<title>Minha Rotina — CUIDADOS</title>
+<title>Minha Rotina — ORAQUI</title>
 
 <meta
     name="theme-color"
@@ -871,10 +871,10 @@ main {
             <div>
 
                 <strong>
-                    CUIDADOS
+                    ORAQUI
                 </strong>
 
-                <small>
+                <small id="brandCondominio">
                     Reserva Igara
                 </small>
 
@@ -885,7 +885,9 @@ main {
 
         <button
             class="logout"
-            onclick="sair()"
+            id="logoutButton"
+            type="button"
+            aria-label="Sair"
         >
             ↪
         </button>
@@ -1063,95 +1065,278 @@ main {
 <script>
 
 /* ==================================================
-   USUÁRIO LOGADO
+   SESSÃO OPERACIONAL
 ================================================== */
 
+function carregarSessao() {
+
+    try {
+
+        const dados =
+            JSON.parse(
+                localStorage.getItem(
+                    "usuarioLogado"
+                )
+            );
+
+
+        if (
+            !dados
+            ||
+            dados.perfil !==
+                "colaborador"
+            ||
+            !dados.id
+            ||
+            !dados.matricula
+            ||
+            !dados.nome
+        ) {
+
+            return null;
+
+        }
+
+
+        return dados;
+
+    } catch (erro) {
+
+        return null;
+
+    }
+
+}
+
+
 const sessao =
-    JSON.parse(
-        localStorage.getItem(
-            "usuarioLogado"
-        )
-    );
+    carregarSessao();
 
 
 if (!sessao) {
 
-    window.location.href =
-        "index.html";
+    localStorage.removeItem(
+        "usuarioLogado"
+    );
+
+
+    window.location.replace(
+        "index.html"
+    );
+
+
+    throw new Error(
+        "Sessão operacional ausente."
+    );
 
 }
 
 
 /*
-    Enquanto não temos banco,
-    complementamos os usuários aqui.
+    IMPORTANTE
 
-    Mais tarde estas informações
-    virão do Supabase.
+    Não existe mais cadastro de usuários
+    dentro deste arquivo.
+
+    Nome, matrícula, função e condomínio
+    vieram do login validado pelo Supabase.
+
+    Nesta etapa, a sessão em localStorage
+    ainda é apenas uma compatibilidade
+    temporária com as páginas atuais.
 */
 
-const perfis = {
 
-    "0001": {
+const usuario = {
 
-        nome:
-            "Débora",
+    id:
+        sessao.id,
 
-        cargo:
-            "Auxiliar de Limpeza",
+    matricula:
+        String(
+            sessao.matricula
+        ),
 
-        tipo:
-            "limpeza",
+    nome:
+        String(
+            sessao.nome
+        ),
 
-        atribuicoes: [
+    cargo:
+        String(
+            sessao.funcao
+            ||
+            sessao.cargo
+            ||
+            "Colaborador"
+        ),
 
-            {
-                tipo:"torre",
-                nome:"Torre E"
-            }
+    tipo:
+        normalizarTipo(
+            sessao.tipo,
+            sessao.funcao
+            ||
+            sessao.cargo
+        ),
 
-        ]
+    condominio:
+        String(
+            sessao.condominio
+            ||
+            "Reserva Igara"
+        ),
 
-    },
-
-
-    "0002": {
-
-        nome:
-            "Zelador",
-
-        cargo:
-            "Zelador",
-
-        tipo:
-            "zeladoria",
-
-        atribuicoes: [
-            "zeladoria-geral"
-        ]
-
-    }
+    atribuicoes:
+        obterAtribuicoesTemporarias(
+            normalizarTipo(
+                sessao.tipo,
+                sessao.funcao
+                ||
+                sessao.cargo
+            )
+        )
 
 };
 
 
-const usuario =
-    perfis[sessao.matricula]
-    ||
-    {
+/* ==================================================
+   TIPO / ATRIBUIÇÕES TEMPORÁRIAS
+================================================== */
 
-        nome:
-            sessao.nome,
+function normalizarTipo(
+    tipoSessao,
+    funcao
+) {
 
-        cargo:
-            sessao.cargo,
+    const tipo =
+        String(
+            tipoSessao
+            ||
+            ""
+        )
+        .toLowerCase();
 
-        tipo:
-            "limpeza",
 
-        atribuicoes:[]
+    const cargo =
+        String(
+            funcao
+            ||
+            ""
+        )
+        .toLowerCase();
 
-    };
+
+    if (
+        tipo ===
+        "zeladoria"
+        ||
+        cargo.includes(
+            "zelad"
+        )
+    ) {
+
+        return "zeladoria";
+
+    }
+
+
+    if (
+        tipo ===
+        "portaria"
+        ||
+        cargo.includes(
+            "portar"
+        )
+    ) {
+
+        return "portaria";
+
+    }
+
+
+    if (
+        tipo ===
+        "manutencao"
+        ||
+        cargo.includes(
+            "manuten"
+        )
+    ) {
+
+        return "manutencao";
+
+    }
+
+
+    if (
+        tipo ===
+        "supervisor"
+        ||
+        cargo.includes(
+            "supervisor"
+        )
+    ) {
+
+        return "supervisor";
+
+    }
+
+
+    return "limpeza";
+
+}
+
+
+/*
+    As atribuições ainda não estão em uma
+    tabela própria do Supabase.
+
+    Até criarmos a configuração dinâmica
+    pelo gestor, o módulo de limpeza mantém
+    a estrutura de teste da Torre E.
+
+    Isso NÃO contém usuário, matrícula ou PIN.
+*/
+
+function obterAtribuicoesTemporarias(
+    tipo
+) {
+
+    if (
+        tipo ===
+        "limpeza"
+    ) {
+
+        return [
+
+            {
+                tipo:
+                    "torre",
+
+                nome:
+                    "Torre E"
+            }
+
+        ];
+
+    }
+
+
+    if (
+        tipo ===
+        "zeladoria"
+    ) {
+
+        return [
+            "zeladoria-geral"
+        ];
+
+    }
+
+
+    return [];
+
+}
 
 
 /* ==================================================
@@ -1187,13 +1372,33 @@ const dataHoje =
    ATIVIDADES CONCLUÍDAS
 ================================================== */
 
+/*
+    TEMPORÁRIO:
+
+    Esta tela ainda lê o resumo local das
+    atividades concluídas para preservar
+    o funcionamento atual.
+
+    A gravação real será revisada no
+    atividade.html antes de fecharmos
+    as policies antigas do Supabase.
+*/
+
 function obterConcluidas() {
 
-    return JSON.parse(
-        localStorage.getItem(
-            "atividadesConcluidas"
-        )
-    ) || [];
+    try {
+
+        return JSON.parse(
+            localStorage.getItem(
+                "atividadesConcluidas"
+            )
+        ) || [];
+
+    } catch (erro) {
+
+        return [];
+
+    }
 
 }
 
@@ -1241,6 +1446,14 @@ function estaConcluida(
 
 document
     .getElementById(
+        "brandCondominio"
+    )
+    .textContent =
+        usuario.condominio;
+
+
+document
+    .getElementById(
         "welcomeName"
     )
     .textContent =
@@ -1262,7 +1475,8 @@ document
     )
     .textContent =
         usuario.cargo +
-        " • Reserva Igara";
+        " • " +
+        usuario.condominio;
 
 
 if (
@@ -1283,7 +1497,9 @@ if (
             "welcomeText"
         )
         .textContent =
-            "Atividades e rondas do Reserva Igara.";
+            "Atividades e rondas do " +
+            usuario.condominio +
+            ".";
 
 
     document
@@ -1300,6 +1516,42 @@ if (
         )
         .textContent =
             "ZELADOR";
+
+} else {
+
+    document
+        .getElementById(
+            "welcomeType"
+        )
+        .textContent =
+            "MINHA ROTINA";
+
+
+    document
+        .getElementById(
+            "welcomeText"
+        )
+        .textContent =
+            "Veja suas atividades programadas.";
+
+
+    document
+        .getElementById(
+            "profileIcon"
+        )
+        .textContent =
+            "👷";
+
+
+    document
+        .getElementById(
+            "profileTag"
+        )
+        .textContent =
+            usuario.tipo ===
+                "limpeza"
+            ? "LIMPEZA"
+            : "EQUIPE";
 
 }
 
@@ -1349,14 +1601,22 @@ function renderLimpeza() {
     const torres =
         usuario.atribuicoes.filter(
             item =>
-                item.tipo === "torre"
+                typeof item ===
+                    "object"
+                &&
+                item.tipo ===
+                    "torre"
         );
 
 
     const espacos =
         usuario.atribuicoes.filter(
             item =>
-                item.tipo === "espaco"
+                typeof item ===
+                    "object"
+                &&
+                item.tipo ===
+                    "espaco"
         );
 
 
@@ -1436,11 +1696,15 @@ function renderLimpeza() {
                             >
 
                                 <small>
-                                    RESERVA IGARA
+                                    ${escaparHTML(
+                                        usuario.condominio
+                                    )}
                                 </small>
 
                                 <strong>
-                                    ${item.nome}
+                                    ${escaparHTML(
+                                        item.nome
+                                    )}
                                 </strong>
 
                             </div>
@@ -1474,7 +1738,9 @@ function renderLimpeza() {
                             class="tower-button"
                             onclick="
                                 abrirTorre(
-                                    '${item.nome}'
+                                    '${escaparJS(
+                                        item.nome
+                                    )}'
                                 )
                             "
                         >
@@ -1542,6 +1808,24 @@ function renderLimpeza() {
     }
 
 
+    if (
+        torres.length === 0
+        &&
+        espacos.length === 0
+    ) {
+
+        html += `
+
+            <div class="empty">
+                Nenhuma rotina foi atribuída
+                a este perfil ainda.
+            </div>
+
+        `;
+
+    }
+
+
     html += `
         </section>
     `;
@@ -1559,10 +1843,6 @@ function renderLimpeza() {
 /* ==================================================
    ZELADORIA
 ================================================== */
-
-/*
-   DIÁRIAS
-*/
 
 const zeladoriaDiaria = [
 
@@ -1767,16 +2047,6 @@ const zeladoriaDiaria = [
 ];
 
 
-/*
-   SEMANAIS
-
-   Segunda G1
-   Terça G2
-   Quarta G3
-   Quinta G4
-   Sexta rua lateral
-*/
-
 const zeladoriaSemanal = {
 
     1:{
@@ -1847,30 +2117,29 @@ const zeladoriaSemanal = {
 };
 
 
-/*
-   RESERVAS
-
-   Por enquanto fica vazio.
-
-   Depois o gestor cadastra uma reserva
-   e a tarefa aparece automaticamente.
-*/
-
 function obterReservasHoje() {
 
-    const reservas =
-        JSON.parse(
-            localStorage.getItem(
-                "reservasLimpeza"
-            )
-        ) || [];
+    try {
+
+        const reservas =
+            JSON.parse(
+                localStorage.getItem(
+                    "reservasLimpeza"
+                )
+            ) || [];
 
 
-    return reservas.filter(
-        item =>
-            item.data ===
-            dataHoje
-    );
+        return reservas.filter(
+            item =>
+                item.data ===
+                dataHoje
+        );
+
+    } catch (erro) {
+
+        return [];
+
+    }
 
 }
 
@@ -1959,8 +2228,6 @@ function renderZeladoria() {
     `;
 
 
-    /* DIÁRIAS */
-
     html += `
 
         <div class="group">
@@ -1999,8 +2266,6 @@ function renderZeladoria() {
 
     `;
 
-
-    /* SEMANAL */
 
     const semanal =
         zeladoriaSemanal[
@@ -2049,8 +2314,6 @@ function renderZeladoria() {
         </div>
     `;
 
-
-    /* RESERVAS */
 
     const reservas =
         obterReservasHoje();
@@ -2111,8 +2374,6 @@ function renderZeladoria() {
         </div>
     `;
 
-
-    /* RONDA */
 
     html += `
 
@@ -2212,11 +2473,15 @@ function criarCard(
             <div class="task-main">
 
                 <strong>
-                    ${nome}
+                    ${escaparHTML(
+                        nome
+                    )}
                 </strong>
 
                 <span>
-                    ${detalhe}
+                    ${escaparHTML(
+                        detalhe
+                    )}
                 </span>
 
             </div>
@@ -2245,17 +2510,15 @@ function abrirTorre(
     );
 
 
-    /*
-       Por enquanto a Torre E
-       já possui sua estrutura.
-
-       Quando cadastrarmos A-D,
-       usamos a mesma lógica.
-    */
-
     localStorage.setItem(
         "localSelecionado",
         "Térreo / Hall de entrada"
+    );
+
+
+    localStorage.setItem(
+        "tipoAtividadeAtual",
+        usuario.tipo
     );
 
 
@@ -2281,7 +2544,7 @@ function abrirAtividade(
 
     localStorage.setItem(
         "torreSelecionada",
-        "Reserva Igara"
+        usuario.condominio
     );
 
 
@@ -2311,8 +2574,11 @@ function atualizarContadoresLimpeza() {
         item => {
 
             if (
+                typeof item ===
+                    "object"
+                &&
                 item.tipo ===
-                "torre"
+                    "torre"
             ) {
 
                 const quantidade =
@@ -2348,8 +2614,11 @@ function atualizarContadoresLimpeza() {
 
 
             if (
+                typeof item ===
+                    "object"
+                &&
                 item.tipo ===
-                "espaco"
+                    "espaco"
             ) {
 
                 total++;
@@ -2505,6 +2774,37 @@ function escaparJS(
 }
 
 
+function escaparHTML(
+    texto
+) {
+
+    return String(
+        texto
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
 /* ==================================================
    LOGOUT
 ================================================== */
@@ -2516,10 +2816,36 @@ function sair() {
     );
 
 
-    window.location.href =
-        "index.html";
+    localStorage.removeItem(
+        "tipoAtividadeAtual"
+    );
+
+
+    localStorage.removeItem(
+        "localSelecionado"
+    );
+
+
+    localStorage.removeItem(
+        "torreSelecionada"
+    );
+
+
+    window.location.replace(
+        "index.html"
+    );
 
 }
+
+
+document
+    .getElementById(
+        "logoutButton"
+    )
+    .addEventListener(
+        "click",
+        sair
+    );
 
 
 /* ==================================================
