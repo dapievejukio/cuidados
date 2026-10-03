@@ -1,0 +1,12 @@
+{
+  "id": "/reservaigara/",
+  "name": "ORAQUI — Reserva Igara",
+  "short_name": "ORAQUI",
+  "description": "Operação, atividades e registros do condomínio.",
+  "start_url": "/reservaigara/index.html",
+  "scope": "/reservaigara/",
+  "display": "standalone",
+  "background_color": "#f4f6f8",
+  "theme_color": "#6d80a8",
+  "lang": "pt-BR"
+}
