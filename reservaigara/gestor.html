@@ -268,7 +268,26 @@ async function salvarDemandaOcorrencia(){
       const {error:oe}=await db.from("ocorrencias").update({status:"Em atendimento",updated_at:agora}).eq("id",o.id).eq("condominio",CONDOMINIO);
       if(oe)console.warn("Demanda criada, mas não foi possível alterar o status da ocorrência:",oe);
     }
-    fecharDemanda();toast(`✓ Demanda #${data.id} criada e vinculada.`);await carregarOcorrencias();
+    let pushResultado={ok:false,enviados:0};
+    try{
+      const {data:pushData,error:pushError}=await db.functions.invoke("enviar-push-demanda",{
+        body:{demanda_id:data.id}
+      });
+      if(pushError)throw pushError;
+      pushResultado=pushData||{ok:true,enviados:0};
+    }catch(pushError){
+      console.error("Demanda criada, mas o push ao destinatário falhou:",pushError);
+    }
+
+    fecharDemanda();
+    await carregarOcorrencias();
+
+    if(pushResultado?.ok){
+      const n=Number(pushResultado.enviados||0);
+      toast(`✓ Demanda #${data.id} criada • ${n} notificação(ões)`);
+    }else{
+      toast(`✓ Demanda #${data.id} criada • push não enviado`);
+    }
   }catch(e){console.error(e);alert("Não foi possível criar a demanda: "+e.message)}
   finally{b.disabled=false;b.textContent="CRIAR DEMANDA"}
 }
