@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta name="theme-color" content="#111827">
+
+  <title>Criar senha — ORAQUI</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+
+      background:
+        linear-gradient(
+          180deg,
+          #111827 0%,
+          #1f2937 100%
+        );
+
+      color: #111827;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 430px;
+    }
+
+    .marca {
+      text-align: center;
+      color: white;
+      margin-bottom: 24px;
+    }
+
+    .logo {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    .slogan {
+      margin-top: 5px;
+      font-size: 14px;
+      opacity: .78;
+    }
+
+    .card {
+      background: white;
+      border-radius: 18px;
+      padding: 26px 22px;
+      box-shadow:
+        0 18px 45px rgba(0, 0, 0, .22);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 24px;
+      text-align: center;
+    }
+
+    .descricao {
+      margin: 0 0 22px;
+      text-align: center;
+      color: #6b7280;
+      line-height: 1.45;
+      font-size: 14px;
+    }
+
+    .usuario {
+      display: none;
+      background: #f3f4f6;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 20px;
+    }
+
+    .usuario strong {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 3px;
+    }
+
+    .usuario span {
+      display: block;
+      font-size: 13px;
+      color: #6b7280;
+      word-break: break-word;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .campo {
+      margin-bottom: 17px;
+    }
+
+    .senha-container {
+      position: relative;
+    }
+
+    input {
+      width: 100%;
+      height: 48px;
+
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+
+      padding: 0 48px 0 13px;
+
+      font-size: 16px;
+      outline: none;
+
+      transition:
+        border-color .2s,
+        box-shadow .2s;
+    }
+
+    input:focus {
+      border-color: #111827;
+      box-shadow:
+        0 0 0 3px rgba(17, 24, 39, .08);
+    }
+
+    .mostrar {
+      position: absolute;
+      right: 6px;
+      top: 50%;
+      transform: translateY(-50%);
+
+      border: 0;
+      background: transparent;
+
+      height: 38px;
+      min-width: 38px;
+
+      cursor: pointer;
+
+      font-size: 17px;
+    }
+
+    .regras {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+
+      padding: 12px 14px;
+      margin-bottom: 18px;
+
+      font-size: 12px;
+      color: #6b7280;
+      line-height: 1.5;
+    }
+
+    .botao {
+      width: 100%;
+      min-height: 50px;
+
+      border: 0;
+      border-radius: 11px;
+
+      background: #111827;
+      color: white;
+
+      font-size: 15px;
+      font-weight: 800;
+
+      cursor: pointer;
+
+      transition:
+        opacity .2s,
+        transform .1s;
+    }
+
+    .botao:active {
+      transform: scale(.99);
+    }
+
+    .botao:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+
+    .mensagem {
+      display: none;
+
+      margin-top: 16px;
+      padding: 12px;
+
+      border-radius: 10px;
+
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .mensagem.erro {
+      display: block;
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+
+    .mensagem.sucesso {
+      display: block;
+      background: #f0fdf4;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+
+    .mensagem.info {
+      display: block;
+      background: #eff6ff;
+      color: #1e40af;
+      border: 1px solid #bfdbfe;
+    }
+
+    .carregando {
+      text-align: center;
+      color: white;
+      font-size: 14px;
+      margin-top: 14px;
+    }
+
+    .rodape {
+      margin-top: 20px;
+      text-align: center;
+      color: rgba(255, 255, 255, .62);
+      font-size: 12px;
+    }
+
+    #conteudo {
+      display: none;
+    }
+
+    #erroConvite {
+      display: none;
+    }
+
+    .erro-convite {
+      background: white;
+      border-radius: 18px;
+      padding: 26px 22px;
+      text-align: center;
+      box-shadow:
+        0 18px 45px rgba(0, 0, 0, .22);
+    }
+
+    .erro-convite h2 {
+      margin-top: 0;
+    }
+
+    .erro-convite p {
+      color: #6b7280;
+      line-height: 1.5;
+    }
+
+    .link-login {
+      display: block;
+
+      margin-top: 18px;
+      padding: 14px;
+
+      border-radius: 10px;
+
+      text-decoration: none;
+      background: #111827;
+      color: white;
+
+      font-weight: 700;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="marca">
+      <div class="logo">ORAQUI</div>
+
+      <div class="slogan">
+        Agora. Aqui. Registrado.
+      </div>
+    </div>
+
+
+    <div id="carregando" class="carregando">
+      Validando seu convite...
+    </div>
+
+
+    <div id="conteudo" class="card">
+
+      <h1>Crie sua senha</h1>
+
+      <p class="descricao">
+        Seu acesso ao ORAQUI foi criado.
+        Defina uma senha pessoal para continuar.
+      </p>
+
+
+      <div id="usuarioBox" class="usuario">
+
+        <strong id="usuarioNome">
+          Colaborador
+        </strong>
+
+        <span id="usuarioEmail"></span>
+
+      </div>
+
+
+      <form id="formSenha">
+
+        <div class="campo">
+
+          <label for="senha">
+            Nova senha
+          </label>
+
+          <div class="senha-container">
+
+            <input
+              id="senha"
+              type="password"
+              autocomplete="new-password"
+              minlength="8"
+              maxlength="72"
+              required
+              placeholder="Digite sua nova senha"
+            >
+
+            <button
+              type="button"
+              class="mostrar"
+              onclick="alternarSenha('senha', this)"
+              aria-label="Mostrar senha"
+            >
+              👁
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div class="campo">
+
+          <label for="confirmarSenha">
+            Confirmar senha
+          </label>
+
+          <div class="senha-container">
+
+            <input
+              id="confirmarSenha"
+              type="password"
+              autocomplete="new-password"
+              minlength="8"
+              maxlength="72"
+              required
+              placeholder="Digite novamente"
+            >
+
+            <button
+              type="button"
+              class="mostrar"
+              onclick="alternarSenha('confirmarSenha', this)"
+              aria-label="Mostrar senha"
+            >
+              👁
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div class="regras">
+          A senha deve possuir pelo menos
+          <strong>8 caracteres</strong>.
+          Evite utilizar seu nome, matrícula
+          ou senhas usadas em outros serviços.
+        </div>
+
+
+        <button
+          id="btnSalvar"
+          class="botao"
+          type="submit"
+        >
+          CRIAR MINHA SENHA
+        </button>
+
+
+        <div
+          id="mensagem"
+          class="mensagem"
+        ></div>
+
+      </form>
+
+    </div>
+
+
+    <div
+      id="erroConvite"
+      class="erro-convite"
+    >
+
+      <h2>Link inválido ou expirado</h2>
+
+      <p id="textoErroConvite">
+        Não foi possível validar este convite.
+        Solicite um novo acesso ao responsável
+        pelo ORAQUI.
+      </p>
+
+      <a
+        class="link-login"
+        href="./index.html"
+      >
+        IR PARA O LOGIN
+      </a>
+
+    </div>
+
+
+    <div class="rodape">
+      ORAQUI · acesso seguro
+    </div>
+
+  </div>
+
+
+  <script>
+
+    // ========================================================
+    // SUPABASE
+    // ========================================================
+
+    const SUPABASE_URL =
+      "https://rhiosvsohvqqrxzwohqu.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_vcjiMMCTxQJ7ArTGsQ-PuQ_5gaAfoIt";
+
+    const db = supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+
+    // ========================================================
+    // ELEMENTOS
+    // ========================================================
+
+    const carregando =
+      document.getElementById("carregando");
+
+    const conteudo =
+      document.getElementById("conteudo");
+
+    const erroConvite =
+      document.getElementById("erroConvite");
+
+    const usuarioBox =
+      document.getElementById("usuarioBox");
+
+    const usuarioNome =
+      document.getElementById("usuarioNome");
+
+    const usuarioEmail =
+      document.getElementById("usuarioEmail");
+
+    const formSenha =
+      document.getElementById("formSenha");
+
+    const senha =
+      document.getElementById("senha");
+
+    const confirmarSenha =
+      document.getElementById("confirmarSenha");
+
+    const btnSalvar =
+      document.getElementById("btnSalvar");
+
+    const mensagem =
+      document.getElementById("mensagem");
+
+
+    // ========================================================
+    // INICIALIZAÇÃO
+    // ========================================================
+
+    iniciar();
+
+
+    async function iniciar() {
+
+      try {
+
+        /*
+          O Supabase pode retornar o convite de formas
+          diferentes conforme o fluxo/configuração:
+
+          1. PKCE:
+             ?code=...
+
+          2. Sessão já estabelecida pelo cliente Auth.
+
+          3. Fluxos antigos com tokens no hash da URL.
+
+          O supabase-js trata boa parte disso.
+        */
+
+        const url =
+          new URL(window.location.href);
+
+        const code =
+          url.searchParams.get("code");
+
+
+        // ----------------------------------------------------
+        // Se houver CODE, troca por uma sessão.
+        // ----------------------------------------------------
+
+        if (code) {
+
+          const {
+            error
+          } =
+            await db.auth
+              .exchangeCodeForSession(code);
+
+          if (error) {
+
+            console.error(
+              "Erro ao trocar código:",
+              error
+            );
+
+          }
+
+        }
+
+
+        // ----------------------------------------------------
+        // Verificar sessão atual.
+        // ----------------------------------------------------
+
+        let {
+          data: {
+            session
+          }
+        } =
+          await db.auth.getSession();
+
+
+        // ----------------------------------------------------
+        // Pequena espera para fluxos em que o Auth
+        // termina de processar a URL.
+        // ----------------------------------------------------
+
+        if (!session) {
+
+          await esperar(700);
+
+          const resultado =
+            await db.auth.getSession();
+
+          session =
+            resultado.data.session;
+
+        }
+
+
+        if (!session || !session.user) {
+
+          mostrarErroConvite(
+            "O convite não pôde ser validado ou já expirou. Solicite um novo convite ao gestor."
+          );
+
+          return;
+
+        }
+
+
+        // ----------------------------------------------------
+        // Mostrar dados do usuário.
+        // ----------------------------------------------------
+
+        const user =
+          session.user;
+
+        const nome =
+          user.user_metadata?.nome ||
+          "Colaborador";
+
+        usuarioNome.textContent =
+          nome;
+
+        usuarioEmail.textContent =
+          user.email || "";
+
+        usuarioBox.style.display =
+          "block";
+
+
+        carregando.style.display =
+          "none";
+
+        conteudo.style.display =
+          "block";
+
+
+        /*
+          Limpamos parâmetros da URL depois que
+          a sessão foi obtida.
+
+          Isso evita deixar códigos/tokens visíveis
+          no histórico do navegador.
+        */
+
+        if (
+          window.location.search ||
+          window.location.hash
+        ) {
+
+          window.history.replaceState(
+            {},
+            document.title,
+            window.location.pathname
+          );
+
+        }
+
+      } catch (erro) {
+
+        console.error(erro);
+
+        mostrarErroConvite(
+          "Ocorreu um problema ao validar o convite. Solicite um novo convite ao gestor."
+        );
+
+      }
+
+    }
+
+
+    // ========================================================
+    // CRIAR SENHA
+    // ========================================================
+
+    formSenha.addEventListener(
+      "submit",
+      async function(event) {
+
+        event.preventDefault();
+
+        limparMensagem();
+
+
+        const novaSenha =
+          senha.value;
+
+        const confirmacao =
+          confirmarSenha.value;
+
+
+        if (novaSenha.length < 8) {
+
+          mostrarMensagem(
+            "A senha precisa ter pelo menos 8 caracteres.",
+            "erro"
+          );
+
+          return;
+
+        }
+
+
+        if (novaSenha !== confirmacao) {
+
+          mostrarMensagem(
+            "As duas senhas não são iguais.",
+            "erro"
+          );
+
+          return;
+
+        }
+
+
+        btnSalvar.disabled =
+          true;
+
+        btnSalvar.textContent =
+          "SALVANDO...";
+
+
+        try {
+
+          // --------------------------------------------------
+          // Confirmar que a sessão continua válida.
+          // --------------------------------------------------
+
+          const {
+            data: {
+              user
+            },
+            error: userError
+          } =
+            await db.auth.getUser();
+
+
+          if (userError || !user) {
+
+            mostrarMensagem(
+              "Sua sessão expirou. Solicite um novo convite.",
+              "erro"
+            );
+
+            return;
+
+          }
+
+
+          // --------------------------------------------------
+          // Alterar senha no Supabase Auth.
+          // --------------------------------------------------
+
+          const {
+            error
+          } =
+            await db.auth.updateUser({
+              password: novaSenha
+            });
+
+
+          if (error) {
+
+            console.error(error);
+
+            mostrarMensagem(
+              traduzirErro(error.message),
+              "erro"
+            );
+
+            return;
+
+          }
+
+
+          mostrarMensagem(
+            "Senha criada com sucesso. Seu acesso ao ORAQUI está pronto.",
+            "sucesso"
+          );
+
+
+          senha.value = "";
+          confirmarSenha.value = "";
+
+
+          /*
+            Pequena espera para o colaborador
+            conseguir ler a confirmação.
+          */
+
+          await esperar(1600);
+
+
+          // --------------------------------------------------
+          // Encerrar a sessão criada pelo convite.
+          //
+          // Assim o primeiro acesso normal começa pelo login.
+          // --------------------------------------------------
+
+          await db.auth.signOut();
+
+
+          // --------------------------------------------------
+          // Ir para o login.
+          // --------------------------------------------------
+
+          window.location.replace(
+            "./index.html"
+          );
+
+        } catch (erro) {
+
+          console.error(erro);
+
+          mostrarMensagem(
+            "Não foi possível criar a senha. Tente novamente.",
+            "erro"
+          );
+
+        } finally {
+
+          btnSalvar.disabled =
+            false;
+
+          btnSalvar.textContent =
+            "CRIAR MINHA SENHA";
+
+        }
+
+      }
+    );
+
+
+    // ========================================================
+    // UTILIDADES
+    // ========================================================
+
+    function alternarSenha(
+      id,
+      botao
+    ) {
+
+      const campo =
+        document.getElementById(id);
+
+      if (campo.type === "password") {
+
+        campo.type = "text";
+
+        botao.textContent =
+          "🙈";
+
+        botao.setAttribute(
+          "aria-label",
+          "Ocultar senha"
+        );
+
+      } else {
+
+        campo.type = "password";
+
+        botao.textContent =
+          "👁";
+
+        botao.setAttribute(
+          "aria-label",
+          "Mostrar senha"
+        );
+
+      }
+
+    }
+
+
+    function mostrarMensagem(
+      texto,
+      tipo
+    ) {
+
+      mensagem.textContent =
+        texto;
+
+      mensagem.className =
+        "mensagem " + tipo;
+
+    }
+
+
+    function limparMensagem() {
+
+      mensagem.textContent =
+        "";
+
+      mensagem.className =
+        "mensagem";
+
+    }
+
+
+    function mostrarErroConvite(
+      texto
+    ) {
+
+      carregando.style.display =
+        "none";
+
+      conteudo.style.display =
+        "none";
+
+      erroConvite.style.display =
+        "block";
+
+      document
+        .getElementById(
+          "textoErroConvite"
+        )
+        .textContent =
+          texto;
+
+    }
+
+
+    function esperar(ms) {
+
+      return new Promise(
+        resolve =>
+          setTimeout(resolve, ms)
+      );
+
+    }
+
+
+    function traduzirErro(
+      texto
+    ) {
+
+      const erro =
+        String(texto || "")
+          .toLowerCase();
+
+
+      if (
+        erro.includes(
+          "password should be at least"
+        )
+      ) {
+
+        return "A senha não atende aos requisitos mínimos de segurança.";
+
+      }
+
+
+      if (
+        erro.includes(
+          "same password"
+        )
+      ) {
+
+        return "Escolha uma senha diferente da senha atual.";
+
+      }
+
+
+      if (
+        erro.includes(
+          "session"
+        )
+      ) {
+
+        return "Sua sessão expirou. Solicite um novo convite.";
+
+      }
+
+
+      return "Não foi possível criar a senha. Verifique os dados e tente novamente.";
+
+    }
+
+  </script>
+
+</body>
+</html>
