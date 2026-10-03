@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
-<title>Reportar Problema — ORAQUI</title>
+<title>Reportar problema — ORAQUI</title>
 <meta name="theme-color" content="#557a95">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
@@ -88,9 +88,24 @@ async function enviar(){
    const protocolo=gerarProtocolo(),codigoAcesso=gerarCodigoAcesso(),agora=new Date();
    const areaNome=areaObj.nome,detalheNome=pontoObj?.nome||null,localCompleto=[areaNome,detalheNome].filter(Boolean).join(" • ");
    fotoPath=await enviarFoto(protocolo);
-   const registro={protocolo,codigo_acesso:codigoAcesso,condominio:CONDOMINIO,area:areaNome,detalhe:detalheNome,local_completo:localCompleto,descricao:descricao||null,foto_path:fotoPath,email:email||null,deseja_retorno:Boolean(email),status:"Aberta",origem:"Morador / visitante",data:agora.toLocaleDateString("en-CA"),hora:agora.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit",second:"2-digit"})};
-   const{data:oc,error}=await db.from("ocorrencias").insert(registro).select("id,protocolo").single();
+   const rpcPayload={
+     p_protocolo:protocolo,
+     p_codigo_acesso:codigoAcesso,
+     p_condominio:CONDOMINIO,
+     p_area:areaNome,
+     p_detalhe:detalheNome,
+     p_local_completo:localCompleto,
+     p_descricao:descricao||null,
+     p_foto_path:fotoPath,
+     p_email:email||null,
+     p_deseja_retorno:Boolean(email),
+     p_origem:"Morador / visitante",
+     p_data:agora.toLocaleDateString("en-CA"),
+     p_hora:agora.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit",second:"2-digit"})
+   };
+   const{data:oc,error}=await db.rpc("criar_ocorrencia_publica",rpcPayload);
    if(error)throw new Error("Não foi possível registrar a ocorrência: "+error.message);
+   if(!oc?.ok||!oc?.id)throw new Error("Não foi possível confirmar o registro da ocorrência.");
 
    /* Push é secundário: a ocorrência continua válida mesmo se a notificação falhar. */
    try{
@@ -112,4 +127,3 @@ carregarLocais();
 </script>
 </body>
 </html>
- 
