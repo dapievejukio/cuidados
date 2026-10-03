@@ -133,7 +133,81 @@ function fillPr(p=null){$("progAtividade").innerHTML=atividadesCarregadas.filter
 function fillPoints(sel=null){let a=+$("progArea").value;$("progPonto").innerHTML='<option value="">Área inteira</option>'+pontosCarregados.filter(x=>x.area_id===a&&x.ativo).map(x=>`<option value="${x.id}">${esc(x.nome)}</option>`).join("");if(sel)$("progPonto").value=sel}function dest(){let f=$("progDestino").value==="funcao";$("progColaboradorField").classList.toggle("hidden",f);$("progFuncaoField").classList.toggle("hidden",!f)}
 function openPr(){if(!atividadesCarregadas.some(x=>x.ativo))return alert("Cadastre uma atividade primeiro.");programacaoEditandoId=null;fillPr();$("progDestino").value="colaborador";$("progColaborador").value="";$("progTipo").value="recorrente";$("progHorario").value="";$("progInicio").value=new Date().toISOString().slice(0,10);$("progFim").value="";$("progPrioridade").value="normal";$("progInstrucoes").value="";$("progFoto").checked=false;$("progObs").checked=false;document.querySelectorAll("#progDias input").forEach(x=>x.checked=true);dest();$("programacaoModal").classList.add("visible")}
 function editPr(id){let p=programacoesCarregadas.find(x=>x.id===id);programacaoEditandoId=id;fillPr(p);$("progDestino").value=p.colaborador_id?"colaborador":"funcao";$("progColaborador").value=p.colaborador_id||"";$("progFuncao").value=p.funcao||"Limpeza";$("progTipo").value=p.tipo||"recorrente";$("progHorario").value=p.horario_limite?String(p.horario_limite).slice(0,5):"";$("progInicio").value=p.data_inicio||"";$("progFim").value=p.data_fim||"";$("progPrioridade").value=p.prioridade||"normal";$("progInstrucoes").value=p.instrucoes||"";$("progFoto").checked=!!p.exige_foto;$("progObs").checked=!!p.exige_observacao;document.querySelectorAll("#progDias input").forEach(x=>x.checked=(p.dias_semana||[]).includes(+x.value));dest();$("programacaoModal").classList.add("visible")}function closePr(){$("programacaoModal").classList.remove("visible");programacaoEditandoId=null}
-async function savePr(){let atividade_id=+$("progAtividade").value,area_id=+$("progArea").value||null,ponto_id=+$("progPonto").value||null,d=$("progDestino").value,colaborador_id=d==="colaborador"?(+$("progColaborador").value||null):null,funcao=d==="funcao"?$("progFuncao").value:null;if(!atividade_id||!area_id)return alert("Selecione atividade e área.");if(d==="colaborador"&&!colaborador_id)return alert("Selecione colaborador.");let v={atividade_id,area_id,ponto_id,colaborador_id,funcao,tipo:$("progTipo").value,dias_semana:[...document.querySelectorAll("#progDias input:checked")].map(x=>+x.value),data_inicio:$("progInicio").value||null,data_fim:$("progFim").value||null,horario_limite:$("progHorario").value||null,prioridade:$("progPrioridade").value,exige_foto:$("progFoto").checked,exige_observacao:$("progObs").checked,instrucoes:$("progInstrucoes").value.trim()||null,ativo:true,updated_at:new Date().toISOString()};let q=programacaoEditandoId?db.from("programacoes").update(v).eq("id",programacaoEditandoId).eq("condominio_id",CONDOMINIO_ID):db.from("programacoes").insert({...v,condominio_id:CONDOMINIO_ID});let{error}=await q;if(error)return alert(error.message);closePr();await carregarAP()}
+async function notificarProgramacao(programacao){
+  try{
+    const {data,error}=await db.functions.invoke("enviar-push-programacao",{
+      body:{programacao_id:programacao.id}
+    });
+    if(error)throw error;
+    return data||{ok:true};
+  }catch(e){
+    console.error("Programação salva, mas o push falhou:",e);
+    return {ok:false,error:e?.message||"Falha ao enviar push"};
+  }
+}
+
+async function savePr(){
+  let atividade_id=+$("progAtividade").value,
+      area_id=+$("progArea").value||null,
+      ponto_id=+$("progPonto").value||null,
+      d=$("progDestino").value,
+      colaborador_id=d==="colaborador"?(+$("progColaborador").value||null):null,
+      funcao=d==="funcao"?$("progFuncao").value:null;
+
+  if(!atividade_id||!area_id)return alert("Selecione atividade e área.");
+  if(d==="colaborador"&&!colaborador_id)return alert("Selecione colaborador.");
+
+  let v={
+    atividade_id,area_id,ponto_id,colaborador_id,funcao,
+    tipo:$("progTipo").value,
+    dias_semana:[...document.querySelectorAll("#progDias input:checked")].map(x=>+x.value),
+    data_inicio:$("progInicio").value||null,
+    data_fim:$("progFim").value||null,
+    horario_limite:$("progHorario").value||null,
+    prioridade:$("progPrioridade").value,
+    exige_foto:$("progFoto").checked,
+    exige_observacao:$("progObs").checked,
+    instrucoes:$("progInstrucoes").value.trim()||null,
+    ativo:true,
+    updated_at:new Date().toISOString()
+  };
+
+  const eraEdicao=!!programacaoEditandoId;
+  let salvo=null,error=null;
+
+  if(eraEdicao){
+    const r=await db.from("programacoes")
+      .update(v)
+      .eq("id",programacaoEditandoId)
+      .eq("condominio_id",CONDOMINIO_ID)
+      .select("*")
+      .single();
+    salvo=r.data;error=r.error;
+  }else{
+    const r=await db.from("programacoes")
+      .insert({...v,condominio_id:CONDOMINIO_ID})
+      .select("*")
+      .single();
+    salvo=r.data;error=r.error;
+  }
+
+  if(error)return alert(error.message);
+
+  closePr();
+  await carregarAP();
+
+  const push=await notificarProgramacao(salvo);
+  if(push.ok){
+    const n=Number(push.enviados||0);
+    toast(eraEdicao
+      ? `Programação atualizada • ${n} notificação(ões)`
+      : `Programação criada • ${n} notificação(ões)`);
+  }else{
+    toast(eraEdicao
+      ? "Programação atualizada • push não enviado"
+      : "Programação criada • push não enviado");
+  }
+}
 async function togglePr(id,ativo){let{error}=await db.from("programacoes").update({ativo,updated_at:new Date().toISOString()}).eq("id",id).eq("condominio_id",CONDOMINIO_ID);if(error)return alert(error.message);await carregarAP()}
 function painel(p){["Operacao","Ocorrencias","Colaboradores","Config"].forEach(n=>{$("panel"+n).classList.toggle("active",n.toLowerCase()===p);$("tab"+n).classList.toggle("active",n.toLowerCase()===p)});if(p==="ocorrencias")carregarOcorrencias();if(p==="colaboradores")carregarColaboradores();if(p==="config")carregarConfig()}
 function eventos(){
