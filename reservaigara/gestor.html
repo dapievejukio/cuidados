@@ -118,7 +118,7 @@ async function ativarPushGestao(){
 }
 
 async function login(){const email=$("loginEmail").value.trim(),password=$("loginPassword").value,box=$("authError");box.style.display="none";try{const {data,error}=await db.auth.signInWithPassword({email,password});if(error)throw error;await validarGestor(data.user)}catch(e){await db.auth.signOut();box.textContent=e.message||"Falha no acesso.";box.style.display="block"}}
-async function validarGestor(user){const {data:p,error}=await db.from("usuarios_gestao").select("id,nome,perfil,ativo,condominio_id").eq("auth_user_id",user.id).eq("ativo",true).maybeSingle();if(error)throw error;if(!p||!["gestor","admin_oraqui","supervisor"].includes(p.perfil))throw new Error("Usuário sem perfil de gestão ativo.");const {data:c,error:ce}=await db.from("condominios").select("id,nome,slug,ativo").eq("id",p.condominio_id).eq("ativo",true).single();if(ce)throw ce;perfilGestor=p;CONDOMINIO_ID=c.id;CONDOMINIO=c.nome;$("headerCondominio").textContent=CONDOMINIO.toUpperCase();$("towerName").textContent=CONDOMINIO;$("managerName").textContent=`${p.nome} • ${CONDOMINIO}`;$("managerProfile").textContent=`${p.perfil.toUpperCase()} • acesso autenticado`;$("authScreen").classList.add("hidden");$("app").classList.remove("hidden");await Promise.all([carregarDados(),carregarOcorrencias()]);await atualizarEstadoPushGestao()}
+async function validarGestor(user){const {data:p,error}=await db.from("usuarios_gestao").select("id,nome,perfil,ativo,condominio_id").eq("auth_user_id",user.id).eq("ativo",true).maybeSingle();if(error)throw error;if(!p||!["gestor","admin_oraqui","supervisor"].includes(p.perfil))throw new Error("Usuário sem perfil de gestão ativo.");const {data:c,error:ce}=await db.from("condominios").select("id,nome,slug,ativo").eq("id",p.condominio_id).eq("ativo",true).single();if(ce)throw ce;perfilGestor=p;CONDOMINIO_ID=c.id;CONDOMINIO=c.nome;$("headerCondominio").textContent=CONDOMINIO.toUpperCase();$("towerName").textContent=CONDOMINIO;$("managerName").textContent=`${p.nome} • ${CONDOMINIO}`;$("managerProfile").textContent=`${p.perfil.toUpperCase()} • acesso autenticado`;$("authScreen").classList.add("hidden");$("app").classList.remove("hidden");await Promise.all([carregarDados(),carregarOcorrencias()]);await atualizarEstadoPushGestao();abrirAbaDaURL()}
 async function sair(){await db.auth.signOut();location.href="index.html"}
 
 async function carregarDados(){
@@ -156,7 +156,22 @@ async function carregarDados(){
 function montarLocais(r){if(!r.length){locationList.innerHTML=vazio("📍","Nenhum registro hoje","As atividades aparecerão aqui.");return}const g={};r.forEach(x=>(g[x.local_nome]??=[]).push(x));locationList.innerHTML=Object.entries(g).map(([local,itens],i)=>`<div class="location-card ${i===0?"open":""}"><div class="location-header"><div class="location-icon">📍</div><div class="location-info"><strong>${esc(local)}</strong><span>${esc([...new Set(itens.map(x=>x.colaborador_nome))].join(", "))}</span></div><span class="location-count">${itens.length} ${itens.length===1?"ITEM":"ITENS"}</span><span>⌄</span></div><div class="location-content">${itens.map(x=>`<div class="record">${foto(x.foto_path,"record-photo")}<div class="record-body"><strong>✓ ${esc(x.item_nome)}</strong><div class="record-meta">${esc(x.colaborador_nome)} • ${hora(x.concluida_em||x.created_at)}</div>${x.observacao?`<div class="record-observation">💬 ${esc(x.observacao)}</div>`:""}</div></div>`).join("")}</div></div>`).join("");locationList.querySelectorAll(".location-card").forEach(c=>c.querySelector(".location-header").onclick=()=>c.classList.toggle("open"))}
 function montarUltimos(r){if(!r.length){activityContainer.innerHTML=vazio("🕘","Sem atividades","Nenhuma atividade foi recebida hoje.");return}activityContainer.innerHTML=`<div class="activity-list">${r.slice(0,20).map(x=>`<div class="activity-row">${foto(x.foto_path,"activity-photo")}<div class="activity-info"><strong>${esc(x.item_nome)}</strong><span>${esc(x.local_nome)} • ${esc(x.colaborador_nome)}</span></div><div class="activity-time">${hora(x.concluida_em||x.created_at)}</div></div>`).join("")}</div>`}
 
-async function carregarOcorrencias(){if(!CONDOMINIO)return;const {data,error}=await db.from("ocorrencias").select("*").eq("condominio",CONDOMINIO).order("created_at",{ascending:false});if(error){occurrenceList.innerHTML=vazio("⚠️","Erro",error.message);return}ocorrenciasCarregadas=data||[];ocorrenciasCarregadas.forEach(o=>statusSelecionado[o.id]=o.status||"Aberta");renderOcorrencias()}
+async function carregarOcorrencias(){
+  if(!CONDOMINIO)return;
+  try{
+    const {data,error}=await db.from("ocorrencias")
+      .select("*")
+      .eq("condominio",CONDOMINIO)
+      .order("created_at",{ascending:false});
+    if(error)throw error;
+    ocorrenciasCarregadas=data||[];
+    ocorrenciasCarregadas.forEach(o=>statusSelecionado[o.id]=o.status||"Aberta");
+    renderOcorrencias();
+  }catch(e){
+    console.error("Erro ao carregar ocorrências:",e);
+    occurrenceList.innerHTML=vazio("⚠️","Erro",e.message||"Não foi possível carregar as ocorrências.");
+  }
+}
 function renderOcorrencias(){const c=s=>ocorrenciasCarregadas.filter(x=>norm(x.status)===s).length;$("occOpen").textContent=c("aberta");$("occProgress").textContent=c("em atendimento");$("occResolved").textContent=c("resolvida");$("occReturn").textContent=ocorrenciasCarregadas.filter(x=>x.deseja_retorno).length;$("occurrenceBadge").textContent=c("aberta");let l=filtroOcorrencias==="todas"?ocorrenciasCarregadas:ocorrenciasCarregadas.filter(x=>norm(x.status)===filtroOcorrencias);if(!l.length){occurrenceList.innerHTML=vazio("✓","Nenhuma ocorrência","Sem registros neste filtro.");return}occurrenceList.innerHTML=l.map(o=>{const s=norm(statusSelecionado[o.id]||o.status),cls=s==="resolvida"?"status-resolvida":s==="em atendimento"?"status-atendimento":"status-aberta";return `<article class="occurrence-card" data-occ="${o.id}"><div class="occurrence-top"><div><div class="occurrence-protocol">${esc(o.protocolo)}</div><div class="occurrence-date">${esc(o.data)} • ${String(o.hora||"").slice(0,5)}</div></div><span class="status-badge ${cls}">${esc(o.status)}</span></div><div class="occurrence-location">📍 ${esc(o.local_completo||[o.area,o.detalhe].filter(Boolean).join(" • "))}</div>${o.descricao?`<div class="occurrence-description">${esc(o.descricao)}</div>`:""}${o.deseja_retorno?`<div class="return-box">✉ ${esc(o.email)}</div>`:""}<div class="occurrence-management"><div class="status-buttons"><button class="status-button ${s==="aberta"?"selected":""}" data-s="Aberta">ABERTA</button><button class="status-button ${s==="em atendimento"?"selected":""}" data-s="Em atendimento">EM ATENDIMENTO</button><button class="status-button ${s==="resolvida"?"selected":""}" data-s="Resolvida">RESOLVIDA</button></div><div class="resolution-box ${s==="resolvida"?"visible":""}"><textarea class="resposta">${esc(o.resposta_gestor||"")}</textarea></div><button class="save-update">SALVAR ATUALIZAÇÃO</button></div></article>`}).join("");occurrenceList.querySelectorAll("[data-occ]").forEach(card=>{const id=Number(card.dataset.occ);card.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{statusSelecionado[id]=b.dataset.s;renderOcorrencias()});card.querySelector(".save-update").onclick=()=>salvarOcorrencia(id)})}
 async function salvarOcorrencia(id){const o=ocorrenciasCarregadas.find(x=>x.id===id),card=occurrenceList.querySelector(`[data-occ="${id}"]`),ns=statusSelecionado[id]||o.status,msg=card.querySelector(".resposta")?.value.trim()||"";if(norm(ns)==="resolvida"&&!msg)return alert("Informe a mensagem de conclusão.");const agora=new Date().toISOString(),payload={status:ns,updated_at:agora};if(norm(ns)==="resolvida"){payload.resposta_gestor=msg;payload.respondido_em=agora;payload.resolvido_em=o.resolvido_em||agora}const anterior=norm(o.status);const {data,error}=await db.from("ocorrencias").update(payload).eq("id",id).eq("condominio",CONDOMINIO).select().single();if(error)return alert(error.message);if(norm(ns)==="resolvida"&&anterior!=="resolvida"&&data.deseja_retorno&&data.email)await db.functions.invoke("enviar-email-resolucao",{body:{email:data.email,protocolo:data.protocolo,condominio:data.condominio,local:data.local_completo||[data.area,data.detalhe].filter(Boolean).join(" • "),mensagem:msg}});toast("✓ Atualização salva.");await carregarOcorrencias()}
 
@@ -266,6 +281,10 @@ async function savePr(){
 }
 async function togglePr(id,ativo){let{error}=await db.from("programacoes").update({ativo,updated_at:new Date().toISOString()}).eq("id",id).eq("condominio_id",CONDOMINIO_ID);if(error)return alert(error.message);await carregarAP()}
 function painel(p){["Operacao","Ocorrencias","Colaboradores","Config"].forEach(n=>{$("panel"+n).classList.toggle("active",n.toLowerCase()===p);$("tab"+n).classList.toggle("active",n.toLowerCase()===p)});if(p==="ocorrencias")carregarOcorrencias();if(p==="colaboradores")carregarColaboradores();if(p==="config")carregarConfig()}
+function abrirAbaDaURL(){
+  const aba=norm(new URLSearchParams(location.search).get("aba"));
+  if(aba==="ocorrencias")painel("ocorrencias");
+}
 function eventos(){
 $("loginButton").onclick=login;$("loginPassword").onkeydown=e=>{if(e.key==="Enter")login()};$("logoutButton").onclick=sair;$("pushGestaoButton").onclick=ativarPushGestao;
 $("tabOperacao").onclick=()=>painel("operacao");$("tabOcorrencias").onclick=()=>painel("ocorrencias");$("tabColaboradores").onclick=()=>painel("colaboradores");$("tabConfig").onclick=()=>painel("config");
@@ -274,9 +293,14 @@ $("addCollaborator").onclick=novoCol;$("closeCollaborator").onclick=$("cancelCol
 $("addArea").onclick=novaArea;$("closeArea").onclick=$("cancelArea").onclick=()=>$("areaModal").classList.remove("visible");$("saveArea").onclick=salvarArea;
 $("closePoint").onclick=$("cancelPoint").onclick=()=>$("pointModal").classList.remove("visible");$("savePoint").onclick=salvarPonto;
 $("subAreas").onclick=()=>subConfig("a");$("subAtividades").onclick=()=>subConfig("t");$("subProgramacoes").onclick=()=>subConfig("p");$("addAtividade").onclick=openAt;$("closeAtividade").onclick=$("cancelAtividade").onclick=closeAt;$("saveAtividade").onclick=saveAt;$("addProgramacao").onclick=openPr;$("closeProgramacao").onclick=$("cancelProgramacao").onclick=closePr;$("saveProgramacao").onclick=savePr;$("progArea").onchange=()=>fillPoints();$("progDestino").onchange=dest;document.querySelectorAll(".filter").forEach(b=>b.onclick=()=>{filtroOcorrencias=b.dataset.filter;document.querySelectorAll(".filter").forEach(x=>x.classList.remove("active"));b.classList.add("active");renderOcorrencias()});
+document.addEventListener("visibilitychange",()=>{if(!document.hidden&&perfilGestor){carregarOcorrencias();carregarDados()}});
+window.addEventListener("focus",()=>{if(perfilGestor)carregarOcorrencias()});
+window.addEventListener("pageshow",()=>{if(perfilGestor)carregarOcorrencias()});
 }
 async function iniciar(){eventos();$("todayDate").textContent=new Date().toLocaleDateString("pt-BR");const {data:{session}}=await db.auth.getSession();if(session){try{await validarGestor(session.user)}catch(e){await db.auth.signOut();$("authError").textContent=e.message;$("authError").style.display="block"}}}
-iniciar();setInterval(()=>{if(perfilGestor){carregarDados();carregarOcorrencias()}},60000);
+iniciar();
+setInterval(()=>{if(perfilGestor&&!document.hidden)carregarOcorrencias()},15000);
+setInterval(()=>{if(perfilGestor&&!document.hidden)carregarDados()},60000);
 </script>
 </body>
 </html>
