@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <title>Colaborador — ORAQUI</title>
 <meta name="theme-color" content="#6d80a8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="ORAQUI">
+<link rel="manifest" href="manifest.webmanifest">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{--primary:#7667b9;--primary-light:#eeeafd;--blue:#5d88a5;--blue-light:#eaf4f8;--green:#69a17f;--green-light:#eaf5ee;--yellow:#bd8d43;--yellow-light:#fff4df;--red:#c96565;--red-light:#fdecec;--text:#2d3742;--muted:#75808c;--background:#f4f6f8;--card:#fff;--border:#e4e9ee;--shadow:0 10px 30px rgba(35,48,65,.07)}
@@ -33,6 +37,14 @@ main{max-width:720px;margin:-18px auto 80px;padding:0 15px}.user-card,.card,.ite
 .programada-concluida .item-description{background:var(--green-light)}
 @media(prefers-reduced-motion:reduce){.programada-pendente,.programada-urgente,.programada-atrasada{animation:none}}
 
+
+.notification-card{display:flex;align-items:center;gap:12px;margin-top:14px;padding:13px;border-radius:15px;background:#f7f5ff;border:1px solid #d9d2f5}
+.notification-icon{width:42px;height:42px;flex-shrink:0;border-radius:13px;display:flex;align-items:center;justify-content:center;background:var(--primary);color:#fff;font-size:19px}
+.notification-info{flex:1}.notification-info strong{display:block;font-size:10px}.notification-info span{display:block;margin-top:4px;color:var(--muted);font-size:8px;line-height:1.4}
+.notification-btn{border:0;padding:10px 12px;border-radius:12px;background:var(--primary);color:#fff;font-size:8px;font-weight:900;white-space:nowrap}
+.notification-btn.enabled{background:var(--green)}
+.notification-btn:disabled{opacity:.5}
+
 .empty,.loading{padding:25px 16px;border-radius:19px;background:#fff;box-shadow:var(--shadow);text-align:center;color:var(--muted);font-size:9px;line-height:1.5}.empty strong{display:block;color:var(--text);font-size:11px;margin-bottom:5px}
 .message{display:none;margin-top:13px;padding:12px;border-radius:14px;font-size:9px;line-height:1.5}.message.visible{display:block}.message.error{background:var(--red-light);color:var(--red)}
 .modal{position:fixed;inset:0;z-index:1000;display:none;align-items:flex-end;justify-content:center;background:rgba(25,32,45,.66)}.modal.visible{display:flex}.modal-card{width:100%;max-width:620px;max-height:92vh;overflow:auto;padding:21px;border-radius:25px 25px 0 0;background:#fff}.modal-head{display:flex;justify-content:space-between;align-items:center}.modal-head h2{font-size:18px}.close{width:38px;height:38px;border:0;border-radius:50%;background:#eef1f3;font-size:18px}.selection{margin-top:14px;padding:12px;border-radius:13px;background:var(--blue-light);color:var(--blue);font-size:9px;font-weight:800;line-height:1.5}.field{margin-top:14px}.field label{display:block;margin-bottom:6px;color:var(--muted);font-size:8px;font-weight:900}.field select,.field textarea{width:100%;border:1px solid var(--border);border-radius:14px;background:#fff;outline:none}.field select{height:49px;padding:0 12px}.field textarea{min-height:105px;padding:12px;resize:vertical}.photo-button{width:100%;min-height:51px;margin-top:14px;border:1.5px dashed #b8c6d4;border-radius:14px;background:#f7fafc;color:var(--blue);font-size:9px;font-weight:900}.photo-button.has{background:var(--green-light);color:var(--green);border-color:#a9d9bf}.photo-input{display:none}.preview{display:none;width:100%;max-height:320px;object-fit:cover;margin-top:10px;border-radius:14px}.preview.visible{display:block}.confirm{width:100%;min-height:54px;margin-top:16px;border:0;border-radius:14px;background:var(--green);color:#fff;font-size:9px;font-weight:900}.confirm:disabled{opacity:.5}
@@ -45,6 +57,14 @@ main{max-width:720px;margin:-18px auto 80px;padding:0 15px}.user-card,.card,.ite
 <main>
 <div class="user-card"><div class="user-icon" id="userIcon">👷</div><div class="user-info"><strong id="userName">Carregando...</strong><span id="userDescription">Validando acesso</span></div><span class="user-tag">ATIVO</span></div>
 <div class="message error" id="error"></div>
+<div class="notification-card" id="notificationCard">
+  <div class="notification-icon">🔔</div>
+  <div class="notification-info">
+    <strong id="notificationTitle">Notificações do ORAQUI</strong>
+    <span id="notificationText">Verificando este aparelho...</span>
+  </div>
+  <button class="notification-btn" id="notificationBtn">ATIVAR</button>
+</div>
 
 <section class="section" id="escalaSection"><div class="section-title"><div><h2>Hoje</h2><p>Sua escala publicada para hoje.</p></div></div><div id="escalaBox" class="loading">Carregando escala...</div></section>
 <section class="section hidden" id="pontoSection"><div class="section-title"><div><h2>Ponto</h2><p>Registre os eventos da sua jornada.</p></div></div><div class="card"><div class="status-card"><div class="status-icon">🕒</div><div class="status-info"><strong id="pontoStatus">Carregando...</strong><span id="pontoDetalhe"></span></div><span class="badge purple" id="pontoBadge">PONTO</span></div><div class="point-actions"><button class="point-btn primary" id="btnEntrada">ENTRADA</button><button class="point-btn" id="btnIniIntervalo">INICIAR INTERVALO</button><button class="point-btn" id="btnFimIntervalo">RETORNAR</button><button class="point-btn" id="btnSaida">SAÍDA</button></div><div class="geo-note" id="geoNote"></div></div></section>
@@ -61,6 +81,7 @@ main{max-width:720px;margin:-18px auto 80px;padding:0 15px}.user-card,.card,.ite
 const SUPABASE_URL="https://rhiosvsohvqqrxzwohqu.supabase.co";
 const SUPABASE_KEY="sb_publishable_vcjiMMCTxQJ7ArTGsQ-PuQ_5gaAfoIt";
 const BUCKET="fotos-atividades";
+const VAPID_PUBLIC_KEY="BNOm_tsvH-uo-hfquzYmf_XxgiGAciYKyia_FdI1PVfBISDELIqnvSUArIIuUW3hpmHt-UynVot3YCb7krs25Bk";
 const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const $=id=>document.getElementById(id);
 let authUser=null,colaborador=null,condominio=null,areas=[],pontos=[],atividades=[],programacoes=[],demandas=[],escalaHoje=null,pontosHoje=[],execucoesHoje=[];
@@ -105,6 +126,117 @@ function pesoProgramacao(p){
   return 3;
 }
 
+
+function base64UrlToUint8Array(base64Url){
+  const padding="=".repeat((4-base64Url.length%4)%4);
+  const base64=(base64Url+padding).replace(/-/g,"+").replace(/_/g,"/");
+  const raw=atob(base64);
+  return Uint8Array.from([...raw].map(c=>c.charCodeAt(0)));
+}
+
+function isStandalone(){
+  return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone===true;
+}
+
+async function registrarServiceWorker(){
+  if(!("serviceWorker" in navigator))throw new Error("Este aparelho/navegador não oferece Service Worker.");
+  return await navigator.serviceWorker.register("./service-worker.js",{scope:"./"});
+}
+
+async function atualizarEstadoNotificacao(){
+  const btn=$("notificationBtn"),txt=$("notificationText"),title=$("notificationTitle");
+  if(!("serviceWorker" in navigator)||!("PushManager" in window)||!("Notification" in window)){
+    title.textContent="Notificações indisponíveis";
+    txt.textContent="Este navegador não oferece Web Push.";
+    btn.textContent="INDISPONÍVEL";btn.disabled=true;return;
+  }
+  if(!isStandalone()){
+    title.textContent="Instale o ORAQUI na Tela de Início";
+    txt.textContent="No iPhone, abra pelo ícone da Tela de Início para ativar notificações.";
+    btn.textContent="COMO ATIVAR";btn.disabled=false;return;
+  }
+  if(Notification.permission==="denied"){
+    title.textContent="Notificações bloqueadas";
+    txt.textContent="Ative ORAQUI em Ajustes > Notificações no iPhone.";
+    btn.textContent="BLOQUEADA";btn.disabled=true;return;
+  }
+  const reg=await navigator.serviceWorker.ready;
+  const sub=await reg.pushManager.getSubscription();
+  if(sub&&Notification.permission==="granted"){
+    title.textContent="Notificações ativas";
+    txt.textContent="Este iPhone pode receber avisos do ORAQUI mesmo com a tela fechada.";
+    btn.textContent="✓ ATIVAS";btn.classList.add("enabled");btn.disabled=false;return;
+  }
+  title.textContent="Notificações do ORAQUI";
+  txt.textContent="Ative para receber novas atividades, urgências e prazos.";
+  btn.textContent="ATIVAR";btn.classList.remove("enabled");btn.disabled=false;
+}
+
+async function salvarAssinaturaPush(subscription){
+  const json=subscription.toJSON();
+  const payload={
+    condominio_id:colaborador.condominio_id,
+    colaborador_id:colaborador.id,
+    auth_user_id:authUser.id,
+    endpoint:json.endpoint,
+    p256dh:json.keys?.p256dh,
+    auth:json.keys?.auth,
+    user_agent:navigator.userAgent,
+    ativo:true,
+    updated_at:new Date().toISOString()
+  };
+  const {error}=await db.from("push_subscriptions").upsert(payload,{onConflict:"endpoint"});
+  if(error)throw error;
+}
+
+async function ativarNotificacoes(){
+  if(!isStandalone()){
+    alert("No iPhone: abra oraqui.app no Safari, toque em Compartilhar > Adicionar à Tela de Início. Depois abra o ORAQUI pelo ícone criado e toque novamente em ATIVAR.");
+    return;
+  }
+  try{
+    $("notificationBtn").disabled=true;
+    const reg=await registrarServiceWorker();
+    const permissao=await Notification.requestPermission();
+    if(permissao!=="granted")throw new Error("A permissão de notificações não foi concedida.");
+    let sub=await reg.pushManager.getSubscription();
+    if(!sub){
+      sub=await reg.pushManager.subscribe({
+        userVisibleOnly:true,
+        applicationServerKey:base64UrlToUint8Array(VAPID_PUBLIC_KEY)
+      });
+    }
+    await salvarAssinaturaPush(sub);
+    toast("🔔 Notificações ativadas neste aparelho.");
+    await atualizarEstadoNotificacao();
+  }catch(e){
+    console.error(e);
+    alert(e.message||"Não foi possível ativar as notificações.");
+  }finally{
+    $("notificationBtn").disabled=false;
+  }
+}
+
+async function enviarPushTeste(){
+  try{
+    const {data,error}=await db.functions.invoke("enviar-push-teste",{body:{}});
+    if(error)throw error;
+    toast(data?.message||"🔔 Notificação de teste enviada.");
+  }catch(e){
+    console.error(e);
+    alert("A assinatura está ativa, mas o envio de teste ainda não respondeu. Verifique a Edge Function enviar-push-teste.");
+  }
+}
+
+async function acaoNotificacao(){
+  if(Notification.permission==="granted"){
+    const reg=await navigator.serviceWorker.ready;
+    const sub=await reg.pushManager.getSubscription();
+    if(sub){await enviarPushTeste();return}
+  }
+  await ativarNotificacoes();
+}
+
 async function iniciar(){
   const {data:{session}}=await db.auth.getSession();
   if(!session){location.href="index.html";return}
@@ -129,6 +261,7 @@ async function iniciar(){
     if(c.ponto_ativo)$("pontoSection").classList.remove("hidden");
 
     await carregarTudo();
+    try{await registrarServiceWorker();await atualizarEstadoNotificacao()}catch(pushError){console.warn(pushError)}
   }catch(e){console.error(e);erro(e.message||"Não foi possível carregar seu acesso.")}
 }
 
@@ -465,6 +598,7 @@ async function sair(){
 }
 
 $("logout").onclick=sair;
+$("notificationBtn").onclick=acaoNotificacao;
 $("btnEntrada").onclick=()=>registrarPonto("entrada");
 $("btnIniIntervalo").onclick=()=>registrarPonto("inicio_intervalo");
 $("btnFimIntervalo").onclick=()=>registrarPonto("fim_intervalo");
