@@ -952,10 +952,10 @@
 
 
         // ====================================================
-        // 6. PROTEÇÃO ADICIONAL
+        // 6. IDENTIFICAR E VALIDAR O PERFIL DO CONVITE
         //
-        //    O usuário precisa ter sido criado como
-        //    colaborador pelo nosso fluxo de convite.
+        //    Esta página atende convites de colaborador e
+        //    usuários da gestão.
         // ====================================================
 
         const perfil =
@@ -968,24 +968,25 @@
           .toLowerCase();
 
 
+        const perfisPermitidos = [
+          "colaborador",
+          "gestor",
+          "supervisor",
+          "admin_cliente",
+          "admin_oraqui"
+        ];
+
+
         if (
-          perfil !==
-          "colaborador"
+          !perfisPermitidos.includes(
+            perfil
+          )
         ) {
-
-          /*
-            Exemplo:
-            o gestor já estava logado e alguém tentou abrir
-            esta página manualmente.
-
-            Mesmo que haja alguma sessão residual,
-            não permitimos alterar a senha aqui.
-          */
 
           await db.auth.signOut();
 
           mostrarErroConvite(
-            "Este link não pertence a um acesso de colaborador."
+            "Este link não pertence a um acesso autorizado do ORAQUI."
           );
 
           return;
@@ -1054,7 +1055,11 @@
         const nome =
           user.user_metadata
             ?.nome ||
-          "Colaborador";
+          (
+            perfil === "colaborador"
+              ? "Colaborador"
+              : "Gestão"
+          );
 
 
         usuarioNome.textContent =
@@ -1244,9 +1249,19 @@
             .toLowerCase();
 
 
+          const perfisPermitidos = [
+            "colaborador",
+            "gestor",
+            "supervisor",
+            "admin_cliente",
+            "admin_oraqui"
+          ];
+
+
           if (
-            perfil !==
-            "colaborador"
+            !perfisPermitidos.includes(
+              perfil
+            )
           ) {
 
             await db.auth.signOut();
@@ -1255,7 +1270,7 @@
               false;
 
             mostrarMensagem(
-              "Este acesso não pertence a um colaborador.",
+              "Este acesso não pertence a um perfil autorizado do ORAQUI.",
               "erro"
             );
 
@@ -1332,6 +1347,10 @@
 
           // ==================================================
           // LOGIN NORMAL
+          //
+          // Após criar a senha encerramos a sessão temporária
+          // do convite. O próximo acesso é feito pelo login
+          // normal do ORAQUI.
           // ==================================================
 
           window.location.replace(
