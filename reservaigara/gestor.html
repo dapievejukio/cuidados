@@ -314,8 +314,41 @@ async function convidarGestor(){
 }
 async function toggleGestor(id){
  if(!podeAdministrarGestao())return alert("Somente o administrador pode alterar gestores.");
- const g=gestoresCarregados.find(x=>Number(x.id)===Number(id));if(!g)return;if(Number(g.id)===Number(perfilGestor?.id))return alert("Você não pode desativar o próprio acesso por esta tela.");if(g.perfil==="admin_oraqui")return alert("O administrador ORAQUI não pode ser alterado por esta tela.");if(!confirm(`${g.ativo?"Desativar":"Reativar"} ${g.nome}?`))return;
- const {error}=await db.from("usuarios_gestao").update({ativo:!g.ativo,updated_at:new Date().toISOString()}).eq("id",id).eq("condominio_id",CONDOMINIO_ID);if(error)return alert(error.message);toast(g.ativo?"Gestor desativado.":"Gestor reativado.");await carregarGestores()
+ const g=gestoresCarregados.find(x=>Number(x.id)===Number(id));
+ if(!g)return;
+ if(Number(g.id)===Number(perfilGestor?.id))return alert("Você não pode desativar o próprio acesso por esta tela.");
+ if(g.perfil==="admin_oraqui")return alert("O administrador ORAQUI não pode ser alterado por esta tela.");
+
+ const novoStatus=!g.ativo;
+ const acao=novoStatus?"Reativar":"Desativar";
+ if(!confirm(`${acao} ${g.nome}?`))return;
+
+ const card=managementList.querySelector(`[data-g="${id}"]`);
+ const btn=card?.querySelector(".toggle-manager");
+ const textoOriginal=btn?.textContent||"";
+ if(btn){
+   btn.disabled=true;
+   btn.textContent=novoStatus?"REATIVANDO...":"DESATIVANDO...";
+ }
+
+ try{
+   const {data,error}=await db.rpc("alterar_status_gestor",{
+     p_usuario_gestao_id:id,
+     p_ativo:novoStatus
+   });
+   if(error)throw error;
+   if(!data?.ok)throw new Error(data?.error||"Não foi possível alterar o status do gestor.");
+
+   toast(novoStatus?"Gestor reativado.":"Gestor desativado.");
+   await carregarGestores();
+ }catch(e){
+   console.error(e);
+   alert(e.message||"Não foi possível alterar o status do gestor.");
+   if(btn){
+     btn.disabled=false;
+     btn.textContent=textoOriginal;
+   }
+ }
 }
 
 async function carregarColaboradores(){const {data,error}=await db.from("colaboradores").select("*").eq("condominio_id",CONDOMINIO_ID).order("ativo",{ascending:false}).order("nome");if(error)return collaboratorList.innerHTML=vazio("⚠️","Erro",error.message);colaboradoresCarregados=data||[];$("colActive").textContent=colaboradoresCarregados.filter(x=>x.ativo).length;$("colInactive").textContent=colaboradoresCarregados.filter(x=>!x.ativo).length;collaboratorList.innerHTML=colaboradoresCarregados.map(c=>`<div class="collaborator-card" data-c="${c.id}"><div class="collaborator-top"><div class="collaborator-avatar">👷</div><div class="collaborator-info"><strong>${esc(c.nome)}</strong><span>${esc(c.funcao)} • #${esc(c.matricula)}</span></div><span class="${c.ativo?"active-badge":"inactive-badge"}">${c.ativo?"ATIVO":"INATIVO"}</span></div><div class="collaborator-data"><div class="data-box"><small>E-MAIL</small><strong>${esc(c.email||"—")}</strong></div><div class="data-box"><small>ACESSO</small><strong>${c.auth_user_id?"AUTH":"LEGADO"}</strong></div></div><div class="collaborator-actions"><button class="action-button edit">EDITAR</button><button class="action-button toggle ${c.ativo?"danger":"success"}">${c.ativo?"DESATIVAR":"REATIVAR"}</button></div></div>`).join("");collaboratorList.querySelectorAll("[data-c]").forEach(el=>{const id=Number(el.dataset.c);el.querySelector(".edit").onclick=()=>editarCol(id);el.querySelector(".toggle").onclick=()=>toggleCol(id)})}
