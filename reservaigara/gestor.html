@@ -25,6 +25,24 @@ main{max-width:980px;margin:-18px auto 80px;padding:0 16px}.manager-card,.tower-
 .push-card{margin-top:12px;padding:14px 16px;border-radius:18px;background:linear-gradient(135deg,#f2effd,#eef5ff);border:1px solid #e3def8;display:flex;align-items:center;gap:12px}.push-icon{width:42px;height:42px;border-radius:13px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:20px}.push-info{flex:1}.push-info strong{display:block;font-size:10px}.push-info span{display:block;margin-top:3px;color:var(--muted);font-size:8px;line-height:1.35}.push-button{border:0;padding:10px 12px;border-radius:12px;background:var(--primary);color:#fff;font-size:8px;font-weight:900}.push-button.active{background:var(--green)}
 .forward-box{margin-top:14px;padding:13px;border:1px solid var(--border);border-radius:15px;background:#fafbfc}.forward-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.forward-head strong{font-size:9px}.forward-head span{font-size:8px;color:var(--muted)}.create-demand{border:0;padding:9px 11px;border-radius:11px;background:var(--blue-light);color:var(--blue);font-size:8px;font-weight:900}.demand-list{display:flex;flex-direction:column;gap:8px;margin-top:10px}.demand-item{padding:11px;border-radius:12px;background:#fff;border:1px solid var(--border)}.demand-top{display:flex;align-items:center;justify-content:space-between;gap:8px}.demand-top strong{font-size:9px}.demand-meta{margin-top:5px;color:var(--muted);font-size:8px;line-height:1.45}.demand-status{padding:5px 8px;border-radius:20px;background:var(--yellow-light);color:var(--yellow);font-size:7px;font-weight:900}.demand-status.done{background:var(--green-light);color:var(--green)}.demand-empty{margin-top:9px;color:var(--muted);font-size:8px}.priority-high{color:var(--red);font-weight:800}.priority-urgent{color:var(--red);font-weight:900}.photo-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.photo-action{border:0;padding:10px 13px;border-radius:11px;background:var(--blue-light);color:var(--blue);font-size:8px;font-weight:900;cursor:pointer}.photo-action.occ-photo{background:#e7f2fb;color:#245b7a;box-shadow:inset 0 0 0 1px #c9dfed}.photo-action.execution{background:var(--green-light);color:var(--green)}
 @media(min-width:700px){.kpis{grid-template-columns:repeat(4,1fr)}.modal{align-items:center}.modal-card{border-radius:25px}.form-grid{grid-template-columns:1fr 1fr}.full{grid-column:1/-1}}
+
+/* OCORRÊNCIAS RESOLVIDAS — resumo compacto por padrão */
+.occurrence-card.resolved-compact{padding:0;overflow:hidden}
+.resolved-summary{display:flex;align-items:center;gap:12px;padding:15px 16px;cursor:pointer;background:#fff}
+.resolved-check{width:42px;height:42px;flex:0 0 42px;border-radius:13px;display:flex;align-items:center;justify-content:center;background:var(--green-light);color:var(--green);font-size:19px;font-weight:900}
+.resolved-main{min-width:0;flex:1}
+.resolved-main strong{display:block;font-size:11px;color:var(--text)}
+.resolved-main span{display:block;margin-top:4px;font-size:8px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.resolved-side{display:flex;align-items:center;gap:10px}
+.resolved-arrow{font-size:16px;color:var(--muted);transition:.18s}
+.resolved-compact.expanded .resolved-arrow{transform:rotate(180deg)}
+.resolved-details{display:none;padding:0 16px 16px;border-top:1px solid var(--border);background:#fff}
+.resolved-compact.expanded .resolved-details{display:block}
+.resolved-details .occurrence-location{margin-top:14px}
+.resolved-answer{margin-top:11px;padding:11px 12px;border-radius:12px;background:var(--green-light);color:#426f54;font-size:9px;line-height:1.5}
+.resolved-answer strong{display:block;margin-bottom:4px;font-size:8px}
+.resolved-details .forward-box{margin-top:12px}
+
 </style>
 </head>
 <body>
@@ -222,22 +240,69 @@ function renderOcorrencias(){
   $("occReturn").textContent=ocorrenciasCarregadas.filter(x=>x.deseja_retorno).length;const abertas=c("aberta");$("occurrenceBadge").textContent=abertas;$("tabOcorrencias").classList.toggle("has-open",abertas>0);
   let l=filtroOcorrencias==="todas"?ocorrenciasCarregadas:ocorrenciasCarregadas.filter(x=>norm(x.status)===filtroOcorrencias);
   if(!l.length){occurrenceList.innerHTML=vazio("✓","Nenhuma ocorrência","Sem registros neste filtro.");return}
+
   occurrenceList.innerHTML=l.map(o=>{
     const s=norm(statusSelecionado[o.id]||o.status),cls=s==="resolvida"?"status-resolvida":s==="em atendimento"?"status-atendimento":"status-aberta";
-    return `<article class="occurrence-card" data-occ="${o.id}"><div class="occurrence-top"><div><div class="occurrence-protocol">${esc(o.protocolo)}</div><div class="occurrence-date">${esc(o.data)} • ${String(o.hora||"").slice(0,5)}</div></div><span class="status-badge ${cls}">${esc(o.status)}</span></div><div class="occurrence-location">📍 ${esc(o.local_completo||[o.area,o.detalhe].filter(Boolean).join(" • "))}</div>${o.descricao?`<div class="occurrence-description">${esc(o.descricao)}</div>`:""}${botoesFotoOcorrencia(o)}${o.deseja_retorno?`<div class="return-box">✉ ${esc(o.email)}</div>`:""}<div class="forward-box"><div class="forward-head"><div><strong>ENCAMINHAMENTO OPERACIONAL</strong><span> • opcional</span></div><button class="create-demand" type="button">＋ CRIAR DEMANDA</button></div>${renderDemandasDaOcorrencia(o)}</div><div class="occurrence-management"><div class="status-buttons"><button class="status-button ${s==="aberta"?"selected":""}" data-s="Aberta">ABERTA</button><button class="status-button ${s==="em atendimento"?"selected":""}" data-s="Em atendimento">EM ATENDIMENTO</button><button class="status-button ${s==="resolvida"?"selected":""}" data-s="Resolvida">RESOLVIDA</button></div><div class="resolution-box ${s==="resolvida"?"visible":""}"><textarea class="resposta" placeholder="Mensagem de conclusão para o solicitante">${esc(o.resposta_gestor||"")}</textarea></div><button class="save-update">SALVAR ATUALIZAÇÃO</button></div></article>`;
+    const local=o.local_completo||[o.area,o.detalhe].filter(Boolean).join(" • ");
+    const resolvida=norm(o.status)==="resolvida";
+
+    if(resolvida){
+      return `<article class="occurrence-card resolved-compact" data-occ="${o.id}">
+        <div class="resolved-summary" role="button" tabindex="0" aria-expanded="false">
+          <div class="resolved-check">✓</div>
+          <div class="resolved-main">
+            <strong>${esc(o.protocolo)}</strong>
+            <span>📍 ${esc(local||"Local não informado")} • ${esc(o.data)} ${String(o.hora||"").slice(0,5)}</span>
+          </div>
+          <div class="resolved-side">
+            <span class="status-badge status-resolvida">RESOLVIDA</span>
+            <span class="resolved-arrow">⌄</span>
+          </div>
+        </div>
+        <div class="resolved-details">
+          ${o.descricao?`<div class="occurrence-description">${esc(o.descricao)}</div>`:""}
+          ${botoesFotoOcorrencia(o)}
+          ${o.deseja_retorno?`<div class="return-box">✉ ${esc(o.email)}</div>`:""}
+          ${o.resposta_gestor?`<div class="resolved-answer"><strong>RETORNO DA GESTÃO</strong>${esc(o.resposta_gestor)}</div>`:""}
+          <div class="forward-box">
+            <div class="forward-head"><div><strong>ENCAMINHAMENTO OPERACIONAL</strong></div></div>
+            ${renderDemandasDaOcorrencia(o)}
+          </div>
+        </div>
+      </article>`;
+    }
+
+    return `<article class="occurrence-card" data-occ="${o.id}"><div class="occurrence-top"><div><div class="occurrence-protocol">${esc(o.protocolo)}</div><div class="occurrence-date">${esc(o.data)} • ${String(o.hora||"").slice(0,5)}</div></div><span class="status-badge ${cls}">${esc(o.status)}</span></div><div class="occurrence-location">📍 ${esc(local)}</div>${o.descricao?`<div class="occurrence-description">${esc(o.descricao)}</div>`:""}${botoesFotoOcorrencia(o)}${o.deseja_retorno?`<div class="return-box">✉ ${esc(o.email)}</div>`:""}<div class="forward-box"><div class="forward-head"><div><strong>ENCAMINHAMENTO OPERACIONAL</strong><span> • opcional</span></div><button class="create-demand" type="button">＋ CRIAR DEMANDA</button></div>${renderDemandasDaOcorrencia(o)}</div><div class="occurrence-management"><div class="status-buttons"><button class="status-button ${s==="aberta"?"selected":""}" data-s="Aberta">ABERTA</button><button class="status-button ${s==="em atendimento"?"selected":""}" data-s="Em atendimento">EM ATENDIMENTO</button><button class="status-button ${s==="resolvida"?"selected":""}" data-s="Resolvida">RESOLVIDA</button></div><div class="resolution-box ${s==="resolvida"?"visible":""}"><textarea class="resposta" placeholder="Mensagem de conclusão para o solicitante">${esc(o.resposta_gestor||"")}</textarea></div><button class="save-update">SALVAR ATUALIZAÇÃO</button></div></article>`;
   }).join("");
+
   occurrenceList.querySelectorAll("[data-occ]").forEach(card=>{
     const id=Number(card.dataset.occ);
-    card.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{statusSelecionado[id]=b.dataset.s;renderOcorrencias()});
-    card.querySelector(".create-demand").onclick=()=>abrirDemandaOcorrencia(id);
     const o=ocorrenciasCarregadas.find(x=>Number(x.id)===id);
+
+    const summary=card.querySelector(".resolved-summary");
+    if(summary){
+      const toggle=()=>{
+        const aberta=card.classList.toggle("expanded");
+        summary.setAttribute("aria-expanded",aberta?"true":"false");
+      };
+      summary.onclick=toggle;
+      summary.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();toggle()}};
+    }
+
+    card.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{statusSelecionado[id]=b.dataset.s;renderOcorrencias()});
+    const create=card.querySelector(".create-demand");
+    if(create)create.onclick=()=>abrirDemandaOcorrencia(id);
+
     const occPhoto=card.querySelector(".occ-photo");
-    if(occPhoto&&o?.foto_path)occPhoto.onclick=()=>abrirFotoStorage(o.foto_path,"ocorrencia");
+    if(occPhoto&&o?.foto_path)occPhoto.onclick=e=>{e.stopPropagation();abrirFotoStorage(o.foto_path,"ocorrencia")};
+
     card.querySelectorAll(".demand-photo").forEach(btn=>{
       const d=demandasOcorrencias.find(x=>Number(x.id)===Number(btn.dataset.demand));
-      if(d?.foto_execucao_path)btn.onclick=()=>abrirFotoStorage(d.foto_execucao_path,"atividade");
+      if(d?.foto_execucao_path)btn.onclick=e=>{e.stopPropagation();abrirFotoStorage(d.foto_execucao_path,"atividade")};
     });
-    card.querySelector(".save-update").onclick=()=>salvarOcorrencia(id);
+
+    const save=card.querySelector(".save-update");
+    if(save)save.onclick=()=>salvarOcorrencia(id);
   });
 }
 async function salvarOcorrencia(id){
