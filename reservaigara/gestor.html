@@ -131,7 +131,7 @@ async function carregarDados(){
   semErro();
   try{
     const [ex,ar,po,co,at]=await Promise.all([
-      db.from("execucoes").select("*").eq("condominio_id",CONDOMINIO_ID).eq("status","concluida").gte("created_at",inicioHoje()).lte("created_at",fimHoje()).order("created_at",{ascending:false}),
+      db.from("execucoes").select("*").eq("condominio_id",CONDOMINIO_ID).eq("ambiente","producao").eq("status","concluida").gte("created_at",inicioHoje()).lte("created_at",fimHoje()).order("created_at",{ascending:false}),
       db.from("areas").select("id,nome").eq("condominio_id",CONDOMINIO_ID),
       db.from("pontos").select("id,area_id,nome").eq("condominio_id",CONDOMINIO_ID),
       db.from("colaboradores").select("id,nome,matricula").eq("condominio_id",CONDOMINIO_ID),
@@ -197,8 +197,8 @@ function botoesFotoOcorrencia(o){
 async function carregarOcorrencias(){
   if(!CONDOMINIO)return;
   const [oc,dm]=await Promise.all([
-    db.from("ocorrencias").select("*").eq("condominio",CONDOMINIO).order("created_at",{ascending:false}),
-    db.from("demandas").select("*").eq("condominio_id",CONDOMINIO_ID).not("ocorrencia_id","is",null).order("created_at",{ascending:false})
+    db.from("ocorrencias").select("*").eq("condominio",CONDOMINIO).eq("ambiente","producao").order("created_at",{ascending:false}),
+    db.from("demandas").select("*").eq("condominio_id",CONDOMINIO_ID).eq("ambiente","producao").not("ocorrencia_id","is",null).order("created_at",{ascending:false})
   ]);
   if(oc.error){occurrenceList.innerHTML=vazio("⚠️","Erro",oc.error.message);return}
   if(dm.error){occurrenceList.innerHTML=vazio("⚠️","Erro ao carregar encaminhamentos",dm.error.message);return}
@@ -382,6 +382,7 @@ async function salvarDemandaOcorrencia(){
   const payload={
     condominio_id:CONDOMINIO_ID,
     ocorrencia_id:o.id,
+    ambiente:"producao",
     colaborador_id,
     funcao,
     area_id:area?.id||null,
