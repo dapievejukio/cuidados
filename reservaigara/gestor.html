@@ -255,7 +255,20 @@ async function salvarOcorrencia(id){
   const atualizado=Array.isArray(data)?data[0]:data;
   if(!atualizado)return alert("A ocorrência não foi localizada ou você não tem permissão para atualizá-la.");
   if(norm(ns)==="resolvida"&&anterior!=="resolvida"&&atualizado.deseja_retorno&&atualizado.email){
-    const {error:emailError}=await db.functions.invoke("enviar-email-resolucao",{body:{email:atualizado.email,protocolo:atualizado.protocolo,condominio:atualizado.condominio,local:atualizado.local_completo||[atualizado.area,atualizado.detalhe].filter(Boolean).join(" • "),mensagem:msg}});
+    const demandasDaOcorrencia=demandasOcorrencias
+      .filter(d=>Number(d.ocorrencia_id)===Number(atualizado.id)&&norm(d.status)==="concluida")
+      .sort((a,b)=>new Date(b.concluida_em||b.updated_at||b.created_at||0)-new Date(a.concluida_em||a.updated_at||a.created_at||0));
+    const ultimaExecucao=demandasDaOcorrencia[0]||null;
+    const fotoExecucaoPath=ultimaExecucao?.foto_execucao_path||null;
+
+    const {error:emailError}=await db.functions.invoke("enviar-email-resolucao",{body:{
+      email:atualizado.email,
+      protocolo:atualizado.protocolo,
+      condominio:atualizado.condominio,
+      local:atualizado.local_completo||[atualizado.area,atualizado.detalhe].filter(Boolean).join(" • "),
+      mensagem:msg,
+      foto_execucao_path:fotoExecucaoPath
+    }});
     if(emailError)console.warn("Ocorrência resolvida, mas o e-mail de retorno não foi enviado:",emailError);
   }
   statusSelecionado[id]=atualizado.status||ns;
