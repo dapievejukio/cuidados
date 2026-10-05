@@ -23,7 +23,7 @@ main{max-width:980px;margin:-18px auto 80px;padding:0 16px}.manager-card,.tower-
 .modal{position:fixed;inset:0;z-index:1300;display:none;align-items:flex-end;justify-content:center;background:rgba(28,34,40,.55)}.modal.visible{display:flex}.modal-card{width:100%;max-width:620px;max-height:92vh;overflow:auto;padding:22px;border-radius:25px 25px 0 0;background:#fff}.modal-head{display:flex;justify-content:space-between}.modal-close{width:38px;height:38px;border:0;border-radius:50%}.form-grid{display:grid;gap:13px;margin-top:18px}.field label{display:block;font-size:8px;color:var(--muted)}.field input,.field select,.field textarea{width:100%;border:1px solid var(--border);border-radius:13px;padding:12px}.switch-card{display:flex;justify-content:space-between;padding:13px;border:1px solid var(--border);border-radius:14px}.switch{position:relative;width:46px;height:26px}.switch input{opacity:0}.slider{position:absolute;inset:0;border-radius:30px;background:#ccd3d9}.slider:before{content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;border-radius:50%;background:#fff}.switch input:checked+.slider{background:var(--primary)}.switch input:checked+.slider:before{transform:translateX(20px)}.modal-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:20px}.cancel-button,.confirm-button{border:0;padding:14px;border-radius:13px}.confirm-button{background:var(--primary);color:#fff}.toast{position:fixed;left:50%;bottom:25px;z-index:1500;transform:translateX(-50%);display:none;padding:12px 18px;border-radius:14px;background:#25313c;color:#fff;font-size:9px}.toast.visible{display:block}
 
 .push-card{margin-top:12px;padding:14px 16px;border-radius:18px;background:linear-gradient(135deg,#f2effd,#eef5ff);border:1px solid #e3def8;display:flex;align-items:center;gap:12px}.push-icon{width:42px;height:42px;border-radius:13px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:20px}.push-info{flex:1}.push-info strong{display:block;font-size:10px}.push-info span{display:block;margin-top:3px;color:var(--muted);font-size:8px;line-height:1.35}.push-button{border:0;padding:10px 12px;border-radius:12px;background:var(--primary);color:#fff;font-size:8px;font-weight:900}.push-button.active{background:var(--green)}
-.forward-box{margin-top:14px;padding:13px;border:1px solid var(--border);border-radius:15px;background:#fafbfc}.forward-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.forward-head strong{font-size:9px}.forward-head span{font-size:8px;color:var(--muted)}.create-demand{border:0;padding:9px 11px;border-radius:11px;background:var(--blue-light);color:var(--blue);font-size:8px;font-weight:900}.demand-list{display:flex;flex-direction:column;gap:8px;margin-top:10px}.demand-item{padding:11px;border-radius:12px;background:#fff;border:1px solid var(--border)}.demand-top{display:flex;align-items:center;justify-content:space-between;gap:8px}.demand-top strong{font-size:9px}.demand-meta{margin-top:5px;color:var(--muted);font-size:8px;line-height:1.45}.demand-status{padding:5px 8px;border-radius:20px;background:var(--yellow-light);color:var(--yellow);font-size:7px;font-weight:900}.demand-status.done{background:var(--green-light);color:var(--green)}.demand-empty{margin-top:9px;color:var(--muted);font-size:8px}.priority-high{color:var(--red);font-weight:800}.priority-urgent{color:var(--red);font-weight:900}
+.forward-box{margin-top:14px;padding:13px;border:1px solid var(--border);border-radius:15px;background:#fafbfc}.forward-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.forward-head strong{font-size:9px}.forward-head span{font-size:8px;color:var(--muted)}.create-demand{border:0;padding:9px 11px;border-radius:11px;background:var(--blue-light);color:var(--blue);font-size:8px;font-weight:900}.demand-list{display:flex;flex-direction:column;gap:8px;margin-top:10px}.demand-item{padding:11px;border-radius:12px;background:#fff;border:1px solid var(--border)}.demand-top{display:flex;align-items:center;justify-content:space-between;gap:8px}.demand-top strong{font-size:9px}.demand-meta{margin-top:5px;color:var(--muted);font-size:8px;line-height:1.45}.demand-status{padding:5px 8px;border-radius:20px;background:var(--yellow-light);color:var(--yellow);font-size:7px;font-weight:900}.demand-status.done{background:var(--green-light);color:var(--green)}.demand-empty{margin-top:9px;color:var(--muted);font-size:8px}.priority-high{color:var(--red);font-weight:800}.priority-urgent{color:var(--red);font-weight:900}.photo-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.photo-action{border:0;padding:9px 11px;border-radius:11px;background:var(--blue-light);color:var(--blue);font-size:8px;font-weight:900}.photo-action.execution{background:var(--green-light);color:var(--green)}
 @media(min-width:700px){.kpis{grid-template-columns:repeat(4,1fr)}.modal{align-items:center}.modal-card{border-radius:25px}.form-grid{grid-template-columns:1fr 1fr}.full{grid-column:1/-1}}
 </style>
 </head>
@@ -143,6 +143,28 @@ async function carregarDados(){
 function montarLocais(r){if(!r.length){locationList.innerHTML=vazio("📍","Nenhum registro hoje","As atividades aparecerão aqui.");return}const g={};r.forEach(x=>(g[x.local_nome]??=[]).push(x));locationList.innerHTML=Object.entries(g).map(([local,itens],i)=>`<div class="location-card ${i===0?"open":""}"><div class="location-header"><div class="location-icon">📍</div><div class="location-info"><strong>${esc(local)}</strong><span>${esc([...new Set(itens.map(x=>x.colaborador_nome))].join(", "))}</span></div><span class="location-count">${itens.length} ${itens.length===1?"ITEM":"ITENS"}</span><span>⌄</span></div><div class="location-content">${itens.map(x=>`<div class="record">${foto(x.foto_path,"record-photo")}<div class="record-body"><strong>✓ ${esc(x.item_nome)}</strong><div class="record-meta">${esc(x.colaborador_nome)} • ${hora(x.concluida_em||x.created_at)}</div>${x.observacao?`<div class="record-observation">💬 ${esc(x.observacao)}</div>`:""}</div></div>`).join("")}</div></div>`).join("");locationList.querySelectorAll(".location-card").forEach(c=>c.querySelector(".location-header").onclick=()=>c.classList.toggle("open"))}
 function montarUltimos(r){if(!r.length){activityContainer.innerHTML=vazio("🕘","Sem atividades","Nenhuma atividade foi recebida hoje.");return}activityContainer.innerHTML=`<div class="activity-list">${r.slice(0,20).map(x=>`<div class="activity-row">${foto(x.foto_path,"activity-photo")}<div class="activity-info"><strong>${esc(x.item_nome)}</strong><span>${esc(x.local_nome)} • ${esc(x.colaborador_nome)}</span></div><div class="activity-time">${hora(x.concluida_em||x.created_at)}</div></div>`).join("")}</div>`}
 
+async function abrirFotoStorage(path,tipo="atividade"){
+  if(!path)return alert("Nenhuma foto registrada.");
+  if(/^https?:\/\//i.test(path)){window.open(path,"_blank","noopener");return}
+  const buckets=tipo==="ocorrencia"
+    ?["fotos-ocorrencias","fotos-atividades"]
+    :["fotos-atividades","fotos-ocorrencias"];
+  for(const bucket of buckets){
+    try{
+      const {data,error}=await db.storage.from(bucket).createSignedUrl(path,600);
+      if(!error&&data?.signedUrl){
+        window.open(data.signedUrl,"_blank","noopener");
+        return;
+      }
+    }catch(e){console.warn("Falha ao abrir foto em",bucket,e)}
+  }
+  alert("A foto está registrada, mas não foi possível gerar o link de visualização.");
+}
+function botoesFotoOcorrencia(o){
+  return o.foto_path
+    ?`<div class="photo-actions"><button class="photo-action occ-photo" type="button">📷 VER FOTO DA OCORRÊNCIA</button></div>`
+    :"";
+}
 async function carregarOcorrencias(){
   if(!CONDOMINIO)return;
   const [oc,dm]=await Promise.all([
@@ -178,7 +200,9 @@ function renderDemandasDaOcorrencia(o){
     const pr=norm(d.prioridade);
     const prClass=pr==="urgente"?"priority-urgent":pr==="alta"?"priority-high":"";
     const prazo=d.prazo_em?new Date(d.prazo_em).toLocaleString("pt-BR",{dateStyle:"short",timeStyle:"short"}):"sem prazo";
-    return `<div class="demand-item"><div class="demand-top"><strong>DEMANDA #${d.id} • ${esc(nomeResponsavelDemanda(d))}</strong><span class="demand-status ${done?"done":""}">${statusDemandaLabel(d.status)}</span></div><div class="demand-meta"><span class="${prClass}">Prioridade ${esc(d.prioridade||"normal")}</span> • ${esc(prazo)}${d.exige_foto?" • 📷 foto":""}${d.exige_observacao?" • 💬 observação":""}</div>${d.descricao?`<div class="record-observation">${esc(d.descricao)}</div>`:""}</div>`;
+    const execObs=d.observacao_execucao?`<div class="record-observation">✅ Retorno da execução: ${esc(d.observacao_execucao)}</div>`:"";
+    const execFoto=d.foto_execucao_path?`<div class="photo-actions"><button class="photo-action execution demand-photo" type="button" data-demand="${d.id}">📷 VER FOTO DA EXECUÇÃO</button></div>`:"";
+    return `<div class="demand-item"><div class="demand-top"><strong>DEMANDA #${d.id} • ${esc(nomeResponsavelDemanda(d))}</strong><span class="demand-status ${done?"done":""}">${statusDemandaLabel(d.status)}</span></div><div class="demand-meta"><span class="${prClass}">Prioridade ${esc(d.prioridade||"normal")}</span> • ${esc(prazo)}${d.exige_foto?" • 📷 foto":""}${d.exige_observacao?" • 💬 observação":""}</div>${d.descricao?`<div class="record-observation">${esc(d.descricao)}</div>`:""}${execObs}${execFoto}</div>`;
   }).join("")}</div>`;
 }
 function renderOcorrencias(){
@@ -189,12 +213,19 @@ function renderOcorrencias(){
   if(!l.length){occurrenceList.innerHTML=vazio("✓","Nenhuma ocorrência","Sem registros neste filtro.");return}
   occurrenceList.innerHTML=l.map(o=>{
     const s=norm(statusSelecionado[o.id]||o.status),cls=s==="resolvida"?"status-resolvida":s==="em atendimento"?"status-atendimento":"status-aberta";
-    return `<article class="occurrence-card" data-occ="${o.id}"><div class="occurrence-top"><div><div class="occurrence-protocol">${esc(o.protocolo)}</div><div class="occurrence-date">${esc(o.data)} • ${String(o.hora||"").slice(0,5)}</div></div><span class="status-badge ${cls}">${esc(o.status)}</span></div><div class="occurrence-location">📍 ${esc(o.local_completo||[o.area,o.detalhe].filter(Boolean).join(" • "))}</div>${o.descricao?`<div class="occurrence-description">${esc(o.descricao)}</div>`:""}${o.deseja_retorno?`<div class="return-box">✉ ${esc(o.email)}</div>`:""}<div class="forward-box"><div class="forward-head"><div><strong>ENCAMINHAMENTO OPERACIONAL</strong><span> • opcional</span></div><button class="create-demand" type="button">＋ CRIAR DEMANDA</button></div>${renderDemandasDaOcorrencia(o)}</div><div class="occurrence-management"><div class="status-buttons"><button class="status-button ${s==="aberta"?"selected":""}" data-s="Aberta">ABERTA</button><button class="status-button ${s==="em atendimento"?"selected":""}" data-s="Em atendimento">EM ATENDIMENTO</button><button class="status-button ${s==="resolvida"?"selected":""}" data-s="Resolvida">RESOLVIDA</button></div><div class="resolution-box ${s==="resolvida"?"visible":""}"><textarea class="resposta" placeholder="Mensagem de conclusão para o solicitante">${esc(o.resposta_gestor||"")}</textarea></div><button class="save-update">SALVAR ATUALIZAÇÃO</button></div></article>`;
+    return `<article class="occurrence-card" data-occ="${o.id}"><div class="occurrence-top"><div><div class="occurrence-protocol">${esc(o.protocolo)}</div><div class="occurrence-date">${esc(o.data)} • ${String(o.hora||"").slice(0,5)}</div></div><span class="status-badge ${cls}">${esc(o.status)}</span></div><div class="occurrence-location">📍 ${esc(o.local_completo||[o.area,o.detalhe].filter(Boolean).join(" • "))}</div>${o.descricao?`<div class="occurrence-description">${esc(o.descricao)}</div>`:""}${botoesFotoOcorrencia(o)}${o.deseja_retorno?`<div class="return-box">✉ ${esc(o.email)}</div>`:""}<div class="forward-box"><div class="forward-head"><div><strong>ENCAMINHAMENTO OPERACIONAL</strong><span> • opcional</span></div><button class="create-demand" type="button">＋ CRIAR DEMANDA</button></div>${renderDemandasDaOcorrencia(o)}</div><div class="occurrence-management"><div class="status-buttons"><button class="status-button ${s==="aberta"?"selected":""}" data-s="Aberta">ABERTA</button><button class="status-button ${s==="em atendimento"?"selected":""}" data-s="Em atendimento">EM ATENDIMENTO</button><button class="status-button ${s==="resolvida"?"selected":""}" data-s="Resolvida">RESOLVIDA</button></div><div class="resolution-box ${s==="resolvida"?"visible":""}"><textarea class="resposta" placeholder="Mensagem de conclusão para o solicitante">${esc(o.resposta_gestor||"")}</textarea></div><button class="save-update">SALVAR ATUALIZAÇÃO</button></div></article>`;
   }).join("");
   occurrenceList.querySelectorAll("[data-occ]").forEach(card=>{
     const id=Number(card.dataset.occ);
     card.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{statusSelecionado[id]=b.dataset.s;renderOcorrencias()});
     card.querySelector(".create-demand").onclick=()=>abrirDemandaOcorrencia(id);
+    const o=ocorrenciasCarregadas.find(x=>Number(x.id)===id);
+    const occPhoto=card.querySelector(".occ-photo");
+    if(occPhoto&&o?.foto_path)occPhoto.onclick=()=>abrirFotoStorage(o.foto_path,"ocorrencia");
+    card.querySelectorAll(".demand-photo").forEach(btn=>{
+      const d=demandasOcorrencias.find(x=>Number(x.id)===Number(btn.dataset.demand));
+      if(d?.foto_execucao_path)btn.onclick=()=>abrirFotoStorage(d.foto_execucao_path,"atividade");
+    });
     card.querySelector(".save-update").onclick=()=>salvarOcorrencia(id);
   });
 }
