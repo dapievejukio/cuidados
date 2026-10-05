@@ -107,6 +107,15 @@ async function enviar(){
    if(error)throw new Error("Não foi possível registrar a ocorrência: "+error.message);
    if(!oc?.ok||!oc?.id)throw new Error("Não foi possível confirmar o registro da ocorrência.");
 
+    /* Garantia de vínculo da foto com a ocorrência criada. */
+    if(fotoPath){
+      const {error:fotoVinculoError}=await db.from("ocorrencias")
+        .update({foto_path:fotoPath,updated_at:new Date().toISOString()})
+        .eq("id",oc.id)
+        .eq("condominio",CONDOMINIO);
+      if(fotoVinculoError)throw new Error("A ocorrência foi criada, mas não foi possível vincular a foto: "+fotoVinculoError.message);
+    }
+
    /* Push é secundário: a ocorrência continua válida mesmo se a notificação falhar. */
    try{
      const r=await db.functions.invoke("enviar-push-ocorrencia",{body:{ocorrencia_id:oc.id}});
