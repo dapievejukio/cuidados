@@ -667,8 +667,21 @@ async function confirmarExecucao(){
         error=r.error;
       }
       if(error)throw error;
+
+      // A demanda já foi gravada como concluída. Só depois disso avisamos a gestão.
+      // Uma falha de Push não desfaz nem bloqueia a conclusão operacional.
+      try{
+        const {data:pushData,error:pushError}=await db.functions.invoke("enviar-push-conclusao",{
+          body:{demanda_id:demandaAtual.id}
+        });
+        if(pushError)console.warn("Demanda concluída, mas o Push para a gestão falhou:",pushError);
+        else console.log("Push conclusão:",pushData);
+      }catch(pushException){
+        console.warn("Demanda concluída, mas não foi possível avisar a gestão:",pushException);
+      }
+
       fecharModal();
-      toast("✓ Demanda concluída.");
+      toast("✓ Demanda concluída. Gestão avisada.");
       await carregarTudo();
       return;
     }
