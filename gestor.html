@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Gestão — ORAQUI</title>
+<meta name="theme-color" content="#342a67">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--primary:#7667b9;--primary-light:#eeeafd;--blue:#5d88a5;--blue-light:#eaf4f8;--green:#69a17f;--green-light:#eaf5ee;--yellow:#c4974d;--yellow-light:#fff5df;--red:#c96565;--red-light:#fdecec;--text:#2d3742;--muted:#75808c;--background:#f4f6f8;--card:#fff;--border:#e4e9ee;--shadow:0 10px 30px rgba(35,48,65,.06)}
+*{box-sizing:border-box;margin:0;padding:0}body{min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--background);color:var(--text)}button,input,select,textarea{font-family:inherit}button{cursor:pointer}.hidden{display:none!important}
+.auth-screen{position:fixed;inset:0;z-index:5000;background:linear-gradient(135deg,#657ba5,#7c72ae);display:flex;align-items:center;justify-content:center;padding:22px}.auth-card{width:min(430px,100%);background:#fff;border-radius:25px;padding:27px;box-shadow:0 20px 60px rgba(25,30,50,.25)}.auth-logo{width:48px;height:48px;border-radius:15px;background:var(--primary-light);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900}.auth-card h1{font-size:24px;margin-top:17px}.auth-card>p{font-size:10px;color:var(--muted);margin-top:7px;line-height:1.5}.auth-field{margin-top:17px}.auth-field label{display:block;font-size:8px;font-weight:800;color:var(--muted);margin-bottom:6px}.auth-field input{width:100%;height:52px;border:1px solid var(--border);border-radius:14px;padding:0 14px;font-size:13px;outline:none}.auth-button{width:100%;height:52px;border:0;border-radius:14px;background:var(--primary);color:#fff;font-size:10px;font-weight:900;margin-top:20px}.auth-error{display:none;margin-top:13px;padding:11px;border-radius:12px;background:var(--red-light);color:var(--red);font-size:9px}
+header{background:linear-gradient(135deg,#6d80a8,#7c72ae);color:#fff;padding:calc(18px + env(safe-area-inset-top)) 18px 52px}.header-content{max-width:980px;margin:auto}.topbar{display:flex;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:11px}.brand-icon{width:39px;height:39px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.18);font-size:20px;font-weight:800}.brand strong{display:block;font-size:17px}.brand small{display:block;font-size:7px;letter-spacing:1.2px;opacity:.75}.logout{border:0;padding:10px 13px;border-radius:14px;background:rgba(255,255,255,.16);color:#fff;font-size:9px;font-weight:800}.header-title{margin-top:29px}.header-title small{font-size:9px;opacity:.72}.header-title h1{margin-top:6px;font-size:28px}.header-title p{margin-top:7px;font-size:11px;opacity:.8}
+main{max-width:980px;margin:-18px auto 80px;padding:0 16px}.manager-card,.tower-card,.kpi,.location-card,.activity-list,.occurrence-card,.collaborator-card,.config-card{background:#fff;box-shadow:var(--shadow)}.manager-card{padding:16px;border-radius:21px;display:flex;align-items:center;gap:13px}.manager-icon{width:48px;height:48px;border-radius:15px;display:flex;align-items:center;justify-content:center;background:var(--primary-light);font-size:22px}.manager-info{flex:1}.manager-info strong{display:block;font-size:13px}.manager-info span{font-size:9px;color:var(--muted)}.online{padding:7px 10px;border-radius:20px;background:var(--green-light);color:var(--green);font-size:8px;font-weight:800}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:16px;padding:5px;border-radius:17px;background:#e9edf1}.tab{border:0;padding:14px 5px;border-radius:13px;background:transparent;color:var(--muted);font-size:8px;font-weight:800;transition:.18s ease}.tab.active{background:var(--primary);color:#fff;box-shadow:0 7px 18px rgba(118,103,185,.28);transform:translateY(-1px)}#tabOcorrencias.has-open{background:#fff0f1;color:#b4232d;box-shadow:inset 0 0 0 1px #f1c7cb}#tabOcorrencias.has-open.active{background:#b4232d;color:#fff;box-shadow:0 7px 18px rgba(180,35,45,.24)}.tab-badge{display:inline-flex;min-width:20px;height:20px;padding:0 5px;align-items:center;justify-content:center;border-radius:20px;background:var(--red-light);color:var(--red);font-weight:950}.has-open .tab-badge{background:#c93642;color:#fff;box-shadow:0 0 0 4px rgba(201,54,66,.10)}.panel{display:none}.panel.active{display:block}@media(max-width:700px){#tabOcorrencias{font-size:8.5px}.tabs{gap:4px}.tab{padding:13px 3px}}
+.date-row,.section-title{display:flex;align-items:center;justify-content:space-between;gap:10px}.date-row{margin-top:24px}.date-row h2,.section-title h2{font-size:17px}.date-pill{padding:8px 11px;border-radius:14px;background:#fff;color:var(--muted);font-size:9px}.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px}.kpi{min-height:105px;padding:16px;border-radius:19px}.kpi strong{display:block;margin-top:9px;font-size:24px}.kpi span,.section-title p{color:var(--muted);font-size:8px}.section{margin-top:27px}.section-title{margin-bottom:12px}.refresh,.add-button{border:0;padding:10px 12px;border-radius:12px;background:var(--blue-light);color:var(--blue);font-size:8px;font-weight:800}.add-button{background:var(--primary);color:#fff}
+.tower-card{padding:17px;border-radius:21px}.tower-top{display:flex;align-items:center;gap:12px}.tower-icon{width:48px;height:48px;border-radius:15px;background:var(--blue-light);display:flex;align-items:center;justify-content:center;font-size:22px}.tower-info{flex:1}.tower-info strong{font-size:13px}.tower-info span{display:block;color:var(--muted);font-size:8px}.percent{font-size:20px;font-weight:800;color:var(--green)}.progress{height:9px;margin-top:15px;border-radius:20px;background:#e9edf2;overflow:hidden}.progress-fill{height:100%;background:var(--green)}.progress-info{display:flex;justify-content:space-between;margin-top:9px;color:var(--muted);font-size:8px}
+.location-list,.occurrence-list,.collaborator-list,.config-list{display:flex;flex-direction:column;gap:10px}.location-card{border-radius:18px;overflow:hidden}.location-header{padding:14px;display:flex;align-items:center;gap:11px}.location-icon{width:40px;height:40px;border-radius:12px;background:var(--blue-light);display:flex;align-items:center;justify-content:center}.location-info{flex:1}.location-info strong{font-size:11px}.location-info span{display:block;color:var(--muted);font-size:8px}.location-count{padding:5px 8px;border-radius:20px;background:var(--green-light);color:var(--green);font-size:8px;font-weight:800}.location-content{display:none;padding:0 14px 14px}.location-card.open .location-content{display:block}.record{padding:12px 0;border-top:1px solid var(--border);display:grid;grid-template-columns:54px 1fr;gap:11px}.record-photo,.activity-photo{background:#edf1f5;overflow:hidden}.foto-clicavel{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:var(--blue);box-shadow:inset 0 0 0 1px #d8e4ec}.foto-clicavel span{font-size:18px;line-height:1}.foto-clicavel small{font-size:6px;font-weight:900;letter-spacing:.4px}.foto-clicavel:active{transform:scale(.96)}.panel.active{animation:panelIn .16s ease}@keyframes panelIn{from{opacity:.55;transform:translateY(3px)}to{opacity:1;transform:none}}.record-photo{width:54px;height:54px;border-radius:11px}.record-photo img,.activity-photo img{width:100%;height:100%;object-fit:cover}.record-body strong{font-size:10px}.record-meta{color:var(--muted);font-size:8px}.record-observation{margin-top:6px;padding:7px 9px;border-radius:9px;background:#f6f8fa;font-size:8px}.activity-list{border-radius:20px;padding:0 15px}.activity-row{min-height:67px;display:flex;align-items:center;gap:11px;border-bottom:1px solid var(--border)}.activity-photo{width:44px;height:44px;border-radius:11px}.activity-info{flex:1}.activity-info strong{font-size:10px}.activity-info span,.activity-time{display:block;color:var(--muted);font-size:8px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.filter{border:0;padding:9px 14px;border-radius:20px;background:#fff;color:var(--muted);font-size:8px;font-weight:800}.filter.active{background:var(--primary);color:#fff}.occurrence-card,.collaborator-card,.config-card{padding:17px;border-radius:21px}.occurrence-top,.collaborator-top,.config-top{display:flex;align-items:center;gap:12px}.occurrence-protocol{color:var(--blue);font-size:13px;font-weight:800}.occurrence-date{font-size:8px;color:var(--muted)}.status-badge,.active-badge,.inactive-badge,.flag{padding:6px 9px;border-radius:20px;font-size:7px;font-weight:800}.status-aberta{background:var(--red-light);color:var(--red)}.status-atendimento{background:var(--yellow-light);color:var(--yellow)}.status-resolvida,.active-badge,.flag.on{background:var(--green-light);color:var(--green)}.occurrence-location,.return-box{margin-top:12px;padding:11px;border-radius:13px;background:var(--blue-light);font-size:9px}.occurrence-description{padding:12px;font-size:10px}.occurrence-management{border-top:1px solid var(--border);padding-top:14px}.status-buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.status-button{border:1px solid var(--border);padding:9px;border-radius:11px;background:#fff;font-size:8px}.status-button.selected{background:var(--primary-light);color:var(--primary)}.resolution-box{display:none;margin-top:12px}.resolution-box.visible{display:block}.resolution-box textarea{width:100%;min-height:90px}.save-update{width:100%;margin-top:10px;padding:12px;border:0;border-radius:12px;background:var(--primary);color:#fff}
+.empty,.loading{padding:28px 18px;border-radius:19px;background:#fff;box-shadow:var(--shadow);text-align:center;color:var(--muted);font-size:8px}.empty strong{display:block;color:var(--text);font-size:11px}.error-box{display:none;margin-top:15px;padding:12px;border-radius:14px;background:var(--red-light);color:var(--red);font-size:9px}
+.management-list{display:flex;flex-direction:column;gap:10px}.management-note{margin-top:10px;padding:11px 13px;border-radius:13px;background:var(--primary-light);color:var(--primary);font-size:8px;line-height:1.45}.role-badge{padding:6px 9px;border-radius:20px;background:var(--primary-light);color:var(--primary);font-size:7px;font-weight:900}.collaborator-avatar,.config-icon{width:46px;height:46px;border-radius:14px;background:var(--primary-light);display:flex;align-items:center;justify-content:center}.collaborator-info,.config-info{flex:1}.collaborator-info span,.config-info span{display:block;color:var(--muted);font-size:8px}.collaborator-data{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}.data-box{padding:10px;background:#f7f8fa;border-radius:12px}.data-box small{font-size:7px;color:var(--muted)}.data-box strong{display:block;font-size:10px}.collaborator-flags,.config-flags{display:flex;gap:6px;flex-wrap:wrap;margin-top:11px}.flag{background:#f1f3f5;color:var(--muted)}.collaborator-actions,.config-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.action-button,.mini{border:0;padding:10px;border-radius:11px;background:var(--blue-light);color:var(--blue);font-size:8px;font-weight:800}.danger{background:var(--red-light)!important;color:var(--red)!important}.success{background:var(--green-light)!important;color:var(--green)!important}.point-row{margin-top:9px;padding:11px;background:#f7f8fa;border-radius:13px;display:flex;gap:9px}.point-actions{display:flex;gap:5px}
+.config-subtabs{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:15px}.config-subtab{border:0;padding:12px;border-radius:13px;background:#e9edf1;color:var(--muted);font-size:8px;font-weight:900}.config-subtab.active{background:var(--primary);color:#fff}
+.modal{position:fixed;inset:0;z-index:1300;display:none;align-items:flex-end;justify-content:center;background:rgba(28,34,40,.55)}.modal.visible{display:flex}.modal-card{width:100%;max-width:620px;max-height:92vh;overflow:auto;padding:22px;border-radius:25px 25px 0 0;background:#fff}.modal-head{display:flex;justify-content:space-between}.modal-close{width:38px;height:38px;border:0;border-radius:50%}.form-grid{display:grid;gap:13px;margin-top:18px}.field label{display:block;font-size:8px;color:var(--muted)}.field input,.field select,.field textarea{width:100%;border:1px solid var(--border);border-radius:13px;padding:12px}.switch-card{display:flex;justify-content:space-between;padding:13px;border:1px solid var(--border);border-radius:14px}.switch{position:relative;width:46px;height:26px}.switch input{opacity:0}.slider{position:absolute;inset:0;border-radius:30px;background:#ccd3d9}.slider:before{content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;border-radius:50%;background:#fff}.switch input:checked+.slider{background:var(--primary)}.switch input:checked+.slider:before{transform:translateX(20px)}.modal-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:20px}.cancel-button,.confirm-button{border:0;padding:14px;border-radius:13px}.confirm-button{background:var(--primary);color:#fff}.toast{position:fixed;left:50%;bottom:25px;z-index:1500;transform:translateX(-50%);display:none;padding:12px 18px;border-radius:14px;background:#25313c;color:#fff;font-size:9px}.toast.visible{display:block}
+
+.push-card{margin-top:12px;padding:14px 16px;border-radius:18px;background:linear-gradient(135deg,#f2effd,#eef5ff);border:1px solid #e3def8;display:flex;align-items:center;gap:12px}.push-icon{width:42px;height:42px;border-radius:13px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:20px}.push-info{flex:1}.push-info strong{display:block;font-size:10px}.push-info span{display:block;margin-top:3px;color:var(--muted);font-size:8px;line-height:1.35}.push-button{border:0;padding:10px 12px;border-radius:12px;background:var(--primary);color:#fff;font-size:8px;font-weight:900}.push-button.active{background:var(--green)}
+.forward-box{margin-top:14px;padding:13px;border:1px solid var(--border);border-radius:15px;background:#fafbfc}.forward-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.forward-head strong{font-size:9px}.forward-head span{font-size:8px;color:var(--muted)}.create-demand{border:0;padding:9px 11px;border-radius:11px;background:var(--blue-light);color:var(--blue);font-size:8px;font-weight:900}.demand-list{display:flex;flex-direction:column;gap:8px;margin-top:10px}.demand-item{padding:11px;border-radius:12px;background:#fff;border:1px solid var(--border)}.demand-top{display:flex;align-items:center;justify-content:space-between;gap:8px}.demand-top strong{font-size:9px}.demand-meta{margin-top:5px;color:var(--muted);font-size:8px;line-height:1.45}.demand-status{padding:5px 8px;border-radius:20px;background:var(--yellow-light);color:var(--yellow);font-size:7px;font-weight:900}.demand-status.done{background:var(--green-light);color:var(--green)}.demand-empty{margin-top:9px;color:var(--muted);font-size:8px}.priority-high{color:var(--red);font-weight:800}.priority-urgent{color:var(--red);font-weight:900}.photo-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.photo-action{border:0;padding:10px 13px;border-radius:11px;background:var(--blue-light);color:var(--blue);font-size:8px;font-weight:900;cursor:pointer}.photo-action.occ-photo{background:#e7f2fb;color:#245b7a;box-shadow:inset 0 0 0 1px #c9dfed}.photo-action.execution{background:var(--green-light);color:var(--green)}
+@media(min-width:700px){.kpis{grid-template-columns:repeat(4,1fr)}.modal{align-items:center}.modal-card{border-radius:25px}.form-grid{grid-template-columns:1fr 1fr}.full{grid-column:1/-1}}
+
+/* OCORRÊNCIAS RESOLVIDAS — resumo compacto por padrão */
+.occurrence-card.resolved-compact{padding:0;overflow:hidden}
+.resolved-summary{display:flex;align-items:center;gap:12px;padding:15px 16px;cursor:pointer;background:#fff}
+.resolved-check{width:42px;height:42px;flex:0 0 42px;border-radius:13px;display:flex;align-items:center;justify-content:center;background:var(--green-light);color:var(--green);font-size:19px;font-weight:900}
+.resolved-main{min-width:0;flex:1}
+.resolved-main strong{display:block;font-size:11px;color:var(--text)}
+.resolved-main span{display:block;margin-top:4px;font-size:8px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.resolved-side{display:flex;align-items:center;gap:10px}
+.resolved-arrow{font-size:16px;color:var(--muted);transition:.18s}
+.resolved-compact.expanded .resolved-arrow{transform:rotate(180deg)}
+.resolved-details{display:none;padding:0 16px 16px;border-top:1px solid var(--border);background:#fff}
+.resolved-compact.expanded .resolved-details{display:block}
+.resolved-details .occurrence-location{margin-top:14px}
+.resolved-answer{margin-top:11px;padding:11px 12px;border-radius:12px;background:var(--green-light);color:#426f54;font-size:9px;line-height:1.5}
+.resolved-answer strong{display:block;margin-bottom:4px;font-size:8px}
+.resolved-details .forward-box{margin-top:12px}
+
+</style>
+</head>
+<body>
+<div class="auth-screen" id="authScreen"><div class="auth-card"><div class="auth-logo">✓</div><h1>Gestão ORAQUI</h1><p>Acesso administrativo protegido pelo Supabase Auth.</p><div class="auth-field"><label>E-MAIL</label><input id="loginEmail" type="email" value="atendimento@oraqui.app"></div><div class="auth-field"><label>SENHA</label><input id="loginPassword" type="password"></div><button class="auth-button" id="loginButton">ENTRAR</button><div class="auth-error" id="authError"></div></div></div>
+<div id="app" class="hidden">
+<header><div class="header-content"><div class="topbar"><div class="brand"><div class="brand-icon">✓</div><div><strong>ORAQUI</strong><small>AGORA. AQUI. REGISTRADO.</small></div></div><button class="logout" id="logoutButton">SAIR</button></div><div class="header-title"><small id="headerCondominio">CONDOMÍNIO</small><h1>Painel de Gestão</h1><p>Operação, ocorrências, equipe e configuração operacional.</p></div></div></header>
+<main>
+<div class="manager-card"><div class="manager-icon">📊</div><div class="manager-info"><strong id="managerName">Gestão</strong><span id="managerProfile">Gestor autenticado</span></div><span class="online">● ONLINE</span></div>
+<div class="push-card"><div class="push-icon">🔔</div><div class="push-info"><strong>Notificações da gestão</strong><span id="pushGestaoStatus">Ative para receber novas ocorrências mesmo com o ORAQUI fechado.</span></div><button class="push-button" id="pushGestaoButton" type="button">ATIVAR</button></div><div class="error-box" id="errorBox"></div>
+<div class="tabs"><button class="tab active" id="tabOperacao">✓ OPERAÇÃO</button><button class="tab" id="tabOcorrencias">⚠ OCORRÊNCIAS <span class="tab-badge" id="occurrenceBadge">0</span></button><button class="tab" id="tabColaboradores">👥 EQUIPE</button><button class="tab" id="tabConfig">⚙ CONFIG.</button></div>
+<div class="panel active" id="panelOperacao"><div class="date-row"><h2>Hoje</h2><div class="date-pill" id="todayDate">--</div></div><div class="kpis"><div class="kpi"><strong id="kpiItems">0</strong><span>REGISTROS HOJE</span></div><div class="kpi"><strong id="kpiPhotos">0</strong><span>FOTOS RECEBIDAS</span></div><div class="kpi"><strong id="kpiWorkers">0</strong><span>COLABORADORES HOJE</span></div><div class="kpi"><strong id="kpiLocations">0</strong><span>LOCAIS REGISTRADOS</span></div></div><section class="section"><div class="section-title"><div><h2>Operação de hoje</h2><p>Registros concluídos pela equipe.</p></div><button class="refresh" id="refreshDados">↻ ATUALIZAR</button></div><div class="tower-card"><div class="tower-top"><div class="tower-icon">🏢</div><div class="tower-info"><strong id="towerName">Condomínio</strong><span id="towerStatus">Carregando...</span></div><div class="percent" id="towerPercent">0</div></div><div class="progress"><div class="progress-fill" id="towerProgress"></div></div><div class="progress-info"><span id="towerDone">0 registros</span><span id="towerTotal">hoje</span></div></div></section><section class="section"><div class="section-title"><div><h2>Registros por local</h2><p>Toque no local para visualizar fotos e informações.</p></div></div><div id="locationList" class="location-list"></div></section><section class="section"><div class="section-title"><div><h2>Últimos registros</h2></div></div><div id="activityContainer"></div></section></div>
+<div class="panel" id="panelOcorrencias"><section class="section"><div class="section-title"><div><h2>Ocorrências</h2><p>Acompanhamento dos registros enviados.</p></div><button class="refresh" id="refreshOcorrencias">↻ ATUALIZAR</button></div><div class="kpis"><div class="kpi"><strong id="occOpen">0</strong><span>ABERTAS</span></div><div class="kpi"><strong id="occProgress">0</strong><span>EM ATENDIMENTO</span></div><div class="kpi"><strong id="occResolved">0</strong><span>RESOLVIDAS</span></div><div class="kpi"><strong id="occReturn">0</strong><span>SOLICITAM RETORNO</span></div></div></section><section class="section"><div class="filters"><button class="filter active" data-filter="todas">TODAS</button><button class="filter" data-filter="aberta">ABERTAS</button><button class="filter" data-filter="em atendimento">EM ATENDIMENTO</button><button class="filter" data-filter="resolvida">RESOLVIDAS</button></div><div id="occurrenceList" class="occurrence-list"></div></section></div>
+<div class="panel" id="panelColaboradores"><section class="section"><div class="section-title"><div><h2>Equipe operacional</h2><p>Cadastro, convite e configurações dos colaboradores.</p></div><button class="add-button" id="addCollaborator">＋ CADASTRAR</button></div><div class="kpis"><div class="kpi"><strong id="colActive">0</strong><span>ATIVOS</span></div><div class="kpi"><strong id="colInactive">0</strong><span>INATIVOS</span></div></div><div id="collaboratorList" class="collaborator-list"></div></section><section class="section"><div class="section-title"><div><h2>Equipe de gestão</h2><p>Administradores e gestores vinculados ao condomínio.</p></div><button class="add-button hidden" id="addManager">＋ CONVIDAR GESTOR</button></div><div id="managementList" class="management-list"></div><div id="managementPermissionNote" class="management-note hidden">Somente o administrador do cliente pode convidar ou alterar gestores.</div></section></div>
+<div class="panel" id="panelConfig"><section class="section"><div class="section-title"><div><h2>Configuração operacional</h2><p>Áreas e pontos usados pelo colaborador e pelo canal de ocorrências.</p></div><button class="add-button" id="addArea">＋ NOVA ÁREA</button></div><div class="config-subtabs" style="grid-template-columns:repeat(3,1fr)"><button class="config-subtab active" id="subAreas">ÁREAS + PONTOS</button><button class="config-subtab" id="subAtividades">ATIVIDADES</button><button class="config-subtab" id="subProgramacoes">PROGRAMAÇÕES</button></div><div id="configAreas"><div id="configList" class="config-list"></div></div><div id="configAtividades" class="hidden"><div class="section-title"><div><h2>Atividades</h2><p>Defina o que deve ser executado.</p></div><button class="add-button" id="addAtividade">＋ NOVA ATIVIDADE</button></div><div id="atividadeList" class="config-list"></div></div><div id="configProgramacoes" class="hidden"><div class="section-title"><div><h2>Programações</h2><p>Defina local, responsável, dias e prazo.</p></div><button class="add-button" id="addProgramacao">＋ NOVA PROGRAMAÇÃO</button></div><div id="programacaoList" class="config-list"></div></div></section></div>
+</main></div>
+
+<div class="modal" id="collaboratorModal"><div class="modal-card"><div class="modal-head"><h2 id="collaboratorModalTitle">Cadastrar colaborador</h2><button class="modal-close" id="closeCollaborator">×</button></div><div class="form-grid"><div class="field full"><label>NOME</label><input id="colNome"></div><div class="field full"><label>E-MAIL</label><input id="colEmail" type="email"></div><div class="field"><label>MATRÍCULA</label><input id="colMatricula"></div><div class="field"><label>FUNÇÃO</label><select id="colFuncao"><option>Limpeza</option><option>Zeladoria</option><option>Portaria</option><option>Manutenção</option><option>Supervisor</option><option>Outro</option></select></div><div class="switch-card full"><span>Ponto</span><label class="switch"><input id="colPontoAtivo" type="checkbox"><span class="slider"></span></label></div><div class="switch-card"><span>Selfie</span><label class="switch"><input id="colSelfie" type="checkbox"><span class="slider"></span></label></div><div class="switch-card"><span>Geolocalização</span><label class="switch"><input id="colGeo" type="checkbox"><span class="slider"></span></label></div><div class="switch-card"><span>Intervalo</span><label class="switch"><input id="colIntervalo" type="checkbox"><span class="slider"></span></label></div><div class="field"><label>INTERVALO MIN.</label><input id="colIntervaloMinutos" type="number" value="60"></div></div><div class="modal-actions"><button class="cancel-button" id="cancelCollaborator">CANCELAR</button><button class="confirm-button" id="saveCollaborator">SALVAR</button></div></div></div>
+
+<div class="modal" id="managerModal"><div class="modal-card"><div class="modal-head"><div><h2>Convidar gestor</h2><p style="margin-top:5px;color:var(--muted);font-size:9px">O novo gestor receberá um convite por e-mail para criar a própria senha.</p></div><button class="modal-close" id="closeManager">×</button></div><div class="form-grid"><div class="field full"><label>NOME</label><input id="managerInviteName" autocomplete="name" placeholder="Nome do gestor"></div><div class="field full"><label>E-MAIL</label><input id="managerInviteEmail" type="email" autocomplete="email" placeholder="email@exemplo.com"></div></div><div class="modal-actions"><button class="cancel-button" id="cancelManager">CANCELAR</button><button class="confirm-button" id="saveManager">ENVIAR CONVITE</button></div></div></div>
+<div class="modal" id="areaModal"><div class="modal-card"><div class="modal-head"><h2 id="areaModalTitle">Nova área</h2><button class="modal-close" id="closeArea">×</button></div><div class="form-grid"><div class="field full"><label>NOME</label><input id="areaNome"></div><div class="field full"><label>DESCRIÇÃO</label><textarea id="areaDescricao"></textarea></div><div class="field"><label>ORDEM</label><input id="areaOrdem" type="number"></div><div class="switch-card"><span>Colaborador</span><label class="switch"><input id="areaColaborador" type="checkbox" checked><span class="slider"></span></label></div><div class="switch-card"><span>Ocorrências</span><label class="switch"><input id="areaOcorrencia" type="checkbox" checked><span class="slider"></span></label></div></div><div class="modal-actions"><button class="cancel-button" id="cancelArea">CANCELAR</button><button class="confirm-button" id="saveArea">SALVAR</button></div></div></div>
+
+<div class="modal" id="pointModal"><div class="modal-card"><div class="modal-head"><h2 id="pointModalTitle">Novo ponto</h2><button class="modal-close" id="closePoint">×</button></div><div class="form-grid"><div class="field full"><label>ÁREA</label><select id="pointArea"></select></div><div class="field full"><label>NOME</label><input id="pointNome"></div><div class="field full"><label>DESCRIÇÃO</label><textarea id="pointDescricao"></textarea></div><div class="field"><label>ORDEM</label><input id="pointOrdem" type="number"></div><div class="switch-card"><span>Colaborador</span><label class="switch"><input id="pointColaborador" type="checkbox" checked><span class="slider"></span></label></div><div class="switch-card"><span>Ocorrências</span><label class="switch"><input id="pointOcorrencia" type="checkbox" checked><span class="slider"></span></label></div></div><div class="modal-actions"><button class="cancel-button" id="cancelPoint">CANCELAR</button><button class="confirm-button" id="savePoint">SALVAR</button></div></div></div>
+<div class="modal" id="atividadeModal"><div class="modal-card"><div class="modal-head"><h2>Atividade</h2><button class="modal-close" id="closeAtividade">×</button></div><div class="form-grid"><div class="field full"><label>NOME</label><input id="atividadeNome"></div><div class="field full"><label>DESCRIÇÃO</label><textarea id="atividadeDescricao"></textarea></div><div class="switch-card"><div class="switch-text"><strong>Exigir foto</strong></div><label class="switch"><input id="atividadeFoto" type="checkbox"><span class="slider"></span></label></div><div class="switch-card"><div class="switch-text"><strong>Exigir observação</strong></div><label class="switch"><input id="atividadeObs" type="checkbox"><span class="slider"></span></label></div></div><div class="modal-actions"><button class="cancel-button" id="cancelAtividade">CANCELAR</button><button class="confirm-button" id="saveAtividade">SALVAR</button></div></div></div>
+<div class="modal" id="programacaoModal"><div class="modal-card"><div class="modal-head"><h2>Programação</h2><button class="modal-close" id="closeProgramacao">×</button></div><div class="form-grid"><div class="field full"><label>ATIVIDADE</label><select id="progAtividade"></select></div><div class="field"><label>ÁREA</label><select id="progArea"></select></div><div class="field"><label>PONTO / LOCAL</label><select id="progPonto"></select></div><div class="field"><label>DESTINO</label><select id="progDestino"><option value="colaborador">Colaborador</option><option value="funcao">Função/equipe</option></select></div><div class="field" id="progColaboradorField"><label>COLABORADOR</label><select id="progColaborador"></select></div><div class="field hidden" id="progFuncaoField"><label>FUNÇÃO</label><select id="progFuncao"><option>Limpeza</option><option>Zeladoria</option><option>Portaria</option><option>Manutenção</option><option>Supervisor</option><option>Outro</option></select></div><div class="field"><label>TIPO</label><select id="progTipo"><option value="recorrente">Recorrente</option><option value="extraordinaria">Extraordinária</option></select></div><div class="field"><label>HORÁRIO LIMITE</label><input id="progHorario" type="time"></div><div class="field"><label>DATA INICIAL</label><input id="progInicio" type="date"></div><div class="field"><label>DATA FINAL</label><input id="progFim" type="date"></div><div class="field full"><label>DIAS DA SEMANA</label><div id="progDias" style="display:grid;grid-template-columns:repeat(4,1fr);gap:7px"><label class="switch-card" style="padding:9px"><span class="switch-text"><strong>SEG</strong></span><input type="checkbox" value="1"></label><label class="switch-card" style="padding:9px"><span class="switch-text"><strong>TER</strong></span><input type="checkbox" value="2"></label><label class="switch-card" style="padding:9px"><span class="switch-text"><strong>QUA</strong></span><input type="checkbox" value="3"></label><label class="switch-card" style="padding:9px"><span class="switch-text"><strong>QUI</strong></span><input type="checkbox" value="4"></label><label class="switch-card" style="padding:9px"><span class="switch-text"><strong>SEX</strong></span><input type="checkbox" value="5"></label><label class="switch-card" style="padding:9px"><span class="switch-text"><strong>SÁB</strong></span><input type="checkbox" value="6"></label><label class="switch-card" style="padding:9px"><span class="switch-text"><strong>DOM</strong></span><input type="checkbox" value="7"></label></div></div><div class="field"><label>PRIORIDADE</label><select id="progPrioridade"><option value="normal">Normal</option><option value="alta">Alta</option><option value="urgente">Urgente</option></select></div><div class="field full"><label>INSTRUÇÕES</label><textarea id="progInstrucoes"></textarea></div><div class="switch-card"><div class="switch-text"><strong>Exigir foto</strong></div><label class="switch"><input id="progFoto" type="checkbox"><span class="slider"></span></label></div><div class="switch-card"><div class="switch-text"><strong>Exigir observação</strong></div><label class="switch"><input id="progObs" type="checkbox"><span class="slider"></span></label></div></div><div class="modal-actions"><button class="cancel-button" id="cancelProgramacao">CANCELAR</button><button class="confirm-button" id="saveProgramacao">SALVAR</button></div></div></div><div class="modal" id="demandaModal"><div class="modal-card"><div class="modal-head"><div><h2>Encaminhar ocorrência</h2><p style="margin-top:5px;color:var(--muted);font-size:9px">Crie uma demanda operacional vinculada à ocorrência.</p></div><button class="modal-close" id="closeDemanda">×</button></div><div class="form-grid"><div class="field full"><label>OCORRÊNCIA / LOCAL</label><input id="demandaOrigem" disabled></div><div class="field"><label>DESTINO</label><select id="demandaDestino"><option value="colaborador">Colaborador</option><option value="funcao">Função/equipe</option></select></div><div class="field" id="demandaColaboradorField"><label>COLABORADOR</label><select id="demandaColaborador"></select></div><div class="field hidden" id="demandaFuncaoField"><label>FUNÇÃO</label><select id="demandaFuncao"><option>Limpeza</option><option>Zeladoria</option><option>Portaria</option><option>Manutenção</option><option>Supervisor</option><option>Outro</option></select></div><div class="field"><label>PRIORIDADE</label><select id="demandaPrioridade"><option value="normal">Normal</option><option value="alta">Alta</option><option value="urgente">Urgente</option><option value="baixa">Baixa</option></select></div><div class="field"><label>PRAZO</label><input id="demandaPrazo" type="datetime-local"></div><div class="switch-card"><span>Exigir foto</span><label class="switch"><input id="demandaFoto" type="checkbox"><span class="slider"></span></label></div><div class="switch-card"><span>Exigir observação</span><label class="switch"><input id="demandaObs" type="checkbox"><span class="slider"></span></label></div><div class="field full"><label>INSTRUÇÕES PARA A EQUIPE</label><textarea id="demandaDescricao" placeholder="Complemento opcional para quem receberá a demanda."></textarea></div></div><div class="modal-actions"><button class="cancel-button" id="cancelDemanda">CANCELAR</button><button class="confirm-button" id="saveDemanda">CRIAR DEMANDA</button></div></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const SUPABASE_URL="https://rhiosvsohvqqrxzwohqu.supabase.co",SUPABASE_KEY="sb_publishable_vcjiMMCTxQJ7ArTGsQ-PuQ_5gaAfoIt";
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY),$=id=>document.getElementById(id);
+let perfilGestor=null,CONDOMINIO="",CONDOMINIO_ID=null,gestoresCarregados=[],ocorrenciasCarregadas=[],demandasOcorrencias=[],colaboradoresCarregados=[],areasCarregadas=[],pontosCarregados=[],atividadesCarregadas=[],programacoesCarregadas=[],filtroOcorrencias="todas",colaboradorEditandoId=null,areaEditandoId=null,pontoEditandoId=null,atividadeEditandoId=null,programacaoEditandoId=null,ocorrenciaDemandaId=null;const statusSelecionado={};
+const locationList=$("locationList"),activityContainer=$("activityContainer"),occurrenceList=$("occurrenceList"),collaboratorList=$("collaboratorList"),managementList=$("managementList"),configList=$("configList"),errorBox=$("errorBox");
+function esc(t){return String(t??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+function norm(s){return String(s||"").trim().toLowerCase()}
+function hoje(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
+function inicioHoje(){const d=new Date();d.setHours(0,0,0,0);return d.toISOString()}
+function fimHoje(){const d=new Date();d.setHours(23,59,59,999);return d.toISOString()}
+function hora(v){if(!v)return"--:--";const d=new Date(v);return Number.isNaN(d.getTime())?String(v).slice(0,5):d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}
+function vazio(i,t,x){return `<div class="empty"><div>${i}</div><strong>${t}</strong><span>${x}</span></div>`}
+function erro(m){errorBox.textContent=m;errorBox.style.display="block"}function semErro(){errorBox.style.display="none"}
+function toast(m){$("toast").textContent=m;$("toast").classList.add("visible");setTimeout(()=>$("toast").classList.remove("visible"),2500)}
+function foto(path,cls){if(!path)return `<div class="${cls}"></div>`;const seguro=encodeURIComponent(String(path));return `<button type="button" class="${cls} foto-clicavel" title="Abrir foto" aria-label="Abrir foto" onclick="event.stopPropagation();abrirFotoStorage(decodeURIComponent(\'${seguro}\'),\'atividade\')"><span>📷</span><small>VER</small></button>`}
+
+
+function base64UrlToUint8Array(base64String){
+  const padding="=".repeat((4-base64String.length%4)%4),base64=(base64String+padding).replace(/-/g,"+").replace(/_/g,"/");
+  const raw=atob(base64);return Uint8Array.from([...raw].map(c=>c.charCodeAt(0)));
+}
+const VAPID_PUBLIC_KEY="BNOm_tsvH-uo-hfquzYmf_XxgiGAciYKyia_FdI1PVfBISDELIqnvSUArIIuUW3hpmHt-UynVot3YCb7krs25Bk";
+async function registrarSWGestao(){
+  if(!("serviceWorker" in navigator))throw new Error("Este navegador não suporta notificações Web Push.");
+  return navigator.serviceWorker.register("./service-worker.js",{scope:"./"});
+}
+async function atualizarEstadoPushGestao(){
+  const b=$("pushGestaoButton"),st=$("pushGestaoStatus");
+  if(!b||!st)return;
+  if(!perfilGestor||!("serviceWorker" in navigator)){b.disabled=true;st.textContent="Notificações não disponíveis neste dispositivo.";return}
+  try{
+    const reg=await registrarSWGestao(),sub=await reg.pushManager.getSubscription();
+    if(sub&&Notification.permission==="granted"){b.textContent="ATIVAS";b.classList.add("active");st.textContent="Este aparelho está preparado para receber novas ocorrências."}
+    else{b.textContent="ATIVAR";b.classList.remove("active");st.textContent="Ative para receber novas ocorrências mesmo com o ORAQUI fechado."}
+  }catch(e){console.warn(e)}
+}
+async function ativarPushGestao(){
+  if(!perfilGestor)return;
+  const b=$("pushGestaoButton");b.disabled=true;b.textContent="ATIVANDO...";
+  try{
+    if(!window.isSecureContext)throw new Error("Notificações exigem conexão segura HTTPS.");
+    const reg=await registrarSWGestao(),perm=await Notification.requestPermission();
+    if(perm!=="granted")throw new Error("Permissão de notificações não concedida.");
+    let sub=await reg.pushManager.getSubscription();
+    if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:base64UrlToUint8Array(VAPID_PUBLIC_KEY)});
+    const j=sub.toJSON();
+    const {data,error}=await db.rpc("registrar_push_gestao",{p_endpoint:j.endpoint,p_p256dh:j.keys?.p256dh,p_auth:j.keys?.auth,p_user_agent:navigator.userAgent});
+    if(error)throw error;if(data?.ok===false)throw new Error(data.error||"Não foi possível vincular este aparelho à gestão.");
+    toast("🔔 Notificações da gestão ativadas.");await atualizarEstadoPushGestao();
+  }catch(e){console.error(e);alert(e.message||"Não foi possível ativar as notificações.")}
+  finally{b.disabled=false}
+}
+
+async function login(){const email=$("loginEmail").value.trim(),password=$("loginPassword").value,box=$("authError");box.style.display="none";try{const {data,error}=await db.auth.signInWithPassword({email,password});if(error)throw error;await validarGestor(data.user)}catch(e){await db.auth.signOut();box.textContent=e.message||"Falha no acesso.";box.style.display="block"}}
+async function validarGestor(user){
+  const {data:p,error}=await db.from("usuarios_gestao").select("id,nome,perfil,ativo,condominio_id").eq("auth_user_id",user.id).eq("ativo",true).maybeSingle();
+  if(error)throw error;
+  if(!p||!["gestor","admin_oraqui","admin_cliente","supervisor"].includes(p.perfil))throw new Error("Usuário sem perfil de gestão ativo.");
+
+  const slugSelecionado=new URLSearchParams(location.search).get("condominio");
+  let consulta=db.from("condominios").select("id,nome,slug,ativo").eq("ativo",true);
+
+  if(p.perfil==="admin_oraqui"&&slugSelecionado){
+    consulta=consulta.eq("slug",slugSelecionado);
+  }else{
+    consulta=consulta.eq("id",p.condominio_id);
+  }
+
+  const {data:c,error:ce}=await consulta.single();
+  if(ce)throw ce;
+
+  perfilGestor=p;CONDOMINIO_ID=c.id;CONDOMINIO=c.nome;
+  $("headerCondominio").textContent=CONDOMINIO.toUpperCase();
+  $("towerName").textContent=CONDOMINIO;
+  $("managerName").textContent=`${p.nome} • ${CONDOMINIO}`;
+  $("managerProfile").textContent=`${p.perfil.toUpperCase()} • acesso autenticado`;
+  $("authScreen").classList.add("hidden");
+  $("app").classList.remove("hidden");
+  aplicarPermissoesGestao();
+  await Promise.all([carregarDados(),carregarOcorrencias()]);
+  await atualizarEstadoPushGestao();
+}
+async function sair(){const destino=perfilGestor?.perfil==="admin_oraqui"?"admin.html":"index.html";await db.auth.signOut();location.href=destino}
+
+async function carregarDados(){
+  if(!CONDOMINIO_ID)return;
+  semErro();
+  try{
+    const [ex,ar,po,co,at]=await Promise.all([
+      db.from("execucoes").select("*").eq("condominio_id",CONDOMINIO_ID).eq("ambiente","producao").eq("status","concluida").gte("created_at",inicioHoje()).lte("created_at",fimHoje()).order("created_at",{ascending:false}),
+      db.from("areas").select("id,nome").eq("condominio_id",CONDOMINIO_ID),
+      db.from("pontos").select("id,area_id,nome").eq("condominio_id",CONDOMINIO_ID),
+      db.from("colaboradores").select("id,nome,matricula").eq("condominio_id",CONDOMINIO_ID),
+      db.from("atividades_v2").select("id,nome").eq("condominio_id",CONDOMINIO_ID)
+    ]);
+    for(const r of [ex,ar,po,co,at])if(r.error)throw r.error;
+    const areas=ar.data||[],pontos=po.data||[],cols=co.data||[],ats=at.data||[];
+    const registros=(ex.data||[]).map(e=>{
+      const pt=pontos.find(x=>Number(x.id)===Number(e.ponto_id));
+      const a=areas.find(x=>Number(x.id)===Number(e.area_id))||areas.find(x=>Number(x.id)===Number(pt?.area_id));
+      const c=cols.find(x=>Number(x.id)===Number(e.colaborador_id));
+      const atividade=ats.find(x=>Number(x.id)===Number(e.atividade_id));
+      return {...e,area_nome:a?.nome||"Sem área",ponto_nome:pt?.nome||"",local_nome:[a?.nome,pt?.nome].filter(Boolean).join(" • ")||"Sem local",colaborador_nome:c?.nome||"Colaborador",matricula:c?.matricula||"",item_nome:atividade?.nome||(e.tipo==="avulsa"?"Atividade avulsa":"Atividade")};
+    });
+    $("kpiItems").textContent=registros.length;
+    $("kpiPhotos").textContent=registros.filter(x=>x.foto_path).length;
+    $("kpiWorkers").textContent=new Set(registros.map(x=>x.colaborador_id).filter(Boolean)).size;
+    $("kpiLocations").textContent=new Set(registros.map(x=>x.local_nome)).size;
+    $("towerPercent").textContent=registros.length;
+    $("towerDone").textContent=`${registros.length} ${registros.length===1?"registro":"registros"}`;
+    $("towerTotal").textContent="concluídos hoje";
+    $("towerStatus").textContent=registros.length?"Atividades registradas pela equipe.":"Nenhuma atividade registrada hoje.";
+    $("towerProgress").style.width=registros.length?"100%":"0%";
+    montarLocais(registros);montarUltimos(registros);
+  }catch(e){console.error(e);erro("Não foi possível carregar a operação V2: "+e.message);locationList.innerHTML=vazio("⚠️","Dados indisponíveis","Falha ao consultar execuções.");activityContainer.innerHTML=vazio("⚠️","Dados indisponíveis","Falha ao consultar execuções.")}
+}
+function montarLocais(r){if(!r.length){locationList.innerHTML=vazio("📍","Nenhum registro hoje","As atividades aparecerão aqui.");return}const g={};r.forEach(x=>(g[x.local_nome]??=[]).push(x));locationList.innerHTML=Object.entries(g).map(([local,itens],i)=>`<div class="location-card ${i===0?"open":""}"><div class="location-header"><div class="location-icon">📍</div><div class="location-info"><strong>${esc(local)}</strong><span>${esc([...new Set(itens.map(x=>x.colaborador_nome))].join(", "))}</span></div><span class="location-count">${itens.length} ${itens.length===1?"ITEM":"ITENS"}</span><span>⌄</span></div><div class="location-content">${itens.map(x=>`<div class="record">${foto(x.foto_path,"record-photo")}<div class="record-body"><strong>✓ ${esc(x.item_nome)}</strong><div class="record-meta">${esc(x.colaborador_nome)} • ${hora(x.concluida_em||x.created_at)}</div>${x.observacao?`<div class="record-observation">💬 ${esc(x.observacao)}</div>`:""}</div></div>`).join("")}</div></div>`).join("");locationList.querySelectorAll(".location-card").forEach(c=>c.querySelector(".location-header").onclick=()=>c.classList.toggle("open"))}
+function montarUltimos(r){if(!r.length){activityContainer.innerHTML=vazio("🕘","Sem atividades","Nenhuma atividade foi recebida hoje.");return}activityContainer.innerHTML=`<div class="activity-list">${r.slice(0,20).map(x=>`<div class="activity-row">${foto(x.foto_path,"activity-photo")}<div class="activity-info"><strong>${esc(x.item_nome)}</strong><span>${esc(x.local_nome)} • ${esc(x.colaborador_nome)}</span></div><div class="activity-time">${hora(x.concluida_em||x.created_at)}</div></div>`).join("")}</div>`}
+
+function normalizarReferenciaFoto(valor){
+  let raw=String(valor||"").trim();
+  if(!raw)return null;
+  if(/^https?:\/\//i.test(raw))return {url:raw};
+  raw=raw.replace(/^\/+/,"");
+  const m=raw.match(/^storage\/v1\/object\/(?:public|sign)\/([^/]+)\/(.+)$/i);
+  if(m)return {bucket:decodeURIComponent(m[1]),path:decodeURIComponent(m[2].split("?")[0])};
+  const partes=raw.split("/");
+  const conhecidos=["fotos-ocorrencias","ocorrencias","ocorrencias-fotos","fotos-atividades","fotos"];
+  if(partes.length>1&&conhecidos.includes(partes[0]))return {bucket:partes.shift(),path:partes.join("/")};
+  return {path:raw};
+}
+async function abrirFotoStorage(valor,tipo="atividade"){
+  const ref=normalizarReferenciaFoto(valor);
+  if(!ref)return alert("Nenhuma foto registrada.");
+  if(ref.url){window.open(ref.url,"_blank","noopener");return}
+  const preferidos=tipo==="ocorrencia"
+    ?["fotos-ocorrencias","ocorrencias","ocorrencias-fotos","fotos-atividades","fotos"]
+    :["fotos-atividades","fotos-ocorrencias","ocorrencias","ocorrencias-fotos","fotos"];
+  const buckets=[ref.bucket,...preferidos].filter((v,i,a)=>v&&a.indexOf(v)===i);
+  for(const bucket of buckets){
+    try{
+      const {data,error}=await db.storage.from(bucket).createSignedUrl(ref.path,600);
+      if(!error&&data?.signedUrl){window.open(data.signedUrl,"_blank","noopener");return}
+    }catch(e){console.warn("Falha ao gerar link assinado:",bucket,e)}
+  }
+  alert("A foto está registrada, mas o Storage não liberou a visualização para este usuário.");
+}
+function botoesFotoOcorrencia(o){
+  return o.foto_path
+    ?`<div class="photo-actions"><button class="photo-action occ-photo" type="button">📷 VER FOTO DA OCORRÊNCIA</button></div>`
+    :"";
+}
+async function carregarOcorrencias(){
+  if(!CONDOMINIO)return;
+  const [oc,dm]=await Promise.all([
+    db.from("ocorrencias").select("*").eq("condominio",CONDOMINIO).eq("ambiente","producao").order("created_at",{ascending:false}),
+    db.from("demandas").select("*").eq("condominio_id",CONDOMINIO_ID).eq("ambiente","producao").not("ocorrencia_id","is",null).order("created_at",{ascending:false})
+  ]);
+  if(oc.error){occurrenceList.innerHTML=vazio("⚠️","Erro",oc.error.message);return}
+  if(dm.error){occurrenceList.innerHTML=vazio("⚠️","Erro ao carregar encaminhamentos",dm.error.message);return}
+  ocorrenciasCarregadas=oc.data||[];
+  demandasOcorrencias=dm.data||[];
+  ocorrenciasCarregadas.forEach(o=>statusSelecionado[o.id]=o.status||"Aberta");
+  renderOcorrencias();
+}
+function nomeResponsavelDemanda(d){
+  if(d.colaborador_id){
+    const c=colaboradoresCarregados.find(x=>Number(x.id)===Number(d.colaborador_id));
+    return c?.nome||`Colaborador #${d.colaborador_id}`;
+  }
+  return d.funcao||"Equipe";
+}
+function statusDemandaLabel(s){
+  const n=norm(s);
+  if(n==="concluida")return"CONCLUÍDA";
+  if(n==="em andamento"||n==="em_andamento"||n==="iniciada")return"EM ANDAMENTO";
+  if(n==="cancelada")return"CANCELADA";
+  return"PENDENTE";
+}
+function renderDemandasDaOcorrencia(o){
+  const ds=demandasOcorrencias.filter(d=>Number(d.ocorrencia_id)===Number(o.id));
+  if(!ds.length)return `<div class="demand-empty">Nenhuma demanda criada. Esta ocorrência pode ser tratada somente pela gestão ou encaminhada para a equipe.</div>`;
+  return `<div class="demand-list">${ds.map(d=>{
+    const done=norm(d.status)==="concluida";
+    const pr=norm(d.prioridade);
+    const prClass=pr==="urgente"?"priority-urgent":pr==="alta"?"priority-high":"";
+    const prazo=d.prazo_em?new Date(d.prazo_em).toLocaleString("pt-BR",{dateStyle:"short",timeStyle:"short"}):"sem prazo";
+    const execObs=d.observacao_execucao?`<div class="record-observation">✅ Retorno da execução: ${esc(d.observacao_execucao)}</div>`:"";
+    const execFoto=d.foto_execucao_path?`<div class="photo-actions"><button class="photo-action execution demand-photo" type="button" data-demand="${d.id}">📷 VER FOTO DA EXECUÇÃO</button></div>`:"";
+    return `<div class="demand-item"><div class="demand-top"><strong>DEMANDA #${d.id} • ${esc(nomeResponsavelDemanda(d))}</strong><span class="demand-status ${done?"done":""}">${statusDemandaLabel(d.status)}</span></div><div class="demand-meta"><span class="${prClass}">Prioridade ${esc(d.prioridade||"normal")}</span> • ${esc(prazo)}${d.exige_foto?" • 📷 foto":""}${d.exige_observacao?" • 💬 observação":""}</div>${d.descricao?`<div class="record-observation">${esc(d.descricao)}</div>`:""}${execObs}${execFoto}</div>`;
+  }).join("")}</div>`;
+}
+function renderOcorrencias(){
+  const c=s=>ocorrenciasCarregadas.filter(x=>norm(x.status)===s).length;
+  $("occOpen").textContent=c("aberta");$("occProgress").textContent=c("em atendimento");$("occResolved").textContent=c("resolvida");
+  $("occReturn").textContent=ocorrenciasCarregadas.filter(x=>x.deseja_retorno).length;const abertas=c("aberta");$("occurrenceBadge").textContent=abertas;$("tabOcorrencias").classList.toggle("has-open",abertas>0);
+  let l=filtroOcorrencias==="todas"?ocorrenciasCarregadas:ocorrenciasCarregadas.filter(x=>norm(x.status)===filtroOcorrencias);
+  if(!l.length){occurrenceList.innerHTML=vazio("✓","Nenhuma ocorrência","Sem registros neste filtro.");return}
+
+  occurrenceList.innerHTML=l.map(o=>{
+    const s=norm(statusSelecionado[o.id]||o.status),cls=s==="resolvida"?"status-resolvida":s==="em atendimento"?"status-atendimento":"status-aberta";
+    const local=o.local_completo||[o.area,o.detalhe].filter(Boolean).join(" • ");
+    const resolvida=norm(o.status)==="resolvida";
+
+    if(resolvida){
+      return `<article class="occurrence-card resolved-compact" data-occ="${o.id}">
+        <div class="resolved-summary" role="button" tabindex="0" aria-expanded="false">
+          <div class="resolved-check">✓</div>
+          <div class="resolved-main">
+            <strong>${esc(o.protocolo)}</strong>
+            <span>📍 ${esc(local||"Local não informado")} • ${esc(o.data)} ${String(o.hora||"").slice(0,5)}</span>
+          </div>
+          <div class="resolved-side">
+            <span class="status-badge status-resolvida">RESOLVIDA</span>
+            <span class="resolved-arrow">⌄</span>
+          </div>
+        </div>
+        <div class="resolved-details">
+          ${o.descricao?`<div class="occurrence-description">${esc(o.descricao)}</div>`:""}
+          ${botoesFotoOcorrencia(o)}
+          ${o.deseja_retorno?`<div class="return-box">✉ ${esc(o.email)}</div>`:""}
+          ${o.resposta_gestor?`<div class="resolved-answer"><strong>RETORNO DA GESTÃO</strong>${esc(o.resposta_gestor)}</div>`:""}
+          <div class="forward-box">
+            <div class="forward-head"><div><strong>ENCAMINHAMENTO OPERACIONAL</strong></div></div>
+            ${renderDemandasDaOcorrencia(o)}
+          </div>
+        </div>
+      </article>`;
+    }
+
+    return `<article class="occurrence-card" data-occ="${o.id}"><div class="occurrence-top"><div><div class="occurrence-protocol">${esc(o.protocolo)}</div><div class="occurrence-date">${esc(o.data)} • ${String(o.hora||"").slice(0,5)}</div></div><span class="status-badge ${cls}">${esc(o.status)}</span></div><div class="occurrence-location">📍 ${esc(local)}</div>${o.descricao?`<div class="occurrence-description">${esc(o.descricao)}</div>`:""}${botoesFotoOcorrencia(o)}${o.deseja_retorno?`<div class="return-box">✉ ${esc(o.email)}</div>`:""}<div class="forward-box"><div class="forward-head"><div><strong>ENCAMINHAMENTO OPERACIONAL</strong><span> • opcional</span></div><button class="create-demand" type="button">＋ CRIAR DEMANDA</button></div>${renderDemandasDaOcorrencia(o)}</div><div class="occurrence-management"><div class="status-buttons"><button class="status-button ${s==="aberta"?"selected":""}" data-s="Aberta">ABERTA</button><button class="status-button ${s==="em atendimento"?"selected":""}" data-s="Em atendimento">EM ATENDIMENTO</button><button class="status-button ${s==="resolvida"?"selected":""}" data-s="Resolvida">RESOLVIDA</button></div><div class="resolution-box ${s==="resolvida"?"visible":""}"><textarea class="resposta" placeholder="Mensagem de conclusão para o solicitante">${esc(o.resposta_gestor||"")}</textarea></div><button class="save-update">SALVAR ATUALIZAÇÃO</button></div></article>`;
+  }).join("");
+
+  occurrenceList.querySelectorAll("[data-occ]").forEach(card=>{
+    const id=Number(card.dataset.occ);
+    const o=ocorrenciasCarregadas.find(x=>Number(x.id)===id);
+
+    const summary=card.querySelector(".resolved-summary");
+    if(summary){
+      const toggle=()=>{
+        const aberta=card.classList.toggle("expanded");
+        summary.setAttribute("aria-expanded",aberta?"true":"false");
+      };
+      summary.onclick=toggle;
+      summary.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();toggle()}};
+    }
+
+    card.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{statusSelecionado[id]=b.dataset.s;renderOcorrencias()});
+    const create=card.querySelector(".create-demand");
+    if(create)create.onclick=()=>abrirDemandaOcorrencia(id);
+
+    const occPhoto=card.querySelector(".occ-photo");
+    if(occPhoto&&o?.foto_path)occPhoto.onclick=e=>{e.stopPropagation();abrirFotoStorage(o.foto_path,"ocorrencia")};
+
+    card.querySelectorAll(".demand-photo").forEach(btn=>{
+      const d=demandasOcorrencias.find(x=>Number(x.id)===Number(btn.dataset.demand));
+      if(d?.foto_execucao_path)btn.onclick=e=>{e.stopPropagation();abrirFotoStorage(d.foto_execucao_path,"atividade")};
+    });
+
+    const save=card.querySelector(".save-update");
+    if(save)save.onclick=()=>salvarOcorrencia(id);
+  });
+}
+async function salvarOcorrencia(id){
+  const o=ocorrenciasCarregadas.find(x=>x.id===id),card=occurrenceList.querySelector(`[data-occ="${id}"]`),ns=statusSelecionado[id]||o.status,msg=card.querySelector(".resposta")?.value.trim()||"";
+  if(norm(ns)==="resolvida"&&!msg)return alert("Informe a mensagem de conclusão.");
+  const agora=new Date().toISOString(),payload={status:ns,updated_at:agora};
+  if(norm(ns)==="resolvida"){payload.resposta_gestor=msg;payload.respondido_em=agora;payload.resolvido_em=o.resolvido_em||agora}
+  const anterior=norm(o.status);
+  const {data,error}=await db.from("ocorrencias")
+    .update(payload)
+    .eq("id",id)
+    .eq("condominio",CONDOMINIO)
+    .select();
+  if(error)return alert(error.message);
+  const atualizado=Array.isArray(data)?data[0]:data;
+  if(!atualizado)return alert("A ocorrência não foi localizada ou você não tem permissão para atualizá-la.");
+  if(norm(ns)==="resolvida"&&anterior!=="resolvida"&&atualizado.deseja_retorno&&atualizado.email){
+    const demandasDaOcorrencia=demandasOcorrencias
+      .filter(d=>Number(d.ocorrencia_id)===Number(atualizado.id)&&norm(d.status)==="concluida")
+      .sort((a,b)=>new Date(b.concluida_em||b.updated_at||b.created_at||0)-new Date(a.concluida_em||a.updated_at||a.created_at||0));
+    const ultimaExecucao=demandasDaOcorrencia[0]||null;
+    const fotoExecucaoPath=ultimaExecucao?.foto_execucao_path||null;
+
+    const {error:emailError}=await db.functions.invoke("enviar-email-resolucao",{body:{
+      email:atualizado.email,
+      protocolo:atualizado.protocolo,
+      condominio:atualizado.condominio,
+      local:atualizado.local_completo||[atualizado.area,atualizado.detalhe].filter(Boolean).join(" • "),
+      mensagem:msg,
+      foto_execucao_path:fotoExecucaoPath
+    }});
+    if(emailError)console.warn("Ocorrência resolvida, mas o e-mail de retorno não foi enviado:",emailError);
+  }
+  statusSelecionado[id]=atualizado.status||ns;
+  toast(norm(ns)==="resolvida"?"✓ Ocorrência resolvida.":"✓ Atualização salva.");
+  await carregarOcorrencias();
+  if(norm(ns)==="resolvida"){
+    filtroOcorrencias="aberta";
+    document.querySelectorAll(".filter").forEach(b=>b.classList.toggle("active",b.dataset.filter==="aberta"));
+    renderOcorrencias();
+  }
+}
+async function garantirDadosEncaminhamento(){
+  const [co,ar,po]=await Promise.all([
+    db.from("colaboradores").select("id,nome,funcao,ativo").eq("condominio_id",CONDOMINIO_ID).eq("ativo",true).order("nome"),
+    db.from("areas").select("*").eq("condominio_id",CONDOMINIO_ID).eq("ativo",true).order("ordem").order("nome"),
+    db.from("pontos").select("*").eq("condominio_id",CONDOMINIO_ID).eq("ativo",true).order("ordem").order("nome")
+  ]);
+  if(co.error)throw co.error;if(ar.error)throw ar.error;if(po.error)throw po.error;
+  colaboradoresCarregados=co.data||[];areasCarregadas=ar.data||[];pontosCarregados=po.data||[];
+}
+function destinoDemanda(){
+  const f=$("demandaDestino").value==="funcao";
+  $("demandaColaboradorField").classList.toggle("hidden",f);
+  $("demandaFuncaoField").classList.toggle("hidden",!f);
+}
+async function abrirDemandaOcorrencia(id){
+  const o=ocorrenciasCarregadas.find(x=>Number(x.id)===Number(id));if(!o)return;
+  try{await garantirDadosEncaminhamento()}catch(e){return alert("Não foi possível carregar os dados para encaminhamento: "+e.message)}
+  ocorrenciaDemandaId=id;
+  $("demandaOrigem").value=`${o.protocolo} • ${o.local_completo||[o.area,o.detalhe].filter(Boolean).join(" • ")}`;
+  $("demandaDestino").value="colaborador";
+  $("demandaColaborador").innerHTML='<option value="">Selecione...</option>'+colaboradoresCarregados.map(c=>`<option value="${c.id}">${esc(c.nome)} • ${esc(c.funcao||"")}</option>`).join("");
+  $("demandaColaborador").value="";
+  $("demandaFuncao").value="Limpeza";$("demandaPrioridade").value="normal";$("demandaPrazo").value="";
+  $("demandaFoto").checked=false;$("demandaObs").checked=false;$("demandaDescricao").value=o.descricao||"";
+  destinoDemanda();$("demandaModal").classList.add("visible");
+}
+function fecharDemanda(){$("demandaModal").classList.remove("visible");ocorrenciaDemandaId=null}
+async function salvarDemandaOcorrencia(){
+  const o=ocorrenciasCarregadas.find(x=>Number(x.id)===Number(ocorrenciaDemandaId));if(!o)return;
+  const destino=$("demandaDestino").value,colaborador_id=destino==="colaborador"?(Number($("demandaColaborador").value)||null):null,funcao=destino==="funcao"?$("demandaFuncao").value:null;
+  if(destino==="colaborador"&&!colaborador_id)return alert("Selecione o colaborador.");
+  let area=areasCarregadas.find(a=>norm(a.nome)===norm(o.area));
+  let ponto=pontosCarregados.find(p=>Number(p.area_id)===Number(area?.id)&&norm(p.nome)===norm(o.detalhe));
+  const prazoLocal=$("demandaPrazo").value;
+  const payload={
+    condominio_id:CONDOMINIO_ID,
+    ocorrencia_id:o.id,
+    ambiente:"producao",
+    colaborador_id,
+    funcao,
+    area_id:area?.id||null,
+    ponto_id:ponto?.id||null,
+    tipo:"tarefa",
+    titulo:`Ocorrência ${o.protocolo}`,
+    descricao:$("demandaDescricao").value.trim()||o.descricao||`Verificar ocorrência ${o.protocolo}.`,
+    inicio_em:new Date().toISOString(),
+    prazo_em:prazoLocal?new Date(prazoLocal).toISOString():null,
+    exige_foto:$("demandaFoto").checked,
+    exige_observacao:$("demandaObs").checked,
+    status:"pendente",
+    prioridade:$("demandaPrioridade").value,
+    updated_at:new Date().toISOString()
+  };
+  const b=$("saveDemanda");b.disabled=true;b.textContent="CRIANDO...";
+  try{
+    const {data,error}=await db.from("demandas").insert(payload).select("*").single();if(error)throw error;
+    if(norm(o.status)==="aberta"){
+      const agora=new Date().toISOString();
+      const {error:oe}=await db.from("ocorrencias").update({status:"Em atendimento",updated_at:agora}).eq("id",o.id).eq("condominio",CONDOMINIO);
+      if(oe)console.warn("Demanda criada, mas não foi possível alterar o status da ocorrência:",oe);
+    }
+    let pushResultado={ok:false,enviados:0};
+    try{
+      const {data:pushData,error:pushError}=await db.functions.invoke("enviar-push-demanda",{
+        body:{demanda_id:data.id}
+      });
+      if(pushError)throw pushError;
+      pushResultado=pushData||{ok:true,enviados:0};
+    }catch(pushError){
+      console.error("Demanda criada, mas o push ao destinatário falhou:",pushError);
+    }
+
+    fecharDemanda();
+    await carregarOcorrencias();
+
+    if(pushResultado?.ok){
+      const n=Number(pushResultado.enviados||0);
+      toast(`✓ Demanda #${data.id} criada • ${n} notificação(ões)`);
+    }else{
+      toast(`✓ Demanda #${data.id} criada • push não enviado`);
+    }
+  }catch(e){console.error(e);alert("Não foi possível criar a demanda: "+e.message)}
+  finally{b.disabled=false;b.textContent="CRIAR DEMANDA"}
+}
+
+
+function podeAdministrarGestao(){return !!perfilGestor&&["admin_cliente","admin_oraqui"].includes(perfilGestor.perfil)}
+function aplicarPermissoesGestao(){const a=podeAdministrarGestao();$("addManager").classList.toggle("hidden",!a);$("managementPermissionNote").classList.toggle("hidden",a)}
+async function carregarGestores(){
+ if(!CONDOMINIO_ID)return;
+ const {data,error}=await db.from("usuarios_gestao").select("id,auth_user_id,condominio_id,nome,perfil,ativo,created_at,updated_at").eq("condominio_id",CONDOMINIO_ID).order("ativo",{ascending:false}).order("nome");
+ if(error){managementList.innerHTML=vazio("⚠️","Erro ao carregar gestão",error.message);return}
+ gestoresCarregados=data||[];const admin=podeAdministrarGestao();
+ managementList.innerHTML=gestoresCarregados.length?gestoresCarregados.map(g=>{const atual=Number(g.id)===Number(perfilGestor?.id),pl=g.perfil==="admin_cliente"?"ADMINISTRADOR":g.perfil==="admin_oraqui"?"ADMIN ORAQUI":g.perfil==="supervisor"?"SUPERVISOR":"GESTOR",pa=admin&&g.perfil!=="admin_oraqui"&&!atual;return `<div class="collaborator-card" data-g="${g.id}"><div class="collaborator-top"><div class="collaborator-avatar">${g.perfil==="admin_cliente"||g.perfil==="admin_oraqui"?"👑":"👤"}</div><div class="collaborator-info"><strong>${esc(g.nome)}${atual?" • você":""}</strong><span>${esc(CONDOMINIO)}</span></div><span class="${g.ativo?"active-badge":"inactive-badge"}">${g.ativo?"ATIVO":"INATIVO"}</span></div><div class="collaborator-flags"><span class="role-badge">${pl}</span></div>${pa?`<div class="collaborator-actions"><button class="action-button resend-manager">REENVIAR CONVITE</button><button class="action-button toggle-manager ${g.ativo?"danger":"success"}">${g.ativo?"DESATIVAR GESTOR":"REATIVAR GESTOR"}</button></div>`:""}</div>`}).join(""):vazio("👥","Nenhum gestor","Ainda não há usuários de gestão vinculados.");
+ managementList.querySelectorAll("[data-g]").forEach(el=>{const id=Number(el.dataset.g),b=el.querySelector(".toggle-manager"),r=el.querySelector(".resend-manager");if(b)b.onclick=()=>toggleGestor(id);if(r)r.onclick=()=>reenviarConviteGestor(id,r)})
+}
+function abrirConviteGestor(){if(!podeAdministrarGestao())return alert("Somente o administrador pode convidar gestores.");$("managerInviteName").value="";$("managerInviteEmail").value="";$("managerModal").classList.add("visible")}
+function fecharConviteGestor(){$("managerModal").classList.remove("visible")}
+async function convidarGestor(){
+ if(!podeAdministrarGestao())return alert("Somente o administrador pode convidar gestores.");
+ const nome=$("managerInviteName").value.trim(),email=$("managerInviteEmail").value.trim().toLowerCase();if(!nome||!email)return alert("Informe nome e e-mail do gestor.");
+ const b=$("saveManager");b.disabled=true;b.textContent="ENVIANDO...";
+ try{const {data,error}=await db.functions.invoke("convidar-gestor",{body:{nome,email}});if(error)throw error;if(data?.ok===false||data?.success===false)throw new Error(data?.error||"Não foi possível convidar o gestor.");fecharConviteGestor();toast("✓ Convite de gestor enviado.");await carregarGestores()}catch(e){console.error(e);alert(e.message||"Não foi possível convidar o gestor.")}finally{b.disabled=false;b.textContent="ENVIAR CONVITE"}
+}
+
+async function reenviarConviteGestor(id,btn){
+  if(!podeAdministrarGestao())return alert("Somente o administrador pode reenviar convites de gestores.");
+  const g=gestoresCarregados.find(x=>Number(x.id)===Number(id));
+  if(!g)return alert("Gestor não encontrado.");
+  if(!confirm(`Reenviar um novo convite para ${g.nome}?`))return;
+  const original=btn?.textContent||"REENVIAR CONVITE";
+  if(btn){btn.disabled=true;btn.textContent="ENVIANDO...";}
+  try{
+    const {data,error}=await db.functions.invoke("reenviar-convite-gestor",{body:{usuario_gestao_id:g.id}});
+    if(error||data?.ok===false){
+      const msg=await mensagemFunction(error,data,"Não foi possível reenviar o convite do gestor.");
+      throw new Error(msg);
+    }
+    toast("✓ Novo convite de gestor enviado.");
+  }catch(e){
+    console.error("Erro ao reenviar convite de gestor:",e);
+    alert(e.message||"Não foi possível reenviar o convite do gestor.");
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent=original;}
+  }
+}
+
+async function toggleGestor(id){
+ if(!podeAdministrarGestao())return alert("Somente o administrador pode alterar gestores.");
+ const g=gestoresCarregados.find(x=>Number(x.id)===Number(id));
+ if(!g)return;
+ if(Number(g.id)===Number(perfilGestor?.id))return alert("Você não pode desativar o próprio acesso por esta tela.");
+ if(g.perfil==="admin_oraqui")return alert("O administrador ORAQUI não pode ser alterado por esta tela.");
+
+ const novoStatus=!g.ativo;
+ const acao=novoStatus?"Reativar":"Desativar";
+ if(!confirm(`${acao} ${g.nome}?`))return;
+
+ const card=managementList.querySelector(`[data-g="${id}"]`);
+ const btn=card?.querySelector(".toggle-manager");
+ const textoOriginal=btn?.textContent||"";
+ if(btn){
+   btn.disabled=true;
+   btn.textContent=novoStatus?"REATIVANDO...":"DESATIVANDO...";
+ }
+
+ try{
+   const {data,error}=await db.rpc("alterar_status_gestor",{
+     p_usuario_gestao_id:id,
+     p_ativo:novoStatus
+   });
+   if(error)throw error;
+   if(!data?.ok)throw new Error(data?.error||"Não foi possível alterar o status do gestor.");
+
+   toast(novoStatus?"Gestor reativado.":"Gestor desativado.");
+   await carregarGestores();
+ }catch(e){
+   console.error(e);
+   alert(e.message||"Não foi possível alterar o status do gestor.");
+   if(btn){
+     btn.disabled=false;
+     btn.textContent=textoOriginal;
+   }
+ }
+}
+
+async function carregarColaboradores(){
+  if(!CONDOMINIO_ID)return;
+  collaboratorList.innerHTML=vazio("⏳","Carregando equipe","Buscando colaboradores do condomínio...");
+
+  const {data,error}=await db
+    .from("colaboradores")
+    .select("id,condominio,condominio_id,nome,matricula,funcao,ativo,email,auth_user_id,ponto_ativo,selfie_ponto_obrigatoria,geolocalizacao_ponto_obrigatoria,intervalo_ativo,intervalo_minutos,created_at,updated_at")
+    .eq("condominio_id",CONDOMINIO_ID)
+    .order("ativo",{ascending:false})
+    .order("nome");
+
+  if(error){
+    console.error("Erro ao carregar colaboradores:",error);
+    $("colActive").textContent="0";
+    $("colInactive").textContent="0";
+    collaboratorList.innerHTML=vazio("⚠️","Erro ao carregar equipe",error.message);
+    return;
+  }
+
+  colaboradoresCarregados=data||[];
+  $("colActive").textContent=colaboradoresCarregados.filter(x=>x.ativo).length;
+  $("colInactive").textContent=colaboradoresCarregados.filter(x=>!x.ativo).length;
+
+  if(!colaboradoresCarregados.length){
+    collaboratorList.innerHTML=vazio("👷","Nenhum colaborador visível","Não há colaboradores disponíveis para este condomínio ou a permissão de leitura precisa ser revisada.");
+    return;
+  }
+
+  collaboratorList.innerHTML=colaboradoresCarregados.map(c=>{
+    const ponto=!!c.ponto_ativo;
+    const selfie=ponto&&!!c.selfie_ponto_obrigatoria;
+    const geo=ponto&&!!c.geolocalizacao_ponto_obrigatoria;
+    const intervalo=ponto&&!!c.intervalo_ativo;
+    return `<div class="collaborator-card" data-c="${c.id}">
+      <div class="collaborator-top">
+        <div class="collaborator-avatar">👷</div>
+        <div class="collaborator-info">
+          <strong>${esc(c.nome)}</strong>
+          <span>${esc(c.funcao)} • #${esc(c.matricula)}</span>
+        </div>
+        <span class="${c.ativo?"active-badge":"inactive-badge"}">${c.ativo?"ATIVO":"INATIVO"}</span>
+      </div>
+      <div class="collaborator-data">
+        <div class="data-box"><small>E-MAIL</small><strong>${esc(c.email||"—")}</strong></div>
+        <div class="data-box"><small>ACESSO</small><strong>${c.auth_user_id?"AUTH":"LEGADO"}</strong></div>
+      </div>
+      <div class="config-flags" style="margin-top:12px">
+        <span class="flag ${ponto?"on":""}">PONTO ${ponto?"ON":"OFF"}</span>
+        <span class="flag ${selfie?"on":""}">SELFIE ${selfie?"ON":"OFF"}</span>
+        <span class="flag ${geo?"on":""}">LOCALIZAÇÃO ${geo?"ON":"OFF"}</span>
+        <span class="flag ${intervalo?"on":""}">INTERVALO ${intervalo?"ON":"OFF"}</span>
+      </div>
+      <div class="collaborator-actions" style="grid-template-columns:repeat(3,1fr)">
+        <button class="action-button edit">EDITAR</button>
+        <button class="action-button resend">REENVIAR CONVITE</button>
+        <button class="action-button toggle ${c.ativo?"danger":"success"}">${c.ativo?"DESATIVAR":"REATIVAR"}</button>
+      </div>
+    </div>`;
+  }).join("");
+
+  collaboratorList.querySelectorAll("[data-c]").forEach(el=>{
+    const id=Number(el.dataset.c);
+    el.querySelector(".edit").onclick=()=>editarCol(id);
+    const resend=el.querySelector(".resend");
+    if(resend)resend.onclick=()=>reenviarConviteColaborador(id,resend);
+    el.querySelector(".toggle").onclick=()=>toggleCol(id);
+  });
+}
+
+function dependencias(){
+  const p=$("colPontoAtivo").checked;
+  $("colSelfie").disabled=!p;
+  $("colGeo").disabled=!p;
+  $("colIntervalo").disabled=!p;
+  $("colIntervaloMinutos").disabled=!p||!$("colIntervalo").checked;
+}
+
+function novoCol(){
+  colaboradorEditandoId=null;
+  $("collaboratorModalTitle").textContent="Cadastrar colaborador";
+  ["colNome","colEmail","colMatricula"].forEach(i=>$(i).value="");
+  $("colFuncao").value="Limpeza";
+  $("colPontoAtivo").checked=false;
+  $("colSelfie").checked=false;
+  $("colGeo").checked=false;
+  $("colIntervalo").checked=false;
+  $("colIntervaloMinutos").value=60;
+  dependencias();
+  $("collaboratorModal").classList.add("visible");
+}
+
+function editarCol(id){
+  const c=colaboradoresCarregados.find(x=>Number(x.id)===Number(id));
+  if(!c)return alert("Colaborador não encontrado.");
+  colaboradorEditandoId=id;
+  $("collaboratorModalTitle").textContent="Editar colaborador";
+  $("colNome").value=c.nome||"";
+  $("colEmail").value=c.email||"";
+  $("colMatricula").value=c.matricula||"";
+  $("colFuncao").value=c.funcao||"Limpeza";
+  $("colPontoAtivo").checked=!!c.ponto_ativo;
+  $("colSelfie").checked=!!c.selfie_ponto_obrigatoria;
+  $("colGeo").checked=!!c.geolocalizacao_ponto_obrigatoria;
+  $("colIntervalo").checked=!!c.intervalo_ativo;
+  $("colIntervaloMinutos").value=c.intervalo_minutos??60;
+  dependencias();
+  $("collaboratorModal").classList.add("visible");
+}
+
+async function mensagemFunction(error,data,fallback){
+  if(data?.error)return data.error;
+  if(data?.message)return data.message;
+  if(error?.context&&typeof error.context.json==="function"){
+    try{
+      const body=await error.context.json();
+      if(body?.error)return body.error;
+      if(body?.message)return body.message;
+    }catch(_){ }
+  }
+  return error?.message||fallback;
+}
+
+async function salvarCol(){
+  const nome=$("colNome").value.trim();
+  const email=$("colEmail").value.trim().toLowerCase();
+  const matricula=$("colMatricula").value.replace(/\D/g,"");
+  const funcao=$("colFuncao").value;
+  const ponto=$("colPontoAtivo").checked;
+  const payload={
+    nome,email,matricula,funcao,
+    ponto_ativo:ponto,
+    selfie_ponto_obrigatoria:ponto&&$("colSelfie").checked,
+    geolocalizacao_ponto_obrigatoria:ponto&&$("colGeo").checked,
+    intervalo_ativo:ponto&&$("colIntervalo").checked,
+    intervalo_minutos:Number($("colIntervaloMinutos").value||60)
+  };
+
+  if(!nome||!email||!matricula)return alert("Informe nome, e-mail e matrícula.");
+
+  if(colaboradorEditandoId){
+    const {error}=await db.from("colaboradores")
+      .update({...payload,updated_at:new Date().toISOString()})
+      .eq("id",colaboradorEditandoId)
+      .eq("condominio_id",CONDOMINIO_ID);
+    if(error)return alert(error.message);
+  }else{
+    const {data,error}=await db.functions.invoke("convidar-colaborador",{body:payload});
+    if(error||data?.success===false){
+      const msg=await mensagemFunction(error,data,"Não foi possível convidar o colaborador.");
+      return alert(msg);
+    }
+  }
+
+  $("collaboratorModal").classList.remove("visible");
+  toast("✓ Colaborador salvo.");
+  await carregarColaboradores();
+}
+
+async function reenviarConviteColaborador(id,btn){
+  const c=colaboradoresCarregados.find(x=>Number(x.id)===Number(id));
+  if(!c||!c.email)return alert("Colaborador sem e-mail cadastrado.");
+  if(!confirm(`Reenviar um novo convite para ${c.nome} (${c.email})?`))return;
+  const original=btn?.textContent||"REENVIAR CONVITE";
+  if(btn){btn.disabled=true;btn.textContent="ENVIANDO...";}
+  try{
+    const {data,error}=await db.functions.invoke("reenviar-convite-colaborador",{body:{colaborador_id:c.id}});
+    if(error||data?.ok===false){
+      const msg=await mensagemFunction(error,data,"Não foi possível reenviar o convite.");
+      throw new Error(msg);
+    }
+    toast("✓ Novo convite enviado.");
+  }catch(e){
+    console.error("Erro ao reenviar convite:",e);
+    alert(e.message||"Não foi possível reenviar o convite.");
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent=original;}
+  }
+}
+
+async function toggleCol(id){
+  const c=colaboradoresCarregados.find(x=>Number(x.id)===Number(id));
+  if(!c)return;
+  const novoStatus=!c.ativo;
+  if(!confirm(`${novoStatus?"Reativar":"Desativar"} ${c.nome}?`))return;
+  const {error}=await db.from("colaboradores")
+    .update({ativo:novoStatus,updated_at:new Date().toISOString()})
+    .eq("id",id)
+    .eq("condominio_id",CONDOMINIO_ID);
+  if(error)return alert(error.message);
+  toast(novoStatus?"Colaborador reativado.":"Colaborador desativado.");
+  await carregarColaboradores();
+}
+
+async function carregarConfig(){const [a,p]=await Promise.all([db.from("areas").select("*").eq("condominio_id",CONDOMINIO_ID).order("ordem").order("nome"),db.from("pontos").select("*").eq("condominio_id",CONDOMINIO_ID).order("ordem").order("nome")]);if(a.error||p.error)return configList.innerHTML=vazio("⚠️","Erro",(a.error||p.error).message);areasCarregadas=a.data||[];pontosCarregados=p.data||[];configList.innerHTML=areasCarregadas.map(a=>{const ps=pontosCarregados.filter(p=>p.area_id===a.id);return `<div class="config-card" data-a="${a.id}"><div class="config-top"><div class="config-icon">📍</div><div class="config-info"><strong>${esc(a.nome)}</strong><span>${ps.length} pontos • ordem ${a.ordem}</span></div><span class="${a.ativo?"active-badge":"inactive-badge"}">${a.ativo?"ATIVA":"INATIVA"}</span></div>${a.descricao?`<div class="record-observation">${esc(a.descricao)}</div>`:""}<div class="config-flags"><span class="flag ${a.visivel_colaborador?"on":""}">COLABORADOR ${a.visivel_colaborador?"ON":"OFF"}</span><span class="flag ${a.visivel_ocorrencia?"on":""}">OCORRÊNCIA ${a.visivel_ocorrencia?"ON":"OFF"}</span></div><div class="config-actions"><button class="action-button edit-a">EDITAR ÁREA</button><button class="action-button add-p">＋ PONTO</button></div>${ps.map(p=>`<div class="point-row" data-p="${p.id}"><div class="config-info"><strong>${esc(p.nome)}</strong><span>ordem ${p.ordem} • ${p.ativo?"ativo":"inativo"}</span></div><div class="point-actions"><button class="mini edit-p">EDITAR</button><button class="mini danger toggle-p">${p.ativo?"DESATIVAR":"REATIVAR"}</button></div></div>`).join("")}</div>`}).join("");configList.querySelectorAll("[data-a]").forEach(el=>{const id=Number(el.dataset.a);el.querySelector(".edit-a").onclick=()=>editarArea(id);el.querySelector(".add-p").onclick=()=>novoPonto(id);el.querySelectorAll("[data-p]").forEach(row=>{const pid=Number(row.dataset.p);row.querySelector(".edit-p").onclick=()=>editarPonto(pid);row.querySelector(".toggle-p").onclick=()=>togglePonto(pid)})})}
+function novaArea(){areaEditandoId=null;$("areaModalTitle").textContent="Nova área";$("areaNome").value="";$("areaDescricao").value="";$("areaOrdem").value=(Math.max(0,...areasCarregadas.map(a=>Number(a.ordem)||0))+1);$("areaColaborador").checked=$("areaOcorrencia").checked=true;$("areaModal").classList.add("visible")}
+function editarArea(id){const a=areasCarregadas.find(x=>x.id===id);areaEditandoId=id;$("areaModalTitle").textContent="Editar área";$("areaNome").value=a.nome;$("areaDescricao").value=a.descricao||"";$("areaOrdem").value=a.ordem;$("areaColaborador").checked=a.visivel_colaborador;$("areaOcorrencia").checked=a.visivel_ocorrencia;$("areaModal").classList.add("visible")}
+async function salvarArea(){const payload={nome:$("areaNome").value.trim(),descricao:$("areaDescricao").value.trim()||null,ordem:Number($("areaOrdem").value)||0,visivel_colaborador:$("areaColaborador").checked,visivel_ocorrencia:$("areaOcorrencia").checked,ativo:true,updated_at:new Date().toISOString()};if(!payload.nome)return alert("Informe o nome.");let q=areaEditandoId?db.from("areas").update(payload).eq("id",areaEditandoId).eq("condominio_id",CONDOMINIO_ID):db.from("areas").insert({...payload,condominio_id:CONDOMINIO_ID});const {error}=await q;if(error)return alert(error.message);$("areaModal").classList.remove("visible");await carregarConfig()}
+function popularAreas(sel){$("pointArea").innerHTML=areasCarregadas.filter(a=>a.ativo).map(a=>`<option value="${a.id}" ${a.id===sel?"selected":""}>${esc(a.nome)}</option>`).join("")}
+function novoPonto(aid){pontoEditandoId=null;popularAreas(aid);$("pointNome").value="";$("pointDescricao").value="";$("pointOrdem").value=Math.max(0,...pontosCarregados.filter(p=>p.area_id===aid).map(p=>Number(p.ordem)||0))+1;$("pointColaborador").checked=$("pointOcorrencia").checked=true;$("pointModal").classList.add("visible")}
+function editarPonto(id){const p=pontosCarregados.find(x=>x.id===id);pontoEditandoId=id;popularAreas(p.area_id);$("pointNome").value=p.nome;$("pointDescricao").value=p.descricao||"";$("pointOrdem").value=p.ordem;$("pointColaborador").checked=p.visivel_colaborador;$("pointOcorrencia").checked=p.visivel_ocorrencia;$("pointModal").classList.add("visible")}
+async function salvarPonto(){const payload={area_id:Number($("pointArea").value),nome:$("pointNome").value.trim(),descricao:$("pointDescricao").value.trim()||null,ordem:Number($("pointOrdem").value)||0,visivel_colaborador:$("pointColaborador").checked,visivel_ocorrencia:$("pointOcorrencia").checked,ativo:true,updated_at:new Date().toISOString()};if(!payload.nome)return alert("Informe o nome.");let q=pontoEditandoId?db.from("pontos").update(payload).eq("id",pontoEditandoId).eq("condominio_id",CONDOMINIO_ID):db.from("pontos").insert({...payload,condominio_id:CONDOMINIO_ID});const {error}=await q;if(error)return alert(error.message);$("pointModal").classList.remove("visible");await carregarConfig()}
+async function togglePonto(id){const p=pontosCarregados.find(x=>x.id===id);await db.from("pontos").update({ativo:!p.ativo,updated_at:new Date().toISOString()}).eq("id",id);await carregarConfig()}
+
+async function carregarAP(){const[a,p,c]=await Promise.all([db.from("atividades_v2").select("*").eq("condominio_id",CONDOMINIO_ID).order("nome"),db.from("programacoes").select("*").eq("condominio_id",CONDOMINIO_ID).order("created_at",{ascending:false}),db.from("colaboradores").select("id,nome,funcao,ativo").eq("condominio_id",CONDOMINIO_ID).eq("ativo",true).order("nome")]);if(a.error)throw a.error;if(p.error)throw p.error;if(c.error)throw c.error;atividadesCarregadas=a.data||[];programacoesCarregadas=p.data||[];colaboradoresCarregados=c.data||[];renderAt();renderPr()}
+function subConfig(t){$("subAreas").classList.toggle("active",t==="a");$("subAtividades").classList.toggle("active",t==="t");$("subProgramacoes").classList.toggle("active",t==="p");$("configAreas").classList.toggle("hidden",t!=="a");$("configAtividades").classList.toggle("hidden",t!=="t");$("configProgramacoes").classList.toggle("hidden",t!=="p");if(t!=="a")carregarAP().catch(e=>alert("Erro: "+e.message))}
+function renderAt(){let e=$("atividadeList");e.innerHTML=atividadesCarregadas.length?atividadesCarregadas.map(a=>`<div class="config-card" data-at="${a.id}"><div class="config-top"><div class="config-icon">🧹</div><div class="config-info"><strong>${esc(a.nome)}</strong><span>${esc(a.descricao||"Sem descrição")}</span></div><span class="${a.ativo?"active-badge":"inactive-badge"}">${a.ativo?"ATIVA":"INATIVA"}</span></div><div class="config-flags"><span class="flag ${a.exige_foto?"on":""}">FOTO ${a.exige_foto?"SIM":"NÃO"}</span><span class="flag ${a.exige_observacao?"on":""}">OBS ${a.exige_observacao?"SIM":"NÃO"}</span></div><div class="config-actions"><button class="action-button edit">EDITAR</button><button class="action-button toggle">${a.ativo?"DESATIVAR":"REATIVAR"}</button></div></div>`).join(""):vazio("🧹","Nenhuma atividade","Cadastre a primeira.");e.querySelectorAll("[data-at]").forEach(x=>{let id=+x.dataset.at,a=atividadesCarregadas.find(z=>z.id===id);x.querySelector(".edit").onclick=()=>editAt(id);x.querySelector(".toggle").onclick=()=>toggleAt(id,!a.ativo)})}
+function openAt(){atividadeEditandoId=null;$("atividadeNome").value="";$("atividadeDescricao").value="";$("atividadeFoto").checked=false;$("atividadeObs").checked=false;$("atividadeModal").classList.add("visible")}function editAt(id){let a=atividadesCarregadas.find(x=>x.id===id);atividadeEditandoId=id;$("atividadeNome").value=a.nome;$("atividadeDescricao").value=a.descricao||"";$("atividadeFoto").checked=!!a.exige_foto;$("atividadeObs").checked=!!a.exige_observacao;$("atividadeModal").classList.add("visible")}function closeAt(){$("atividadeModal").classList.remove("visible");atividadeEditandoId=null}
+async function saveAt(){let nome=$("atividadeNome").value.trim();if(!nome)return alert("Informe o nome.");let v={nome,descricao:$("atividadeDescricao").value.trim()||null,exige_foto:$("atividadeFoto").checked,exige_observacao:$("atividadeObs").checked,ativo:true,updated_at:new Date().toISOString()};let q=atividadeEditandoId?db.from("atividades_v2").update(v).eq("id",atividadeEditandoId).eq("condominio_id",CONDOMINIO_ID):db.from("atividades_v2").insert({...v,condominio_id:CONDOMINIO_ID});let{error}=await q;if(error)return alert(error.message);closeAt();await carregarAP()}
+async function toggleAt(id,ativo){let{error}=await db.from("atividades_v2").update({ativo,updated_at:new Date().toISOString()}).eq("id",id).eq("condominio_id",CONDOMINIO_ID);if(error)return alert(error.message);await carregarAP()}
+function diasNome(d){if(!d?.length)return"Todos os dias";let n={1:"Seg",2:"Ter",3:"Qua",4:"Qui",5:"Sex",6:"Sáb",7:"Dom"};return d.map(x=>n[x]||x).join(", ")}
+function renderPr(){let e=$("programacaoList");e.innerHTML=programacoesCarregadas.length?programacoesCarregadas.map(p=>{let a=atividadesCarregadas.find(x=>x.id===p.atividade_id),ar=areasCarregadas.find(x=>x.id===p.area_id),pt=pontosCarregados.find(x=>x.id===p.ponto_id),c=colaboradoresCarregados.find(x=>x.id===p.colaborador_id);return`<div class="config-card" data-pr="${p.id}"><div class="config-top"><div class="config-icon">📅</div><div class="config-info"><strong>${esc(a?.nome||"Atividade")}</strong><span>${esc([ar?.nome,pt?.nome].filter(Boolean).join(" • "))} • ${esc(c?.nome||p.funcao||"Equipe")}</span></div><span class="${p.ativo?"active-badge":"inactive-badge"}">${p.ativo?"ATIVA":"INATIVA"}</span></div><div class="record-observation">${esc(diasNome(p.dias_semana))}${p.horario_limite?" • até "+String(p.horario_limite).slice(0,5):""}</div><div class="config-actions"><button class="action-button edit">EDITAR</button><button class="action-button toggle">${p.ativo?"DESATIVAR":"REATIVAR"}</button></div></div>`}).join(""):vazio("📅","Nenhuma programação","Crie a primeira rotina.");e.querySelectorAll("[data-pr]").forEach(x=>{let id=+x.dataset.pr,p=programacoesCarregadas.find(z=>z.id===id);x.querySelector(".edit").onclick=()=>editPr(id);x.querySelector(".toggle").onclick=()=>togglePr(id,!p.ativo)})}
+function fillPr(p=null){$("progAtividade").innerHTML=atividadesCarregadas.filter(x=>x.ativo||x.id===p?.atividade_id).map(x=>`<option value="${x.id}">${esc(x.nome)}</option>`).join("");$("progArea").innerHTML='<option value="">Selecione...</option>'+areasCarregadas.filter(x=>x.ativo).map(x=>`<option value="${x.id}">${esc(x.nome)}</option>`).join("");$("progColaborador").innerHTML='<option value="">Selecione...</option>'+colaboradoresCarregados.map(x=>`<option value="${x.id}">${esc(x.nome)}</option>`).join("");if(p){$("progAtividade").value=p.atividade_id;$("progArea").value=p.area_id||""}fillPoints(p?.ponto_id)}
+function fillPoints(sel=null){let a=+$("progArea").value;$("progPonto").innerHTML='<option value="">Área inteira</option>'+pontosCarregados.filter(x=>x.area_id===a&&x.ativo).map(x=>`<option value="${x.id}">${esc(x.nome)}</option>`).join("");if(sel)$("progPonto").value=sel}function dest(){let f=$("progDestino").value==="funcao";$("progColaboradorField").classList.toggle("hidden",f);$("progFuncaoField").classList.toggle("hidden",!f)}
+function openPr(){if(!atividadesCarregadas.some(x=>x.ativo))return alert("Cadastre uma atividade primeiro.");programacaoEditandoId=null;fillPr();$("progDestino").value="colaborador";$("progColaborador").value="";$("progTipo").value="recorrente";$("progHorario").value="";$("progInicio").value=new Date().toISOString().slice(0,10);$("progFim").value="";$("progPrioridade").value="normal";$("progInstrucoes").value="";$("progFoto").checked=false;$("progObs").checked=false;document.querySelectorAll("#progDias input").forEach(x=>x.checked=true);dest();$("programacaoModal").classList.add("visible")}
+function editPr(id){let p=programacoesCarregadas.find(x=>x.id===id);programacaoEditandoId=id;fillPr(p);$("progDestino").value=p.colaborador_id?"colaborador":"funcao";$("progColaborador").value=p.colaborador_id||"";$("progFuncao").value=p.funcao||"Limpeza";$("progTipo").value=p.tipo||"recorrente";$("progHorario").value=p.horario_limite?String(p.horario_limite).slice(0,5):"";$("progInicio").value=p.data_inicio||"";$("progFim").value=p.data_fim||"";$("progPrioridade").value=p.prioridade||"normal";$("progInstrucoes").value=p.instrucoes||"";$("progFoto").checked=!!p.exige_foto;$("progObs").checked=!!p.exige_observacao;document.querySelectorAll("#progDias input").forEach(x=>x.checked=(p.dias_semana||[]).includes(+x.value));dest();$("programacaoModal").classList.add("visible")}function closePr(){$("programacaoModal").classList.remove("visible");programacaoEditandoId=null}
+async function notificarProgramacao(programacao){
+  try{
+    const {data,error}=await db.functions.invoke("enviar-push-programacao",{
+      body:{programacao_id:programacao.id}
+    });
+    if(error)throw error;
+    return data||{ok:true};
+  }catch(e){
+    console.error("Programação salva, mas o push falhou:",e);
+    return {ok:false,error:e?.message||"Falha ao enviar push"};
+  }
+}
+
+async function savePr(){
+  let atividade_id=+$("progAtividade").value,
+      area_id=+$("progArea").value||null,
+      ponto_id=+$("progPonto").value||null,
+      d=$("progDestino").value,
+      colaborador_id=d==="colaborador"?(+$("progColaborador").value||null):null,
+      funcao=d==="funcao"?$("progFuncao").value:null;
+
+  if(!atividade_id||!area_id)return alert("Selecione atividade e área.");
+  if(d==="colaborador"&&!colaborador_id)return alert("Selecione colaborador.");
+
+  let v={
+    atividade_id,area_id,ponto_id,colaborador_id,funcao,
+    tipo:$("progTipo").value,
+    dias_semana:[...document.querySelectorAll("#progDias input:checked")].map(x=>+x.value),
+    data_inicio:$("progInicio").value||null,
+    data_fim:$("progFim").value||null,
+    horario_limite:$("progHorario").value||null,
+    prioridade:$("progPrioridade").value,
+    exige_foto:$("progFoto").checked,
+    exige_observacao:$("progObs").checked,
+    instrucoes:$("progInstrucoes").value.trim()||null,
+    ativo:true,
+    updated_at:new Date().toISOString()
+  };
+
+  const eraEdicao=!!programacaoEditandoId;
+  let salvo=null,error=null;
+
+  if(eraEdicao){
+    const r=await db.from("programacoes")
+      .update(v)
+      .eq("id",programacaoEditandoId)
+      .eq("condominio_id",CONDOMINIO_ID)
+      .select("*")
+      .single();
+    salvo=r.data;error=r.error;
+  }else{
+    const r=await db.from("programacoes")
+      .insert({...v,condominio_id:CONDOMINIO_ID})
+      .select("*")
+      .single();
+    salvo=r.data;error=r.error;
+  }
+
+  if(error)return alert(error.message);
+
+  closePr();
+  await carregarAP();
+
+  const push=await notificarProgramacao(salvo);
+  if(push.ok){
+    const n=Number(push.enviados||0);
+    toast(eraEdicao
+      ? `Programação atualizada • ${n} notificação(ões)`
+      : `Programação criada • ${n} notificação(ões)`);
+  }else{
+    toast(eraEdicao
+      ? "Programação atualizada • push não enviado"
+      : "Programação criada • push não enviado");
+  }
+}
+async function togglePr(id,ativo){let{error}=await db.from("programacoes").update({ativo,updated_at:new Date().toISOString()}).eq("id",id).eq("condominio_id",CONDOMINIO_ID);if(error)return alert(error.message);await carregarAP()}
+function painel(p){["Operacao","Ocorrencias","Colaboradores","Config"].forEach(n=>{$("panel"+n).classList.toggle("active",n.toLowerCase()===p);$("tab"+n).classList.toggle("active",n.toLowerCase()===p)});if(p==="ocorrencias")carregarOcorrencias();if(p==="colaboradores"){carregarColaboradores();carregarGestores()}if(p==="config")carregarConfig()}
+function eventos(){
+$("loginButton").onclick=login;$("pushGestaoButton").onclick=ativarPushGestao;$("loginPassword").onkeydown=e=>{if(e.key==="Enter")login()};$("logoutButton").onclick=sair;
+$("tabOperacao").onclick=()=>painel("operacao");$("tabOcorrencias").onclick=()=>painel("ocorrencias");$("tabColaboradores").onclick=()=>painel("colaboradores");$("tabConfig").onclick=()=>painel("config");
+$("refreshDados").onclick=carregarDados;$("refreshOcorrencias").onclick=carregarOcorrencias;
+$("closeDemanda").onclick=$("cancelDemanda").onclick=fecharDemanda;$("saveDemanda").onclick=salvarDemandaOcorrencia;$("demandaDestino").onchange=destinoDemanda;
+$("addCollaborator").onclick=novoCol;$("closeCollaborator").onclick=$("cancelCollaborator").onclick=()=>$("collaboratorModal").classList.remove("visible");$("saveCollaborator").onclick=salvarCol;$("colPontoAtivo").onchange=dependencias;$("colIntervalo").onchange=dependencias;$("addManager").onclick=abrirConviteGestor;$("closeManager").onclick=$("cancelManager").onclick=fecharConviteGestor;$("saveManager").onclick=convidarGestor;
+$("addArea").onclick=novaArea;$("closeArea").onclick=$("cancelArea").onclick=()=>$("areaModal").classList.remove("visible");$("saveArea").onclick=salvarArea;
+$("closePoint").onclick=$("cancelPoint").onclick=()=>$("pointModal").classList.remove("visible");$("savePoint").onclick=salvarPonto;
+$("subAreas").onclick=()=>subConfig("a");$("subAtividades").onclick=()=>subConfig("t");$("subProgramacoes").onclick=()=>subConfig("p");$("addAtividade").onclick=openAt;$("closeAtividade").onclick=$("cancelAtividade").onclick=closeAt;$("saveAtividade").onclick=saveAt;$("addProgramacao").onclick=openPr;$("closeProgramacao").onclick=$("cancelProgramacao").onclick=closePr;$("saveProgramacao").onclick=savePr;$("progArea").onchange=()=>fillPoints();$("progDestino").onchange=dest;document.querySelectorAll(".filter").forEach(b=>b.onclick=()=>{filtroOcorrencias=b.dataset.filter;document.querySelectorAll(".filter").forEach(x=>x.classList.remove("active"));b.classList.add("active");renderOcorrencias()});
+}
+async function iniciar(){eventos();$("todayDate").textContent=new Date().toLocaleDateString("pt-BR");const {data:{session}}=await db.auth.getSession();if(session){try{await validarGestor(session.user)}catch(e){await db.auth.signOut();$("authError").textContent=e.message;$("authError").style.display="block"}}}
+iniciar();setInterval(()=>{if(perfilGestor){carregarDados();carregarOcorrencias()}},60000);
+</script>
+</body>
+</html>
