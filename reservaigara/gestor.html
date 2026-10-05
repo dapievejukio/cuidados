@@ -351,12 +351,174 @@ async function toggleGestor(id){
  }
 }
 
-async function carregarColaboradores(){const {data,error}=await db.from("colaboradores").select("*").eq("condominio_id",CONDOMINIO_ID).order("ativo",{ascending:false}).order("nome");if(error)return collaboratorList.innerHTML=vazio("⚠️","Erro",error.message);colaboradoresCarregados=data||[];$("colActive").textContent=colaboradoresCarregados.filter(x=>x.ativo).length;$("colInactive").textContent=colaboradoresCarregados.filter(x=>!x.ativo).length;collaboratorList.innerHTML=colaboradoresCarregados.map(c=>`<div class="collaborator-card" data-c="${c.id}"><div class="collaborator-top"><div class="collaborator-avatar">👷</div><div class="collaborator-info"><strong>${esc(c.nome)}</strong><span>${esc(c.funcao)} • #${esc(c.matricula)}</span></div><span class="${c.ativo?"active-badge":"inactive-badge"}">${c.ativo?"ATIVO":"INATIVO"}</span></div><div class="collaborator-data"><div class="data-box"><small>E-MAIL</small><strong>${esc(c.email||"—")}</strong></div><div class="data-box"><small>ACESSO</small><strong>${c.auth_user_id?"AUTH":"LEGADO"}</strong></div></div><div class="collaborator-actions"><button class="action-button edit">EDITAR</button><button class="action-button toggle ${c.ativo?"danger":"success"}">${c.ativo?"DESATIVAR":"REATIVAR"}</button></div></div>`).join("");collaboratorList.querySelectorAll("[data-c]").forEach(el=>{const id=Number(el.dataset.c);el.querySelector(".edit").onclick=()=>editarCol(id);el.querySelector(".toggle").onclick=()=>toggleCol(id)})}
-function dependencias(){const p=$("colPontoAtivo").checked;$("colSelfie").disabled=!p;$("colGeo").disabled=!p;$("colIntervalo").disabled=!p}
-function novoCol(){colaboradorEditandoId=null;$("collaboratorModalTitle").textContent="Cadastrar colaborador";["colNome","colEmail","colMatricula"].forEach(i=>$(i).value="");$("colFuncao").value="Limpeza";$("colPontoAtivo").checked=false;$("colSelfie").checked=false;$("colGeo").checked=false;$("colIntervalo").checked=false;dependencias();$("collaboratorModal").classList.add("visible")}
-function editarCol(id){const c=colaboradoresCarregados.find(x=>x.id===id);colaboradorEditandoId=id;$("collaboratorModalTitle").textContent="Editar colaborador";$("colNome").value=c.nome||"";$("colEmail").value=c.email||"";$("colMatricula").value=c.matricula||"";$("colFuncao").value=c.funcao||"Limpeza";$("colPontoAtivo").checked=!!c.ponto_ativo;$("colSelfie").checked=!!c.selfie_ponto_obrigatoria;$("colGeo").checked=!!c.geolocalizacao_ponto_obrigatoria;$("colIntervalo").checked=!!c.intervalo_ativo;$("colIntervaloMinutos").value=c.intervalo_minutos??60;dependencias();$("collaboratorModal").classList.add("visible")}
-async function salvarCol(){const nome=$("colNome").value.trim(),email=$("colEmail").value.trim().toLowerCase(),matricula=$("colMatricula").value.replace(/\D/g,""),funcao=$("colFuncao").value,ponto=$("colPontoAtivo").checked,payload={nome,email,matricula,funcao,ponto_ativo:ponto,selfie_ponto_obrigatoria:ponto&&$("colSelfie").checked,geolocalizacao_ponto_obrigatoria:ponto&&$("colGeo").checked,intervalo_ativo:ponto&&$("colIntervalo").checked,intervalo_minutos:Number($("colIntervaloMinutos").value||60)};if(!nome||!email||!matricula)return alert("Informe nome, e-mail e matrícula.");if(colaboradorEditandoId){const {error}=await db.from("colaboradores").update({...payload,updated_at:new Date().toISOString()}).eq("id",colaboradorEditandoId).eq("condominio_id",CONDOMINIO_ID);if(error)return alert(error.message)}else{const {data,error}=await db.functions.invoke("convidar-colaborador",{body:payload});if(error||data?.success===false)return alert(error?.message||data?.error)}$("collaboratorModal").classList.remove("visible");toast("✓ Colaborador salvo.");await carregarColaboradores()}
-async function toggleCol(id){const c=colaboradoresCarregados.find(x=>x.id===id);if(!confirm(`${c.ativo?"Desativar":"Reativar"} ${c.nome}?`))return;await db.from("colaboradores").update({ativo:!c.ativo,updated_at:new Date().toISOString()}).eq("id",id).eq("condominio_id",CONDOMINIO_ID);await carregarColaboradores()}
+async function carregarColaboradores(){
+  if(!CONDOMINIO_ID)return;
+  collaboratorList.innerHTML=vazio("⏳","Carregando equipe","Buscando colaboradores do condomínio...");
+
+  const {data,error}=await db
+    .from("colaboradores")
+    .select("id,condominio,condominio_id,nome,matricula,funcao,ativo,email,auth_user_id,ponto_ativo,selfie_ponto_obrigatoria,geolocalizacao_ponto_obrigatoria,intervalo_ativo,intervalo_minutos,created_at,updated_at")
+    .eq("condominio_id",CONDOMINIO_ID)
+    .order("ativo",{ascending:false})
+    .order("nome");
+
+  if(error){
+    console.error("Erro ao carregar colaboradores:",error);
+    $("colActive").textContent="0";
+    $("colInactive").textContent="0";
+    collaboratorList.innerHTML=vazio("⚠️","Erro ao carregar equipe",error.message);
+    return;
+  }
+
+  colaboradoresCarregados=data||[];
+  $("colActive").textContent=colaboradoresCarregados.filter(x=>x.ativo).length;
+  $("colInactive").textContent=colaboradoresCarregados.filter(x=>!x.ativo).length;
+
+  if(!colaboradoresCarregados.length){
+    collaboratorList.innerHTML=vazio("👷","Nenhum colaborador visível","Não há colaboradores disponíveis para este condomínio ou a permissão de leitura precisa ser revisada.");
+    return;
+  }
+
+  collaboratorList.innerHTML=colaboradoresCarregados.map(c=>{
+    const ponto=!!c.ponto_ativo;
+    const selfie=ponto&&!!c.selfie_ponto_obrigatoria;
+    const geo=ponto&&!!c.geolocalizacao_ponto_obrigatoria;
+    const intervalo=ponto&&!!c.intervalo_ativo;
+    return `<div class="collaborator-card" data-c="${c.id}">
+      <div class="collaborator-top">
+        <div class="collaborator-avatar">👷</div>
+        <div class="collaborator-info">
+          <strong>${esc(c.nome)}</strong>
+          <span>${esc(c.funcao)} • #${esc(c.matricula)}</span>
+        </div>
+        <span class="${c.ativo?"active-badge":"inactive-badge"}">${c.ativo?"ATIVO":"INATIVO"}</span>
+      </div>
+      <div class="collaborator-data">
+        <div class="data-box"><small>E-MAIL</small><strong>${esc(c.email||"—")}</strong></div>
+        <div class="data-box"><small>ACESSO</small><strong>${c.auth_user_id?"AUTH":"LEGADO"}</strong></div>
+      </div>
+      <div class="config-flags" style="margin-top:12px">
+        <span class="flag ${ponto?"on":""}">PONTO ${ponto?"ON":"OFF"}</span>
+        <span class="flag ${selfie?"on":""}">SELFIE ${selfie?"ON":"OFF"}</span>
+        <span class="flag ${geo?"on":""}">LOCALIZAÇÃO ${geo?"ON":"OFF"}</span>
+        <span class="flag ${intervalo?"on":""}">INTERVALO ${intervalo?"ON":"OFF"}</span>
+      </div>
+      <div class="collaborator-actions">
+        <button class="action-button edit">EDITAR</button>
+        <button class="action-button toggle ${c.ativo?"danger":"success"}">${c.ativo?"DESATIVAR":"REATIVAR"}</button>
+      </div>
+    </div>`;
+  }).join("");
+
+  collaboratorList.querySelectorAll("[data-c]").forEach(el=>{
+    const id=Number(el.dataset.c);
+    el.querySelector(".edit").onclick=()=>editarCol(id);
+    el.querySelector(".toggle").onclick=()=>toggleCol(id);
+  });
+}
+
+function dependencias(){
+  const p=$("colPontoAtivo").checked;
+  $("colSelfie").disabled=!p;
+  $("colGeo").disabled=!p;
+  $("colIntervalo").disabled=!p;
+  $("colIntervaloMinutos").disabled=!p||!$("colIntervalo").checked;
+}
+
+function novoCol(){
+  colaboradorEditandoId=null;
+  $("collaboratorModalTitle").textContent="Cadastrar colaborador";
+  ["colNome","colEmail","colMatricula"].forEach(i=>$(i).value="");
+  $("colFuncao").value="Limpeza";
+  $("colPontoAtivo").checked=false;
+  $("colSelfie").checked=false;
+  $("colGeo").checked=false;
+  $("colIntervalo").checked=false;
+  $("colIntervaloMinutos").value=60;
+  dependencias();
+  $("collaboratorModal").classList.add("visible");
+}
+
+function editarCol(id){
+  const c=colaboradoresCarregados.find(x=>Number(x.id)===Number(id));
+  if(!c)return alert("Colaborador não encontrado.");
+  colaboradorEditandoId=id;
+  $("collaboratorModalTitle").textContent="Editar colaborador";
+  $("colNome").value=c.nome||"";
+  $("colEmail").value=c.email||"";
+  $("colMatricula").value=c.matricula||"";
+  $("colFuncao").value=c.funcao||"Limpeza";
+  $("colPontoAtivo").checked=!!c.ponto_ativo;
+  $("colSelfie").checked=!!c.selfie_ponto_obrigatoria;
+  $("colGeo").checked=!!c.geolocalizacao_ponto_obrigatoria;
+  $("colIntervalo").checked=!!c.intervalo_ativo;
+  $("colIntervaloMinutos").value=c.intervalo_minutos??60;
+  dependencias();
+  $("collaboratorModal").classList.add("visible");
+}
+
+async function mensagemFunction(error,data,fallback){
+  if(data?.error)return data.error;
+  if(data?.message)return data.message;
+  if(error?.context&&typeof error.context.json==="function"){
+    try{
+      const body=await error.context.json();
+      if(body?.error)return body.error;
+      if(body?.message)return body.message;
+    }catch(_){ }
+  }
+  return error?.message||fallback;
+}
+
+async function salvarCol(){
+  const nome=$("colNome").value.trim();
+  const email=$("colEmail").value.trim().toLowerCase();
+  const matricula=$("colMatricula").value.replace(/\D/g,"");
+  const funcao=$("colFuncao").value;
+  const ponto=$("colPontoAtivo").checked;
+  const payload={
+    nome,email,matricula,funcao,
+    ponto_ativo:ponto,
+    selfie_ponto_obrigatoria:ponto&&$("colSelfie").checked,
+    geolocalizacao_ponto_obrigatoria:ponto&&$("colGeo").checked,
+    intervalo_ativo:ponto&&$("colIntervalo").checked,
+    intervalo_minutos:Number($("colIntervaloMinutos").value||60)
+  };
+
+  if(!nome||!email||!matricula)return alert("Informe nome, e-mail e matrícula.");
+
+  if(colaboradorEditandoId){
+    const {error}=await db.from("colaboradores")
+      .update({...payload,updated_at:new Date().toISOString()})
+      .eq("id",colaboradorEditandoId)
+      .eq("condominio_id",CONDOMINIO_ID);
+    if(error)return alert(error.message);
+  }else{
+    const {data,error}=await db.functions.invoke("convidar-colaborador",{body:payload});
+    if(error||data?.success===false){
+      const msg=await mensagemFunction(error,data,"Não foi possível convidar o colaborador.");
+      return alert(msg);
+    }
+  }
+
+  $("collaboratorModal").classList.remove("visible");
+  toast("✓ Colaborador salvo.");
+  await carregarColaboradores();
+}
+
+async function toggleCol(id){
+  const c=colaboradoresCarregados.find(x=>Number(x.id)===Number(id));
+  if(!c)return;
+  const novoStatus=!c.ativo;
+  if(!confirm(`${novoStatus?"Reativar":"Desativar"} ${c.nome}?`))return;
+  const {error}=await db.from("colaboradores")
+    .update({ativo:novoStatus,updated_at:new Date().toISOString()})
+    .eq("id",id)
+    .eq("condominio_id",CONDOMINIO_ID);
+  if(error)return alert(error.message);
+  toast(novoStatus?"Colaborador reativado.":"Colaborador desativado.");
+  await carregarColaboradores();
+}
 
 async function carregarConfig(){const [a,p]=await Promise.all([db.from("areas").select("*").eq("condominio_id",CONDOMINIO_ID).order("ordem").order("nome"),db.from("pontos").select("*").eq("condominio_id",CONDOMINIO_ID).order("ordem").order("nome")]);if(a.error||p.error)return configList.innerHTML=vazio("⚠️","Erro",(a.error||p.error).message);areasCarregadas=a.data||[];pontosCarregados=p.data||[];configList.innerHTML=areasCarregadas.map(a=>{const ps=pontosCarregados.filter(p=>p.area_id===a.id);return `<div class="config-card" data-a="${a.id}"><div class="config-top"><div class="config-icon">📍</div><div class="config-info"><strong>${esc(a.nome)}</strong><span>${ps.length} pontos • ordem ${a.ordem}</span></div><span class="${a.ativo?"active-badge":"inactive-badge"}">${a.ativo?"ATIVA":"INATIVA"}</span></div>${a.descricao?`<div class="record-observation">${esc(a.descricao)}</div>`:""}<div class="config-flags"><span class="flag ${a.visivel_colaborador?"on":""}">COLABORADOR ${a.visivel_colaborador?"ON":"OFF"}</span><span class="flag ${a.visivel_ocorrencia?"on":""}">OCORRÊNCIA ${a.visivel_ocorrencia?"ON":"OFF"}</span></div><div class="config-actions"><button class="action-button edit-a">EDITAR ÁREA</button><button class="action-button add-p">＋ PONTO</button></div>${ps.map(p=>`<div class="point-row" data-p="${p.id}"><div class="config-info"><strong>${esc(p.nome)}</strong><span>ordem ${p.ordem} • ${p.ativo?"ativo":"inativo"}</span></div><div class="point-actions"><button class="mini edit-p">EDITAR</button><button class="mini danger toggle-p">${p.ativo?"DESATIVAR":"REATIVAR"}</button></div></div>`).join("")}</div>`}).join("");configList.querySelectorAll("[data-a]").forEach(el=>{const id=Number(el.dataset.a);el.querySelector(".edit-a").onclick=()=>editarArea(id);el.querySelector(".add-p").onclick=()=>novoPonto(id);el.querySelectorAll("[data-p]").forEach(row=>{const pid=Number(row.dataset.p);row.querySelector(".edit-p").onclick=()=>editarPonto(pid);row.querySelector(".toggle-p").onclick=()=>togglePonto(pid)})})}
 function novaArea(){areaEditandoId=null;$("areaModalTitle").textContent="Nova área";$("areaNome").value="";$("areaDescricao").value="";$("areaOrdem").value=(Math.max(0,...areasCarregadas.map(a=>Number(a.ordem)||0))+1);$("areaColaborador").checked=$("areaOcorrencia").checked=true;$("areaModal").classList.add("visible")}
@@ -462,7 +624,7 @@ $("loginButton").onclick=login;$("pushGestaoButton").onclick=ativarPushGestao;$(
 $("tabOperacao").onclick=()=>painel("operacao");$("tabOcorrencias").onclick=()=>painel("ocorrencias");$("tabColaboradores").onclick=()=>painel("colaboradores");$("tabConfig").onclick=()=>painel("config");
 $("refreshDados").onclick=carregarDados;$("refreshOcorrencias").onclick=carregarOcorrencias;
 $("closeDemanda").onclick=$("cancelDemanda").onclick=fecharDemanda;$("saveDemanda").onclick=salvarDemandaOcorrencia;$("demandaDestino").onchange=destinoDemanda;
-$("addCollaborator").onclick=novoCol;$("closeCollaborator").onclick=$("cancelCollaborator").onclick=()=>$("collaboratorModal").classList.remove("visible");$("saveCollaborator").onclick=salvarCol;$("colPontoAtivo").onchange=dependencias;$("addManager").onclick=abrirConviteGestor;$("closeManager").onclick=$("cancelManager").onclick=fecharConviteGestor;$("saveManager").onclick=convidarGestor;
+$("addCollaborator").onclick=novoCol;$("closeCollaborator").onclick=$("cancelCollaborator").onclick=()=>$("collaboratorModal").classList.remove("visible");$("saveCollaborator").onclick=salvarCol;$("colPontoAtivo").onchange=dependencias;$("colIntervalo").onchange=dependencias;$("addManager").onclick=abrirConviteGestor;$("closeManager").onclick=$("cancelManager").onclick=fecharConviteGestor;$("saveManager").onclick=convidarGestor;
 $("addArea").onclick=novaArea;$("closeArea").onclick=$("cancelArea").onclick=()=>$("areaModal").classList.remove("visible");$("saveArea").onclick=salvarArea;
 $("closePoint").onclick=$("cancelPoint").onclick=()=>$("pointModal").classList.remove("visible");$("savePoint").onclick=salvarPonto;
 $("subAreas").onclick=()=>subConfig("a");$("subAtividades").onclick=()=>subConfig("t");$("subProgramacoes").onclick=()=>subConfig("p");$("addAtividade").onclick=openAt;$("closeAtividade").onclick=$("cancelAtividade").onclick=closeAt;$("saveAtividade").onclick=saveAt;$("addProgramacao").onclick=openPr;$("closeProgramacao").onclick=$("cancelProgramacao").onclick=closePr;$("saveProgramacao").onclick=savePr;$("progArea").onchange=()=>fillPoints();$("progDestino").onchange=dest;document.querySelectorAll(".filter").forEach(b=>b.onclick=()=>{filtroOcorrencias=b.dataset.filter;document.querySelectorAll(".filter").forEach(x=>x.classList.remove("active"));b.classList.add("active");renderOcorrencias()});
