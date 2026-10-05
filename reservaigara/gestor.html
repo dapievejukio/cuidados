@@ -301,8 +301,8 @@ async function carregarGestores(){
  const {data,error}=await db.from("usuarios_gestao").select("id,auth_user_id,condominio_id,nome,perfil,ativo,created_at,updated_at").eq("condominio_id",CONDOMINIO_ID).order("ativo",{ascending:false}).order("nome");
  if(error){managementList.innerHTML=vazio("⚠️","Erro ao carregar gestão",error.message);return}
  gestoresCarregados=data||[];const admin=podeAdministrarGestao();
- managementList.innerHTML=gestoresCarregados.length?gestoresCarregados.map(g=>{const atual=Number(g.id)===Number(perfilGestor?.id),pl=g.perfil==="admin_cliente"?"ADMINISTRADOR":g.perfil==="admin_oraqui"?"ADMIN ORAQUI":g.perfil==="supervisor"?"SUPERVISOR":"GESTOR",pa=admin&&g.perfil!=="admin_oraqui"&&!atual;return `<div class="collaborator-card" data-g="${g.id}"><div class="collaborator-top"><div class="collaborator-avatar">${g.perfil==="admin_cliente"||g.perfil==="admin_oraqui"?"👑":"👤"}</div><div class="collaborator-info"><strong>${esc(g.nome)}${atual?" • você":""}</strong><span>${esc(CONDOMINIO)}</span></div><span class="${g.ativo?"active-badge":"inactive-badge"}">${g.ativo?"ATIVO":"INATIVO"}</span></div><div class="collaborator-flags"><span class="role-badge">${pl}</span></div>${pa?`<div class="collaborator-actions" style="grid-template-columns:1fr"><button class="action-button toggle-manager ${g.ativo?"danger":"success"}">${g.ativo?"DESATIVAR GESTOR":"REATIVAR GESTOR"}</button></div>`:""}</div>`}).join(""):vazio("👥","Nenhum gestor","Ainda não há usuários de gestão vinculados.");
- managementList.querySelectorAll("[data-g]").forEach(el=>{const b=el.querySelector(".toggle-manager");if(b)b.onclick=()=>toggleGestor(Number(el.dataset.g))})
+ managementList.innerHTML=gestoresCarregados.length?gestoresCarregados.map(g=>{const atual=Number(g.id)===Number(perfilGestor?.id),pl=g.perfil==="admin_cliente"?"ADMINISTRADOR":g.perfil==="admin_oraqui"?"ADMIN ORAQUI":g.perfil==="supervisor"?"SUPERVISOR":"GESTOR",pa=admin&&g.perfil!=="admin_oraqui"&&!atual;return `<div class="collaborator-card" data-g="${g.id}"><div class="collaborator-top"><div class="collaborator-avatar">${g.perfil==="admin_cliente"||g.perfil==="admin_oraqui"?"👑":"👤"}</div><div class="collaborator-info"><strong>${esc(g.nome)}${atual?" • você":""}</strong><span>${esc(CONDOMINIO)}</span></div><span class="${g.ativo?"active-badge":"inactive-badge"}">${g.ativo?"ATIVO":"INATIVO"}</span></div><div class="collaborator-flags"><span class="role-badge">${pl}</span></div>${pa?`<div class="collaborator-actions"><button class="action-button resend-manager">REENVIAR CONVITE</button><button class="action-button toggle-manager ${g.ativo?"danger":"success"}">${g.ativo?"DESATIVAR GESTOR":"REATIVAR GESTOR"}</button></div>`:""}</div>`}).join(""):vazio("👥","Nenhum gestor","Ainda não há usuários de gestão vinculados.");
+ managementList.querySelectorAll("[data-g]").forEach(el=>{const id=Number(el.dataset.g),b=el.querySelector(".toggle-manager"),r=el.querySelector(".resend-manager");if(b)b.onclick=()=>toggleGestor(id);if(r)r.onclick=()=>reenviarConviteGestor(id,r)})
 }
 function abrirConviteGestor(){if(!podeAdministrarGestao())return alert("Somente o administrador pode convidar gestores.");$("managerInviteName").value="";$("managerInviteEmail").value="";$("managerModal").classList.add("visible")}
 function fecharConviteGestor(){$("managerModal").classList.remove("visible")}
@@ -312,6 +312,29 @@ async function convidarGestor(){
  const b=$("saveManager");b.disabled=true;b.textContent="ENVIANDO...";
  try{const {data,error}=await db.functions.invoke("convidar-gestor",{body:{nome,email}});if(error)throw error;if(data?.ok===false||data?.success===false)throw new Error(data?.error||"Não foi possível convidar o gestor.");fecharConviteGestor();toast("✓ Convite de gestor enviado.");await carregarGestores()}catch(e){console.error(e);alert(e.message||"Não foi possível convidar o gestor.")}finally{b.disabled=false;b.textContent="ENVIAR CONVITE"}
 }
+
+async function reenviarConviteGestor(id,btn){
+  if(!podeAdministrarGestao())return alert("Somente o administrador pode reenviar convites de gestores.");
+  const g=gestoresCarregados.find(x=>Number(x.id)===Number(id));
+  if(!g)return alert("Gestor não encontrado.");
+  if(!confirm(`Reenviar um novo convite para ${g.nome}?`))return;
+  const original=btn?.textContent||"REENVIAR CONVITE";
+  if(btn){btn.disabled=true;btn.textContent="ENVIANDO...";}
+  try{
+    const {data,error}=await db.functions.invoke("reenviar-convite-gestor",{body:{usuario_gestao_id:g.id}});
+    if(error||data?.ok===false){
+      const msg=await mensagemFunction(error,data,"Não foi possível reenviar o convite do gestor.");
+      throw new Error(msg);
+    }
+    toast("✓ Novo convite de gestor enviado.");
+  }catch(e){
+    console.error("Erro ao reenviar convite de gestor:",e);
+    alert(e.message||"Não foi possível reenviar o convite do gestor.");
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent=original;}
+  }
+}
+
 async function toggleGestor(id){
  if(!podeAdministrarGestao())return alert("Somente o administrador pode alterar gestores.");
  const g=gestoresCarregados.find(x=>Number(x.id)===Number(id));
@@ -403,8 +426,9 @@ async function carregarColaboradores(){
         <span class="flag ${geo?"on":""}">LOCALIZAÇÃO ${geo?"ON":"OFF"}</span>
         <span class="flag ${intervalo?"on":""}">INTERVALO ${intervalo?"ON":"OFF"}</span>
       </div>
-      <div class="collaborator-actions">
+      <div class="collaborator-actions" style="grid-template-columns:repeat(3,1fr)">
         <button class="action-button edit">EDITAR</button>
+        <button class="action-button resend">REENVIAR CONVITE</button>
         <button class="action-button toggle ${c.ativo?"danger":"success"}">${c.ativo?"DESATIVAR":"REATIVAR"}</button>
       </div>
     </div>`;
@@ -413,6 +437,8 @@ async function carregarColaboradores(){
   collaboratorList.querySelectorAll("[data-c]").forEach(el=>{
     const id=Number(el.dataset.c);
     el.querySelector(".edit").onclick=()=>editarCol(id);
+    const resend=el.querySelector(".resend");
+    if(resend)resend.onclick=()=>reenviarConviteColaborador(id,resend);
     el.querySelector(".toggle").onclick=()=>toggleCol(id);
   });
 }
