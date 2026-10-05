@@ -506,6 +506,27 @@ async function salvarCol(){
   await carregarColaboradores();
 }
 
+async function reenviarConviteColaborador(id,btn){
+  const c=colaboradoresCarregados.find(x=>Number(x.id)===Number(id));
+  if(!c||!c.email)return alert("Colaborador sem e-mail cadastrado.");
+  if(!confirm(`Reenviar um novo convite para ${c.nome} (${c.email})?`))return;
+  const original=btn?.textContent||"REENVIAR CONVITE";
+  if(btn){btn.disabled=true;btn.textContent="ENVIANDO...";}
+  try{
+    const {data,error}=await db.functions.invoke("reenviar-convite-colaborador",{body:{colaborador_id:c.id}});
+    if(error||data?.ok===false){
+      const msg=await mensagemFunction(error,data,"Não foi possível reenviar o convite.");
+      throw new Error(msg);
+    }
+    toast("✓ Novo convite enviado.");
+  }catch(e){
+    console.error("Erro ao reenviar convite:",e);
+    alert(e.message||"Não foi possível reenviar o convite.");
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent=original;}
+  }
+}
+
 async function toggleCol(id){
   const c=colaboradoresCarregados.find(x=>Number(x.id)===Number(id));
   if(!c)return;
