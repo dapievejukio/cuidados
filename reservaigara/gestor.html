@@ -246,10 +246,26 @@ async function salvarOcorrencia(id){
   const agora=new Date().toISOString(),payload={status:ns,updated_at:agora};
   if(norm(ns)==="resolvida"){payload.resposta_gestor=msg;payload.respondido_em=agora;payload.resolvido_em=o.resolvido_em||agora}
   const anterior=norm(o.status);
-  const {data,error}=await db.from("ocorrencias").update(payload).eq("id",id).eq("condominio",CONDOMINIO).select().single();
+  const {data,error}=await db.from("ocorrencias")
+    .update(payload)
+    .eq("id",id)
+    .eq("condominio",CONDOMINIO)
+    .select();
   if(error)return alert(error.message);
-  if(norm(ns)==="resolvida"&&anterior!=="resolvida"&&data.deseja_retorno&&data.email)await db.functions.invoke("enviar-email-resolucao",{body:{email:data.email,protocolo:data.protocolo,condominio:data.condominio,local:data.local_completo||[data.area,data.detalhe].filter(Boolean).join(" • "),mensagem:msg}});
-  toast("✓ Atualização salva.");await carregarOcorrencias();
+  const atualizado=Array.isArray(data)?data[0]:data;
+  if(!atualizado)return alert("A ocorrência não foi localizada ou você não tem permissão para atualizá-la.");
+  if(norm(ns)==="resolvida"&&anterior!=="resolvida"&&atualizado.deseja_retorno&&atualizado.email){
+    const {error:emailError}=await db.functions.invoke("enviar-email-resolucao",{body:{email:atualizado.email,protocolo:atualizado.protocolo,condominio:atualizado.condominio,local:atualizado.local_completo||[atualizado.area,atualizado.detalhe].filter(Boolean).join(" • "),mensagem:msg}});
+    if(emailError)console.warn("Ocorrência resolvida, mas o e-mail de retorno não foi enviado:",emailError);
+  }
+  statusSelecionado[id]=atualizado.status||ns;
+  toast(norm(ns)==="resolvida"?"✓ Ocorrência resolvida.":"✓ Atualização salva.");
+  await carregarOcorrencias();
+  if(norm(ns)==="resolvida"){
+    filtroOcorrencias="aberta";
+    document.querySelectorAll(".filter").forEach(b=>b.classList.toggle("active",b.dataset.filter==="aberta"));
+    renderOcorrencias();
+  }
 }
 async function garantirDadosEncaminhamento(){
   const [co,ar,po]=await Promise.all([
