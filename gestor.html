@@ -124,29 +124,73 @@ async function ativarPushGestao(){
 
 async function login(){const email=$("loginEmail").value.trim(),password=$("loginPassword").value,box=$("authError");box.style.display="none";try{const {data,error}=await db.auth.signInWithPassword({email,password});if(error)throw error;await validarGestor(data.user)}catch(e){await db.auth.signOut();box.textContent=e.message||"Falha no acesso.";box.style.display="block"}}
 async function validarGestor(user){
-  const {data:p,error}=await db.from("usuarios_gestao").select("id,nome,perfil,ativo,condominio_id").eq("auth_user_id",user.id).eq("ativo",true).maybeSingle();
-  if(error)throw error;
-  if(!p||!["gestor","admin_oraqui","admin_cliente","supervisor"].includes(p.perfil))throw new Error("Usuário sem perfil de gestão ativo.");
+  // 1) Localiza o perfil de gestão do usuário sem exigir conversão para objeto único.
+  const {data:perfis,error:pe}=await db.from("usuarios_gestao")
+    .select("id,nome,perfil,ativo,condominio_id")
+    .eq("auth_user_id",user.id)
+    .eq("ativo",true);
 
-  const slugSelecionado=new URLSearchParams(location.search).get("condominio");
-  let consulta=db.from("condominios").select("id,nome,slug,ativo").eq("ativo",true);
+  if(pe)throw pe;
 
-  if(p.perfil==="admin_oraqui"&&slugSelecionado){
-    consulta=consulta.eq("slug",slugSelecionado);
+  const perfisValidos=(perfis||[]).filter(x =>
+    ["gestor","admin_oraqui","admin_cliente","supervisor"].includes(x.perfil)
+  );
+
+  if(!perfisValidos.length)
+    throw new Error("Usuário sem perfil de gestão ativo.");
+
+  // Se houver mais de um vínculo no futuro, o admin ORAQUI tem prioridade.
+  const p=perfisValidos.find(x=>x.perfil==="admin_oraqui") || perfisValidos[0];
+
+  const slugSelecionado=(new URLSearchParams(location.search).get("condominio")||"").trim();
+
+  let c=null;
+
+  if(p.perfil==="admin_oraqui"){
+    // Admin global SEMPRE precisa entrar a partir de um condomínio escolhido no Admin.
+    if(!slugSelecionado){
+      location.href="admin.html";
+      return;
+    }
+
+    const {data:condominios,error:ce}=await db.from("condominios")
+      .select("id,nome,slug,ativo")
+      .eq("slug",slugSelecionado)
+      .eq("ativo",true);
+
+    if(ce)throw ce;
+    if(!condominios?.length)
+      throw new Error("Condomínio selecionado não foi encontrado ou está inativo.");
+    if(condominios.length>1)
+      throw new Error("Há mais de um condomínio com o mesmo slug. Corrija o cadastro antes de continuar.");
+
+    c=condominios[0];
   }else{
-    consulta=consulta.eq("id",p.condominio_id);
+    // Gestores comuns continuam presos ao condomínio cadastrado no perfil.
+    const {data:condominios,error:ce}=await db.from("condominios")
+      .select("id,nome,slug,ativo")
+      .eq("id",p.condominio_id)
+      .eq("ativo",true);
+
+    if(ce)throw ce;
+    if(!condominios?.length)
+      throw new Error("O condomínio vinculado a este usuário não foi encontrado ou está inativo.");
+
+    c=condominios[0];
   }
 
-  const {data:c,error:ce}=await consulta.single();
-  if(ce)throw ce;
+  perfilGestor=p;
+  CONDOMINIO_ID=c.id;
+  CONDOMINIO=c.nome;
 
-  perfilGestor=p;CONDOMINIO_ID=c.id;CONDOMINIO=c.nome;
   $("headerCondominio").textContent=CONDOMINIO.toUpperCase();
   $("towerName").textContent=CONDOMINIO;
   $("managerName").textContent=`${p.nome} • ${CONDOMINIO}`;
   $("managerProfile").textContent=`${p.perfil.toUpperCase()} • acesso autenticado`;
+
   $("authScreen").classList.add("hidden");
   $("app").classList.remove("hidden");
+
   aplicarPermissoesGestao();
   await Promise.all([carregarDados(),carregarOcorrencias()]);
   await atualizarEstadoPushGestao();
