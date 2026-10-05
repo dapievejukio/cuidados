@@ -23,7 +23,7 @@ main{max-width:720px;margin:-18px auto 80px;padding:0 15px}.user-card,.card,.ite
 .demand-done{border:1px solid #cce4d5;background:linear-gradient(135deg,#fff 0%,#f3faf6 100%);opacity:.9}
 .demand-local{margin-top:9px;padding:9px 10px;border-radius:11px;background:var(--blue-light);color:var(--blue);font-size:8px;font-weight:800;line-height:1.45}
 .demand-requirements{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}.demand-requirement{padding:5px 8px;border-radius:20px;background:#f1f3f5;color:var(--muted);font-size:7px;font-weight:900}.demand-requirement.on{background:var(--yellow-light);color:var(--yellow)}
-.action.start{background:var(--blue);color:#fff}.action.done{background:var(--green);color:#fff}
+.action.start{background:var(--blue);color:#fff}.action.done{background:var(--green);color:#fff}.action.photo-origin{background:#e7f2fb;color:#245b7a;box-shadow:inset 0 0 0 1px #c9dfed}
 
 /* ATENÇÃO OPERACIONAL */
 @keyframes oraquiPulse{0%,100%{box-shadow:0 0 0 0 rgba(118,103,185,.28),var(--shadow)}50%{box-shadow:0 0 0 7px rgba(118,103,185,0),0 14px 34px rgba(118,103,185,.16)}}
@@ -412,6 +412,21 @@ function demandaEmExecucao(d){
   return s==="iniciada"||s==="em andamento"||s==="em_andamento";
 }
 
+async function verFotoOcorrencia(ocorrenciaId){
+  if(!ocorrenciaId)return alert("Esta demanda não está vinculada a uma ocorrência.");
+  const {data,error}=await db.from("ocorrencias")
+    .select("foto_path")
+    .eq("id",ocorrenciaId)
+    .maybeSingle();
+  if(error)return alert("Não foi possível consultar a foto: "+error.message);
+  if(!data?.foto_path)return alert("A ocorrência não possui foto.");
+  const path=String(data.foto_path).replace(/^\/+/, "");
+  if(/^https?:\/\//i.test(path)){window.open(path,"_blank","noopener");return}
+  const {data:link,error:linkError}=await db.storage.from("fotos-ocorrencias").createSignedUrl(path,600);
+  if(linkError||!link?.signedUrl)return alert("Não foi possível abrir a foto da ocorrência.");
+  window.open(link.signedUrl,"_blank","noopener");
+}
+
 function renderDemandas(){
   if(!demandas.length){
     $("demandas").className="";
@@ -431,6 +446,7 @@ function renderDemandas(){
     const origem=ocorrencia?`<div class="alert-strip"><span>OCORRÊNCIA ENCAMINHADA PELA GESTÃO</span><span>#${esc(d.ocorrencia_id)}</span></div>`:"";
     const requisitos=(d.exige_foto||d.exige_observacao)?`<div class="demand-requirements">${d.exige_foto?'<span class="demand-requirement on">📷 FOTO OBRIGATÓRIA</span>':""}${d.exige_observacao?'<span class="demand-requirement on">💬 OBSERVAÇÃO OBRIGATÓRIA</span>':""}</div>`:"";
     const acoes=[];
+    if(ocorrencia)acoes.push(`<button class="action photo-origin" onclick="verFotoOcorrencia(${d.ocorrencia_id})">📷 VER FOTO</button>`);
     if(d.tipo==="recado"&&d.status==="pendente")acoes.push(`<button class="action secondary" onclick="mudarDemanda(${d.id},'visualizada')">MARCAR COMO LIDA</button>`);
     if(d.tipo!=="recado"&&!concluida&&!executando)acoes.push(`<button class="action start" onclick="iniciarDemanda(${d.id})">▶ INICIAR</button>`);
     if(d.tipo!=="recado"&&!concluida)acoes.push(`<button class="action done" onclick="abrirDemandaExecucao(${d.id})">✓ CONCLUIR</button>`);
@@ -441,7 +457,7 @@ function renderDemandas(){
 async function mudarDemanda(id,status){
   const agora=new Date().toISOString(),payload={status,updated_at:agora};
   if(status==="visualizada")payload.visualizada_em=agora;
-  if(status==="iniciada")payload.iniciada_em=agora;
+  if(status==="em_andamento")payload.iniciada_em=agora;
   if(status==="concluida")payload.concluida_em=agora;
   const {error}=await db.from("demandas").update(payload).eq("id",id).eq("condominio_id",colaborador.condominio_id);
   if(error){alert(error.message);return false}
@@ -452,7 +468,7 @@ async function mudarDemanda(id,status){
 async function iniciarDemanda(id){
   const d=demandas.find(x=>mesmoId(x.id,id));
   if(!d)return alert("Demanda não encontrada.");
-  const ok=await mudarDemanda(id,"iniciada");
+  const ok=await mudarDemanda(id,"em_andamento");
   if(ok)toast("▶ Demanda iniciada.");
 }
 
