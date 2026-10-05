@@ -18,6 +18,12 @@ main{max-width:720px;margin:-18px auto 80px;padding:0 15px}.user-card,.card,.ite
 .section{margin-top:23px}.section-title{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;margin-bottom:11px}.section-title h2{font-size:17px}.section-title p{margin-top:5px;color:var(--muted);font-size:9px;line-height:1.5}.card{padding:17px}.status-card{display:flex;align-items:center;gap:12px}.status-icon{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:var(--blue-light);font-size:20px}.status-info{flex:1}.status-info strong{display:block;font-size:11px}.status-info span{display:block;margin-top:4px;color:var(--muted);font-size:8px;line-height:1.4}.badge{padding:6px 9px;border-radius:20px;font-size:7px;font-weight:900}.green{background:var(--green-light);color:var(--green)}.yellow{background:var(--yellow-light);color:var(--yellow)}.purple{background:var(--primary-light);color:var(--primary)}.red{background:var(--red-light);color:var(--red)}
 .point-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:14px}.point-btn{min-height:48px;border:0;border-radius:14px;background:var(--primary-light);color:var(--primary);font-size:9px;font-weight:900}.point-btn.primary{background:var(--green);color:#fff}.point-btn:disabled{opacity:.4}.geo-note{margin-top:10px;color:var(--muted);font-size:8px;line-height:1.45}
 .list{display:flex;flex-direction:column;gap:10px}.item-card{padding:15px;position:relative}.item-top{display:flex;gap:11px;align-items:flex-start}.item-icon{width:42px;height:42px;flex-shrink:0;border-radius:13px;display:flex;align-items:center;justify-content:center;background:var(--blue-light);font-size:19px}.item-info{flex:1}.item-info strong{display:block;font-size:11px}.item-info span{display:block;margin-top:4px;color:var(--muted);font-size:8px;line-height:1.45}.item-description{margin-top:11px;padding:10px 11px;border-radius:12px;background:#f7f8fa;font-size:9px;line-height:1.5}.item-actions{display:flex;gap:8px;margin-top:12px}.action{flex:1;border:0;padding:11px;border-radius:12px;background:var(--primary);color:#fff;font-size:8px;font-weight:900}.action.secondary{background:var(--blue-light);color:var(--blue)}
+.demand-occurrence{border:2px solid #c9c0ef;background:linear-gradient(135deg,#fff 0%,#faf8ff 100%)}
+.demand-running{border:2px solid #b7d7c4;background:linear-gradient(135deg,#fff 0%,#f2faf5 100%)}
+.demand-done{border:1px solid #cce4d5;background:linear-gradient(135deg,#fff 0%,#f3faf6 100%);opacity:.9}
+.demand-local{margin-top:9px;padding:9px 10px;border-radius:11px;background:var(--blue-light);color:var(--blue);font-size:8px;font-weight:800;line-height:1.45}
+.demand-requirements{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}.demand-requirement{padding:5px 8px;border-radius:20px;background:#f1f3f5;color:var(--muted);font-size:7px;font-weight:900}.demand-requirement.on{background:var(--yellow-light);color:var(--yellow)}
+.action.start{background:var(--blue);color:#fff}.action.done{background:var(--green);color:#fff}
 
 /* ATENÇÃO OPERACIONAL */
 @keyframes oraquiPulse{0%,100%{box-shadow:0 0 0 0 rgba(118,103,185,.28),var(--shadow)}50%{box-shadow:0 0 0 7px rgba(118,103,185,0),0 14px 34px rgba(118,103,185,.16)}}
@@ -85,7 +91,7 @@ const VAPID_PUBLIC_KEY="BNOm_tsvH-uo-hfquzYmf_XxgiGAciYKyia_FdI1PVfBISDELIqnvSUA
 const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const $=id=>document.getElementById(id);
 let authUser=null,colaborador=null,condominio=null,areas=[],pontos=[],atividades=[],programacoes=[],demandas=[],escalaHoje=null,pontosHoje=[],execucoesHoje=[];
-let execAtual=null,fotoArquivo=null,previewURL=null,processando=false;
+let execAtual=null,demandaAtual=null,fotoArquivo=null,previewURL=null,processando=false;
 
 function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
 function hoje(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
@@ -393,6 +399,19 @@ async function registrarPonto(tipo){
   }catch(e){alert(e.message||"Não foi possível registrar o ponto.")}
 }
 
+function statusDemandaTexto(status){
+  const s=String(status||"pendente").toLowerCase();
+  if(s==="concluida")return"CONCLUÍDA";
+  if(s==="iniciada"||s==="em andamento"||s==="em_andamento")return"EM EXECUÇÃO";
+  if(s==="visualizada")return"VISUALIZADA";
+  return"PENDENTE";
+}
+
+function demandaEmExecucao(d){
+  const s=String(d.status||"").toLowerCase();
+  return s==="iniciada"||s==="em andamento"||s==="em_andamento";
+}
+
 function renderDemandas(){
   if(!demandas.length){
     $("demandas").className="";
@@ -400,17 +419,61 @@ function renderDemandas(){
     return;
   }
   $("demandas").className="list";
-  $("demandas").innerHTML=demandas.map(d=>`<div class="item-card"><div class="item-top"><div class="item-icon">${d.tipo==="urgente"?"⚠️":d.tipo==="recado"?"💬":"✓"}</div><div class="item-info"><strong>${esc(d.titulo)}</strong><span>${esc(d.tipo)} • ${esc(d.status)}${d.prazo_em?" • prazo "+hora(d.prazo_em):""}</span></div><span class="badge ${d.tipo==="urgente"?"red":"purple"}">${esc(String(d.tipo||"tarefa").toUpperCase())}</span></div>${d.descricao?`<div class="item-description">${esc(d.descricao)}</div>`:""}<div class="item-actions">${d.status==="pendente"?`<button class="action secondary" onclick="mudarDemanda(${d.id},'visualizada')">MARCAR COMO LIDA</button>`:""}${d.tipo!=="recado"&&d.status!=="concluida"?`<button class="action" onclick="mudarDemanda(${d.id},'concluida')">CONCLUIR</button>`:""}</div></div>`).join("");
+  $("demandas").innerHTML=demandas.map(d=>{
+    const concluida=String(d.status||"").toLowerCase()==="concluida";
+    const executando=demandaEmExecucao(d);
+    const ocorrencia=!!d.ocorrencia_id;
+    const prioridade=String(d.prioridade||"normal").toLowerCase();
+    const local=nomeLocal(d.area_id,d.ponto_id);
+    const classe=concluida?"demand-done":executando?"demand-running":ocorrencia?"demand-occurrence":"";
+    const icone=prioridade==="urgente"?"⚠️":d.tipo==="recado"?"💬":ocorrencia?"⚠️":"✓";
+    const badgeClass=prioridade==="urgente"?"red":concluida?"green":executando?"green":"purple";
+    const origem=ocorrencia?`<div class="alert-strip"><span>OCORRÊNCIA ENCAMINHADA PELA GESTÃO</span><span>#${esc(d.ocorrencia_id)}</span></div>`:"";
+    const requisitos=(d.exige_foto||d.exige_observacao)?`<div class="demand-requirements">${d.exige_foto?'<span class="demand-requirement on">📷 FOTO OBRIGATÓRIA</span>':""}${d.exige_observacao?'<span class="demand-requirement on">💬 OBSERVAÇÃO OBRIGATÓRIA</span>':""}</div>`:"";
+    const acoes=[];
+    if(d.tipo==="recado"&&d.status==="pendente")acoes.push(`<button class="action secondary" onclick="mudarDemanda(${d.id},'visualizada')">MARCAR COMO LIDA</button>`);
+    if(d.tipo!=="recado"&&!concluida&&!executando)acoes.push(`<button class="action start" onclick="iniciarDemanda(${d.id})">▶ INICIAR</button>`);
+    if(d.tipo!=="recado"&&!concluida)acoes.push(`<button class="action done" onclick="abrirDemandaExecucao(${d.id})">✓ CONCLUIR</button>`);
+    return `<div class="item-card ${classe}">${origem}<div class="item-top"><div class="item-icon">${icone}</div><div class="item-info"><strong>${esc(d.titulo)}</strong><span>${esc(d.tipo||"tarefa")} • ${statusDemandaTexto(d.status)}${d.prazo_em?" • prazo "+new Date(d.prazo_em).toLocaleString("pt-BR",{dateStyle:"short",timeStyle:"short"}):""}</span></div><span class="badge ${badgeClass}">${esc(prioridade.toUpperCase())}</span></div>${local?`<div class="demand-local">📍 ${esc(local)}</div>`:""}${d.descricao?`<div class="item-description">${esc(d.descricao)}</div>`:""}${requisitos}${acoes.length?`<div class="item-actions">${acoes.join("")}</div>`:""}</div>`;
+  }).join("");
 }
 
 async function mudarDemanda(id,status){
   const agora=new Date().toISOString(),payload={status,updated_at:agora};
   if(status==="visualizada")payload.visualizada_em=agora;
+  if(status==="iniciada")payload.iniciada_em=agora;
   if(status==="concluida")payload.concluida_em=agora;
-  const {error}=await db.from("demandas").update(payload).eq("id",id);
-  if(error){alert(error.message);return}
-  toast("✓ Demanda atualizada.");
+  const {error}=await db.from("demandas").update(payload).eq("id",id).eq("condominio_id",colaborador.condominio_id);
+  if(error){alert(error.message);return false}
   await carregarTudo();
+  return true;
+}
+
+async function iniciarDemanda(id){
+  const d=demandas.find(x=>mesmoId(x.id,id));
+  if(!d)return alert("Demanda não encontrada.");
+  const ok=await mudarDemanda(id,"iniciada");
+  if(ok)toast("▶ Demanda iniciada.");
+}
+
+function abrirDemandaExecucao(id){
+  const d=demandas.find(x=>mesmoId(x.id,id));
+  if(!d)return alert("Demanda não encontrada.");
+  demandaAtual=d;
+  execAtual=null;
+  fotoArquivo=null;
+  $("photoInput").value="";
+  $("preview").classList.remove("visible");
+  $("photoButton").classList.remove("has");
+  $("photoButton").textContent=d.exige_foto?"📷 ADICIONAR FOTO OBRIGATÓRIA":"📷 ADICIONAR FOTO";
+  $("observacao").value="";
+  $("modalTitle").textContent="Concluir demanda";
+  const local=nomeLocal(d.area_id,d.ponto_id)||"Local informado pela gestão";
+  $("modalSelection").textContent=`${d.titulo} • ${local}`;
+  $("areaField").classList.add("hidden");
+  $("pontoField").classList.add("hidden");
+  $("confirmExec").textContent="✓ CONCLUIR DEMANDA";
+  $("execModal").classList.add("visible");
 }
 
 function renderProgramacoes(){
@@ -476,6 +539,7 @@ function renderHistorico(){
 }
 
 function abrirExecucao(id=null){
+  demandaAtual=null;
   execAtual=id?programacoes.find(p=>mesmoId(p.id,id)):null;
   fotoArquivo=null;
   $("photoInput").value="";
@@ -484,6 +548,7 @@ function abrirExecucao(id=null){
   $("photoButton").textContent="📷 ADICIONAR FOTO";
   $("observacao").value="";
   $("modalTitle").textContent=execAtual?"Registrar execução":"Registro avulso";
+  $("confirmExec").textContent="✓ REGISTRAR CONCLUSÃO";
 
   if(execAtual){
     const at=atividades.find(a=>mesmoId(a.id,execAtual.atividade_id));
@@ -530,34 +595,68 @@ async function uploadFoto(areaId,pontoId){
 
 async function confirmarExecucao(){
   if(processando)return;
+  const ehDemanda=!!demandaAtual;
   const at=execAtual?atividades.find(a=>mesmoId(a.id,execAtual.atividade_id)):null;
-  const exigeFoto=execAtual?(execAtual.exige_foto??at?.exige_foto??false):false;
-  const exigeObs=execAtual?(execAtual.exige_observacao??at?.exige_observacao??false):false;
+  const exigeFoto=ehDemanda?!!demandaAtual.exige_foto:(execAtual?(execAtual.exige_foto??at?.exige_foto??false):false);
+  const exigeObs=ehDemanda?!!demandaAtual.exige_observacao:(execAtual?(execAtual.exige_observacao??at?.exige_observacao??false):false);
   const obs=$("observacao").value.trim();
 
   if(exigeFoto&&!fotoArquivo){alert("Esta atividade exige foto.");return}
   if(exigeObs&&!obs){alert("Esta atividade exige observação.");return}
 
-  let areaId=execAtual?.area_id||null,pontoId=execAtual?.ponto_id||null;
+  let areaId=ehDemanda?(demandaAtual.area_id||null):(execAtual?.area_id||null);
+  let pontoId=ehDemanda?(demandaAtual.ponto_id||null):(execAtual?.ponto_id||null);
 
-  if(!execAtual){
+  if(!ehDemanda&&!execAtual){
     areaId=Number($("areaSelect").value)||null;
     pontoId=Number($("pontoSelect").value)||null;
     if(!areaId){alert("Selecione uma área.");return}
-
     const disponiveis=pontos.filter(p=>mesmoId(p.area_id,areaId));
     if(disponiveis.length&&!pontoId){alert("Selecione o ponto/local.");return}
     if(pontoId&&!disponiveis.some(p=>mesmoId(p.id,pontoId))){alert("O ponto selecionado não pertence à área escolhida.");return}
   }
 
   if(pontoId&&!areaId)areaId=areaDoPonto(pontoId)?.id||null;
-
   processando=true;
   $("confirmExec").disabled=true;
   $("confirmExec").textContent="REGISTRANDO...";
 
   try{
     const fotoPath=await uploadFoto(areaId,pontoId),agora=new Date().toISOString();
+
+    if(ehDemanda){
+      /* A conclusão operacional da demanda fica registrada na própria demanda.
+         Não inserimos em execucoes aqui porque a estrutura atual de execucoes
+         não possui demanda_id confirmado. Assim evitamos misturar demanda com programação. */
+      const payloadDemanda={
+        status:"concluida",
+        concluida_em:agora,
+        updated_at:agora
+      };
+      if(obs)payloadDemanda.observacao_execucao=obs;
+      if(fotoPath)payloadDemanda.foto_execucao_path=fotoPath;
+
+      let {error}=await db.from("demandas").update(payloadDemanda)
+        .eq("id",demandaAtual.id)
+        .eq("condominio_id",colaborador.condominio_id);
+
+      /* Compatibilidade: se as colunas de evidência ainda não existem,
+         conclui a demanda sem perder o fluxo. Depois podemos criar essas
+         duas colunas para o gestor visualizar foto/observação. */
+      if(error&&(String(error.message||"").includes("observacao_execucao")||String(error.message||"").includes("foto_execucao_path"))){
+        const fallback={status:"concluida",concluida_em:agora,updated_at:agora};
+        const r=await db.from("demandas").update(fallback)
+          .eq("id",demandaAtual.id)
+          .eq("condominio_id",colaborador.condominio_id);
+        error=r.error;
+      }
+      if(error)throw error;
+      fecharModal();
+      toast("✓ Demanda concluída.");
+      await carregarTudo();
+      return;
+    }
+
     const payload={
       condominio_id:colaborador.condominio_id,
       colaborador_id:colaborador.id,
@@ -582,13 +681,14 @@ async function confirmarExecucao(){
   finally{
     processando=false;
     $("confirmExec").disabled=false;
-    $("confirmExec").textContent="✓ REGISTRAR CONCLUSÃO";
+    $("confirmExec").textContent=demandaAtual?"✓ CONCLUIR DEMANDA":"✓ REGISTRAR CONCLUSÃO";
   }
 }
 
 function fecharModal(){
   $("execModal").classList.remove("visible");
   if(previewURL){URL.revokeObjectURL(previewURL);previewURL=null}
+  execAtual=null;demandaAtual=null;fotoArquivo=null;
 }
 async function sair(){
   localStorage.removeItem("usuarioLogado");
