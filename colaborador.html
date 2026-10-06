@@ -106,7 +106,7 @@ main{max-width:720px;margin:-18px auto 80px;padding:0 15px}.user-card,.card,.ite
 <div class="offline-card online" id="offlineCard">
   <div class="offline-icon" id="offlineIcon">☁️</div>
   <div class="offline-info"><strong id="offlineTitle">ORAQUI conectado</strong><span id="offlineText">Os registros serão enviados normalmente.</span></div>
-  <button class="offline-btn hidden" id="syncBtn" type="button">SINCRONIZAR</button>
+  <div style="display:flex;gap:6px;align-items:center"><button class="offline-btn hidden" id="discardOfflineBtn" type="button" style="background:#8c929c">DESCARTAR TESTE</button><button class="offline-btn hidden" id="syncBtn" type="button">SINCRONIZAR</button></div>
 </div>
 
 <section class="section"><div class="section-title"><div><h2>Registrar atividade</h2><p>Registre rapidamente uma atividade do dia a dia que não estava programada.</p></div></div><div class="card"><button class="action" id="avulso">＋ REGISTRAR ATIVIDADE</button></div></section>
@@ -227,10 +227,19 @@ async function atualizarEstadoOffline(){
     $("offlineText").textContent="Os registros serão enviados normalmente.";
   }
   btn.classList.toggle("hidden",!online||qtd===0);
+  const descartar=$("discardOfflineBtn");
+  if(descartar)descartar.classList.toggle("hidden",qtd===0);
 }
 async function arquivoParaBlobMarcado(areaId,pontoId){
   if(!fotoArquivo)return null;
-  return await gerarFotoComMarcaAgua(fotoArquivo,areaId,pontoId);
+  const arquivo=await gerarFotoComMarcaAgua(fotoArquivo,areaId,pontoId);
+  const buffer=await arquivo.arrayBuffer();
+  if(!buffer||buffer.byteLength===0)throw new Error("A foto processada ficou vazia.");
+  return {
+    buffer,
+    type:arquivo.type||"image/jpeg",
+    size:buffer.byteLength
+  };
 }
 async function enfileirarOffline(item){
   await idbPut(STORE_FILA,item);
@@ -257,9 +266,37 @@ function statusSync(titulo,texto,erro=false){
 }
 async function enviarFotoFila(item){
   if(!item.foto_blob)return null;
-  statusSync("Sincronizando","1/2 — Enviando foto...");
+  statusSync("Sincronizando","1/2 — Preparando e enviando foto...");
+
+  let conteudo=null;
+  let contentType="image/jpeg";
+
+  // Offline V2: formato seguro para Safari/iPhone — ArrayBuffer + MIME.
+  if(item.foto_blob.buffer){
+    const buffer=item.foto_blob.buffer;
+    const tamanho=buffer?.byteLength??item.foto_blob.size??0;
+    if(!buffer||tamanho<=0){
+      throw new Error("FOTO OFFLINE INVÁLIDA — a imagem salva no aparelho está vazia.");
+    }
+    contentType=item.foto_blob.type||"image/jpeg";
+    conteudo=new Blob([buffer],{type:contentType});
+  }else if(item.foto_blob instanceof Blob){
+    // Compatibilidade com filas antigas quando o Safari preservou corretamente o Blob.
+    if(item.foto_blob.size<=0){
+      throw new Error("FOTO OFFLINE ANTIGA INVÁLIDA — a imagem deste registro ficou sem conteúdo. Faça um novo registro após atualizar o ORAQUI.");
+    }
+    contentType=item.foto_blob.type||"image/jpeg";
+    conteudo=item.foto_blob;
+  }else{
+    throw new Error("FOTO OFFLINE ANTIGA INCOMPATÍVEL — este registro foi criado pela versão anterior. Faça um novo registro após atualizar o ORAQUI.");
+  }
+
+  if(!conteudo||conteudo.size<=0){
+    throw new Error("FOTO OFFLINE INVÁLIDA — nenhum conteúdo disponível para envio.");
+  }
+
   const path=`v2/${item.condominio_id}/${item.colaborador_id}/${item.data_local}/${item.client_id}-${item.area_id||"area"}-${item.ponto_id||"ponto"}.jpg`;
-  const {error}=await db.storage.from(BUCKET).upload(path,item.foto_blob,{upsert:false,contentType:"image/jpeg"});
+  const {error}=await db.storage.from(BUCKET).upload(path,conteudo,{upsert:false,contentType});
   if(error){
     const msg=String(error.message||"").toLowerCase();
     if(!msg.includes("already")&&!msg.includes("exists")&&!msg.includes("duplicate")){
@@ -288,6 +325,18 @@ async function sincronizarItemFila(item){
   }else{
     throw new Error("FILA — tipo de registro offline desconhecido: "+String(item.kind));
   }
+}
+
+async function descartarFilaOfflineAtual(){
+  if(!colaborador)return;
+  const todos=await idbGetAll(STORE_FILA);
+  const fila=todos.filter(x=>Number(x.condominio_id)===Number(colaborador.condominio_id)&&Number(x.colaborador_id)===Number(colaborador.id));
+  if(!fila.length)return;
+  if(!confirm(`Descartar ${fila.length} registro(s) offline pendente(s) deste condomínio? Use somente para registros de teste que não precisam ser recuperados.`))return;
+  for(const item of fila)await idbDelete(STORE_FILA,item.client_id);
+  $("syncBtn").textContent="SINCRONIZAR";
+  await atualizarEstadoOffline();
+  toast("Registro(s) offline de teste descartado(s).");
 }
 
 async function sincronizarFilaOffline(){
@@ -1177,6 +1226,7 @@ $("btnSaida").onclick=()=>registrarPonto("saida");
 $("avulso").onclick=()=>abrirExecucao();
 $("verAnterior").onclick=alternarDiaAnterior;
 $("syncBtn").onclick=sincronizarFilaOffline;
+$("discardOfflineBtn").onclick=descartarFilaOfflineAtual;
 $("closeModal").onclick=fecharModal;
 $("areaSelect").onchange=popularPontos;
 $("pontoSelect").onchange=()=>{
