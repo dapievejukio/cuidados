@@ -236,56 +236,102 @@ async function enfileirarOffline(item){
   await idbPut(STORE_FILA,item);
   await atualizarEstadoOffline();
 }
+function mensagemErroSupabase(e){
+  if(!e)return"Erro desconhecido";
+  const partes=[
+    e.message,
+    e.error_description,
+    e.details,
+    e.hint,
+    e.code?`código ${e.code}`:null,
+    e.status?`HTTP ${e.status}`:null
+  ].filter(Boolean);
+  return [...new Set(partes.map(String))].join(" • ")||String(e);
+}
+function statusSync(titulo,texto,erro=false){
+  const card=$("offlineCard");
+  card.classList.remove("online");
+  $("offlineIcon").textContent=erro?"❌":"🔄";
+  $("offlineTitle").textContent=titulo;
+  $("offlineText").textContent=texto;
+}
 async function enviarFotoFila(item){
   if(!item.foto_blob)return null;
+  statusSync("Sincronizando","1/2 — Enviando foto...");
   const path=`v2/${item.condominio_id}/${item.colaborador_id}/${item.data_local}/${item.client_id}-${item.area_id||"area"}-${item.ponto_id||"ponto"}.jpg`;
   const {error}=await db.storage.from(BUCKET).upload(path,item.foto_blob,{upsert:false,contentType:"image/jpeg"});
   if(error){
-    // Se a foto já foi enviada numa tentativa anterior, o caminho é determinístico.
     const msg=String(error.message||"").toLowerCase();
-    if(!msg.includes("already")&&!msg.includes("exists")&&!msg.includes("duplicate"))throw error;
+    if(!msg.includes("already")&&!msg.includes("exists")&&!msg.includes("duplicate")){
+      throw new Error("STORAGE/FOTO — "+mensagemErroSupabase(error));
+    }
   }
   return path;
 }
 async function sincronizarItemFila(item){
   const fotoPath=await enviarFotoFila(item);
+  statusSync("Sincronizando","2/2 — Gravando registro operacional...");
+
   if(item.kind==="execucao"){
-    // client_id deve ser único no banco para idempotência. O SQL desta versão cria essa coluna.
     const payload={...item.payload,client_id:item.client_id,foto_path:fotoPath,updated_at:new Date().toISOString()};
     const {data,error}=await db.from("execucoes").upsert(payload,{onConflict:"client_id"}).select("id").single();
-    if(error)throw error;
-    try{await db.functions.invoke("enviar-push-conclusao",{body:{execucao_id:data.id}})}catch(e){console.warn(e)}
+    if(error)throw new Error("EXECUÇÕES/BANCO — "+mensagemErroSupabase(error));
+    try{await db.functions.invoke("enviar-push-conclusao",{body:{execucao_id:data.id}})}catch(e){console.warn("Push:",e)}
   }else if(item.kind==="demanda"){
     const agora=item.payload.concluida_em||new Date().toISOString();
     const payload={status:"concluida",concluida_em:agora,updated_at:new Date().toISOString()};
     if(item.payload.observacao_execucao)payload.observacao_execucao=item.payload.observacao_execucao;
     if(fotoPath)payload.foto_execucao_path=fotoPath;
     const {error}=await db.from("demandas").update(payload).eq("id",item.demanda_id).eq("condominio_id",item.condominio_id);
-    if(error)throw error;
-    try{await db.functions.invoke("enviar-push-conclusao",{body:{demanda_id:item.demanda_id}})}catch(e){console.warn(e)}
+    if(error)throw new Error("DEMANDAS/BANCO — "+mensagemErroSupabase(error));
+    try{await db.functions.invoke("enviar-push-conclusao",{body:{demanda_id:item.demanda_id}})}catch(e){console.warn("Push:",e)}
+  }else{
+    throw new Error("FILA — tipo de registro offline desconhecido: "+String(item.kind));
   }
 }
+
 async function sincronizarFilaOffline(){
   if(sincronizandoFila||!navigator.onLine||!colaborador)return;
   sincronizandoFila=true;
+  $("syncBtn").disabled=true;
   try{
     const todos=await idbGetAll(STORE_FILA);
     const fila=todos.filter(x=>Number(x.condominio_id)===Number(colaborador.condominio_id)&&Number(x.colaborador_id)===Number(colaborador.id))
       .sort((a,b)=>new Date(a.criado_em)-new Date(b.criado_em));
-    for(const item of fila){
+
+    if(!fila.length){
+      await atualizarEstadoOffline();
+      return;
+    }
+
+    for(let i=0;i<fila.length;i++){
+      const item=fila[i];
+      statusSync(`Sincronizando ${i+1} de ${fila.length}`,"Preparando registro...");
       try{
         await sincronizarItemFila(item);
         await idbDelete(STORE_FILA,item.client_id);
       }catch(e){
-        console.warn("Fila offline pendente:",item.client_id,e);
-        break;
+        console.error("ORAQUI OFFLINE DIAGNÓSTICO",e,item);
+        statusSync("Falha na sincronização",mensagemErroSupabase(e),true);
+        $("syncBtn").classList.remove("hidden");
+        $("syncBtn").textContent="TENTAR NOVAMENTE";
+        return; // item permanece no IndexedDB
       }
     }
+
+    $("syncBtn").textContent="SINCRONIZAR";
     await atualizarEstadoOffline();
-    if(navigator.onLine){
-      try{await carregarTudo()}catch{}
-    }
-  }finally{sincronizandoFila=false}
+    toast("✓ Registros offline sincronizados.");
+    try{await carregarTudo()}catch(e){console.warn(e)}
+  }catch(e){
+    console.error("ORAQUI OFFLINE FILA",e);
+    statusSync("Falha na fila offline",mensagemErroSupabase(e),true);
+    $("syncBtn").classList.remove("hidden");
+    $("syncBtn").textContent="TENTAR NOVAMENTE";
+  }finally{
+    sincronizandoFila=false;
+    $("syncBtn").disabled=false;
+  }
 }
 
 function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
