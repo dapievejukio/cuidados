@@ -50,6 +50,14 @@ main{max-width:720px;margin:-18px auto 80px;padding:0 15px}.user-card,.card,.ite
 .notification-btn{border:0;padding:10px 12px;border-radius:12px;background:var(--primary);color:#fff;font-size:8px;font-weight:900;white-space:nowrap}
 .notification-btn.enabled{background:var(--green)}
 .notification-btn:disabled{opacity:.5}
+.offline-card{display:flex;align-items:center;gap:12px;margin-top:10px;padding:12px 13px;border-radius:15px;background:#fff4df;border:1px solid #ead2a5}
+.offline-card.online{background:var(--green-light);border-color:#cce4d5}
+.offline-icon{width:40px;height:40px;flex-shrink:0;border-radius:13px;display:flex;align-items:center;justify-content:center;background:#fff;font-size:18px}
+.offline-info{flex:1}.offline-info strong{display:block;font-size:10px}.offline-info span{display:block;margin-top:4px;color:var(--muted);font-size:8px;line-height:1.4}
+.offline-btn{border:0;padding:9px 11px;border-radius:11px;background:var(--yellow);color:#fff;font-size:8px;font-weight:900}
+.offline-card.online .offline-btn{background:var(--green)}
+.sync-badge{display:inline-flex;margin-top:8px;padding:5px 8px;border-radius:20px;background:var(--yellow-light);color:var(--yellow);font-size:7px;font-weight:900}
+
 
 .empty,.loading{padding:25px 16px;border-radius:19px;background:#fff;box-shadow:var(--shadow);text-align:center;color:var(--muted);font-size:9px;line-height:1.5}.empty strong{display:block;color:var(--text);font-size:11px;margin-bottom:5px}
 .message{display:none;margin-top:13px;padding:12px;border-radius:14px;font-size:9px;line-height:1.5}.message.visible{display:block}.message.error{background:var(--red-light);color:var(--red)}
@@ -95,6 +103,11 @@ main{max-width:720px;margin:-18px auto 80px;padding:0 15px}.user-card,.card,.ite
   </div>
   <button class="notification-btn" id="notificationBtn">ATIVAR</button>
 </div>
+<div class="offline-card online" id="offlineCard">
+  <div class="offline-icon" id="offlineIcon">☁️</div>
+  <div class="offline-info"><strong id="offlineTitle">ORAQUI conectado</strong><span id="offlineText">Os registros serão enviados normalmente.</span></div>
+  <button class="offline-btn hidden" id="syncBtn" type="button">SINCRONIZAR</button>
+</div>
 
 <section class="section"><div class="section-title"><div><h2>Registrar atividade</h2><p>Registre rapidamente uma atividade do dia a dia que não estava programada.</p></div></div><div class="card"><button class="action" id="avulso">＋ REGISTRAR ATIVIDADE</button></div></section>
 <section class="section" id="escalaSection"><div class="section-title"><div><h2>Hoje</h2><p>Sua escala publicada para hoje.</p></div></div><div id="escalaBox" class="loading">Carregando escala...</div></section>
@@ -117,6 +130,163 @@ const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const $=id=>document.getElementById(id);
 let authUser=null,colaborador=null,condominio=null,areas=[],pontos=[],atividades=[],programacoes=[],demandas=[],escalaHoje=null,pontosHoje=[],execucoesHoje=[];
 let execAtual=null,demandaAtual=null,fotoArquivo=null,previewURL=null,processando=false,anteriorAberto=false;
+let sincronizandoFila=false;
+
+
+const ORAQUI_DB="oraqui-offline-v1";
+const ORAQUI_DB_VERSION=1;
+const STORE_CACHE="cache_operacao";
+const STORE_FILA="fila_execucoes";
+
+function abrirBancoOffline(){
+  return new Promise((resolve,reject)=>{
+    const req=indexedDB.open(ORAQUI_DB,ORAQUI_DB_VERSION);
+    req.onupgradeneeded=()=>{
+      const banco=req.result;
+      if(!banco.objectStoreNames.contains(STORE_CACHE))banco.createObjectStore(STORE_CACHE,{keyPath:"chave"});
+      if(!banco.objectStoreNames.contains(STORE_FILA))banco.createObjectStore(STORE_FILA,{keyPath:"client_id"});
+    };
+    req.onsuccess=()=>resolve(req.result);
+    req.onerror=()=>reject(req.error);
+  });
+}
+async function idbPut(store,valor){
+  const banco=await abrirBancoOffline();
+  return new Promise((resolve,reject)=>{
+    const tx=banco.transaction(store,"readwrite");
+    tx.objectStore(store).put(valor);
+    tx.oncomplete=()=>{banco.close();resolve()};
+    tx.onerror=()=>{const e=tx.error;banco.close();reject(e)};
+  });
+}
+async function idbGet(store,chave){
+  const banco=await abrirBancoOffline();
+  return new Promise((resolve,reject)=>{
+    const tx=banco.transaction(store,"readonly"),req=tx.objectStore(store).get(chave);
+    req.onsuccess=()=>{banco.close();resolve(req.result||null)};
+    req.onerror=()=>{const e=req.error;banco.close();reject(e)};
+  });
+}
+async function idbGetAll(store){
+  const banco=await abrirBancoOffline();
+  return new Promise((resolve,reject)=>{
+    const tx=banco.transaction(store,"readonly"),req=tx.objectStore(store).getAll();
+    req.onsuccess=()=>{banco.close();resolve(req.result||[])};
+    req.onerror=()=>{const e=req.error;banco.close();reject(e)};
+  });
+}
+async function idbDelete(store,chave){
+  const banco=await abrirBancoOffline();
+  return new Promise((resolve,reject)=>{
+    const tx=banco.transaction(store,"readwrite");tx.objectStore(store).delete(chave);
+    tx.oncomplete=()=>{banco.close();resolve()};
+    tx.onerror=()=>{const e=tx.error;banco.close();reject(e)};
+  });
+}
+function chaveCacheOperacao(){
+  return colaborador&&condominio?`operacao:${authUser.id}:${condominio.id}:${colaborador.id}:${hoje()}`:null;
+}
+async function salvarCacheOperacao(){
+  const chave=chaveCacheOperacao();if(!chave)return;
+  await idbPut(STORE_CACHE,{
+    chave,salvo_em:new Date().toISOString(),
+    colaborador,condominio,areas,pontos,atividades,programacoes,demandas,escalaHoje,pontosHoje,execucoesHoje
+  });
+}
+async function carregarCacheOperacao(){
+  const chave=chaveCacheOperacao();if(!chave)return false;
+  const c=await idbGet(STORE_CACHE,chave);if(!c)return false;
+  areas=c.areas||[];pontos=c.pontos||[];atividades=c.atividades||[];
+  programacoes=c.programacoes||[];demandas=c.demandas||[];
+  escalaHoje=c.escalaHoje||null;pontosHoje=c.pontosHoje||[];execucoesHoje=c.execucoesHoje||[];
+  renderEscala();renderPonto();renderDemandas();renderProgramacoes();renderHistorico();
+  toast("📱 Operação carregada do aparelho.");
+  return true;
+}
+function gerarClientId(){
+  return crypto.randomUUID?crypto.randomUUID():`${Date.now()}-${Math.random().toString(16).slice(2)}-${Math.random().toString(16).slice(2)}`;
+}
+async function quantidadeFilaAtual(){
+  if(!colaborador)return 0;
+  const todos=await idbGetAll(STORE_FILA);
+  return todos.filter(x=>Number(x.condominio_id)===Number(colaborador.condominio_id)&&Number(x.colaborador_id)===Number(colaborador.id)).length;
+}
+async function atualizarEstadoOffline(){
+  const online=navigator.onLine,card=$("offlineCard"),btn=$("syncBtn");
+  let qtd=0;try{qtd=await quantidadeFilaAtual()}catch{}
+  card.classList.toggle("online",online&&qtd===0);
+  $("offlineIcon").textContent=online?(qtd?"🔄":"☁️"):"📱";
+  if(!online){
+    $("offlineTitle").textContent="Modo offline";
+    $("offlineText").textContent=qtd?`${qtd} registro(s) salvo(s) neste aparelho aguardando internet.`:"Você pode registrar atividades; elas ficarão salvas neste aparelho.";
+  }else if(qtd){
+    $("offlineTitle").textContent="Sincronização pendente";
+    $("offlineText").textContent=`${qtd} registro(s) aguardando envio ao ORAQUI.`;
+  }else{
+    $("offlineTitle").textContent="ORAQUI conectado";
+    $("offlineText").textContent="Os registros serão enviados normalmente.";
+  }
+  btn.classList.toggle("hidden",!online||qtd===0);
+}
+async function arquivoParaBlobMarcado(areaId,pontoId){
+  if(!fotoArquivo)return null;
+  return await gerarFotoComMarcaAgua(fotoArquivo,areaId,pontoId);
+}
+async function enfileirarOffline(item){
+  await idbPut(STORE_FILA,item);
+  await atualizarEstadoOffline();
+}
+async function enviarFotoFila(item){
+  if(!item.foto_blob)return null;
+  const path=`v2/${item.condominio_id}/${item.colaborador_id}/${item.data_local}/${item.client_id}-${item.area_id||"area"}-${item.ponto_id||"ponto"}.jpg`;
+  const {error}=await db.storage.from(BUCKET).upload(path,item.foto_blob,{upsert:false,contentType:"image/jpeg"});
+  if(error){
+    // Se a foto já foi enviada numa tentativa anterior, o caminho é determinístico.
+    const msg=String(error.message||"").toLowerCase();
+    if(!msg.includes("already")&&!msg.includes("exists")&&!msg.includes("duplicate"))throw error;
+  }
+  return path;
+}
+async function sincronizarItemFila(item){
+  const fotoPath=await enviarFotoFila(item);
+  if(item.kind==="execucao"){
+    // client_id deve ser único no banco para idempotência. O SQL desta versão cria essa coluna.
+    const payload={...item.payload,client_id:item.client_id,foto_path:fotoPath,updated_at:new Date().toISOString()};
+    const {data,error}=await db.from("execucoes").upsert(payload,{onConflict:"client_id"}).select("id").single();
+    if(error)throw error;
+    try{await db.functions.invoke("enviar-push-conclusao",{body:{execucao_id:data.id}})}catch(e){console.warn(e)}
+  }else if(item.kind==="demanda"){
+    const agora=item.payload.concluida_em||new Date().toISOString();
+    const payload={status:"concluida",concluida_em:agora,updated_at:new Date().toISOString()};
+    if(item.payload.observacao_execucao)payload.observacao_execucao=item.payload.observacao_execucao;
+    if(fotoPath)payload.foto_execucao_path=fotoPath;
+    const {error}=await db.from("demandas").update(payload).eq("id",item.demanda_id).eq("condominio_id",item.condominio_id);
+    if(error)throw error;
+    try{await db.functions.invoke("enviar-push-conclusao",{body:{demanda_id:item.demanda_id}})}catch(e){console.warn(e)}
+  }
+}
+async function sincronizarFilaOffline(){
+  if(sincronizandoFila||!navigator.onLine||!colaborador)return;
+  sincronizandoFila=true;
+  try{
+    const todos=await idbGetAll(STORE_FILA);
+    const fila=todos.filter(x=>Number(x.condominio_id)===Number(colaborador.condominio_id)&&Number(x.colaborador_id)===Number(colaborador.id))
+      .sort((a,b)=>new Date(a.criado_em)-new Date(b.criado_em));
+    for(const item of fila){
+      try{
+        await sincronizarItemFila(item);
+        await idbDelete(STORE_FILA,item.client_id);
+      }catch(e){
+        console.warn("Fila offline pendente:",item.client_id,e);
+        break;
+      }
+    }
+    await atualizarEstadoOffline();
+    if(navigator.onLine){
+      try{await carregarTudo()}catch{}
+    }
+  }finally{sincronizandoFila=false}
+}
 
 function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
 function hoje(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
@@ -400,8 +570,16 @@ async function carregarTudo(){
     renderDemandas();
     renderProgramacoes();
     renderHistorico();
+    try{await salvarCacheOperacao()}catch(cacheError){console.warn("Cache offline:",cacheError)}
+    await atualizarEstadoOffline();
   }catch(e){
     console.error(e);
+    const cacheOk=await carregarCacheOperacao().catch(()=>false);
+    if(cacheOk){
+      limparErro();
+      await atualizarEstadoOffline();
+      return;
+    }
     erro(e.message||"Não foi possível carregar sua operação.");
     $("demandas").innerHTML=vazio("Falha ao carregar","Verifique as permissões do seu acesso.");
     $("programacoes").innerHTML=vazio("Falha ao carregar","Verifique as permissões do seu acesso.");
@@ -851,98 +1029,81 @@ async function confirmarExecucao(){
     if(disponiveis.length&&!pontoId){alert("Selecione o ponto/local.");return}
     if(pontoId&&!disponiveis.some(p=>mesmoId(p.id,pontoId))){alert("O ponto selecionado não pertence à área escolhida.");return}
   }
-
   if(pontoId&&!areaId)areaId=areaDoPonto(pontoId)?.id||null;
-  processando=true;
-  $("confirmExec").disabled=true;
-  $("confirmExec").textContent="REGISTRANDO...";
+
+  processando=true;$("confirmExec").disabled=true;$("confirmExec").textContent="REGISTRANDO...";
+  const agora=new Date().toISOString();
+  const clientId=gerarClientId();
 
   try{
-    const fotoPath=await uploadFoto(areaId,pontoId),agora=new Date().toISOString();
-
-    if(ehDemanda){
-      /* A conclusão operacional da demanda fica registrada na própria demanda.
-         Não inserimos em execucoes aqui porque a estrutura atual de execucoes
-         não possui demanda_id confirmado. Assim evitamos misturar demanda com programação. */
-      const payloadDemanda={
-        status:"concluida",
-        concluida_em:agora,
-        updated_at:agora
-      };
-      if(obs)payloadDemanda.observacao_execucao=obs;
-      if(fotoPath)payloadDemanda.foto_execucao_path=fotoPath;
-
-      let {error}=await db.from("demandas").update(payloadDemanda)
-        .eq("id",demandaAtual.id)
-        .eq("condominio_id",colaborador.condominio_id);
-
-      /* Compatibilidade: se as colunas de evidência ainda não existem,
-         conclui a demanda sem perder o fluxo. Depois podemos criar essas
-         duas colunas para o gestor visualizar foto/observação. */
-      if(error&&(String(error.message||"").includes("observacao_execucao")||String(error.message||"").includes("foto_execucao_path"))){
-        const fallback={status:"concluida",concluida_em:agora,updated_at:agora};
-        const r=await db.from("demandas").update(fallback)
-          .eq("id",demandaAtual.id)
-          .eq("condominio_id",colaborador.condominio_id);
-        error=r.error;
-      }
-      if(error)throw error;
-
-      // A demanda já foi gravada como concluída. Só depois disso avisamos a gestão.
-      // Uma falha de Push não desfaz nem bloqueia a conclusão operacional.
-      try{
-        const {data:pushData,error:pushError}=await db.functions.invoke("enviar-push-conclusao",{
-          body:{demanda_id:demandaAtual.id}
+    // Se não houver rede, ou se o envio normal falhar por conectividade, preservamos tudo localmente.
+    if(!navigator.onLine){
+      const fotoBlob=await arquivoParaBlobMarcado(areaId,pontoId);
+      if(ehDemanda){
+        await enfileirarOffline({
+          client_id:clientId,kind:"demanda",demanda_id:demandaAtual.id,
+          condominio_id:colaborador.condominio_id,colaborador_id:colaborador.id,
+          area_id:areaId,ponto_id:pontoId,data_local:hoje(),criado_em:agora,foto_blob:fotoBlob,
+          payload:{concluida_em:agora,observacao_execucao:obs||null}
         });
-        if(pushError)console.warn("Demanda concluída, mas o Push para a gestão falhou:",pushError);
-        else console.log("Push conclusão:",pushData);
-      }catch(pushException){
-        console.warn("Demanda concluída, mas não foi possível avisar a gestão:",pushException);
+      }else{
+        await enfileirarOffline({
+          client_id:clientId,kind:"execucao",condominio_id:colaborador.condominio_id,colaborador_id:colaborador.id,
+          area_id:areaId,ponto_id:pontoId,data_local:hoje(),criado_em:agora,foto_blob:fotoBlob,
+          payload:{
+            condominio_id:colaborador.condominio_id,colaborador_id:colaborador.id,
+            programacao_id:execAtual?.id||null,atividade_id:execAtual?.atividade_id||null,
+            area_id:areaId,ponto_id:pontoId,
+            tipo:execAtual?(execAtual.tipo==="extraordinaria"?"extraordinaria":"programada"):"avulsa",
+            status:"concluida",observacao:obs||null,iniciada_em:null,concluida_em:agora,updated_at:agora
+          }
+        });
       }
-
-      fecharModal();
-      toast("✓ Demanda concluída. Gestão avisada.");
-      await carregarTudo();
+      fecharModal();toast("📱 Salvo no aparelho — aguardando internet.");
       return;
     }
 
-    const payload={
-      condominio_id:colaborador.condominio_id,
-      colaborador_id:colaborador.id,
-      programacao_id:execAtual?.id||null,
-      atividade_id:execAtual?.atividade_id||null,
-      area_id:areaId,
-      ponto_id:pontoId,
-      tipo:execAtual?(execAtual.tipo==="extraordinaria"?"extraordinaria":"programada"):"avulsa",
-      status:"concluida",
-      observacao:obs||null,
-      foto_path:fotoPath,
-      iniciada_em:null,
-      concluida_em:agora,
-      updated_at:agora
-    };
-    const {data:execCriada,error}=await db.from("execucoes").insert(payload).select("id").single();
-    if(error)throw error;
+    // Fluxo online existente.
+    const fotoPath=await uploadFoto(areaId,pontoId);
 
-    // A execução já foi salva. Depois disso avisamos a gestão.
-    // Se o Push falhar, o registro operacional permanece válido.
-    try{
-      const {data:pushData,error:pushError}=await db.functions.invoke("enviar-push-conclusao",{
-        body:{execucao_id:execCriada.id}
-      });
-      if(pushError)console.warn("Atividade registrada, mas o Push para a gestão falhou:",pushError);
-      else console.log("Push execução:",pushData);
-    }catch(pushException){
-      console.warn("Atividade registrada, mas não foi possível avisar a gestão:",pushException);
+    if(ehDemanda){
+      const payloadDemanda={status:"concluida",concluida_em:agora,updated_at:agora};
+      if(obs)payloadDemanda.observacao_execucao=obs;
+      if(fotoPath)payloadDemanda.foto_execucao_path=fotoPath;
+      let {error}=await db.from("demandas").update(payloadDemanda).eq("id",demandaAtual.id).eq("condominio_id",colaborador.condominio_id);
+      if(error&&(String(error.message||"").includes("observacao_execucao")||String(error.message||"").includes("foto_execucao_path"))){
+        const r=await db.from("demandas").update({status:"concluida",concluida_em:agora,updated_at:agora})
+          .eq("id",demandaAtual.id).eq("condominio_id",colaborador.condominio_id);
+        error=r.error;
+      }
+      if(error)throw error;
+      try{await db.functions.invoke("enviar-push-conclusao",{body:{demanda_id:demandaAtual.id}})}catch(e){console.warn(e)}
+      fecharModal();toast("✓ Demanda concluída. Gestão avisada.");await carregarTudo();return;
     }
 
-    fecharModal();
-    toast("✓ Atividade registrada. Gestão avisada.");
-    await carregarTudo();
-  }catch(e){alert(e.message||"Não foi possível registrar.");}
-  finally{
-    processando=false;
-    $("confirmExec").disabled=false;
+    const payload={
+      condominio_id:colaborador.condominio_id,colaborador_id:colaborador.id,
+      programacao_id:execAtual?.id||null,atividade_id:execAtual?.atividade_id||null,
+      area_id:areaId,ponto_id:pontoId,
+      tipo:execAtual?(execAtual.tipo==="extraordinaria"?"extraordinaria":"programada"):"avulsa",
+      status:"concluida",observacao:obs||null,foto_path:fotoPath,
+      iniciada_em:null,concluida_em:agora,updated_at:agora,client_id:clientId
+    };
+    const {data:execCriada,error}=await db.from("execucoes").upsert(payload,{onConflict:"client_id"}).select("id").single();
+    if(error)throw error;
+    try{await db.functions.invoke("enviar-push-conclusao",{body:{execucao_id:execCriada.id}})}catch(e){console.warn(e)}
+    fecharModal();toast("✓ Atividade registrada. Gestão avisada.");await carregarTudo();
+  }catch(e){
+    // Não transformar erros de regra/permissão em falso sucesso offline quando a rede está normal.
+    console.error(e);
+    if(!navigator.onLine){
+      alert("A conexão caiu durante o registro. Tente novamente; o ORAQUI manterá o modo offline.");
+      await atualizarEstadoOffline();
+    }else{
+      alert(e.message||"Não foi possível registrar.");
+    }
+  }finally{
+    processando=false;$("confirmExec").disabled=false;
     $("confirmExec").textContent=demandaAtual?"✓ CONCLUIR DEMANDA":"✓ REGISTRAR CONCLUSÃO";
   }
 }
@@ -969,6 +1130,7 @@ $("btnFimIntervalo").onclick=()=>registrarPonto("fim_intervalo");
 $("btnSaida").onclick=()=>registrarPonto("saida");
 $("avulso").onclick=()=>abrirExecucao();
 $("verAnterior").onclick=alternarDiaAnterior;
+$("syncBtn").onclick=sincronizarFilaOffline;
 $("closeModal").onclick=fecharModal;
 $("areaSelect").onchange=popularPontos;
 $("pontoSelect").onchange=()=>{
@@ -992,7 +1154,10 @@ $("photoInput").onchange=e=>{
 };
 $("execModal").onclick=e=>{if(e.target===$("execModal"))fecharModal()};
 iniciar();
+window.addEventListener("online",async()=>{await atualizarEstadoOffline();await sincronizarFilaOffline()});
+window.addEventListener("offline",atualizarEstadoOffline);
 setInterval(()=>{if(colaborador)renderProgramacoes()},60000);
+setInterval(()=>{if(navigator.onLine&&colaborador)sincronizarFilaOffline()},120000);
 </script>
 </body>
 </html>
