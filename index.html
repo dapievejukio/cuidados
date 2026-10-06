@@ -297,7 +297,132 @@
 
         }
 
+
+        /* =====================================
+           ACESSO
+        ===================================== */
+
+        .login-card {
+            width:min(390px, calc(100vw - 34px));
+            margin-top:28px;
+            padding:20px;
+            border:1px solid rgba(35,103,168,.10);
+            border-radius:22px;
+            background:rgba(255,255,255,.82);
+            box-shadow:0 18px 50px rgba(35,103,168,.10);
+            backdrop-filter:blur(12px);
+            -webkit-backdrop-filter:blur(12px);
+        }
+
+        .login-title {
+            color:var(--text);
+            font-size:14px;
+            font-weight:900;
+        }
+
+        .login-subtitle {
+            margin-top:5px;
+            color:var(--muted);
+            font-size:9px;
+            line-height:1.5;
+        }
+
+        .field {
+            margin-top:13px;
+            text-align:left;
+        }
+
+        .field label {
+            display:block;
+            margin-bottom:6px;
+            color:var(--muted);
+            font-size:8px;
+            font-weight:900;
+            letter-spacing:.5px;
+            text-transform:uppercase;
+        }
+
+        .field input {
+            width:100%;
+            height:48px;
+            padding:0 14px;
+            border:1px solid #dbe7f0;
+            border-radius:14px;
+            outline:none;
+            background:#fff;
+            color:#29445f;
+            font-size:14px;
+        }
+
+        .field input:focus {
+            border-color:#7db5df;
+            box-shadow:0 0 0 3px rgba(76,145,208,.10);
+        }
+
+        .login-button {
+            width:100%;
+            height:50px;
+            margin-top:16px;
+            border:0;
+            border-radius:14px;
+            background:linear-gradient(135deg,var(--blue),var(--blue-light));
+            color:#fff;
+            font-size:10px;
+            font-weight:900;
+            letter-spacing:.5px;
+        }
+
+        .login-button:disabled {
+            opacity:.55;
+            cursor:default;
+        }
+
+        .login-message {
+            display:none;
+            margin-top:12px;
+            padding:10px 12px;
+            border-radius:12px;
+            background:#fff1f1;
+            color:#a84d4d;
+            font-size:9px;
+            font-weight:700;
+            line-height:1.5;
+        }
+
+        .login-message.visible { display:block; }
+
+        .access-status {
+            display:none;
+            margin-top:15px;
+            color:var(--muted);
+            font-size:9px;
+            font-weight:700;
+        }
+
+        .access-status.visible { display:block; }
+
+        .forgot {
+            display:inline-block;
+            margin-top:13px;
+            border:0;
+            background:transparent;
+            color:var(--blue);
+            font-size:9px;
+            font-weight:800;
+        }
+
+        @media(max-height:720px) {
+            body { overflow:auto; }
+            main { padding-top:35px; padding-bottom:35px; }
+            .logo { width:62px; height:62px; font-size:31px; }
+            h1 { margin-top:15px; font-size:36px; }
+            .detail { margin-top:16px; }
+            .login-card { margin-top:18px; }
+        }
+
     </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 </head>
 
@@ -313,22 +438,212 @@
 
     <main>
 
-        <div class="logo">
-            ✓
-        </div>
+        <div class="logo">✓</div>
 
-        <h1>
-            ORAQUI
-        </h1>
+        <h1>ORAQUI</h1>
 
-        <div class="tagline">
-            Agora. Aqui. Registrado.
-        </div>
+        <div class="tagline">Agora. Aqui. Registrado.</div>
 
         <div class="detail"></div>
 
+        <section class="login-card" id="loginCard">
+            <div class="login-title">Acesso ao ORAQUI</div>
+            <div class="login-subtitle">Entre com o e-mail e a senha vinculados ao seu acesso.</div>
+
+            <form id="loginForm">
+                <div class="field">
+                    <label for="email">E-mail</label>
+                    <input id="email" type="email" autocomplete="username" inputmode="email" required>
+                </div>
+
+                <div class="field">
+                    <label for="password">Senha</label>
+                    <input id="password" type="password" autocomplete="current-password" required>
+                </div>
+
+                <button class="login-button" id="loginButton" type="submit">ENTRAR</button>
+            </form>
+
+            <button class="forgot" id="forgotButton" type="button">ESQUECI MINHA SENHA</button>
+
+            <div class="login-message" id="loginMessage"></div>
+            <div class="access-status" id="accessStatus">Verificando seus acessos...</div>
+        </section>
+
     </main>
 
+
+
+<script>
+const SUPABASE_URL = "https://rhiosvsohvqqrxzwohqu.supabase.co";
+const SUPABASE_KEY = "sb_publishable_vcjiMMCTxQJ7ArTGsQ-PuQ_5gaAfoIt";
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const $ = id => document.getElementById(id);
+
+function mensagem(texto){
+    const el = $("loginMessage");
+    el.textContent = texto || "";
+    el.classList.toggle("visible", !!texto);
+}
+
+function carregando(ativo, texto="Verificando seus acessos..."){
+    $("loginButton").disabled = ativo;
+    $("email").disabled = ativo;
+    $("password").disabled = ativo;
+    $("accessStatus").textContent = texto;
+    $("accessStatus").classList.toggle("visible", ativo);
+}
+
+function traduzErroLogin(msg){
+    const m = String(msg || "").toLowerCase();
+    if(m.includes("invalid login credentials")) return "E-mail ou senha incorretos.";
+    if(m.includes("email not confirmed")) return "Este e-mail ainda não foi confirmado.";
+    if(m.includes("too many requests")) return "Muitas tentativas. Aguarde alguns minutos e tente novamente.";
+    return msg || "Não foi possível entrar.";
+}
+
+async function detectarAcessos(user){
+    /*
+      A rota não concede permissão. Ela apenas escolhe a interface.
+      O acesso real continua protegido pelo Supabase/RLS.
+    */
+    const [adminResult, gestaoResult, colaboradorResult] = await Promise.all([
+        db.from("oraqui_admins")
+          .select("auth_user_id")
+          .eq("auth_user_id", user.id)
+          .eq("ativo", true)
+          .maybeSingle(),
+
+        db.from("usuarios_gestao")
+          .select("id,condominio_id,perfil,ativo")
+          .eq("auth_user_id", user.id)
+          .eq("ativo", true)
+          .limit(1),
+
+        db.from("colaboradores")
+          .select("id,condominio_id,funcao,ativo")
+          .eq("auth_user_id", user.id)
+          .eq("ativo", true)
+          .limit(1)
+    ]);
+
+    // Se uma tabela não for visível por RLS, não derrubamos o login inteiro.
+    const admin = !adminResult.error && !!adminResult.data;
+    const gestao = !gestaoResult.error && (gestaoResult.data || []).length > 0;
+    const colaborador = !colaboradorResult.error && (colaboradorResult.data || []).length > 0;
+
+    return {admin, gestao, colaborador};
+}
+
+async function encaminharUsuario(user){
+    carregando(true, "Identificando seu perfil...");
+
+    const acessos = await detectarAcessos(user);
+
+    /*
+      Prioridade operacional:
+      - colaborador: abre a operação do colaborador;
+      - gestão: abre a gestão;
+      - somente admin global: abre administração.
+      Se uma mesma conta tiver colaborador + gestão, priorizamos gestão,
+      pois ela possui o escopo operacional mais amplo.
+    */
+    if(acessos.gestao){
+        location.replace("./gestor.html");
+        return;
+    }
+
+    if(acessos.colaborador){
+        location.replace("./colaborador.html");
+        return;
+    }
+
+    if(acessos.admin){
+        location.replace("./admin.html");
+        return;
+    }
+
+    await db.auth.signOut();
+    carregando(false);
+    mensagem("Sua conta foi autenticada, mas não possui um acesso ativo no ORAQUI.");
+}
+
+$("loginForm").addEventListener("submit", async event => {
+    event.preventDefault();
+    mensagem("");
+
+    const email = $("email").value.trim();
+    const password = $("password").value;
+
+    if(!email || !password){
+        mensagem("Informe e-mail e senha.");
+        return;
+    }
+
+    carregando(true, "Entrando...");
+
+    try{
+        const {data, error} = await db.auth.signInWithPassword({email, password});
+        if(error) throw error;
+        if(!data?.user) throw new Error("Não foi possível identificar o usuário autenticado.");
+
+        await encaminharUsuario(data.user);
+    }catch(error){
+        console.error(error);
+        carregando(false);
+        mensagem(traduzErroLogin(error.message));
+    }
+});
+
+$("forgotButton").addEventListener("click", async () => {
+    mensagem("");
+
+    const email = $("email").value.trim();
+
+    if(!email){
+        mensagem("Informe seu e-mail acima para recuperar a senha.");
+        $("email").focus();
+        return;
+    }
+
+    $("forgotButton").disabled = true;
+
+    try{
+        const {error} = await db.auth.resetPasswordForEmail(email, {
+            redirectTo: `${location.origin}/definir-senha.html`
+        });
+        if(error) throw error;
+
+        const el = $("loginMessage");
+        el.style.background = "#edf8f0";
+        el.style.color = "#477a59";
+        mensagem("Enviamos as instruções de recuperação para o e-mail informado.");
+    }catch(error){
+        console.error(error);
+        mensagem(error.message || "Não foi possível enviar a recuperação de senha.");
+    }finally{
+        $("forgotButton").disabled = false;
+    }
+});
+
+async function iniciar(){
+    try{
+        const {data:{session}, error} = await db.auth.getSession();
+        if(error) throw error;
+
+        if(session?.user){
+            await encaminharUsuario(session.user);
+        }
+    }catch(error){
+        console.error(error);
+        carregando(false);
+        mensagem("Não foi possível verificar a sessão. Recarregue a página.");
+    }
+}
+
+iniciar();
+</script>
 
 </body>
 
