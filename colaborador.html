@@ -688,15 +688,66 @@ function popularPontos(){
   $("modalSelection").textContent=ar?`${ar.nome}${ps.length?` • ${ps.length} ${ps.length===1?"local disponível":"locais disponíveis"}`:" • sem ponto cadastrado"}`:"Escolha primeiro a área e depois o ponto/local.";
 }
 
+
+function textoMarcaAgua(areaId,pontoId){
+  const local=nomeLocal(areaId,pontoId)||"Local da atividade";
+  let atividade="Atividade";
+  if(demandaAtual) atividade=demandaAtual.titulo||demandaAtual.tipo||"Demanda";
+  else if(execAtual) atividade=atividadeNome(execAtual.atividade_id);
+  else atividade="Atividade avulsa";
+  const dataHora=new Date().toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit",second:"2-digit"});
+  return [
+    `ORAQUI • ${condominio?.nome||colaborador?.condominio||"Condomínio"}`,
+    `LOCAL DA TAREFA • ${local}`,
+    `${atividade} • ${colaborador?.nome||"Colaborador"}`,
+    `CAPTURADA • ${dataHora}`
+  ];
+}
+function carregarImagemArquivo(file){
+  return new Promise((resolve,reject)=>{
+    const url=URL.createObjectURL(file),img=new Image();
+    img.onload=()=>{URL.revokeObjectURL(url);resolve(img)};
+    img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error("Não foi possível processar a foto."))};
+    img.src=url;
+  });
+}
+function canvasParaBlob(canvas){
+  return new Promise((resolve,reject)=>canvas.toBlob(
+    b=>b?resolve(b):reject(new Error("Não foi possível gerar a foto com a marca d'água.")),
+    "image/jpeg",.88
+  ));
+}
+async function gerarFotoComMarcaAgua(file,areaId,pontoId){
+  const img=await carregarImagemArquivo(file);
+  const MAX=2200,escala=Math.min(1,MAX/Math.max(img.naturalWidth,img.naturalHeight));
+  const w=Math.max(1,Math.round(img.naturalWidth*escala)),h=Math.max(1,Math.round(img.naturalHeight*escala));
+  const canvas=document.createElement("canvas");canvas.width=w;canvas.height=h;
+  const ctx=canvas.getContext("2d");if(!ctx)throw new Error("Este navegador não conseguiu preparar a foto.");
+  ctx.drawImage(img,0,0,w,h);
+  const linhas=textoMarcaAgua(areaId,pontoId),pad=Math.max(16,Math.round(w*.022));
+  const fs=Math.max(18,Math.min(34,Math.round(w*.027))),lh=Math.round(fs*1.35),rh=pad*2+lh*linhas.length;
+  ctx.fillStyle="rgba(15,22,30,.76)";ctx.fillRect(0,h-rh,w,rh);
+  ctx.textBaseline="top";ctx.fillStyle="#fff";ctx.font=`600 ${fs}px -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif`;
+  linhas.forEach((linha,i)=>{
+    let t=String(linha),mw=w-pad*2;
+    while(t.length>12&&ctx.measureText(t).width>mw)t=t.slice(0,-2);
+    if(t!==linha)t=t.trimEnd()+"…";
+    ctx.globalAlpha=i===0?1:.92;ctx.fillText(t,pad,h-rh+pad+i*lh);
+  });
+  ctx.globalAlpha=1;
+  const blob=await canvasParaBlob(canvas);
+  const base=(file.name||"foto").replace(/\.[^.]+$/,"").replace(/[^a-zA-Z0-9_-]+/g,"-")||"foto";
+  return new File([blob],`${base}-oraqui.jpg`,{type:"image/jpeg",lastModified:Date.now()});
+}
+
 async function uploadFoto(areaId,pontoId){
   if(!fotoArquivo)return null;
-  const ext=(fotoArquivo.name.split(".").pop()||"jpg").toLowerCase().replace(/[^a-z0-9]/g,"")||"jpg";
-  const path=`v2/${colaborador.condominio_id}/${colaborador.id}/${hoje()}/${Date.now()}-${areaId||"area"}-${pontoId||"ponto"}.${ext}`;
-  const {error}=await db.storage.from(BUCKET).upload(path,fotoArquivo,{upsert:false,contentType:fotoArquivo.type||"image/jpeg"});
+  const fotoMarcada=await gerarFotoComMarcaAgua(fotoArquivo,areaId,pontoId);
+  const path=`v2/${colaborador.condominio_id}/${colaborador.id}/${hoje()}/${Date.now()}-${areaId||"area"}-${pontoId||"ponto"}.jpg`;
+  const {error}=await db.storage.from(BUCKET).upload(path,fotoMarcada,{upsert:false,contentType:"image/jpeg"});
   if(error)throw new Error("Erro ao enviar foto: "+error.message);
   return path;
 }
-
 async function confirmarExecucao(){
   if(processando)return;
   const ehDemanda=!!demandaAtual;
@@ -855,7 +906,7 @@ $("photoInput").onchange=e=>{
   $("preview").src=previewURL;
   $("preview").classList.add("visible");
   $("photoButton").classList.add("has");
-  $("photoButton").textContent="📷 FOTO SELECIONADA";
+  $("photoButton").textContent="📷 FOTO PRONTA • MARCA ORAQUI NO REGISTRO";
 };
 $("execModal").onclick=e=>{if(e.target===$("execModal"))fecharModal()};
 iniciar();
