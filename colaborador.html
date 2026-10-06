@@ -99,9 +99,10 @@ main{max-width:720px;margin:-18px auto 80px;padding:0 15px}.user-card,.card,.ite
 <section class="section"><div class="section-title"><div><h2>Registrar atividade</h2><p>Registre rapidamente uma atividade do dia a dia que não estava programada.</p></div></div><div class="card"><button class="action" id="avulso">＋ REGISTRAR ATIVIDADE</button></div></section>
 <section class="section" id="escalaSection"><div class="section-title"><div><h2>Hoje</h2><p>Sua escala publicada para hoje.</p></div></div><div id="escalaBox" class="loading">Carregando escala...</div></section>
 <section class="section hidden" id="pontoSection"><div class="section-title"><div><h2>Ponto</h2><p>Registre os eventos da sua jornada.</p></div></div><div class="card"><div class="status-card"><div class="status-icon">🕒</div><div class="status-info"><strong id="pontoStatus">Carregando...</strong><span id="pontoDetalhe"></span></div><span class="badge purple" id="pontoBadge">PONTO</span></div><div class="point-actions"><button class="point-btn primary" id="btnEntrada">ENTRADA</button><button class="point-btn" id="btnIniIntervalo">INICIAR INTERVALO</button><button class="point-btn" id="btnFimIntervalo">RETORNAR</button><button class="point-btn" id="btnSaida">SAÍDA</button></div><div class="geo-note" id="geoNote"></div></div></section>
-<section class="section"><div class="section-title"><div><h2>Demandas</h2><p>Recados, tarefas e itens urgentes destinados a você.</p></div></div><div id="demandas" class="loading">Carregando...</div></section>
-<section class="section"><div class="section-title"><div><h2>Atividades programadas</h2><p>O que está previsto para sua rotina. Pendências ficam destacadas até a conclusão.</p></div></div><div id="programacoes" class="loading">Carregando...</div></section>
-<section class="section"><div class="section-title"><div><h2>Executado hoje</h2><p>Seu histórico operacional de hoje.</p></div></div><div id="historico" class="loading">Carregando...</div></section>
+<section class="section"><div class="section-title"><div><h2>Atividades programadas de hoje</h2><p>O que está previsto para sua rotina. Pendências ficam destacadas até a conclusão.</p></div></div><div id="programacoes" class="loading">Carregando...</div></section>
+<section class="section"><div class="section-title"><div><h2>Demandas e ocorrências</h2><p>Itens de hoje e pendências anteriores que ainda precisam de atendimento.</p></div></div><div id="demandas" class="loading">Carregando...</div></section>
+<section class="section"><div class="section-title"><div><h2>Executado hoje</h2><p>Seu histórico operacional somente de hoje.</p></div></div><div id="historico" class="loading">Carregando...</div></section>
+<section class="section"><div class="card"><button class="action secondary" id="verAnterior">📅 VER DIA ANTERIOR</button></div><div id="historicoAnterior" class="hidden" style="margin-top:10px"></div></section>
 </main>
 
 <div class="modal" id="execModal"><div class="modal-card"><div class="modal-head"><h2 id="modalTitle">Registrar execução</h2><button class="close" id="closeModal">×</button></div><div class="selection" id="modalSelection"></div><div class="field hidden" id="areaField"><label>ÁREA</label><select id="areaSelect"></select></div><div class="field hidden" id="pontoField"><label>PONTO / LOCAL</label><select id="pontoSelect"></select></div><button class="photo-button" id="photoButton">📷 ADICIONAR FOTO</button><input class="photo-input" id="photoInput" type="file" accept="image/*" capture="environment"><img class="preview" id="preview" alt="Prévia"><div class="field"><label>OBSERVAÇÃO</label><textarea id="observacao" maxlength="600" placeholder="Observação sobre a execução..."></textarea></div><button class="confirm" id="confirmExec">✓ REGISTRAR CONCLUSÃO</button></div></div>
@@ -115,12 +116,22 @@ const VAPID_PUBLIC_KEY="BNOm_tsvH-uo-hfquzYmf_XxgiGAciYKyia_FdI1PVfBISDELIqnvSUA
 const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const $=id=>document.getElementById(id);
 let authUser=null,colaborador=null,condominio=null,areas=[],pontos=[],atividades=[],programacoes=[],demandas=[],escalaHoje=null,pontosHoje=[],execucoesHoje=[];
-let execAtual=null,demandaAtual=null,fotoArquivo=null,previewURL=null,processando=false;
+let execAtual=null,demandaAtual=null,fotoArquivo=null,previewURL=null,processando=false,anteriorAberto=false;
 
 function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
 function hoje(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
 function inicioHojeISO(){const d=new Date();d.setHours(0,0,0,0);return d.toISOString()}
 function fimHojeISO(){const d=new Date();d.setHours(23,59,59,999);return d.toISOString()}
+function inicioDiaISO(offset=0){const d=new Date();d.setDate(d.getDate()+offset);d.setHours(0,0,0,0);return d.toISOString()}
+function fimDiaISO(offset=0){const d=new Date();d.setDate(d.getDate()+offset);d.setHours(23,59,59,999);return d.toISOString()}
+function dataLocalISO(v){if(!v)return"";const d=new Date(v);if(Number.isNaN(d.getTime()))return"";return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
+function demandaEhDeHoje(d){return dataLocalISO(d.created_at)===hoje()}
+function demandaVisivelHoje(d){
+  const status=String(d.status||"pendente").toLowerCase();
+  const concluida=status==="concluida";
+  // Concluídas antigas saem da operação atual. Pendências antigas permanecem.
+  return !concluida || demandaEhDeHoje(d) || dataLocalISO(d.concluida_em)===hoje();
+}
 function hora(v){if(!v)return"--:--";const d=new Date(v);return Number.isNaN(d.getTime())?String(v).slice(0,5):d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}
 function toast(m){$("toast").textContent=m;$("toast").classList.add("visible");setTimeout(()=>$("toast").classList.remove("visible"),2600)}
 function erro(m){$("error").textContent=m;$("error").classList.add("visible")}
@@ -336,7 +347,7 @@ async function selecionarCondominioColaborador(condominioId){
   condominio=vinculo.condominio;
   sessionStorage.setItem("oraqui_colaborador_condominio_id",String(condominio.id));
 
-  areas=[];pontos=[];atividades=[];programacoes=[];demandas=[];pontosHoje=[];execucoesHoje=[];escalaHoje=null;
+  areas=[];pontos=[];atividades=[];programacoes=[];demandas=[];pontosHoje=[];execucoesHoje=[];escalaHoje=null;anteriorAberto=false;$("historicoAnterior").classList.add("hidden");$("historicoAnterior").innerHTML="";$("verAnterior").textContent="📅 VER DIA ANTERIOR";
 
   $("userName").textContent=colaborador.nome;
   $("userDescription").textContent=`${colaborador.funcao||"Colaborador"} • #${colaborador.matricula}`;
@@ -380,7 +391,7 @@ async function carregarTudo(){
     atividades=at.data||[];
     programacoes=(pr.data||[]).filter(programacaoValeHoje).filter(programacaoParaColaborador);
     escalaHoje=(es.data||[]).find(x=>x.status_publicacao==="publicada"||x.status_publicacao==="alterada")||(es.data||[])[0]||null;
-    demandas=(de.data||[]).filter(demandaParaColaborador);
+    demandas=(de.data||[]).filter(demandaParaColaborador).filter(demandaVisivelHoje);
     pontosHoje=rp.data||[];
     execucoesHoje=ex.data||[];
 
@@ -642,6 +653,76 @@ function renderHistorico(){
   }).join("");
 }
 
+
+async function alternarDiaAnterior(){
+  const box=$("historicoAnterior"),btn=$("verAnterior");
+  if(anteriorAberto){
+    anteriorAberto=false;
+    box.classList.add("hidden");
+    btn.textContent="📅 VER DIA ANTERIOR";
+    return;
+  }
+
+  anteriorAberto=true;
+  box.classList.remove("hidden");
+  box.innerHTML='<div class="loading">Carregando dia anterior...</div>';
+  btn.textContent="FECHAR DIA ANTERIOR";
+
+  try{
+    const [ex,de]=await Promise.all([
+      db.from("execucoes").select("*")
+        .eq("condominio_id",colaborador.condominio_id)
+        .eq("colaborador_id",colaborador.id)
+        .gte("created_at",inicioDiaISO(-1))
+        .lte("created_at",fimDiaISO(-1))
+        .order("created_at",{ascending:false}),
+      db.from("demandas").select("*")
+        .eq("condominio_id",colaborador.condominio_id)
+        .eq("status","concluida")
+        .gte("concluida_em",inicioDiaISO(-1))
+        .lte("concluida_em",fimDiaISO(-1))
+        .order("concluida_em",{ascending:false})
+    ]);
+    if(ex.error)throw ex.error;
+    if(de.error)throw de.error;
+
+    const execs=ex.data||[];
+    const demandasOntem=(de.data||[]).filter(demandaParaColaborador);
+    const itens=[];
+
+    execs.forEach(e=>{
+      itens.push({
+        quando:e.concluida_em||e.created_at,
+        titulo:e.atividade_id?atividadeNome(e.atividade_id):(e.tipo==="avulsa"?"Atividade avulsa":"Atividade"),
+        local:nomeLocal(e.area_id,e.ponto_id)||"Registro operacional",
+        obs:e.observacao||""
+      });
+    });
+
+    demandasOntem.forEach(d=>{
+      itens.push({
+        quando:d.concluida_em||d.updated_at||d.created_at,
+        titulo:d.titulo||"Demanda",
+        local:nomeLocal(d.area_id,d.ponto_id)||"Demanda concluída",
+        obs:d.observacao_execucao||""
+      });
+    });
+
+    itens.sort((a,b)=>new Date(b.quando)-new Date(a.quando));
+
+    if(!itens.length){
+      box.innerHTML=vazio("Nenhum registro no dia anterior","Não há atividades ou demandas concluídas para mostrar.");
+      return;
+    }
+
+    box.className="list";
+    box.innerHTML=itens.map(i=>`<div class="item-card"><div class="item-top"><div class="item-icon">✓</div><div class="item-info"><strong>${esc(i.titulo)}</strong><span>${esc(i.local)} • ${hora(i.quando)}</span></div><span class="badge green">REGISTRADO</span></div>${i.obs?`<div class="item-description">${esc(i.obs)}</div>`:""}</div>`).join("");
+  }catch(e){
+    console.error(e);
+    box.innerHTML=vazio("Falha ao carregar","Não foi possível consultar o dia anterior.");
+  }
+}
+
 function abrirExecucao(id=null){
   demandaAtual=null;
   execAtual=id?programacoes.find(p=>mesmoId(p.id,id)):null;
@@ -887,6 +968,7 @@ $("btnIniIntervalo").onclick=()=>registrarPonto("inicio_intervalo");
 $("btnFimIntervalo").onclick=()=>registrarPonto("fim_intervalo");
 $("btnSaida").onclick=()=>registrarPonto("saida");
 $("avulso").onclick=()=>abrirExecucao();
+$("verAnterior").onclick=alternarDiaAnterior;
 $("closeModal").onclick=fecharModal;
 $("areaSelect").onchange=popularPontos;
 $("pontoSelect").onchange=()=>{
