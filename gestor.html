@@ -527,7 +527,7 @@ async function reenviarConviteGestor(id,btn){
   const original=btn?.textContent||"REENVIAR CONVITE";
   if(btn){btn.disabled=true;btn.textContent="ENVIANDO...";}
   try{
-    const {data,error}=await db.functions.invoke("reenviar-convite-gestor",{body:{usuario_gestao_id:g.id}});
+    const {data,error}=await db.functions.invoke("reenviar-convite-gestor",{body:{usuario_gestao_id:g.id,condominio_id:CONDOMINIO_ID}});
     if(error||data?.ok===false){
       const msg=await mensagemFunction(error,data,"Não foi possível reenviar o convite do gestor.");
       throw new Error(msg);
@@ -745,7 +745,7 @@ async function reenviarConviteColaborador(id,btn){
   const original=btn?.textContent||"REENVIAR CONVITE";
   if(btn){btn.disabled=true;btn.textContent="ENVIANDO...";}
   try{
-    const {data,error}=await db.functions.invoke("reenviar-convite-colaborador",{body:{colaborador_id:c.id}});
+    const {data,error}=await db.functions.invoke("reenviar-convite-colaborador",{body:{colaborador_id:c.id,condominio_id:CONDOMINIO_ID}});
     if(error||data?.ok===false){
       const msg=await mensagemFunction(error,data,"Não foi possível reenviar o convite.");
       throw new Error(msg);
