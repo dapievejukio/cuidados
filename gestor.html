@@ -43,12 +43,34 @@ main{max-width:980px;margin:-18px auto 80px;padding:0 16px}.manager-card,.tower-
 .resolved-answer strong{display:block;margin-bottom:4px;font-size:8px}
 .resolved-details .forward-box{margin-top:12px}
 
+
+.condo-switch{border:0;padding:10px 13px;border-radius:14px;background:rgba(255,255,255,.16);color:#fff;font-size:9px;font-weight:800;margin-right:6px}
+.condo-screen{position:fixed;inset:0;z-index:4900;background:linear-gradient(135deg,#657ba5,#7c72ae);display:flex;align-items:center;justify-content:center;padding:22px}
+.condo-card{width:min(520px,100%);background:#fff;border-radius:25px;padding:27px;box-shadow:0 20px 60px rgba(25,30,50,.25)}
+.condo-card h2{font-size:22px;margin-top:15px}.condo-card>p{margin-top:7px;color:var(--muted);font-size:10px;line-height:1.5}
+.condo-list{display:flex;flex-direction:column;gap:10px;margin-top:20px}
+.condo-option{width:100%;border:1px solid var(--border);border-radius:16px;background:#fff;padding:15px;text-align:left;display:flex;align-items:center;gap:12px}
+.condo-option:hover{background:var(--primary-light);border-color:#d9d2f4}
+.condo-option-icon{width:42px;height:42px;border-radius:13px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:20px}
+.condo-option-info{flex:1}.condo-option-info strong{display:block;font-size:12px;color:var(--text)}.condo-option-info span{display:block;margin-top:3px;font-size:8px;color:var(--muted)}
+
 </style>
 </head>
 <body>
 <div class="auth-screen" id="authScreen"><div class="auth-card"><div class="auth-logo">✓</div><h1>Gestão ORAQUI</h1><p>Acesso administrativo protegido pelo Supabase Auth.</p><div class="auth-field"><label>E-MAIL</label><input id="loginEmail" type="email" value="atendimento@oraqui.app"></div><div class="auth-field"><label>SENHA</label><input id="loginPassword" type="password"></div><button class="auth-button" id="loginButton">ENTRAR</button><div class="auth-error" id="authError"></div></div></div>
+
+<div class="condo-screen hidden" id="condoScreen">
+  <div class="condo-card">
+    <div class="auth-logo">✓</div>
+    <h2>Escolha o condomínio</h2>
+    <p>Esta conta possui acesso a mais de um condomínio. Selecione onde deseja trabalhar.</p>
+    <div class="condo-list" id="condoList"></div>
+    <button class="auth-button" id="condoLogout" type="button">SAIR DA CONTA</button>
+  </div>
+</div>
+
 <div id="app" class="hidden">
-<header><div class="header-content"><div class="topbar"><div class="brand"><div class="brand-icon">✓</div><div><strong>ORAQUI</strong><small>AGORA. AQUI. REGISTRADO.</small></div></div><button class="logout" id="logoutButton">SAIR</button></div><div class="header-title"><small id="headerCondominio">CONDOMÍNIO</small><h1>Painel de Gestão</h1><p>Operação, ocorrências, equipe e configuração operacional.</p></div></div></header>
+<header><div class="header-content"><div class="topbar"><div class="brand"><div class="brand-icon">✓</div><div><strong>ORAQUI</strong><small>AGORA. AQUI. REGISTRADO.</small></div></div><div><button class="condo-switch hidden" id="switchCondoButton" type="button">🏢 TROCAR</button><button class="logout" id="logoutButton">SAIR</button></div></div><div class="header-title"><small id="headerCondominio">CONDOMÍNIO</small><h1>Painel de Gestão</h1><p>Operação, ocorrências, equipe e configuração operacional.</p></div></div></header>
 <main>
 <div class="manager-card"><div class="manager-icon">📊</div><div class="manager-info"><strong id="managerName">Gestão</strong><span id="managerProfile">Gestor autenticado</span></div><span class="online">● ONLINE</span></div>
 <div class="push-card"><div class="push-icon">🔔</div><div class="push-info"><strong>Notificações da gestão</strong><span id="pushGestaoStatus">Ative para receber novas ocorrências mesmo com o ORAQUI fechado.</span></div><button class="push-button" id="pushGestaoButton" type="button">ATIVAR</button></div><div class="error-box" id="errorBox"></div>
@@ -72,7 +94,7 @@ main{max-width:980px;margin:-18px auto 80px;padding:0 16px}.manager-card,.tower-
 <script>
 const SUPABASE_URL="https://rhiosvsohvqqrxzwohqu.supabase.co",SUPABASE_KEY="sb_publishable_vcjiMMCTxQJ7ArTGsQ-PuQ_5gaAfoIt";
 const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY),$=id=>document.getElementById(id);
-let perfilGestor=null,CONDOMINIO="",CONDOMINIO_ID=null,gestoresCarregados=[],ocorrenciasCarregadas=[],demandasOcorrencias=[],colaboradoresCarregados=[],areasCarregadas=[],pontosCarregados=[],atividadesCarregadas=[],programacoesCarregadas=[],filtroOcorrencias="todas",colaboradorEditandoId=null,areaEditandoId=null,pontoEditandoId=null,atividadeEditandoId=null,programacaoEditandoId=null,ocorrenciaDemandaId=null;const statusSelecionado={};
+let perfilGestor=null,vinculosGestao=[],CONDOMINIO="",CONDOMINIO_ID=null,gestoresCarregados=[],ocorrenciasCarregadas=[],demandasOcorrencias=[],colaboradoresCarregados=[],areasCarregadas=[],pontosCarregados=[],atividadesCarregadas=[],programacoesCarregadas=[],filtroOcorrencias="todas",colaboradorEditandoId=null,areaEditandoId=null,pontoEditandoId=null,atividadeEditandoId=null,programacaoEditandoId=null,ocorrenciaDemandaId=null;const statusSelecionado={};
 const locationList=$("locationList"),activityContainer=$("activityContainer"),occurrenceList=$("occurrenceList"),collaboratorList=$("collaboratorList"),managementList=$("managementList"),configList=$("configList"),errorBox=$("errorBox");
 function esc(t){return String(t??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
 function norm(s){return String(s||"").trim().toLowerCase()}
@@ -122,80 +144,56 @@ async function ativarPushGestao(){
   finally{b.disabled=false}
 }
 
-async function login(){const email=$("loginEmail").value.trim(),password=$("loginPassword").value,box=$("authError");box.style.display="none";try{const {data,error}=await db.auth.signInWithPassword({email,password});if(error)throw error;await validarGestor(data.user)}catch(e){await db.auth.signOut();box.textContent=e.message||"Falha no acesso.";box.style.display="block"}}
-async function validarGestor(user){
-  // 1) Localiza o perfil de gestão do usuário sem exigir conversão para objeto único.
-  const {data:perfis,error:pe}=await db.from("usuarios_gestao")
-    .select("id,nome,perfil,ativo,condominio_id")
-    .eq("auth_user_id",user.id)
-    .eq("ativo",true);
-
-  if(pe)throw pe;
-
-  const perfisValidos=(perfis||[]).filter(x =>
-    ["gestor","admin_oraqui","admin_cliente","supervisor"].includes(x.perfil)
-  );
-
-  if(!perfisValidos.length)
-    throw new Error("Usuário sem perfil de gestão ativo.");
-
-  // Se houver mais de um vínculo no futuro, o admin ORAQUI tem prioridade.
-  const p=perfisValidos.find(x=>x.perfil==="admin_oraqui") || perfisValidos[0];
-
-  const slugSelecionado=(new URLSearchParams(location.search).get("condominio")||"").trim();
-
-  let c=null;
-
-  if(p.perfil==="admin_oraqui"){
-    // Admin global SEMPRE precisa entrar a partir de um condomínio escolhido no Admin.
-    if(!slugSelecionado){
-      location.href="admin.html";
-      return;
-    }
-
-    const {data:condominios,error:ce}=await db.from("condominios")
-      .select("id,nome,slug,ativo")
-      .eq("slug",slugSelecionado)
-      .eq("ativo",true);
-
-    if(ce)throw ce;
-    if(!condominios?.length)
-      throw new Error("Condomínio selecionado não foi encontrado ou está inativo.");
-    if(condominios.length>1)
-      throw new Error("Há mais de um condomínio com o mesmo slug. Corrija o cadastro antes de continuar.");
-
-    c=condominios[0];
-  }else{
-    // Gestores comuns continuam presos ao condomínio cadastrado no perfil.
-    const {data:condominios,error:ce}=await db.from("condominios")
-      .select("id,nome,slug,ativo")
-      .eq("id",p.condominio_id)
-      .eq("ativo",true);
-
-    if(ce)throw ce;
-    if(!condominios?.length)
-      throw new Error("O condomínio vinculado a este usuário não foi encontrado ou está inativo.");
-
-    c=condominios[0];
+async function login(){
+  const email=$("loginEmail").value.trim(),password=$("loginPassword").value,box=$("authError");
+  box.style.display="none";
+  try{
+    const {data,error}=await db.auth.signInWithPassword({email,password});
+    if(error)throw error;
+    await validarGestor(data.user);
+  }catch(e){
+    await db.auth.signOut();
+    box.textContent=e.message||"Falha no acesso.";
+    box.style.display="block";
   }
-
-  perfilGestor=p;
-  CONDOMINIO_ID=c.id;
-  CONDOMINIO=c.nome;
-
-  $("headerCondominio").textContent=CONDOMINIO.toUpperCase();
-  $("towerName").textContent=CONDOMINIO;
-  $("managerName").textContent=`${p.nome} • ${CONDOMINIO}`;
-  $("managerProfile").textContent=`${p.perfil.toUpperCase()} • acesso autenticado`;
-
-  $("authScreen").classList.add("hidden");
-  $("app").classList.remove("hidden");
-
-  aplicarPermissoesGestao();
-  await Promise.all([carregarDados(),carregarOcorrencias()]);
-  await atualizarEstadoPushGestao();
 }
-async function sair(){const destino=perfilGestor?.perfil==="admin_oraqui"?"admin.html":"index.html";await db.auth.signOut();location.href=destino}
+async function validarGestor(user){
+  const {data:vinculos,error}=await db.from("usuarios_gestao").select("id,nome,perfil,ativo,condominio_id").eq("auth_user_id",user.id).eq("ativo",true).order("condominio_id");
+  if(error)throw error;
+  const permitidos=(vinculos||[]).filter(v=>v.condominio_id&&["gestor","admin_cliente","supervisor"].includes(v.perfil));
+  if(!permitidos.length)throw new Error("Usuário sem perfil de gestão ativo.");
+  const ids=[...new Set(permitidos.map(v=>Number(v.condominio_id)))];
+  const {data:condominios,error:ce}=await db.from("condominios").select("id,nome,slug,ativo").in("id",ids).eq("ativo",true).order("nome");
+  if(ce)throw ce;
+  vinculosGestao=(condominios||[]).map(c=>{const v=permitidos.find(x=>Number(x.condominio_id)===Number(c.id));return {...v,condominio:c}});
+  if(!vinculosGestao.length)throw new Error("Nenhum condomínio ativo disponível para esta conta.");
+  $("authScreen").classList.add("hidden");
+  const salvo=Number(sessionStorage.getItem("oraqui_condominio_id")||0);
+  const vinculoSalvo=vinculosGestao.find(v=>Number(v.condominio_id)===salvo);
+  if(vinculosGestao.length===1)await selecionarCondominio(vinculosGestao[0].condominio_id);
+  else if(vinculoSalvo)await selecionarCondominio(vinculoSalvo.condominio_id);
+  else mostrarSeletorCondominios();
+}
+function mostrarSeletorCondominios(){
+  $("app").classList.add("hidden");$("condoScreen").classList.remove("hidden");
+  $("condoList").innerHTML=vinculosGestao.map(v=>`<button class="condo-option" type="button" data-condo="${v.condominio_id}"><div class="condo-option-icon">🏢</div><div class="condo-option-info"><strong>${esc(v.condominio.nome)}</strong><span>${esc(v.nome)} • ${esc(v.perfil.toUpperCase())}</span></div><span>›</span></button>`).join("");
+  $("condoList").querySelectorAll("[data-condo]").forEach(b=>b.onclick=()=>selecionarCondominio(Number(b.dataset.condo)));
+}
+function limparEstadoCondominio(){
+  gestoresCarregados=[];ocorrenciasCarregadas=[];demandasOcorrencias=[];colaboradoresCarregados=[];areasCarregadas=[];pontosCarregados=[];atividadesCarregadas=[];programacoesCarregadas=[];filtroOcorrencias="todas";colaboradorEditandoId=null;areaEditandoId=null;pontoEditandoId=null;atividadeEditandoId=null;programacaoEditandoId=null;ocorrenciaDemandaId=null;Object.keys(statusSelecionado).forEach(k=>delete statusSelecionado[k]);
+}
+async function selecionarCondominio(id){
+  const v=vinculosGestao.find(x=>Number(x.condominio_id)===Number(id));
+  if(!v)return alert("Você não possui acesso ativo a este condomínio.");
+  perfilGestor=v;CONDOMINIO_ID=Number(v.condominio.id);CONDOMINIO=v.condominio.nome;
+  sessionStorage.setItem("oraqui_condominio_id",String(CONDOMINIO_ID));limparEstadoCondominio();
+  $("headerCondominio").textContent=CONDOMINIO.toUpperCase();$("towerName").textContent=CONDOMINIO;$("managerName").textContent=`${v.nome} • ${CONDOMINIO}`;$("managerProfile").textContent=`${v.perfil.toUpperCase()} • acesso autenticado`;
+  $("switchCondoButton").classList.toggle("hidden",vinculosGestao.length<2);
+  $("condoScreen").classList.add("hidden");$("authScreen").classList.add("hidden");$("app").classList.remove("hidden");
+  aplicarPermissoesGestao();painel("operacao");await Promise.all([carregarDados(),carregarOcorrencias()]);await atualizarEstadoPushGestao();
+}
+function trocarCondominio(){if(vinculosGestao.length>1)mostrarSeletorCondominios()}
+async function sair(){sessionStorage.removeItem("oraqui_condominio_id");await db.auth.signOut();location.href="./"}
 
 async function carregarDados(){
   if(!CONDOMINIO_ID)return;
@@ -502,7 +500,7 @@ async function salvarDemandaOcorrencia(){
 }
 
 
-function podeAdministrarGestao(){return !!perfilGestor&&["admin_cliente","admin_oraqui"].includes(perfilGestor.perfil)}
+function podeAdministrarGestao(){return !!perfilGestor&&perfilGestor.perfil==="admin_cliente"}
 function aplicarPermissoesGestao(){const a=podeAdministrarGestao();$("addManager").classList.toggle("hidden",!a);$("managementPermissionNote").classList.toggle("hidden",a)}
 async function carregarGestores(){
  if(!CONDOMINIO_ID)return;
@@ -518,7 +516,7 @@ async function convidarGestor(){
  if(!podeAdministrarGestao())return alert("Somente o administrador pode convidar gestores.");
  const nome=$("managerInviteName").value.trim(),email=$("managerInviteEmail").value.trim().toLowerCase();if(!nome||!email)return alert("Informe nome e e-mail do gestor.");
  const b=$("saveManager");b.disabled=true;b.textContent="ENVIANDO...";
- try{const {data,error}=await db.functions.invoke("convidar-gestor",{body:{nome,email}});if(error)throw error;if(data?.ok===false||data?.success===false)throw new Error(data?.error||"Não foi possível convidar o gestor.");fecharConviteGestor();toast("✓ Convite de gestor enviado.");await carregarGestores()}catch(e){console.error(e);alert(e.message||"Não foi possível convidar o gestor.")}finally{b.disabled=false;b.textContent="ENVIAR CONVITE"}
+ try{const {data,error}=await db.functions.invoke("convidar-gestor",{body:{nome,email,condominio_id:CONDOMINIO_ID}});if(error)throw error;if(data?.ok===false||data?.success===false)throw new Error(data?.error||"Não foi possível convidar o gestor.");fecharConviteGestor();toast("✓ Convite de gestor enviado.");await carregarGestores()}catch(e){console.error(e);alert(e.message||"Não foi possível convidar o gestor.")}finally{b.disabled=false;b.textContent="ENVIAR CONVITE"}
 }
 
 async function reenviarConviteGestor(id,btn){
@@ -728,7 +726,7 @@ async function salvarCol(){
       .eq("condominio_id",CONDOMINIO_ID);
     if(error)return alert(error.message);
   }else{
-    const {data,error}=await db.functions.invoke("convidar-colaborador",{body:payload});
+    const {data,error}=await db.functions.invoke("convidar-colaborador",{body:{...payload,condominio_id:CONDOMINIO_ID}});
     if(error||data?.success===false){
       const msg=await mensagemFunction(error,data,"Não foi possível convidar o colaborador.");
       return alert(msg);
@@ -875,7 +873,7 @@ async function savePr(){
 async function togglePr(id,ativo){let{error}=await db.from("programacoes").update({ativo,updated_at:new Date().toISOString()}).eq("id",id).eq("condominio_id",CONDOMINIO_ID);if(error)return alert(error.message);await carregarAP()}
 function painel(p){["Operacao","Ocorrencias","Colaboradores","Config"].forEach(n=>{$("panel"+n).classList.toggle("active",n.toLowerCase()===p);$("tab"+n).classList.toggle("active",n.toLowerCase()===p)});if(p==="ocorrencias")carregarOcorrencias();if(p==="colaboradores"){carregarColaboradores();carregarGestores()}if(p==="config")carregarConfig()}
 function eventos(){
-$("loginButton").onclick=login;$("pushGestaoButton").onclick=ativarPushGestao;$("loginPassword").onkeydown=e=>{if(e.key==="Enter")login()};$("logoutButton").onclick=sair;
+$("loginButton").onclick=login;$("pushGestaoButton").onclick=ativarPushGestao;$("switchCondoButton").onclick=trocarCondominio;$("condoLogout").onclick=sair;$("loginPassword").onkeydown=e=>{if(e.key==="Enter")login()};$("logoutButton").onclick=sair;
 $("tabOperacao").onclick=()=>painel("operacao");$("tabOcorrencias").onclick=()=>painel("ocorrencias");$("tabColaboradores").onclick=()=>painel("colaboradores");$("tabConfig").onclick=()=>painel("config");
 $("refreshDados").onclick=carregarDados;$("refreshOcorrencias").onclick=carregarOcorrencias;
 $("closeDemanda").onclick=$("cancelDemanda").onclick=fecharDemanda;$("saveDemanda").onclick=salvarDemandaOcorrencia;$("demandaDestino").onchange=destinoDemanda;
@@ -885,7 +883,7 @@ $("closePoint").onclick=$("cancelPoint").onclick=()=>$("pointModal").classList.r
 $("subAreas").onclick=()=>subConfig("a");$("subAtividades").onclick=()=>subConfig("t");$("subProgramacoes").onclick=()=>subConfig("p");$("addAtividade").onclick=openAt;$("closeAtividade").onclick=$("cancelAtividade").onclick=closeAt;$("saveAtividade").onclick=saveAt;$("addProgramacao").onclick=openPr;$("closeProgramacao").onclick=$("cancelProgramacao").onclick=closePr;$("saveProgramacao").onclick=savePr;$("progArea").onchange=()=>fillPoints();$("progDestino").onchange=dest;document.querySelectorAll(".filter").forEach(b=>b.onclick=()=>{filtroOcorrencias=b.dataset.filter;document.querySelectorAll(".filter").forEach(x=>x.classList.remove("active"));b.classList.add("active");renderOcorrencias()});
 }
 async function iniciar(){eventos();$("todayDate").textContent=new Date().toLocaleDateString("pt-BR");const {data:{session}}=await db.auth.getSession();if(session){try{await validarGestor(session.user)}catch(e){await db.auth.signOut();$("authError").textContent=e.message;$("authError").style.display="block"}}}
-iniciar();setInterval(()=>{if(perfilGestor){carregarDados();carregarOcorrencias()}},60000);
+iniciar();setInterval(()=>{if(perfilGestor&&CONDOMINIO_ID&&!$("app").classList.contains("hidden")){carregarDados();carregarOcorrencias()}},60000);
 </script>
 </body>
 </html>
