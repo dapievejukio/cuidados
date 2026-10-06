@@ -15,12 +15,12 @@
  --shadow:0 18px 48px rgba(24,57,52,.10)
 }
 *{box-sizing:border-box}html{background:var(--bg)}body{margin:0;min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink)}
-button,input,select,textarea{font:inherit}.shell{max-width:680px;margin:auto;min-height:100vh}
+button,input,select,textarea{font:inherit}.sahell{max-width:680px;margin:auto;min-height:100vh}
 .hero{position:relative;overflow:hidden;background:linear-gradient(145deg,#123934 0%,#1d5049 65%,#2d6b61 100%);color:#fff;padding:calc(18px + env(safe-area-inset-top)) 20px 58px}
 .hero:after{content:"";position:absolute;width:220px;height:220px;border:1px solid rgba(255,255,255,.09);border-radius:50%;right:-90px;top:-80px;box-shadow:0 0 0 35px rgba(255,255,255,.025),0 0 0 75px rgba(255,255,255,.018)}
 .top{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:10px}.mark{width:38px;height:38px;border-radius:13px;background:#fff;color:var(--brand);display:grid;place-items:center;font-weight:900;font-size:13px;letter-spacing:-.5px}.brand b{display:block;font-size:15px;letter-spacing:.8px}.brand span{display:block;margin-top:2px;font-size:10px;opacity:.72}
 .secure{display:flex;align-items:center;gap:6px;padding:8px 10px;border:1px solid rgba(255,255,255,.16);border-radius:999px;background:rgba(255,255,255,.08);font-size:9px;font-weight:700;letter-spacing:.3px}
-.hero-copy{position:relative;z-index:1;margin-top:35px;max-width:520px}.eyebrow{font-size:10px;font-weight:800;letter-spacing:1.1px;opacity:.7}.hero h1{font-size:30px;line-height:1.08;letter-spacing:-.8px;margin:8px 0 10px}.hero p{max-width:450px;margin:0;color:rgba(255,255,255,.76);font-size:13px;line-height:1.55}
+.hero-copy{position:relative;z-index:1;margin-top:35px;max-width:520px}.eyebrow{font-size:16px;font-weight:900;letter-spacing:.7px;opacity:.94}.hero h1{font-size:30px;line-height:1.08;letter-spacing:-.8px;margin:8px 0 10px}.hero p{max-width:450px;margin:0;color:rgba(255,255,255,.76);font-size:13px;line-height:1.55}
 main{position:relative;margin-top:-28px;padding:0 14px 44px}.progress{display:flex;align-items:center;gap:8px;margin:0 6px 13px;color:#fff;font-size:9px;font-weight:750}.progress i{display:block;width:22px;height:4px;border-radius:99px;background:rgba(255,255,255,.35)}.progress i.on{width:38px;background:#fff}
 .card{background:var(--paper);border:1px solid rgba(223,231,228,.9);border-radius:24px;padding:20px;margin-bottom:12px;box-shadow:var(--shadow)}
 .step{display:flex;align-items:flex-start;gap:12px;margin-bottom:17px}.num{width:30px;height:30px;flex:0 0 30px;display:grid;place-items:center;border-radius:10px;background:var(--mint);color:var(--brand);font-size:11px;font-weight:900}.step h2{margin:1px 0 3px;font-size:16px;letter-spacing:-.2px}.step p{margin:0;color:var(--muted);font-size:10px;line-height:1.45}
@@ -30,6 +30,11 @@ select,input[type=email],textarea{width:100%;border:1px solid var(--line);outlin
 select,input[type=email]{height:54px;border-radius:15px;padding:0 14px;font-size:13px}textarea{min-height:105px;border-radius:16px;padding:14px;resize:vertical;font-size:13px;line-height:1.5}
 select:focus,input:focus,textarea:focus{border-color:#78a49b;background:#fff;box-shadow:0 0 0 3px rgba(36,91,84,.07)}select:disabled{opacity:.6}
 #detalheContainer{display:none}.loading-local{margin:7px 2px 0;color:var(--muted);font-size:9px}
+.ops-card{display:none;margin-top:14px;padding:15px;border:1px solid #dce9e5;border-radius:18px;background:linear-gradient(135deg,#f4f9f7,#edf6f3)}
+.ops-top{display:flex;align-items:center;gap:9px;margin-bottom:12px}.ops-check{width:30px;height:30px;display:grid;place-items:center;border-radius:10px;background:#dff0ea;color:#1d725b;font-weight:900}.ops-top strong{font-size:12px}.ops-top span{display:block;margin-top:2px;color:var(--muted);font-size:9px}
+.ops-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.ops-item{padding:11px;border-radius:13px;background:#fff;border:1px solid #e5ecea}.ops-item small{display:block;color:#71807d;font-size:8px;font-weight:850;letter-spacing:.45px}.ops-item b{display:block;margin-top:5px;font-size:11px;line-height:1.35}.ops-item em{display:block;margin-top:3px;color:#71807d;font-size:8px;font-style:normal}.ops-photo{display:none;margin-top:7px;border:0;background:none;padding:0;color:var(--brand2);font-size:9px;font-weight:850;cursor:pointer}
+.still{display:none;margin-top:11px;padding:11px 12px;border-radius:13px;background:#fff;color:#4e615c;font-size:10px;line-height:1.45}.still strong{color:var(--brand)}
+@media(max-width:430px){.ops-grid{grid-template-columns:1fr}}
 .photo-box{display:flex;align-items:center;gap:13px;padding:15px;border:1.5px dashed #b9cbc6;border-radius:18px;background:#f8fbfa;cursor:pointer}.photo-icon{width:49px;height:49px;flex:0 0 49px;display:grid;place-items:center;border-radius:15px;background:var(--mint);font-size:22px}.photo-box strong{display:block;font-size:13px}.photo-box span{display:block;margin-top:3px;color:var(--muted);font-size:9px;line-height:1.4}#photoInput{display:none}
 .preview{display:none;position:relative}.preview img{display:block;width:100%;max-height:400px;object-fit:cover;border-radius:18px}.remove{position:absolute;right:10px;top:10px;width:38px;height:38px;border:0;border-radius:50%;background:rgba(13,30,27,.76);color:#fff;font-size:20px}
 .or{display:flex;align-items:center;gap:10px;margin:15px 0}.or:before,.or:after{content:"";height:1px;flex:1;background:var(--line)}.or span{font-size:8px;font-weight:800;color:#93a09d}.counter{text-align:right;color:#9aa6a3;font-size:8px;margin-top:5px}
@@ -65,7 +70,15 @@ select:focus,input:focus,textarea:focus{border-color:#78a49b;background:#fff;box
   <div class="step"><div class="num">01</div><div><h2>Onde aconteceu?</h2><p>Escolha o local para direcionarmos corretamente.</p></div></div>
   <div class="place"><div class="place-icon">⌖</div><div><small>CONDOMÍNIO</small><strong>Reserva Igara</strong></div></div>
   <div class="field"><label for="area">ÁREA</label><select id="area" onchange="alterarArea()" disabled><option value="">Carregando locais...</option></select><div class="loading-local" id="localStatus"></div></div>
-  <div class="field" id="detalheContainer"><label for="detalhe">LOCAL / PONTO</label><select id="detalhe"><option value="">Selecione o local</option></select></div>
+  <div class="field" id="detalheContainer"><label for="detalhe">LOCAL / PONTO</label><select id="detalhe" onchange="carregarHistoricoLocal()"><option value="">Selecione o local</option></select></div>
+  <div class="ops-card" id="opsCard">
+   <div class="ops-top"><div class="ops-check">✓</div><div><strong>Este local é acompanhado pelo ORAQUI</strong><span>Registros operacionais do espaço selecionado</span></div></div>
+   <div class="ops-grid">
+    <div class="ops-item"><small>ÚLTIMA ATIVIDADE REGISTRADA</small><b id="ultimaAtividade">Consultando...</b><em id="ultimaQuando"></em><button class="ops-photo" id="ultimaFoto" type="button">📷 VER REGISTRO</button></div>
+    <div class="ops-item"><small>PRÓXIMA ATIVIDADE PREVISTA</small><b id="proximaAtividade">Consultando...</b><em id="proximaQuando"></em></div>
+   </div>
+   <div class="still" id="stillProblem"><strong>Ainda encontrou algo que precisa de atenção?</strong><br>Avise a equipe abaixo.</div>
+  </div>
  </section>
 
  <section class="card">
@@ -129,8 +142,59 @@ function alterarArea(){
  const areaId=Number(document.getElementById("area").value)||null,container=document.getElementById("detalheContainer"),det=document.getElementById("detalhe");
  const ps=pontos.filter(x=>Number(x.area_id)===areaId);
  det.innerHTML='<option value="">Selecione o local</option>'+ps.map(x=>`<option value="${x.id}">${esc(x.nome)}</option>`).join("");
- container.style.display=ps.length?"block":"none";det.value="";esconderErro();
+ container.style.display=ps.length?"block":"none";det.value="";
+ const ops=document.getElementById("opsCard");if(ops)ops.style.display="none";
+ esconderErro();
+ if(!ps.length&&areaId)carregarHistoricoLocal();
 }
+function fmtDataHora(v){
+ if(!v)return "";
+ const d=new Date(v);
+ if(Number.isNaN(d.getTime()))return "";
+ const hoje=new Date(),amanha=new Date();amanha.setDate(hoje.getDate()+1);
+ const mesma=(a,b)=>a.toDateString()===b.toDateString();
+ const dia=mesma(d,hoje)?"Hoje":mesma(d,amanha)?"Amanhã":d.toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit"});
+ return `${dia}, ${d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}`;
+}
+async function carregarHistoricoLocal(){
+ const areaId=Number(document.getElementById("area").value)||null;
+ const pontoId=Number(document.getElementById("detalhe").value)||null;
+ const ps=pontos.filter(x=>Number(x.area_id)===areaId);
+ if(!areaId||(ps.length&&!pontoId)){document.getElementById("opsCard").style.display="none";return}
+ const card=document.getElementById("opsCard"),ua=document.getElementById("ultimaAtividade"),uw=document.getElementById("ultimaQuando"),uf=document.getElementById("ultimaFoto"),pa=document.getElementById("proximaAtividade"),pw=document.getElementById("proximaQuando");
+ card.style.display="block";document.getElementById("stillProblem").style.display="none";
+ ua.textContent="Consultando...";uw.textContent="";uf.style.display="none";pa.textContent="Consultando...";pw.textContent="";
+ try{
+  let q=db.from("execucoes").select("id,atividade_id,executada_em,created_at,foto_path,atividades_v2(nome)").eq("condominio_id",CONDOMINIO_ID).eq("area_id",areaId).order("executada_em",{ascending:false}).limit(1);
+  if(pontoId)q=q.eq("ponto_id",pontoId);else q=q.is("ponto_id",null);
+  const {data:exec,error:e1}=await q;if(e1)throw e1;
+  const ultima=exec?.[0];
+  if(ultima){
+   ua.textContent=ultima.atividades_v2?.nome||"Atividade concluída";
+   uw.textContent=fmtDataHora(ultima.executada_em||ultima.created_at);
+   if(ultima.foto_path){
+    uf.style.display="block";
+    uf.onclick=async()=>{
+     const {data,error}=await db.storage.from("fotos-atividades").createSignedUrl(ultima.foto_path,120);
+     if(error||!data?.signedUrl){mostrarErro("Não foi possível abrir a foto deste registro.");return}
+     window.open(data.signedUrl,"_blank","noopener");
+    };
+   }
+  }else{ua.textContent="Ainda não há atividade registrada";uw.textContent="";}
+ }catch(e){console.warn("Histórico público indisponível",e);ua.textContent="Histórico ainda não disponível";uw.textContent="";}
+
+ try{
+  const agora=new Date().toISOString();
+  let q2=db.from("programacoes").select("id,atividade_id,inicio_previsto,atividades_v2(nome)").eq("condominio_id",CONDOMINIO_ID).eq("area_id",areaId).gte("inicio_previsto",agora).order("inicio_previsto",{ascending:true}).limit(1);
+  if(pontoId)q2=q2.eq("ponto_id",pontoId);else q2=q2.is("ponto_id",null);
+  const {data:prog,error:e2}=await q2;if(e2)throw e2;
+  const prox=prog?.[0];
+  if(prox){pa.textContent=prox.atividades_v2?.nome||"Atividade programada";pw.textContent=fmtDataHora(prox.inicio_previsto)}
+  else{pa.textContent="Nenhuma atividade programada";pw.textContent=""}
+ }catch(e){console.warn("Programação pública indisponível",e);pa.textContent="Programação ainda não disponível";pw.textContent=""}
+ document.getElementById("stillProblem").style.display="block";
+}
+
 photoInput.addEventListener("change",function(){const file=this.files[0];if(!file)return;const limite=10*1024*1024;if(file.size>limite){mostrarErro("A foto deve ter no máximo 10 MB.");this.value="";return}if(!file.type.startsWith("image/")){mostrarErro("Selecione um arquivo de imagem.");this.value="";return}fotoSelecionada=file;if(previewUrl)URL.revokeObjectURL(previewUrl);previewUrl=URL.createObjectURL(file);document.getElementById("photoPreview").src=previewUrl;document.getElementById("photoBox").style.display="none";document.getElementById("preview").style.display="block";esconderErro()});
 function removerFoto(){photoInput.value="";fotoSelecionada=null;if(previewUrl){URL.revokeObjectURL(previewUrl);previewUrl=null}document.getElementById("photoPreview").src="";document.getElementById("preview").style.display="none";document.getElementById("photoBox").style.display="block"}
 function contador(){document.getElementById("count").textContent=document.getElementById("descricao").value.length}
