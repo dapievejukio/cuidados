@@ -1,2872 +1,865 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
-
-<title>Minha Rotina — ORAQUI</title>
-
-<meta
-    name="theme-color"
-    content="#12355b"
->
-
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>Colaborador — ORAQUI</title>
+<meta name="theme-color" content="#6d80a8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="ORAQUI">
+<link rel="manifest" href="manifest.webmanifest">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-
-:root {
-
-    --primary:#12355b;
-    --primary-dark:#0b2745;
-    --primary-light:#eaf2fb;
-
-    --green:#178c58;
-    --green-light:#e8f6ef;
-
-    --yellow:#d89b19;
-    --yellow-light:#fff4d6;
-
-    --red:#d94b4b;
-    --red-light:#fdecec;
-
-    --purple:#6654a3;
-    --purple-light:#efecf8;
-
-    --text:#17202a;
-    --muted:#687483;
-
-    --background:#f4f7fa;
-    --card:#ffffff;
-    --border:#e2e8ef;
-
-    --shadow:
-        0 8px 25px
-        rgba(20,45,75,.07);
-
-}
-
-* {
-
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-
-}
-
-body {
-
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Roboto,
-        Helvetica,
-        Arial,
-        sans-serif;
-
-    background:
-        var(--background);
-
-    color:
-        var(--text);
-
-    min-height:100vh;
-
-}
-
-button {
-
-    font-family:inherit;
-
-}
-
-
-/* HEADER */
-
-header {
-
-    background:
-        linear-gradient(
-            135deg,
-            var(--primary-dark),
-            var(--primary)
-        );
-
-    color:white;
-
-    padding:
-        calc(18px + env(safe-area-inset-top))
-        18px
-        35px;
-
-}
-
-.header-content {
-
-    max-width:760px;
-    margin:auto;
-
-}
-
-.topbar {
-
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-
-}
-
-.brand {
-
-    display:flex;
-    align-items:center;
-    gap:10px;
-
-}
-
-.logo {
-
-    width:43px;
-    height:43px;
-
-    border-radius:13px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    background:
-        rgba(255,255,255,.14);
-
-    font-size:21px;
-    font-weight:800;
-
-}
-
-.brand strong {
-
-    display:block;
-    font-size:15px;
-
-}
-
-.brand small {
-
-    display:block;
-
-    margin-top:2px;
-
-    opacity:.7;
-    font-size:9px;
-
-}
-
-.logout {
-
-    width:42px;
-    height:42px;
-
-    border:0;
-    border-radius:13px;
-
-    background:
-        rgba(255,255,255,.14);
-
-    color:white;
-    cursor:pointer;
-
-    font-size:17px;
-
-}
-
-.welcome {
-
-    margin-top:27px;
-
-}
-
-.welcome small {
-
-    opacity:.7;
-    font-size:10px;
-
-}
-
-.welcome h1 {
-
-    margin-top:4px;
-    font-size:26px;
-
-}
-
-.welcome p {
-
-    margin-top:5px;
-
-    opacity:.72;
-    font-size:10px;
-
-}
-
-
-/* MAIN */
-
-main {
-
-    max-width:760px;
-
-    margin:-15px auto 100px;
-
-    padding:0 15px;
-
-}
-
-
-/* PROFILE */
-
-.profile {
-
-    background:white;
-
-    border-radius:20px;
-
-    padding:15px;
-
-    display:flex;
-    align-items:center;
-    gap:12px;
-
-    box-shadow:
-        var(--shadow);
-
-}
-
-.avatar {
-
-    width:48px;
-    height:48px;
-
-    flex-shrink:0;
-
-    border-radius:15px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    background:
-        var(--primary-light);
-
-    font-size:22px;
-
-}
-
-.profile-info {
-
-    flex:1;
-
-}
-
-.profile-info strong {
-
-    display:block;
-    font-size:14px;
-
-}
-
-.profile-info span {
-
-    display:block;
-
-    margin-top:3px;
-
-    color:
-        var(--muted);
-
-    font-size:9px;
-
-}
-
-.profile-tag {
-
-    padding:6px 9px;
-
-    border-radius:20px;
-
-    background:
-        var(--primary-light);
-
-    color:
-        var(--primary);
-
-    font-size:8px;
-    font-weight:700;
-
-}
-
-
-/* SUMMARY */
-
-.summary {
-
-    display:grid;
-
-    grid-template-columns:
-        repeat(3,1fr);
-
-    gap:9px;
-
-    margin-top:13px;
-
-}
-
-.summary-card {
-
-    background:white;
-
-    border-radius:16px;
-
-    padding:14px 8px;
-
-    text-align:center;
-
-    box-shadow:
-        var(--shadow);
-
-}
-
-.summary-card strong {
-
-    display:block;
-
-    font-size:22px;
-
-}
-
-.summary-card span {
-
-    display:block;
-
-    margin-top:3px;
-
-    color:
-        var(--muted);
-
-    font-size:8px;
-
-}
-
-.green {
-
-    color:
-        var(--green);
-
-}
-
-.yellow {
-
-    color:
-        var(--yellow);
-
-}
-
-.blue {
-
-    color:
-        var(--primary);
-
-}
-
-
-/* SECTIONS */
-
-.section {
-
-    margin-top:25px;
-
-}
-
-.section-title {
-
-    display:flex;
-
-    align-items:center;
-    justify-content:space-between;
-
-    margin-bottom:10px;
-
-}
-
-.section-title h2 {
-
-    font-size:16px;
-
-}
-
-.section-title span {
-
-    color:
-        var(--muted);
-
-    font-size:9px;
-
-}
-
-
-/* GROUP */
-
-.group {
-
-    margin-bottom:18px;
-
-}
-
-.group-title {
-
-    display:flex;
-    align-items:center;
-    gap:7px;
-
-    margin:
-        0
-        3px
-        8px;
-
-    color:
-        var(--muted);
-
-    font-size:9px;
-    font-weight:750;
-
-    letter-spacing:.4px;
-
-    text-transform:uppercase;
-
-}
-
-
-/* CARD */
-
-.task {
-
-    width:100%;
-
-    border:0;
-
-    background:white;
-
-    border-radius:17px;
-
-    padding:14px;
-
-    margin-bottom:8px;
-
-    display:flex;
-
-    align-items:center;
-
-    gap:11px;
-
-    text-align:left;
-
-    cursor:pointer;
-
-    box-shadow:
-        var(--shadow);
-
-}
-
-.task-icon {
-
-    width:45px;
-    height:45px;
-
-    flex-shrink:0;
-
-    border-radius:14px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    background:
-        var(--primary-light);
-
-    font-size:20px;
-
-}
-
-.task-main {
-
-    flex:1;
-    min-width:0;
-
-}
-
-.task-main strong {
-
-    display:block;
-
-    color:
-        var(--text);
-
-    font-size:12px;
-
-}
-
-.task-main span {
-
-    display:block;
-
-    margin-top:4px;
-
-    color:
-        var(--muted);
-
-    font-size:8px;
-
-    line-height:1.4;
-
-}
-
-.status {
-
-    flex-shrink:0;
-
-    padding:6px 8px;
-
-    border-radius:20px;
-
-    font-size:8px;
-    font-weight:700;
-
-}
-
-.pending {
-
-    color:
-        #916300;
-
-    background:
-        var(--yellow-light);
-
-}
-
-.done {
-
-    color:
-        var(--green);
-
-    background:
-        var(--green-light);
-
-}
-
-.future {
-
-    color:
-        var(--muted);
-
-    background:#eef1f4;
-
-}
-
-
-/* TOWER */
-
-.tower {
-
-    background:white;
-
-    border-radius:19px;
-
-    padding:17px;
-
-    margin-bottom:10px;
-
-    box-shadow:
-        var(--shadow);
-
-}
-
-.tower-top {
-
-    display:flex;
-
-    align-items:center;
-
-    gap:12px;
-
-}
-
-.tower-icon {
-
-    width:48px;
-    height:48px;
-
-    border-radius:15px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    background:
-        var(--primary-light);
-
-    font-size:22px;
-
-}
-
-.tower-info {
-
-    flex:1;
-
-}
-
-.tower-info small {
-
-    display:block;
-
-    color:
-        var(--muted);
-
-    font-size:8px;
-
-}
-
-.tower-info strong {
-
-    display:block;
-
-    margin-top:2px;
-
-    font-size:15px;
-
-}
-
-.tower-percent {
-
-    color:
-        var(--green);
-
-    font-size:13px;
-
-    font-weight:750;
-
-}
-
-.progress {
-
-    height:7px;
-
-    margin-top:13px;
-
-    border-radius:20px;
-
-    overflow:hidden;
-
-    background:#e8edf2;
-
-}
-
-.progress-fill {
-
-    height:100%;
-
-    width:0%;
-
-    background:
-        var(--green);
-
-}
-
-.tower-button {
-
-    width:100%;
-
-    margin-top:13px;
-
-    padding:11px;
-
-    border:0;
-
-    border-radius:12px;
-
-    background:
-        var(--primary-light);
-
-    color:
-        var(--primary);
-
-    font-size:9px;
-
-    font-weight:750;
-
-    cursor:pointer;
-
-}
-
-
-/* EVENT */
-
-.event-card {
-
-    padding:16px;
-
-    border-radius:17px;
-
-    background:
-        var(--purple-light);
-
-    color:
-        var(--purple);
-
-    font-size:9px;
-
-    line-height:1.5;
-
-}
-
-.event-card strong {
-
-    display:block;
-
-    margin-bottom:4px;
-
-    font-size:12px;
-
-}
-
-
-/* EMPTY */
-
-.empty {
-
-    padding:20px;
-
-    border-radius:17px;
-
-    background:white;
-
-    text-align:center;
-
-    color:
-        var(--muted);
-
-    font-size:9px;
-
-    box-shadow:
-        var(--shadow);
-
-}
-
-
-/* BOTTOM */
-
-.bottom-nav {
-
-    position:fixed;
-
-    left:0;
-    right:0;
-    bottom:0;
-
-    height:68px;
-
-    display:flex;
-
-    align-items:center;
-    justify-content:space-around;
-
-    background:white;
-
-    border-top:
-        1px solid
-        var(--border);
-
-    z-index:100;
-
-    padding-bottom:
-        env(safe-area-inset-bottom);
-
-}
-
-.nav {
-
-    text-align:center;
-
-    color:
-        var(--muted);
-
-    font-size:8px;
-
-}
-
-.nav-icon {
-
-    display:block;
-
-    margin-bottom:3px;
-
-    font-size:18px;
-
-}
-
-.nav.active {
-
-    color:
-        var(--primary);
-
-    font-weight:700;
-
-}
-
-
-@media(min-width:700px) {
-
-    .tasks-grid {
-
-        display:grid;
-
-        grid-template-columns:
-            1fr 1fr;
-
-        gap:8px;
-
-    }
-
-    .task {
-
-        margin-bottom:0;
-
-    }
-
-}
+:root{--primary:#7667b9;--primary-light:#eeeafd;--blue:#5d88a5;--blue-light:#eaf4f8;--green:#69a17f;--green-light:#eaf5ee;--yellow:#bd8d43;--yellow-light:#fff4df;--red:#c96565;--red-light:#fdecec;--text:#2d3742;--muted:#75808c;--background:#f4f6f8;--card:#fff;--border:#e4e9ee;--shadow:0 10px 30px rgba(35,48,65,.07)}
+*{box-sizing:border-box;margin:0;padding:0}body{min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--background);color:var(--text)}button,input,select,textarea{font-family:inherit}button{cursor:pointer}.hidden{display:none!important}
+header{background:linear-gradient(135deg,#6d80a8,#7c72ae);color:#fff;padding:calc(18px + env(safe-area-inset-top)) 18px 48px}.header-content{max-width:720px;margin:auto}.topbar{display:flex;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:10px}.brand-icon{width:39px;height:39px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.18);font-size:20px;font-weight:800}.brand strong{display:block;font-size:17px}.brand small{display:block;margin-top:2px;font-size:7px;letter-spacing:1.1px;opacity:.75}.logout{border:0;padding:10px 13px;border-radius:14px;background:rgba(255,255,255,.16);color:#fff;font-size:9px;font-weight:800}.header-title{margin-top:27px}.header-title small{display:block;font-size:9px;letter-spacing:1px;opacity:.72}.header-title h1{margin-top:6px;font-size:27px}.header-title p{margin-top:7px;font-size:11px;opacity:.8}
+main{max-width:720px;margin:-18px auto 80px;padding:0 15px}.user-card,.card,.item-card{background:#fff;box-shadow:var(--shadow);border-radius:21px}.user-card{padding:16px;display:flex;align-items:center;gap:13px}.user-icon{width:49px;height:49px;border-radius:15px;display:flex;align-items:center;justify-content:center;background:var(--primary-light);font-size:23px}.user-info{flex:1}.user-info strong{display:block;font-size:13px}.user-info span{display:block;margin-top:4px;color:var(--muted);font-size:9px}.user-tag{padding:7px 10px;border-radius:20px;background:var(--green-light);color:var(--green);font-size:8px;font-weight:800}
+.section{margin-top:23px}.section-title{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;margin-bottom:11px}.section-title h2{font-size:17px}.section-title p{margin-top:5px;color:var(--muted);font-size:9px;line-height:1.5}.card{padding:17px}.status-card{display:flex;align-items:center;gap:12px}.status-icon{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:var(--blue-light);font-size:20px}.status-info{flex:1}.status-info strong{display:block;font-size:11px}.status-info span{display:block;margin-top:4px;color:var(--muted);font-size:8px;line-height:1.4}.badge{padding:6px 9px;border-radius:20px;font-size:7px;font-weight:900}.green{background:var(--green-light);color:var(--green)}.yellow{background:var(--yellow-light);color:var(--yellow)}.purple{background:var(--primary-light);color:var(--primary)}.red{background:var(--red-light);color:var(--red)}
+.point-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:14px}.point-btn{min-height:48px;border:0;border-radius:14px;background:var(--primary-light);color:var(--primary);font-size:9px;font-weight:900}.point-btn.primary{background:var(--green);color:#fff}.point-btn:disabled{opacity:.4}.geo-note{margin-top:10px;color:var(--muted);font-size:8px;line-height:1.45}
+.list{display:flex;flex-direction:column;gap:10px}.item-card{padding:15px;position:relative}.item-top{display:flex;gap:11px;align-items:flex-start}.item-icon{width:42px;height:42px;flex-shrink:0;border-radius:13px;display:flex;align-items:center;justify-content:center;background:var(--blue-light);font-size:19px}.item-info{flex:1}.item-info strong{display:block;font-size:11px}.item-info span{display:block;margin-top:4px;color:var(--muted);font-size:8px;line-height:1.45}.item-description{margin-top:11px;padding:10px 11px;border-radius:12px;background:#f7f8fa;font-size:9px;line-height:1.5}.item-actions{display:flex;gap:8px;margin-top:12px}.action{flex:1;border:0;padding:11px;border-radius:12px;background:var(--primary);color:#fff;font-size:8px;font-weight:900}.action.secondary{background:var(--blue-light);color:var(--blue)}
+.demand-occurrence{border:2px solid #c9c0ef;background:linear-gradient(135deg,#fff 0%,#faf8ff 100%)}
+.demand-running{border:2px solid #b7d7c4;background:linear-gradient(135deg,#fff 0%,#f2faf5 100%)}
+.demand-done{border:1px solid #cce4d5;background:linear-gradient(135deg,#fff 0%,#f3faf6 100%);opacity:.9}
+.demand-local{margin-top:9px;padding:9px 10px;border-radius:11px;background:var(--blue-light);color:var(--blue);font-size:8px;font-weight:800;line-height:1.45}
+.demand-requirements{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}.demand-requirement{padding:5px 8px;border-radius:20px;background:#f1f3f5;color:var(--muted);font-size:7px;font-weight:900}.demand-requirement.on{background:var(--yellow-light);color:var(--yellow)}
+.action.start{background:var(--blue);color:#fff}.action.done{background:var(--green);color:#fff}.action.photo-origin{background:#e7f2fb;color:#245b7a;box-shadow:inset 0 0 0 1px #c9dfed}
+
+/* ATENÇÃO OPERACIONAL */
+@keyframes oraquiPulse{0%,100%{box-shadow:0 0 0 0 rgba(118,103,185,.28),var(--shadow)}50%{box-shadow:0 0 0 7px rgba(118,103,185,0),0 14px 34px rgba(118,103,185,.16)}}
+@keyframes oraquiUrgent{0%,100%{box-shadow:0 0 0 0 rgba(201,101,101,.38),0 12px 30px rgba(201,101,101,.13)}50%{box-shadow:0 0 0 8px rgba(201,101,101,0),0 16px 38px rgba(201,101,101,.22)}}
+.programada-pendente{border:2px solid #c9c0ef;background:linear-gradient(135deg,#fff 0%,#faf8ff 100%);animation:oraquiPulse 1.8s ease-in-out infinite}
+.programada-pendente .item-icon{background:var(--primary);color:#fff}
+.programada-urgente,.programada-atrasada{border:2px solid #df8c8c;background:linear-gradient(135deg,#fff 0%,#fff3f3 100%);animation:oraquiUrgent 1.15s ease-in-out infinite}
+.programada-urgente .item-icon,.programada-atrasada .item-icon{background:var(--red);color:#fff}
+.programada-concluida{border:1px solid #cce4d5;background:linear-gradient(135deg,#fff 0%,#f3faf6 100%);opacity:.86}
+.programada-concluida .item-icon{background:var(--green);color:#fff}
+.alert-strip{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:11px;padding:9px 11px;border-radius:12px;background:var(--primary);color:#fff;font-size:8px;font-weight:900;letter-spacing:.25px}
+.alert-strip.urgent{background:var(--red)}
+.deadline{display:inline-flex;align-items:center;gap:5px;margin-top:7px;padding:6px 9px;border-radius:10px;background:var(--yellow-light);color:var(--yellow);font-size:8px;font-weight:900}
+.deadline.late{background:var(--red);color:#fff}
+.programada-pendente .action{min-height:47px;font-size:9px;box-shadow:0 7px 18px rgba(118,103,185,.22)}
+.programada-urgente .action,.programada-atrasada .action{min-height:49px;background:var(--red);font-size:9px;box-shadow:0 7px 18px rgba(201,101,101,.25)}
+.programada-concluida .item-description{background:var(--green-light)}
+@media(prefers-reduced-motion:reduce){.programada-pendente,.programada-urgente,.programada-atrasada{animation:none}}
+
+
+.notification-card{display:flex;align-items:center;gap:12px;margin-top:14px;padding:13px;border-radius:15px;background:#f7f5ff;border:1px solid #d9d2f5}
+.notification-icon{width:42px;height:42px;flex-shrink:0;border-radius:13px;display:flex;align-items:center;justify-content:center;background:var(--primary);color:#fff;font-size:19px}
+.notification-info{flex:1}.notification-info strong{display:block;font-size:10px}.notification-info span{display:block;margin-top:4px;color:var(--muted);font-size:8px;line-height:1.4}
+.notification-btn{border:0;padding:10px 12px;border-radius:12px;background:var(--primary);color:#fff;font-size:8px;font-weight:900;white-space:nowrap}
+.notification-btn.enabled{background:var(--green)}
+.notification-btn:disabled{opacity:.5}
+
+.empty,.loading{padding:25px 16px;border-radius:19px;background:#fff;box-shadow:var(--shadow);text-align:center;color:var(--muted);font-size:9px;line-height:1.5}.empty strong{display:block;color:var(--text);font-size:11px;margin-bottom:5px}
+.message{display:none;margin-top:13px;padding:12px;border-radius:14px;font-size:9px;line-height:1.5}.message.visible{display:block}.message.error{background:var(--red-light);color:var(--red)}
+.modal{position:fixed;inset:0;z-index:1000;display:none;align-items:flex-end;justify-content:center;background:rgba(25,32,45,.66)}.modal.visible{display:flex}.modal-card{width:100%;max-width:620px;max-height:92vh;overflow:auto;padding:21px;border-radius:25px 25px 0 0;background:#fff}.modal-head{display:flex;justify-content:space-between;align-items:center}.modal-head h2{font-size:18px}.close{width:38px;height:38px;border:0;border-radius:50%;background:#eef1f3;font-size:18px}.selection{margin-top:14px;padding:12px;border-radius:13px;background:var(--blue-light);color:var(--blue);font-size:9px;font-weight:800;line-height:1.5}.field{margin-top:14px}.field label{display:block;margin-bottom:6px;color:var(--muted);font-size:8px;font-weight:900}.field select,.field textarea{width:100%;border:1px solid var(--border);border-radius:14px;background:#fff;outline:none}.field select{height:49px;padding:0 12px}.field textarea{min-height:105px;padding:12px;resize:vertical}.photo-button{width:100%;min-height:51px;margin-top:14px;border:1.5px dashed #b8c6d4;border-radius:14px;background:#f7fafc;color:var(--blue);font-size:9px;font-weight:900}.photo-button.has{background:var(--green-light);color:var(--green);border-color:#a9d9bf}.photo-input{display:none}.preview{display:none;width:100%;max-height:320px;object-fit:cover;margin-top:10px;border-radius:14px}.preview.visible{display:block}.confirm{width:100%;min-height:54px;margin-top:16px;border:0;border-radius:14px;background:var(--green);color:#fff;font-size:9px;font-weight:900}.confirm:disabled{opacity:.5}
+.toast{position:fixed;z-index:2000;left:50%;bottom:25px;transform:translateX(-50%) translateY(30px);opacity:0;padding:12px 18px;border-radius:14px;background:#25313c;color:#fff;font-size:9px;font-weight:800;transition:.25s}.toast.visible{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(min-width:650px){.modal{align-items:center}.modal-card{border-radius:25px}.point-actions{grid-template-columns:repeat(4,1fr)}}
+
+.condo-switch{border:0;padding:10px 13px;border-radius:14px;background:rgba(255,255,255,.16);color:#fff;font-size:9px;font-weight:800;margin-right:6px}
+.condo-screen{position:fixed;inset:0;z-index:5000;background:linear-gradient(135deg,#6d80a8,#7c72ae);display:flex;align-items:center;justify-content:center;padding:22px}
+.condo-card{width:min(520px,100%);background:#fff;border-radius:25px;padding:27px;box-shadow:0 20px 60px rgba(25,30,50,.25)}
+.condo-logo{width:49px;height:49px;border-radius:15px;background:var(--primary-light);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:25px;font-weight:900}
+.condo-card h2{font-size:22px;margin-top:16px}.condo-card>p{margin-top:7px;color:var(--muted);font-size:10px;line-height:1.5}
+.condo-list{display:flex;flex-direction:column;gap:10px;margin-top:20px}
+.condo-option{width:100%;border:1px solid var(--border);border-radius:16px;background:#fff;padding:15px;text-align:left;display:flex;align-items:center;gap:12px}
+.condo-option:hover{background:var(--primary-light);border-color:#d9d2f4}
+.condo-option-icon{width:42px;height:42px;border-radius:13px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:20px}
+.condo-option-info{flex:1}.condo-option-info strong{display:block;font-size:12px;color:var(--text)}.condo-option-info span{display:block;margin-top:3px;font-size:8px;color:var(--muted)}
+.condo-exit{width:100%;min-height:50px;margin-top:18px;border:0;border-radius:14px;background:var(--primary);color:#fff;font-size:9px;font-weight:900}
 
 </style>
-
 </head>
-
-
 <body>
 
-
-<header>
-
-<div class="header-content">
-
-    <div class="topbar">
-
-        <div class="brand">
-
-            <div class="logo">
-                ✓
-            </div>
-
-            <div>
-
-                <strong>
-                    ORAQUI
-                </strong>
-
-                <small id="brandCondominio">
-                    Reserva Igara
-                </small>
-
-            </div>
-
-        </div>
-
-
-        <button
-            class="logout"
-            id="logoutButton"
-            type="button"
-            aria-label="Sair"
-        >
-            ↪
-        </button>
-
-    </div>
-
-
-    <div class="welcome">
-
-        <small id="welcomeType">
-            MINHA ROTINA
-        </small>
-
-        <h1 id="welcomeName">
-            Olá
-        </h1>
-
-        <p id="welcomeText">
-            Veja suas atividades programadas.
-        </p>
-
-    </div>
-
+<div class="condo-screen hidden" id="condoScreen">
+  <div class="condo-card">
+    <div class="condo-logo">✓</div>
+    <h2>Escolha o condomínio</h2>
+    <p>Seu acesso está vinculado a mais de um condomínio. Escolha onde deseja trabalhar agora.</p>
+    <div class="condo-list" id="condoList"></div>
+    <button class="condo-exit" id="condoLogout" type="button">SAIR DA CONTA</button>
+  </div>
 </div>
 
-</header>
-
-
+<header><div class="header-content"><div class="topbar"><div class="brand"><div class="brand-icon">✓</div><div><strong>ORAQUI</strong><small>AGORA. AQUI. REGISTRADO.</small></div></div><div><button class="condo-switch hidden" id="switchCondoButton" type="button">🏢 TROCAR</button><button class="logout" id="logout">SAIR</button></div></div><div class="header-title"><small id="condominioNome">CONDOMÍNIO</small><h1>Minha operação</h1><p>Escala, ponto, demandas e atividades do dia.</p></div></div></header>
 <main>
-
-
-<!-- PERFIL -->
-
-<div class="profile">
-
-    <div
-        class="avatar"
-        id="profileIcon"
-    >
-        👷
-    </div>
-
-
-    <div class="profile-info">
-
-        <strong id="profileName">
-            Colaborador
-        </strong>
-
-        <span id="profileCargo">
-            Reserva Igara
-        </span>
-
-    </div>
-
-
-    <span
-        class="profile-tag"
-        id="profileTag"
-    >
-        EQUIPE
-    </span>
-
+<div class="user-card"><div class="user-icon" id="userIcon">👷</div><div class="user-info"><strong id="userName">Carregando...</strong><span id="userDescription">Validando acesso</span></div><span class="user-tag">ATIVO</span></div>
+<div class="message error" id="error"></div>
+<div class="notification-card" id="notificationCard">
+  <div class="notification-icon">🔔</div>
+  <div class="notification-info">
+    <strong id="notificationTitle">Notificações do ORAQUI</strong>
+    <span id="notificationText">Verificando este aparelho...</span>
+  </div>
+  <button class="notification-btn" id="notificationBtn">ATIVAR</button>
 </div>
 
-
-<!-- RESUMO -->
-
-<div class="summary">
-
-    <div class="summary-card">
-
-        <strong
-            class="green"
-            id="completedCount"
-        >
-            0
-        </strong>
-
-        <span>
-            CONCLUÍDAS
-        </span>
-
-    </div>
-
-
-    <div class="summary-card">
-
-        <strong
-            class="yellow"
-            id="pendingCount"
-        >
-            0
-        </strong>
-
-        <span>
-            PENDENTES
-        </span>
-
-    </div>
-
-
-    <div class="summary-card">
-
-        <strong
-            class="blue"
-            id="totalCount"
-        >
-            0
-        </strong>
-
-        <span>
-            PROGRAMADAS
-        </span>
-
-    </div>
-
-</div>
-
-
-<div id="content"></div>
-
-
+<section class="section"><div class="section-title"><div><h2>Registrar atividade</h2><p>Registre rapidamente uma atividade do dia a dia que não estava programada.</p></div></div><div class="card"><button class="action" id="avulso">＋ REGISTRAR ATIVIDADE</button></div></section>
+<section class="section" id="escalaSection"><div class="section-title"><div><h2>Hoje</h2><p>Sua escala publicada para hoje.</p></div></div><div id="escalaBox" class="loading">Carregando escala...</div></section>
+<section class="section hidden" id="pontoSection"><div class="section-title"><div><h2>Ponto</h2><p>Registre os eventos da sua jornada.</p></div></div><div class="card"><div class="status-card"><div class="status-icon">🕒</div><div class="status-info"><strong id="pontoStatus">Carregando...</strong><span id="pontoDetalhe"></span></div><span class="badge purple" id="pontoBadge">PONTO</span></div><div class="point-actions"><button class="point-btn primary" id="btnEntrada">ENTRADA</button><button class="point-btn" id="btnIniIntervalo">INICIAR INTERVALO</button><button class="point-btn" id="btnFimIntervalo">RETORNAR</button><button class="point-btn" id="btnSaida">SAÍDA</button></div><div class="geo-note" id="geoNote"></div></div></section>
+<section class="section"><div class="section-title"><div><h2>Demandas</h2><p>Recados, tarefas e itens urgentes destinados a você.</p></div></div><div id="demandas" class="loading">Carregando...</div></section>
+<section class="section"><div class="section-title"><div><h2>Atividades programadas</h2><p>O que está previsto para sua rotina. Pendências ficam destacadas até a conclusão.</p></div></div><div id="programacoes" class="loading">Carregando...</div></section>
+<section class="section"><div class="section-title"><div><h2>Executado hoje</h2><p>Seu histórico operacional de hoje.</p></div></div><div id="historico" class="loading">Carregando...</div></section>
 </main>
 
-
-<nav class="bottom-nav">
-
-    <div class="nav active">
-
-        <span class="nav-icon">
-            ☑
-        </span>
-
-        Minha rotina
-
-    </div>
-
-
-    <div class="nav">
-
-        <span class="nav-icon">
-            ✓
-        </span>
-
-        Concluídos
-
-    </div>
-
-
-    <div class="nav">
-
-        <span class="nav-icon">
-            ⚠
-        </span>
-
-        Ocorrências
-
-    </div>
-
-
-    <div class="nav">
-
-        <span class="nav-icon">
-            👤
-        </span>
-
-        Perfil
-
-    </div>
-
-</nav>
-
+<div class="modal" id="execModal"><div class="modal-card"><div class="modal-head"><h2 id="modalTitle">Registrar execução</h2><button class="close" id="closeModal">×</button></div><div class="selection" id="modalSelection"></div><div class="field hidden" id="areaField"><label>ÁREA</label><select id="areaSelect"></select></div><div class="field hidden" id="pontoField"><label>PONTO / LOCAL</label><select id="pontoSelect"></select></div><button class="photo-button" id="photoButton">📷 ADICIONAR FOTO</button><input class="photo-input" id="photoInput" type="file" accept="image/*" capture="environment"><img class="preview" id="preview" alt="Prévia"><div class="field"><label>OBSERVAÇÃO</label><textarea id="observacao" maxlength="600" placeholder="Observação sobre a execução..."></textarea></div><button class="confirm" id="confirmExec">✓ REGISTRAR CONCLUSÃO</button></div></div>
+<div class="toast" id="toast"></div>
 
 <script>
+const SUPABASE_URL="https://rhiosvsohvqqrxzwohqu.supabase.co";
+const SUPABASE_KEY="sb_publishable_vcjiMMCTxQJ7ArTGsQ-PuQ_5gaAfoIt";
+const BUCKET="fotos-atividades";
+const VAPID_PUBLIC_KEY="BNOm_tsvH-uo-hfquzYmf_XxgiGAciYKyia_FdI1PVfBISDELIqnvSUArIIuUW3hpmHt-UynVot3YCb7krs25Bk";
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const $=id=>document.getElementById(id);
+let authUser=null,colaborador=null,condominio=null,areas=[],pontos=[],atividades=[],programacoes=[],demandas=[],escalaHoje=null,pontosHoje=[],execucoesHoje=[];
+let execAtual=null,demandaAtual=null,fotoArquivo=null,previewURL=null,processando=false;
 
-/* ==================================================
-   SESSÃO OPERACIONAL
-================================================== */
+function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+function hoje(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
+function inicioHojeISO(){const d=new Date();d.setHours(0,0,0,0);return d.toISOString()}
+function fimHojeISO(){const d=new Date();d.setHours(23,59,59,999);return d.toISOString()}
+function hora(v){if(!v)return"--:--";const d=new Date(v);return Number.isNaN(d.getTime())?String(v).slice(0,5):d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}
+function toast(m){$("toast").textContent=m;$("toast").classList.add("visible");setTimeout(()=>$("toast").classList.remove("visible"),2600)}
+function erro(m){$("error").textContent=m;$("error").classList.add("visible")}
+function limparErro(){$("error").classList.remove("visible")}
+function funcIcon(f){f=String(f||"").toLowerCase();if(f.includes("zel"))return"🛠️";if(f.includes("port"))return"🛡️";if(f.includes("manut"))return"🔧";return"🧹"}
+function atividadeNome(id){return atividades.find(x=>x.id===id)?.nome||"Atividade"}
+function vazio(t,s){return `<div class="empty"><strong>${esc(t)}</strong>${esc(s)}</div>`}
+function mesmoId(a,b){return Number(a)===Number(b)}
+function areaDoPonto(pontoId){const pt=pontos.find(p=>mesmoId(p.id,pontoId));return pt?areas.find(a=>mesmoId(a.id,pt.area_id)):null}
+function nomeLocal(areaId,pontoId){
+  const pt=pontos.find(p=>mesmoId(p.id,pontoId));
+  const ar=areas.find(a=>mesmoId(a.id,areaId))||(pt?areas.find(a=>mesmoId(a.id,pt.area_id)):null);
+  return [ar?.nome,pt?.nome].filter(Boolean).join(" • ");
+}
+function minutosAgora(){const d=new Date();return d.getHours()*60+d.getMinutes()}
+function minutosHorario(v){
+  if(!v)return null;
+  const s=String(v).slice(0,5).split(":");
+  if(s.length<2)return null;
+  return Number(s[0])*60+Number(s[1]);
+}
+function estaAtrasada(p,feito){
+  if(feito||!p.horario_limite)return false;
+  const limite=minutosHorario(p.horario_limite);
+  return limite!==null&&minutosAgora()>limite;
+}
+function pesoProgramacao(p){
+  const feito=execucoesHoje.some(e=>mesmoId(e.programacao_id,p.id)&&e.status==="concluida");
+  if(feito)return 99;
+  if(estaAtrasada(p,false))return 0;
+  if(String(p.prioridade||"").toLowerCase()==="urgente")return 1;
+  if(String(p.prioridade||"").toLowerCase()==="alta")return 2;
+  return 3;
+}
 
-function carregarSessao() {
 
-    try {
+function base64UrlToUint8Array(base64Url){
+  const padding="=".repeat((4-base64Url.length%4)%4);
+  const base64=(base64Url+padding).replace(/-/g,"+").replace(/_/g,"/");
+  const raw=atob(base64);
+  return Uint8Array.from([...raw].map(c=>c.charCodeAt(0)));
+}
 
-        const dados =
-            JSON.parse(
-                localStorage.getItem(
-                    "usuarioLogado"
-                )
-            );
+function isStandalone(){
+  return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone===true;
+}
 
+async function registrarServiceWorker(){
+  if(!("serviceWorker" in navigator))throw new Error("Este aparelho/navegador não oferece Service Worker.");
+  return await navigator.serviceWorker.register("./service-worker.js",{scope:"./"});
+}
 
-        if (
-            !dados
-            ||
-            dados.perfil !==
-                "colaborador"
-            ||
-            !dados.id
-            ||
-            !dados.matricula
-            ||
-            !dados.nome
-        ) {
+async function atualizarEstadoNotificacao(){
+  const btn=$("notificationBtn"),txt=$("notificationText"),title=$("notificationTitle");
+  if(!("serviceWorker" in navigator)||!("PushManager" in window)||!("Notification" in window)){
+    title.textContent="Notificações indisponíveis";
+    txt.textContent="Este navegador não oferece Web Push.";
+    btn.textContent="INDISPONÍVEL";btn.disabled=true;return;
+  }
+  if(!isStandalone()){
+    title.textContent="Instale o ORAQUI na Tela de Início";
+    txt.textContent="No iPhone, abra pelo ícone da Tela de Início para ativar notificações.";
+    btn.textContent="COMO ATIVAR";btn.disabled=false;return;
+  }
+  if(Notification.permission==="denied"){
+    title.textContent="Notificações bloqueadas";
+    txt.textContent="Ative ORAQUI em Ajustes > Notificações no iPhone.";
+    btn.textContent="BLOQUEADA";btn.disabled=true;return;
+  }
+  const reg=await navigator.serviceWorker.ready;
+  const sub=await reg.pushManager.getSubscription();
+  if(sub&&Notification.permission==="granted"){
+    title.textContent="Notificações ativas";
+    txt.textContent="Este iPhone pode receber avisos do ORAQUI mesmo com a tela fechada.";
+    btn.textContent="✓ ATIVAS";btn.classList.add("enabled");btn.disabled=false;return;
+  }
+  title.textContent="Notificações do ORAQUI";
+  txt.textContent="Ative para receber novas atividades, urgências e prazos.";
+  btn.textContent="ATIVAR";btn.classList.remove("enabled");btn.disabled=false;
+}
 
-            return null;
+async function salvarAssinaturaPush(subscription){
+  const json=subscription.toJSON();
+  const payload={
+    condominio_id:colaborador.condominio_id,
+    colaborador_id:colaborador.id,
+    auth_user_id:authUser.id,
+    endpoint:json.endpoint,
+    p256dh:json.keys?.p256dh,
+    auth:json.keys?.auth,
+    user_agent:navigator.userAgent,
+    ativo:true,
+    updated_at:new Date().toISOString()
+  };
+  const {error}=await db.from("push_subscriptions").upsert(payload,{onConflict:"endpoint"});
+  if(error)throw error;
+}
 
-        }
+async function ativarNotificacoes(){
+  if(!isStandalone()){
+    alert("No iPhone: abra oraqui.app no Safari, toque em Compartilhar > Adicionar à Tela de Início. Depois abra o ORAQUI pelo ícone criado e toque novamente em ATIVAR.");
+    return;
+  }
+  try{
+    $("notificationBtn").disabled=true;
+    const reg=await registrarServiceWorker();
+    const permissao=await Notification.requestPermission();
+    if(permissao!=="granted")throw new Error("A permissão de notificações não foi concedida.");
+    let sub=await reg.pushManager.getSubscription();
+    if(!sub){
+      sub=await reg.pushManager.subscribe({
+        userVisibleOnly:true,
+        applicationServerKey:base64UrlToUint8Array(VAPID_PUBLIC_KEY)
+      });
+    }
+    await salvarAssinaturaPush(sub);
+    toast("🔔 Notificações ativadas neste aparelho.");
+    await atualizarEstadoNotificacao();
+  }catch(e){
+    console.error(e);
+    alert(e.message||"Não foi possível ativar as notificações.");
+  }finally{
+    $("notificationBtn").disabled=false;
+  }
+}
 
+async function enviarPushTeste(){
+  try{
+    const {data,error}=await db.functions.invoke("enviar-push-teste",{body:{}});
+    if(error)throw error;
+    toast(data?.message||"🔔 Notificação de teste enviada.");
+  }catch(e){
+    console.error(e);
+    alert("A assinatura está ativa, mas o envio de teste ainda não respondeu. Verifique a Edge Function enviar-push-teste.");
+  }
+}
 
-        return dados;
+async function acaoNotificacao(){
+  if(Notification.permission==="granted"){
+    const reg=await navigator.serviceWorker.ready;
+    const sub=await reg.pushManager.getSubscription();
+    if(sub){await enviarPushTeste();return}
+  }
+  await ativarNotificacoes();
+}
 
-    } catch (erro) {
+async function iniciar(){
+  const {data:{session}}=await db.auth.getSession();
+  if(!session){location.href="./";return}
+  authUser=session.user;
+  try{
+    const {data:cs,error}=await db.from("colaboradores")
+      .select("id,condominio_id,condominio,nome,email,matricula,funcao,ativo,ponto_ativo,selfie_ponto_obrigatoria,geolocalizacao_ponto_obrigatoria,intervalo_ativo,intervalo_minutos")
+      .eq("auth_user_id",authUser.id)
+      .eq("ativo",true)
+      .order("condominio_id");
+    if(error)throw error;
+    if(!cs?.length)throw new Error("Seu cadastro não está ativo.");
 
-        return null;
+    const ids=[...new Set(cs.map(c=>Number(c.condominio_id)).filter(Boolean))];
+    const {data:condominios,error:ce}=await db.from("condominios")
+      .select("id,nome,slug,ativo")
+      .in("id",ids)
+      .eq("ativo",true)
+      .order("nome");
+    if(ce)throw ce;
 
+    vinculosColaborador=(condominios||[]).map(co=>{
+      const c=cs.find(x=>Number(x.condominio_id)===Number(co.id));
+      return c?{colaborador:c,condominio:co}:null;
+    }).filter(Boolean);
+
+    if(!vinculosColaborador.length)throw new Error("Nenhum condomínio ativo disponível para este acesso.");
+
+    const salvo=Number(sessionStorage.getItem("oraqui_colaborador_condominio_id")||0);
+    const vinculoSalvo=vinculosColaborador.find(v=>Number(v.condominio.id)===salvo);
+
+    if(vinculosColaborador.length===1){
+      await selecionarCondominioColaborador(vinculosColaborador[0].condominio.id);
+    }else if(vinculoSalvo){
+      await selecionarCondominioColaborador(vinculoSalvo.condominio.id);
+    }else{
+      mostrarSeletorColaborador();
+    }
+  }catch(e){
+    console.error(e);
+    erro(e.message||"Não foi possível carregar seu acesso.");
+  }
+}
+
+function mostrarSeletorColaborador(){
+  $("condoScreen").classList.remove("hidden");
+  $("condoList").innerHTML=vinculosColaborador.map(v=>`
+    <button class="condo-option" type="button" data-condo="${v.condominio.id}">
+      <div class="condo-option-icon">🏢</div>
+      <div class="condo-option-info">
+        <strong>${esc(v.condominio.nome)}</strong>
+        <span>${esc(v.colaborador.funcao||"Colaborador")} • #${esc(v.colaborador.matricula)}</span>
+      </div>
+      <span>›</span>
+    </button>
+  `).join("");
+  $("condoList").querySelectorAll("[data-condo]").forEach(btn=>{
+    btn.onclick=()=>selecionarCondominioColaborador(Number(btn.dataset.condo));
+  });
+}
+
+async function selecionarCondominioColaborador(condominioId){
+  const vinculo=vinculosColaborador.find(v=>Number(v.condominio.id)===Number(condominioId));
+  if(!vinculo)return alert("Você não possui vínculo ativo com este condomínio.");
+
+  colaborador=vinculo.colaborador;
+  condominio=vinculo.condominio;
+  sessionStorage.setItem("oraqui_colaborador_condominio_id",String(condominio.id));
+
+  areas=[];pontos=[];atividades=[];programacoes=[];demandas=[];pontosHoje=[];execucoesHoje=[];escalaHoje=null;
+
+  $("userName").textContent=colaborador.nome;
+  $("userDescription").textContent=`${colaborador.funcao||"Colaborador"} • #${colaborador.matricula}`;
+  $("userIcon").textContent=funcIcon(colaborador.funcao);
+  $("condominioNome").textContent=condominio.nome.toUpperCase();
+  $("pontoSection").classList.toggle("hidden",!colaborador.ponto_ativo);
+  $("switchCondoButton").classList.toggle("hidden",vinculosColaborador.length<2);
+  $("condoScreen").classList.add("hidden");
+
+  await carregarTudo();
+  try{
+    await registrarServiceWorker();
+    await atualizarEstadoNotificacao();
+  }catch(pushError){
+    console.warn(pushError);
+  }
+}
+
+function trocarCondominioColaborador(){
+  if(vinculosColaborador.length>1)mostrarSeletorColaborador();
+}
+
+async function carregarTudo(){
+  limparErro();
+  try{
+    const [ar,po,at,pr,es,de,rp,ex]=await Promise.all([
+      db.from("areas").select("id,nome,descricao,ordem").eq("condominio_id",colaborador.condominio_id).eq("ativo",true).eq("visivel_colaborador",true).order("ordem",{ascending:true}).order("nome",{ascending:true}),
+      db.from("pontos").select("id,area_id,nome,descricao,ordem").eq("condominio_id",colaborador.condominio_id).eq("ativo",true).eq("visivel_colaborador",true).order("ordem",{ascending:true}).order("nome",{ascending:true}),
+      db.from("atividades_v2").select("id,nome,descricao,exige_foto,exige_observacao").eq("condominio_id",colaborador.condominio_id).eq("ativo",true),
+      db.from("programacoes").select("id,atividade_id,area_id,ponto_id,colaborador_id,funcao,tipo,dias_semana,data_inicio,data_fim,horario_limite,prioridade,exige_foto,exige_observacao,instrucoes").eq("condominio_id",colaborador.condominio_id).eq("ativo",true),
+      db.from("escalas").select("*").eq("condominio_id",colaborador.condominio_id).eq("colaborador_id",colaborador.id).eq("data",hoje()),
+      db.from("demandas").select("*").eq("condominio_id",colaborador.condominio_id).neq("status","cancelada").order("created_at",{ascending:false}),
+      db.from("registros_ponto").select("*").eq("condominio_id",colaborador.condominio_id).eq("colaborador_id",colaborador.id).gte("registrado_em",inicioHojeISO()).lte("registrado_em",fimHojeISO()).order("registrado_em"),
+      db.from("execucoes").select("*").eq("condominio_id",colaborador.condominio_id).eq("colaborador_id",colaborador.id).gte("created_at",inicioHojeISO()).lte("created_at",fimHojeISO()).order("created_at",{ascending:false})
+    ]);
+
+    for(const r of [ar,po,at,pr,es,de,rp,ex])if(r.error)throw r.error;
+
+    areas=ar.data||[];
+    pontos=po.data||[];
+    atividades=at.data||[];
+    programacoes=(pr.data||[]).filter(programacaoValeHoje).filter(programacaoParaColaborador);
+    escalaHoje=(es.data||[]).find(x=>x.status_publicacao==="publicada"||x.status_publicacao==="alterada")||(es.data||[])[0]||null;
+    demandas=(de.data||[]).filter(demandaParaColaborador);
+    pontosHoje=rp.data||[];
+    execucoesHoje=ex.data||[];
+
+    renderEscala();
+    renderPonto();
+    renderDemandas();
+    renderProgramacoes();
+    renderHistorico();
+  }catch(e){
+    console.error(e);
+    erro(e.message||"Não foi possível carregar sua operação.");
+    $("demandas").innerHTML=vazio("Falha ao carregar","Verifique as permissões do seu acesso.");
+    $("programacoes").innerHTML=vazio("Falha ao carregar","Verifique as permissões do seu acesso.");
+    $("historico").innerHTML=vazio("Falha ao carregar","Verifique as permissões do seu acesso.");
+  }
+}
+
+function programacaoParaColaborador(p){
+  if(p.colaborador_id&&mesmoId(p.colaborador_id,colaborador.id))return true;
+  if(p.colaborador_id)return false;
+  if(p.funcao&&String(p.funcao).trim()){
+    return String(p.funcao).trim().toLowerCase()===String(colaborador.funcao||"").trim().toLowerCase();
+  }
+  return true;
+}
+
+function demandaParaColaborador(d){
+  if(d.colaborador_id&&mesmoId(d.colaborador_id,colaborador.id))return true;
+  if(d.colaborador_id)return false;
+  if(d.funcao&&String(d.funcao).trim()){
+    return String(d.funcao).trim().toLowerCase()===String(colaborador.funcao||"").trim().toLowerCase();
+  }
+  return true;
+}
+
+function programacaoValeHoje(p){
+  const data=hoje();
+  if(p.data_inicio&&data<p.data_inicio)return false;
+  if(p.data_fim&&data>p.data_fim)return false;
+  if(p.tipo==="extraordinaria")return true;
+  if(!p.dias_semana||!p.dias_semana.length)return true;
+  const js=new Date().getDay(),iso=js===0?7:js;
+  return p.dias_semana.map(Number).includes(iso)||p.dias_semana.map(Number).includes(js);
+}
+
+function renderEscala(){
+  if(!escalaHoje){
+    $("escalaBox").outerHTML=`<div id="escalaBox">${vazio("Sem escala publicada para hoje","A rotina pode continuar disponível conforme as programações da gestão.")}</div>`;
+    return;
+  }
+  const tipo=escalaHoje.tipo||"trabalho";
+  const txt=tipo==="trabalho"&&escalaHoje.inicio_previsto?`${hora(escalaHoje.inicio_previsto)} às ${hora(escalaHoje.fim_previsto)}`:tipo.toUpperCase();
+  $("escalaBox").outerHTML=`<div id="escalaBox" class="card status-card"><div class="status-icon">📅</div><div class="status-info"><strong>${esc(txt)}</strong><span>${esc(escalaHoje.observacao||"Escala publicada pela gestão.")}</span></div><span class="badge ${tipo==="trabalho"?"green":"yellow"}">${esc(tipo.toUpperCase())}</span></div>`;
+}
+
+function renderPonto(){
+  if(!colaborador.ponto_ativo)return;
+  const ultimo=pontosHoje.at(-1);
+  let status="Jornada não iniciada",det="Nenhum registro hoje";
+  if(ultimo){
+    status=ultimo.tipo==="entrada"?"Em trabalho":ultimo.tipo==="inicio_intervalo"?"Em intervalo":ultimo.tipo==="fim_intervalo"?"Em trabalho":"Jornada encerrada";
+    det=`Último registro: ${hora(ultimo.registrado_em)}`;
+  }
+  $("pontoStatus").textContent=status;
+  $("pontoDetalhe").textContent=det;
+  const tipos=pontosHoje.map(x=>x.tipo),encerrada=tipos.includes("saida"),emIntervalo=ultimo?.tipo==="inicio_intervalo";
+  $("btnEntrada").disabled=tipos.includes("entrada");
+  $("btnIniIntervalo").disabled=!tipos.includes("entrada")||emIntervalo||encerrada||!colaborador.intervalo_ativo;
+  $("btnFimIntervalo").disabled=!emIntervalo||encerrada;
+  $("btnSaida").disabled=!tipos.includes("entrada")||emIntervalo||encerrada;
+  const req=[];
+  if(colaborador.geolocalizacao_ponto_obrigatoria)req.push("localização");
+  if(colaborador.selfie_ponto_obrigatoria)req.push("selfie");
+  $("geoNote").textContent=req.length?`Este colaborador exige ${req.join(" e ")} no registro de ponto.`:"Registro de ponto sem localização/selfie obrigatória.";
+}
+
+async function obterLocalizacao(){
+  if(!colaborador.geolocalizacao_ponto_obrigatoria)return {latitude:null,longitude:null,precisao_metros:null};
+  if(!navigator.geolocation)throw new Error("Este aparelho não oferece geolocalização.");
+  return new Promise((resolve,reject)=>navigator.geolocation.getCurrentPosition(
+    p=>resolve({latitude:p.coords.latitude,longitude:p.coords.longitude,precisao_metros:p.coords.accuracy}),
+    e=>reject(new Error(e.code===1?"A localização é obrigatória. Autorize o acesso à localização no navegador.":"Não foi possível obter sua localização. Tente novamente em local com melhor sinal.")),
+    {enableHighAccuracy:true,timeout:15000,maximumAge:0}
+  ));
+}
+
+async function registrarPonto(tipo){
+  if(colaborador.selfie_ponto_obrigatoria){
+    alert("A selfie de ponto está configurada como obrigatória, mas o armazenamento privado de selfies ainda não foi ativado. Desative temporariamente essa exigência na gestão até concluirmos essa etapa.");
+    return;
+  }
+  try{
+    const geo=await obterLocalizacao();
+    const {error}=await db.from("registros_ponto").insert({
+      condominio_id:colaborador.condominio_id,
+      colaborador_id:colaborador.id,
+      escala_id:escalaHoje?.id||null,
+      tipo,
+      ...geo
+    });
+    if(error)throw error;
+    toast("✓ Ponto registrado.");
+    await carregarTudo();
+  }catch(e){alert(e.message||"Não foi possível registrar o ponto.")}
+}
+
+function statusDemandaTexto(status){
+  const s=String(status||"pendente").toLowerCase();
+  if(s==="concluida")return"CONCLUÍDA";
+  if(s==="iniciada"||s==="em andamento"||s==="em_andamento")return"EM EXECUÇÃO";
+  if(s==="visualizada")return"VISUALIZADA";
+  return"PENDENTE";
+}
+
+function demandaEmExecucao(d){
+  const s=String(d.status||"").toLowerCase();
+  return s==="iniciada"||s==="em andamento"||s==="em_andamento";
+}
+
+async function verFotoOcorrencia(ocorrenciaId){
+  if(!ocorrenciaId)return alert("Esta demanda não está vinculada a uma ocorrência.");
+  const {data,error}=await db.from("ocorrencias")
+    .select("foto_path")
+    .eq("id",ocorrenciaId)
+    .maybeSingle();
+  if(error)return alert("Não foi possível consultar a foto: "+error.message);
+  if(!data?.foto_path)return alert("A ocorrência não possui foto.");
+  const path=String(data.foto_path).replace(/^\/+/, "");
+  if(/^https?:\/\//i.test(path)){window.open(path,"_blank","noopener");return}
+  const {data:link,error:linkError}=await db.storage.from("fotos-ocorrencias").createSignedUrl(path,600);
+  if(linkError||!link?.signedUrl)return alert("Não foi possível abrir a foto da ocorrência.");
+  window.open(link.signedUrl,"_blank","noopener");
+}
+
+function renderDemandas(){
+  if(!demandas.length){
+    $("demandas").className="";
+    $("demandas").innerHTML=vazio("Nenhuma demanda pendente","Recados e tarefas enviados pela gestão aparecerão aqui.");
+    return;
+  }
+  $("demandas").className="list";
+  $("demandas").innerHTML=demandas.map(d=>{
+    const concluida=String(d.status||"").toLowerCase()==="concluida";
+    const executando=demandaEmExecucao(d);
+    const ocorrencia=!!d.ocorrencia_id;
+    const prioridade=String(d.prioridade||"normal").toLowerCase();
+    const local=nomeLocal(d.area_id,d.ponto_id);
+    const classe=concluida?"demand-done":executando?"demand-running":ocorrencia?"demand-occurrence":"";
+    const icone=prioridade==="urgente"?"⚠️":d.tipo==="recado"?"💬":ocorrencia?"⚠️":"✓";
+    const badgeClass=prioridade==="urgente"?"red":concluida?"green":executando?"green":"purple";
+    const origem=ocorrencia?`<div class="alert-strip"><span>OCORRÊNCIA ENCAMINHADA PELA GESTÃO</span><span>#${esc(d.ocorrencia_id)}</span></div>`:"";
+    const requisitos=(d.exige_foto||d.exige_observacao)?`<div class="demand-requirements">${d.exige_foto?'<span class="demand-requirement on">📷 FOTO OBRIGATÓRIA</span>':""}${d.exige_observacao?'<span class="demand-requirement on">💬 OBSERVAÇÃO OBRIGATÓRIA</span>':""}</div>`:"";
+    const acoes=[];
+    if(ocorrencia)acoes.push(`<button class="action photo-origin" onclick="verFotoOcorrencia(${d.ocorrencia_id})">📷 VER FOTO</button>`);
+    if(d.tipo==="recado"&&d.status==="pendente")acoes.push(`<button class="action secondary" onclick="mudarDemanda(${d.id},'visualizada')">MARCAR COMO LIDA</button>`);
+    if(d.tipo!=="recado"&&!concluida&&!executando)acoes.push(`<button class="action start" onclick="iniciarDemanda(${d.id})">▶ INICIAR</button>`);
+    if(d.tipo!=="recado"&&!concluida)acoes.push(`<button class="action done" onclick="abrirDemandaExecucao(${d.id})">✓ CONCLUIR</button>`);
+    return `<div class="item-card ${classe}">${origem}<div class="item-top"><div class="item-icon">${icone}</div><div class="item-info"><strong>${esc(d.titulo)}</strong><span>${esc(d.tipo||"tarefa")} • ${statusDemandaTexto(d.status)}${d.prazo_em?" • prazo "+new Date(d.prazo_em).toLocaleString("pt-BR",{dateStyle:"short",timeStyle:"short"}):""}</span></div><span class="badge ${badgeClass}">${esc(prioridade.toUpperCase())}</span></div>${local?`<div class="demand-local">📍 ${esc(local)}</div>`:""}${d.descricao?`<div class="item-description">${esc(d.descricao)}</div>`:""}${requisitos}${acoes.length?`<div class="item-actions">${acoes.join("")}</div>`:""}</div>`;
+  }).join("");
+}
+
+async function mudarDemanda(id,status){
+  const agora=new Date().toISOString(),payload={status,updated_at:agora};
+  if(status==="visualizada")payload.visualizada_em=agora;
+  if(status==="em_andamento")payload.iniciada_em=agora;
+  if(status==="concluida")payload.concluida_em=agora;
+  const {error}=await db.from("demandas").update(payload).eq("id",id).eq("condominio_id",colaborador.condominio_id);
+  if(error){alert(error.message);return false}
+  await carregarTudo();
+  return true;
+}
+
+async function iniciarDemanda(id){
+  const d=demandas.find(x=>mesmoId(x.id,id));
+  if(!d)return alert("Demanda não encontrada.");
+  const ok=await mudarDemanda(id,"em_andamento");
+  if(ok)toast("▶ Demanda iniciada.");
+}
+
+function abrirDemandaExecucao(id){
+  const d=demandas.find(x=>mesmoId(x.id,id));
+  if(!d)return alert("Demanda não encontrada.");
+  demandaAtual=d;
+  execAtual=null;
+  fotoArquivo=null;
+  $("photoInput").value="";
+  $("preview").classList.remove("visible");
+  $("photoButton").classList.remove("has");
+  $("photoButton").textContent=d.exige_foto?"📷 ADICIONAR FOTO OBRIGATÓRIA":"📷 ADICIONAR FOTO";
+  $("observacao").value="";
+  $("modalTitle").textContent="Concluir demanda";
+  const local=nomeLocal(d.area_id,d.ponto_id)||"Local informado pela gestão";
+  $("modalSelection").textContent=`${d.titulo} • ${local}`;
+  $("areaField").classList.add("hidden");
+  $("pontoField").classList.add("hidden");
+  $("confirmExec").textContent="✓ CONCLUIR DEMANDA";
+  $("execModal").classList.add("visible");
+}
+
+function renderProgramacoes(){
+  if(!programacoes.length){
+    $("programacoes").className="";
+    $("programacoes").innerHTML=vazio("Nenhuma atividade programada","Quando a gestão cadastrar a rotina, ela aparecerá aqui automaticamente.");
+    return;
+  }
+
+  const ordenadas=[...programacoes].sort((a,b)=>{
+    const pa=pesoProgramacao(a),pb=pesoProgramacao(b);
+    if(pa!==pb)return pa-pb;
+    const ha=minutosHorario(a.horario_limite),hb=minutosHorario(b.horario_limite);
+    if(ha===null&&hb!==null)return 1;
+    if(ha!==null&&hb===null)return -1;
+    if(ha!==null&&hb!==null&&ha!==hb)return ha-hb;
+    return Number(a.id)-Number(b.id);
+  });
+
+  $("programacoes").className="list";
+  $("programacoes").innerHTML=ordenadas.map(p=>{
+    const at=atividades.find(a=>mesmoId(a.id,p.atividade_id));
+    const feito=execucoesHoje.some(e=>mesmoId(e.programacao_id,p.id)&&e.status==="concluida");
+    const atrasada=estaAtrasada(p,feito);
+    const urgente=!feito&&String(p.prioridade||"").toLowerCase()==="urgente";
+    const local=nomeLocal(p.area_id,p.ponto_id)||"Local definido pela gestão";
+
+    let classe="programada-pendente",icone="🔔",badge="PENDENTE",badgeClass="purple",faixa="ATIVIDADE PENDENTE — TOQUE PARA CONCLUIR",faixaClass="";
+    if(atrasada){classe="programada-atrasada";icone="⏰";badge="ATRASADA";badgeClass="red";faixa="⚠ PRAZO ULTRAPASSADO — ATENÇÃO";faixaClass="urgent"}
+    else if(urgente){classe="programada-urgente";icone="⚠️";badge="URGENTE";badgeClass="red";faixa="⚠ ATIVIDADE URGENTE";faixaClass="urgent"}
+    else if(feito){classe="programada-concluida";icone="✓";badge="CONCLUÍDA";badgeClass="green";faixa="✓ ATIVIDADE CONCLUÍDA";faixaClass=""}
+
+    const prazo=p.horario_limite?`<div class="deadline ${atrasada?"late":""}">${atrasada?"⏰ ATRASADA — ERA ATÉ":"🕒 CONCLUIR ATÉ"} ${esc(String(p.horario_limite).slice(0,5))}</div>`:"";
+
+    return `<div class="item-card ${classe}">
+      <div class="alert-strip ${faixaClass}"><span>${faixa}</span><span>${feito?"✓":"●"}</span></div>
+      <div class="item-top">
+        <div class="item-icon">${icone}</div>
+        <div class="item-info">
+          <strong>${esc(at?.nome||"Atividade")}</strong>
+          <span>${esc(local)}</span>
+          ${prazo}
+        </div>
+        <span class="badge ${badgeClass}">${badge}</span>
+      </div>
+      ${p.instrucoes?`<div class="item-description">${esc(p.instrucoes)}</div>`:""}
+      ${!feito?`<div class="item-actions"><button class="action" onclick="abrirExecucao(${p.id})">✓ REGISTRAR CONCLUSÃO</button></div>`:""}
+    </div>`;
+  }).join("");
+}
+
+function renderHistorico(){
+  if(!execucoesHoje.length){
+    $("historico").className="";
+    $("historico").innerHTML=vazio("Nenhuma execução registrada hoje","As conclusões registradas aparecerão aqui.");
+    return;
+  }
+  $("historico").className="list";
+  $("historico").innerHTML=execucoesHoje.map(e=>{
+    const nome=e.atividade_id?atividadeNome(e.atividade_id):(e.tipo==="avulsa"?"Atividade avulsa":"Atividade");
+    return `<div class="item-card"><div class="item-top"><div class="item-icon">✓</div><div class="item-info"><strong>${esc(nome)}</strong><span>${esc(nomeLocal(e.area_id,e.ponto_id)||"Registro avulso")} • ${hora(e.concluida_em||e.created_at)}</span></div><span class="badge green">REGISTRADO</span></div>${e.observacao?`<div class="item-description">${esc(e.observacao)}</div>`:""}</div>`;
+  }).join("");
+}
+
+function abrirExecucao(id=null){
+  demandaAtual=null;
+  execAtual=id?programacoes.find(p=>mesmoId(p.id,id)):null;
+  fotoArquivo=null;
+  $("photoInput").value="";
+  $("preview").classList.remove("visible");
+  $("photoButton").classList.remove("has");
+  $("photoButton").textContent="📷 ADICIONAR FOTO";
+  $("observacao").value="";
+  $("modalTitle").textContent=execAtual?"Registrar execução":"Registro avulso";
+  $("confirmExec").textContent="✓ REGISTRAR CONCLUSÃO";
+
+  if(execAtual){
+    const at=atividades.find(a=>mesmoId(a.id,execAtual.atividade_id));
+    $("modalSelection").textContent=`${at?.nome||"Atividade"} • ${nomeLocal(execAtual.area_id,execAtual.ponto_id)||"Local programado"}`;
+    $("areaField").classList.add("hidden");
+    $("pontoField").classList.add("hidden");
+  }else{
+    $("modalSelection").textContent=areas.length?"Escolha primeiro a área e depois o ponto/local.":"Nenhuma área operacional está disponível para este colaborador.";
+    $("areaField").classList.remove("hidden");
+    $("pontoField").classList.remove("hidden");
+    popularAreas();
+  }
+  $("execModal").classList.add("visible");
+}
+
+function popularAreas(){
+  const opcoes=areas.map(a=>`<option value="${a.id}">${esc(a.nome)}</option>`).join("");
+  $("areaSelect").innerHTML=`<option value="">Selecione a área...</option>${opcoes}`;
+  $("areaSelect").disabled=!areas.length;
+  popularPontos();
+}
+
+function popularPontos(){
+  const aid=Number($("areaSelect").value);
+  const ps=aid?pontos.filter(p=>mesmoId(p.area_id,aid)):[];
+  $("pontoSelect").innerHTML=!aid
+    ?`<option value="">Selecione primeiro a área...</option>`
+    :ps.length
+      ?`<option value="">Selecione o ponto/local...</option>${ps.map(p=>`<option value="${p.id}">${esc(p.nome)}</option>`).join("")}`
+      :`<option value="">Área sem ponto cadastrado</option>`;
+  $("pontoSelect").disabled=!aid||!ps.length;
+  const ar=areas.find(a=>mesmoId(a.id,aid));
+  $("modalSelection").textContent=ar?`${ar.nome}${ps.length?` • ${ps.length} ${ps.length===1?"local disponível":"locais disponíveis"}`:" • sem ponto cadastrado"}`:"Escolha primeiro a área e depois o ponto/local.";
+}
+
+async function uploadFoto(areaId,pontoId){
+  if(!fotoArquivo)return null;
+  const ext=(fotoArquivo.name.split(".").pop()||"jpg").toLowerCase().replace(/[^a-z0-9]/g,"")||"jpg";
+  const path=`v2/${colaborador.condominio_id}/${colaborador.id}/${hoje()}/${Date.now()}-${areaId||"area"}-${pontoId||"ponto"}.${ext}`;
+  const {error}=await db.storage.from(BUCKET).upload(path,fotoArquivo,{upsert:false,contentType:fotoArquivo.type||"image/jpeg"});
+  if(error)throw new Error("Erro ao enviar foto: "+error.message);
+  return path;
+}
+
+async function confirmarExecucao(){
+  if(processando)return;
+  const ehDemanda=!!demandaAtual;
+  const at=execAtual?atividades.find(a=>mesmoId(a.id,execAtual.atividade_id)):null;
+  const exigeFoto=ehDemanda?!!demandaAtual.exige_foto:(execAtual?(execAtual.exige_foto??at?.exige_foto??false):false);
+  const exigeObs=ehDemanda?!!demandaAtual.exige_observacao:(execAtual?(execAtual.exige_observacao??at?.exige_observacao??false):false);
+  const obs=$("observacao").value.trim();
+
+  if(exigeFoto&&!fotoArquivo){alert("Esta atividade exige foto.");return}
+  if(exigeObs&&!obs){alert("Esta atividade exige observação.");return}
+
+  let areaId=ehDemanda?(demandaAtual.area_id||null):(execAtual?.area_id||null);
+  let pontoId=ehDemanda?(demandaAtual.ponto_id||null):(execAtual?.ponto_id||null);
+
+  if(!ehDemanda&&!execAtual){
+    areaId=Number($("areaSelect").value)||null;
+    pontoId=Number($("pontoSelect").value)||null;
+    if(!areaId){alert("Selecione uma área.");return}
+    const disponiveis=pontos.filter(p=>mesmoId(p.area_id,areaId));
+    if(disponiveis.length&&!pontoId){alert("Selecione o ponto/local.");return}
+    if(pontoId&&!disponiveis.some(p=>mesmoId(p.id,pontoId))){alert("O ponto selecionado não pertence à área escolhida.");return}
+  }
+
+  if(pontoId&&!areaId)areaId=areaDoPonto(pontoId)?.id||null;
+  processando=true;
+  $("confirmExec").disabled=true;
+  $("confirmExec").textContent="REGISTRANDO...";
+
+  try{
+    const fotoPath=await uploadFoto(areaId,pontoId),agora=new Date().toISOString();
+
+    if(ehDemanda){
+      /* A conclusão operacional da demanda fica registrada na própria demanda.
+         Não inserimos em execucoes aqui porque a estrutura atual de execucoes
+         não possui demanda_id confirmado. Assim evitamos misturar demanda com programação. */
+      const payloadDemanda={
+        status:"concluida",
+        concluida_em:agora,
+        updated_at:agora
+      };
+      if(obs)payloadDemanda.observacao_execucao=obs;
+      if(fotoPath)payloadDemanda.foto_execucao_path=fotoPath;
+
+      let {error}=await db.from("demandas").update(payloadDemanda)
+        .eq("id",demandaAtual.id)
+        .eq("condominio_id",colaborador.condominio_id);
+
+      /* Compatibilidade: se as colunas de evidência ainda não existem,
+         conclui a demanda sem perder o fluxo. Depois podemos criar essas
+         duas colunas para o gestor visualizar foto/observação. */
+      if(error&&(String(error.message||"").includes("observacao_execucao")||String(error.message||"").includes("foto_execucao_path"))){
+        const fallback={status:"concluida",concluida_em:agora,updated_at:agora};
+        const r=await db.from("demandas").update(fallback)
+          .eq("id",demandaAtual.id)
+          .eq("condominio_id",colaborador.condominio_id);
+        error=r.error;
+      }
+      if(error)throw error;
+
+      // A demanda já foi gravada como concluída. Só depois disso avisamos a gestão.
+      // Uma falha de Push não desfaz nem bloqueia a conclusão operacional.
+      try{
+        const {data:pushData,error:pushError}=await db.functions.invoke("enviar-push-conclusao",{
+          body:{demanda_id:demandaAtual.id}
+        });
+        if(pushError)console.warn("Demanda concluída, mas o Push para a gestão falhou:",pushError);
+        else console.log("Push conclusão:",pushData);
+      }catch(pushException){
+        console.warn("Demanda concluída, mas não foi possível avisar a gestão:",pushException);
+      }
+
+      fecharModal();
+      toast("✓ Demanda concluída. Gestão avisada.");
+      await carregarTudo();
+      return;
     }
 
+    const payload={
+      condominio_id:colaborador.condominio_id,
+      colaborador_id:colaborador.id,
+      programacao_id:execAtual?.id||null,
+      atividade_id:execAtual?.atividade_id||null,
+      area_id:areaId,
+      ponto_id:pontoId,
+      tipo:execAtual?(execAtual.tipo==="extraordinaria"?"extraordinaria":"programada"):"avulsa",
+      status:"concluida",
+      observacao:obs||null,
+      foto_path:fotoPath,
+      iniciada_em:null,
+      concluida_em:agora,
+      updated_at:agora
+    };
+    const {data:execCriada,error}=await db.from("execucoes").insert(payload).select("id").single();
+    if(error)throw error;
+
+    // A execução já foi salva. Depois disso avisamos a gestão.
+    // Se o Push falhar, o registro operacional permanece válido.
+    try{
+      const {data:pushData,error:pushError}=await db.functions.invoke("enviar-push-conclusao",{
+        body:{execucao_id:execCriada.id}
+      });
+      if(pushError)console.warn("Atividade registrada, mas o Push para a gestão falhou:",pushError);
+      else console.log("Push execução:",pushData);
+    }catch(pushException){
+      console.warn("Atividade registrada, mas não foi possível avisar a gestão:",pushException);
+    }
+
+    fecharModal();
+    toast("✓ Atividade registrada. Gestão avisada.");
+    await carregarTudo();
+  }catch(e){alert(e.message||"Não foi possível registrar.");}
+  finally{
+    processando=false;
+    $("confirmExec").disabled=false;
+    $("confirmExec").textContent=demandaAtual?"✓ CONCLUIR DEMANDA":"✓ REGISTRAR CONCLUSÃO";
+  }
 }
 
-
-const sessao =
-    carregarSessao();
-
-
-if (!sessao) {
-
-    localStorage.removeItem(
-        "usuarioLogado"
-    );
-
-
-    window.location.replace(
-        "index.html"
-    );
-
-
-    throw new Error(
-        "Sessão operacional ausente."
-    );
-
+function fecharModal(){
+  $("execModal").classList.remove("visible");
+  if(previewURL){URL.revokeObjectURL(previewURL);previewURL=null}
+  execAtual=null;demandaAtual=null;fotoArquivo=null;
+}
+async function sair(){
+  localStorage.removeItem("usuarioLogado");
+  localStorage.removeItem("tipoAtividadeAtual");
+  await db.auth.signOut();
+  location.href="index.html";
 }
 
-
-/*
-    IMPORTANTE
-
-    Não existe mais cadastro de usuários
-    dentro deste arquivo.
-
-    Nome, matrícula, função e condomínio
-    vieram do login validado pelo Supabase.
-
-    Nesta etapa, a sessão em localStorage
-    ainda é apenas uma compatibilidade
-    temporária com as páginas atuais.
-*/
-
-
-const usuario = {
-
-    id:
-        sessao.id,
-
-    matricula:
-        String(
-            sessao.matricula
-        ),
-
-    nome:
-        String(
-            sessao.nome
-        ),
-
-    cargo:
-        String(
-            sessao.funcao
-            ||
-            sessao.cargo
-            ||
-            "Colaborador"
-        ),
-
-    tipo:
-        normalizarTipo(
-            sessao.tipo,
-            sessao.funcao
-            ||
-            sessao.cargo
-        ),
-
-    condominio:
-        String(
-            sessao.condominio
-            ||
-            "Reserva Igara"
-        ),
-
-    atribuicoes:
-        obterAtribuicoesTemporarias(
-            normalizarTipo(
-                sessao.tipo,
-                sessao.funcao
-                ||
-                sessao.cargo
-            )
-        )
-
+$("logout").onclick=sair;
+$("switchCondoButton").onclick=trocarCondominioColaborador;
+$("condoLogout").onclick=async()=>{sessionStorage.removeItem("oraqui_colaborador_condominio_id");await db.auth.signOut();location.href="./"};
+$("notificationBtn").onclick=acaoNotificacao;
+$("btnEntrada").onclick=()=>registrarPonto("entrada");
+$("btnIniIntervalo").onclick=()=>registrarPonto("inicio_intervalo");
+$("btnFimIntervalo").onclick=()=>registrarPonto("fim_intervalo");
+$("btnSaida").onclick=()=>registrarPonto("saida");
+$("avulso").onclick=()=>abrirExecucao();
+$("closeModal").onclick=fecharModal;
+$("areaSelect").onchange=popularPontos;
+$("pontoSelect").onchange=()=>{
+  const aid=Number($("areaSelect").value),pid=Number($("pontoSelect").value);
+  $("modalSelection").textContent=nomeLocal(aid,pid)||areas.find(a=>mesmoId(a.id,aid))?.nome||"Escolha primeiro a área e depois o ponto/local.";
 };
-
-
-/* ==================================================
-   TIPO / ATRIBUIÇÕES TEMPORÁRIAS
-================================================== */
-
-function normalizarTipo(
-    tipoSessao,
-    funcao
-) {
-
-    const tipo =
-        String(
-            tipoSessao
-            ||
-            ""
-        )
-        .toLowerCase();
-
-
-    const cargo =
-        String(
-            funcao
-            ||
-            ""
-        )
-        .toLowerCase();
-
-
-    if (
-        tipo ===
-        "zeladoria"
-        ||
-        cargo.includes(
-            "zelad"
-        )
-    ) {
-
-        return "zeladoria";
-
-    }
-
-
-    if (
-        tipo ===
-        "portaria"
-        ||
-        cargo.includes(
-            "portar"
-        )
-    ) {
-
-        return "portaria";
-
-    }
-
-
-    if (
-        tipo ===
-        "manutencao"
-        ||
-        cargo.includes(
-            "manuten"
-        )
-    ) {
-
-        return "manutencao";
-
-    }
-
-
-    if (
-        tipo ===
-        "supervisor"
-        ||
-        cargo.includes(
-            "supervisor"
-        )
-    ) {
-
-        return "supervisor";
-
-    }
-
-
-    return "limpeza";
-
-}
-
-
-/*
-    As atribuições ainda não estão em uma
-    tabela própria do Supabase.
-
-    Até criarmos a configuração dinâmica
-    pelo gestor, o módulo de limpeza mantém
-    a estrutura de teste da Torre E.
-
-    Isso NÃO contém usuário, matrícula ou PIN.
-*/
-
-function obterAtribuicoesTemporarias(
-    tipo
-) {
-
-    if (
-        tipo ===
-        "limpeza"
-    ) {
-
-        return [
-
-            {
-                tipo:
-                    "torre",
-
-                nome:
-                    "Torre E"
-            }
-
-        ];
-
-    }
-
-
-    if (
-        tipo ===
-        "zeladoria"
-    ) {
-
-        return [
-            "zeladoria-geral"
-        ];
-
-    }
-
-
-    return [];
-
-}
-
-
-/* ==================================================
-   DATA
-================================================== */
-
-const hoje =
-    new Date();
-
-
-const diaSemana =
-    hoje.getDay();
-
-
-const dataHoje =
-    hoje.toLocaleDateString(
-        "pt-BR"
-    );
-
-
-/*
-0 domingo
-1 segunda
-2 terça
-3 quarta
-4 quinta
-5 sexta
-6 sábado
-*/
-
-
-/* ==================================================
-   ATIVIDADES CONCLUÍDAS
-================================================== */
-
-/*
-    TEMPORÁRIO:
-
-    Esta tela ainda lê o resumo local das
-    atividades concluídas para preservar
-    o funcionamento atual.
-
-    A gravação real será revisada no
-    atividade.html antes de fecharmos
-    as policies antigas do Supabase.
-*/
-
-function obterConcluidas() {
-
-    try {
-
-        return JSON.parse(
-            localStorage.getItem(
-                "atividadesConcluidas"
-            )
-        ) || [];
-
-    } catch (erro) {
-
-        return [];
-
-    }
-
-}
-
-
-function estaConcluida(
-    local
-) {
-
-    const concluidas =
-        obterConcluidas();
-
-
-    return concluidas.some(
-        item => {
-
-            if (
-                typeof item ===
-                "string"
-            ) {
-
-                return item === local;
-
-            }
-
-
-            return (
-                item.local === local
-                &&
-                (
-                    !item.data
-                    ||
-                    item.data === dataHoje
-                )
-            );
-
-        }
-    );
-
-}
-
-
-/* ==================================================
-   PERFIL
-================================================== */
-
-document
-    .getElementById(
-        "brandCondominio"
-    )
-    .textContent =
-        usuario.condominio;
-
-
-document
-    .getElementById(
-        "welcomeName"
-    )
-    .textContent =
-        "Olá, " +
-        usuario.nome;
-
-
-document
-    .getElementById(
-        "profileName"
-    )
-    .textContent =
-        usuario.nome;
-
-
-document
-    .getElementById(
-        "profileCargo"
-    )
-    .textContent =
-        usuario.cargo +
-        " • " +
-        usuario.condominio;
-
-
-if (
-    usuario.tipo ===
-    "zeladoria"
-) {
-
-    document
-        .getElementById(
-            "welcomeType"
-        )
-        .textContent =
-            "ZELADORIA";
-
-
-    document
-        .getElementById(
-            "welcomeText"
-        )
-        .textContent =
-            "Atividades e rondas do " +
-            usuario.condominio +
-            ".";
-
-
-    document
-        .getElementById(
-            "profileIcon"
-        )
-        .textContent =
-            "🛠️";
-
-
-    document
-        .getElementById(
-            "profileTag"
-        )
-        .textContent =
-            "ZELADOR";
-
-} else {
-
-    document
-        .getElementById(
-            "welcomeType"
-        )
-        .textContent =
-            "MINHA ROTINA";
-
-
-    document
-        .getElementById(
-            "welcomeText"
-        )
-        .textContent =
-            "Veja suas atividades programadas.";
-
-
-    document
-        .getElementById(
-            "profileIcon"
-        )
-        .textContent =
-            "👷";
-
-
-    document
-        .getElementById(
-            "profileTag"
-        )
-        .textContent =
-            usuario.tipo ===
-                "limpeza"
-            ? "LIMPEZA"
-            : "EQUIPE";
-
-}
-
-
-/* ==================================================
-   LIMPEZA MULTI
-================================================== */
-
-const estruturaTorres = {
-
-    "Torre A":17,
-    "Torre B":17,
-    "Torre C":17,
-    "Torre D":17,
-    "Torre E":17
-
+$("confirmExec").onclick=confirmarExecucao;
+$("photoButton").onclick=()=>$("photoInput").click();
+$("photoInput").onchange=e=>{
+  const f=e.target.files?.[0];
+  if(!f)return;
+  if(!f.type.startsWith("image/")){alert("Selecione uma imagem.");return}
+  if(f.size>10*1024*1024){alert("A imagem deve ter no máximo 10 MB.");return}
+  fotoArquivo=f;
+  if(previewURL)URL.revokeObjectURL(previewURL);
+  previewURL=URL.createObjectURL(f);
+  $("preview").src=previewURL;
+  $("preview").classList.add("visible");
+  $("photoButton").classList.add("has");
+  $("photoButton").textContent="📷 FOTO SELECIONADA";
 };
-
-
-function renderLimpeza() {
-
-    const content =
-        document.getElementById(
-            "content"
-        );
-
-
-    let html = `
-
-        <section class="section">
-
-            <div class="section-title">
-
-                <h2>
-                    Minha rotina
-                </h2>
-
-                <span>
-                    ${dataHoje}
-                </span>
-
-            </div>
-
-    `;
-
-
-    const torres =
-        usuario.atribuicoes.filter(
-            item =>
-                typeof item ===
-                    "object"
-                &&
-                item.tipo ===
-                    "torre"
-        );
-
-
-    const espacos =
-        usuario.atribuicoes.filter(
-            item =>
-                typeof item ===
-                    "object"
-                &&
-                item.tipo ===
-                    "espaco"
-        );
-
-
-    if (
-        torres.length > 0
-    ) {
-
-        html += `
-
-            <div class="group">
-
-                <div class="group-title">
-                    🏢 Torres
-                </div>
-
-        `;
-
-
-        torres.forEach(
-            item => {
-
-                const total =
-                    estruturaTorres[
-                        item.nome
-                    ] || 17;
-
-
-                const concluidas =
-                    obterConcluidas()
-                    .filter(
-                        atividade =>
-                            typeof atividade ===
-                                "object"
-                            &&
-                            atividade.torre ===
-                                item.nome
-                            &&
-                            (
-                                !atividade.data
-                                ||
-                                atividade.data ===
-                                    dataHoje
-                            )
-                    )
-                    .length;
-
-
-                const percentual =
-                    Math.min(
-                        Math.round(
-                            (
-                                concluidas /
-                                total
-                            ) * 100
-                        ),
-                        100
-                    );
-
-
-                html += `
-
-                    <div class="tower">
-
-                        <div
-                            class="tower-top"
-                        >
-
-                            <div
-                                class="tower-icon"
-                            >
-                                🏢
-                            </div>
-
-
-                            <div
-                                class="tower-info"
-                            >
-
-                                <small>
-                                    ${escaparHTML(
-                                        usuario.condominio
-                                    )}
-                                </small>
-
-                                <strong>
-                                    ${escaparHTML(
-                                        item.nome
-                                    )}
-                                </strong>
-
-                            </div>
-
-
-                            <span
-                                class="tower-percent"
-                            >
-                                ${percentual}%
-                            </span>
-
-                        </div>
-
-
-                        <div
-                            class="progress"
-                        >
-
-                            <div
-                                class="progress-fill"
-                                style="
-                                    width:
-                                    ${percentual}%
-                                "
-                            ></div>
-
-                        </div>
-
-
-                        <button
-                            class="tower-button"
-                            onclick="
-                                abrirTorre(
-                                    '${escaparJS(
-                                        item.nome
-                                    )}'
-                                )
-                            "
-                        >
-                            ABRIR ROTINA
-                        </button>
-
-                    </div>
-
-                `;
-
-            }
-        );
-
-
-        html += `
-            </div>
-        `;
-
-    }
-
-
-    if (
-        espacos.length > 0
-    ) {
-
-        html += `
-
-            <div class="group">
-
-                <div class="group-title">
-                    🧹 Espaços
-                </div>
-
-                <div class="tasks-grid">
-
-        `;
-
-
-        espacos.forEach(
-            item => {
-
-                html +=
-                    criarCard(
-                        item.nome,
-                        item.icone ||
-                            "🧹",
-                        "Limpeza programada",
-                        estaConcluida(
-                            item.nome
-                        )
-                    );
-
-            }
-        );
-
-
-        html += `
-
-                </div>
-
-            </div>
-
-        `;
-
-    }
-
-
-    if (
-        torres.length === 0
-        &&
-        espacos.length === 0
-    ) {
-
-        html += `
-
-            <div class="empty">
-                Nenhuma rotina foi atribuída
-                a este perfil ainda.
-            </div>
-
-        `;
-
-    }
-
-
-    html += `
-        </section>
-    `;
-
-
-    content.innerHTML =
-        html;
-
-
-    atualizarContadoresLimpeza();
-
-}
-
-
-/* ==================================================
-   ZELADORIA
-================================================== */
-
-const zeladoriaDiaria = [
-
-    {
-        nome:
-            "Frente do condomínio",
-
-        icone:
-            "🚪",
-
-        detalhe:
-            "Acesso, calçada e recolhimento de resíduos"
-    },
-
-    {
-        nome:
-            "Áreas verdes comuns",
-
-        icone:
-            "🌿",
-
-        detalhe:
-            "Recolher lixo e resíduos sobre os gramados"
-    },
-
-    {
-        nome:
-            "Entorno Torre A",
-
-        icone:
-            "🏢",
-
-        detalhe:
-            "Gramado, calçada e acessos"
-    },
-
-    {
-        nome:
-            "Entorno Torre B",
-
-        icone:
-            "🏢",
-
-        detalhe:
-            "Gramado, calçada e acessos"
-    },
-
-    {
-        nome:
-            "Entorno Torre C",
-
-        icone:
-            "🏢",
-
-        detalhe:
-            "Gramado, calçada e acessos"
-    },
-
-    {
-        nome:
-            "Entorno Torre D",
-
-        icone:
-            "🏢",
-
-        detalhe:
-            "Gramado, calçada e acessos"
-    },
-
-    {
-        nome:
-            "Entorno Torre E",
-
-        icone:
-            "🏢",
-
-        detalhe:
-            "Gramado, calçada e acessos"
-    },
-
-    {
-        nome:
-            "Resíduos Torre A",
-
-        icone:
-            "🗑️",
-
-        detalhe:
-            "Abrigo de resíduos"
-    },
-
-    {
-        nome:
-            "Resíduos Torre B",
-
-        icone:
-            "🗑️",
-
-        detalhe:
-            "Abrigo de resíduos"
-    },
-
-    {
-        nome:
-            "Resíduos Torre C",
-
-        icone:
-            "🗑️",
-
-        detalhe:
-            "Abrigo de resíduos"
-    },
-
-    {
-        nome:
-            "Resíduos Torre D",
-
-        icone:
-            "🗑️",
-
-        detalhe:
-            "Abrigo de resíduos"
-    },
-
-    {
-        nome:
-            "Resíduos Torre E",
-
-        icone:
-            "🗑️",
-
-        detalhe:
-            "Abrigo de resíduos"
-    },
-
-    {
-        nome:
-            "Central de resíduos",
-
-        icone:
-            "♻️",
-
-        detalhe:
-            "Organização e limpeza"
-    },
-
-    {
-        nome:
-            "Lixeiras das áreas comuns",
-
-        icone:
-            "🗑️",
-
-        detalhe:
-            "Esvaziar, trocar sacos e verificar limpeza"
-    },
-
-    {
-        nome:
-            "Chimarródromo",
-
-        icone:
-            "🧉",
-
-        detalhe:
-            "Piso, bancos, mesas e entorno"
-    },
-
-    {
-        nome:
-            "Play / Praça infantil",
-
-        icone:
-            "🛝",
-
-        detalhe:
-            "Piso, entorno e resíduos"
-    },
-
-    {
-        nome:
-            "Espaço Pet",
-
-        icone:
-            "🐕",
-
-        detalhe:
-            "Piso, lixeira e entorno"
-    },
-
-    {
-        nome:
-            "Entorno da piscina",
-
-        icone:
-            "🏊",
-
-        detalhe:
-            "Circulação e recolhimento de resíduos"
-    }
-
-];
-
-
-const zeladoriaSemanal = {
-
-    1:{
-
-        nome:
-            "Garagem G1",
-
-        icone:
-            "🅿️",
-
-        detalhe:
-            "Limpeza semanal da garagem"
-
-    },
-
-    2:{
-
-        nome:
-            "Garagem G2",
-
-        icone:
-            "🅿️",
-
-        detalhe:
-            "Limpeza semanal da garagem"
-
-    },
-
-    3:{
-
-        nome:
-            "Garagem G3",
-
-        icone:
-            "🅿️",
-
-        detalhe:
-            "Limpeza semanal da garagem"
-
-    },
-
-    4:{
-
-        nome:
-            "Garagem G4",
-
-        icone:
-            "🅿️",
-
-        detalhe:
-            "Limpeza semanal da garagem"
-
-    },
-
-    5:{
-
-        nome:
-            "Rua lateral",
-
-        icone:
-            "🛣️",
-
-        detalhe:
-            "Limpeza semanal da circulação externa"
-
-    }
-
-};
-
-
-function obterReservasHoje() {
-
-    try {
-
-        const reservas =
-            JSON.parse(
-                localStorage.getItem(
-                    "reservasLimpeza"
-                )
-            ) || [];
-
-
-        return reservas.filter(
-            item =>
-                item.data ===
-                dataHoje
-        );
-
-    } catch (erro) {
-
-        return [];
-
-    }
-
-}
-
-
-/* ==================================================
-   RONDA
-================================================== */
-
-const rondas = [
-
-    {
-        nome:
-            "Ronda de iluminação",
-
-        icone:
-            "💡",
-
-        detalhe:
-            "Verificar pontos apagados ou defeituosos"
-    },
-
-    {
-        nome:
-            "Portas e portões",
-
-        icone:
-            "🚪",
-
-        detalhe:
-            "Verificar funcionamento e danos aparentes"
-    },
-
-    {
-        nome:
-            "Vazamentos",
-
-        icone:
-            "💧",
-
-        detalhe:
-            "Verificar água acumulada e vazamentos aparentes"
-    },
-
-    {
-        nome:
-            "Conservação geral",
-
-        icone:
-            "🔎",
-
-        detalhe:
-            "Danos, objetos abandonados ou riscos"
-    }
-
-];
-
-
-/* ==================================================
-   RENDER ZELADORIA
-================================================== */
-
-function renderZeladoria() {
-
-    const content =
-        document.getElementById(
-            "content"
-        );
-
-
-    let html = `
-
-        <section class="section">
-
-            <div class="section-title">
-
-                <h2>
-                    Rotina de hoje
-                </h2>
-
-                <span>
-                    ${dataHoje}
-                </span>
-
-            </div>
-
-    `;
-
-
-    html += `
-
-        <div class="group">
-
-            <div class="group-title">
-                ☀️ Rotina diária
-            </div>
-
-            <div class="tasks-grid">
-
-    `;
-
-
-    zeladoriaDiaria.forEach(
-        item => {
-
-            html +=
-                criarCard(
-                    item.nome,
-                    item.icone,
-                    item.detalhe,
-                    estaConcluida(
-                        item.nome
-                    )
-                );
-
-        }
-    );
-
-
-    html += `
-
-            </div>
-
-        </div>
-
-    `;
-
-
-    const semanal =
-        zeladoriaSemanal[
-            diaSemana
-        ];
-
-
-    html += `
-
-        <div class="group">
-
-            <div class="group-title">
-                📅 Atividade semanal
-            </div>
-
-    `;
-
-
-    if (semanal) {
-
-        html +=
-            criarCard(
-                semanal.nome,
-                semanal.icone,
-                semanal.detalhe,
-                estaConcluida(
-                    semanal.nome
-                )
-            );
-
-    } else {
-
-        html += `
-
-            <div class="empty">
-                Nenhuma atividade semanal
-                programada para hoje.
-            </div>
-
-        `;
-
-    }
-
-
-    html += `
-        </div>
-    `;
-
-
-    const reservas =
-        obterReservasHoje();
-
-
-    html += `
-
-        <div class="group">
-
-            <div class="group-title">
-                🛖 Quiosques / reservas
-            </div>
-
-    `;
-
-
-    if (
-        reservas.length === 0
-    ) {
-
-        html += `
-
-            <div class="event-card">
-
-                <strong>
-                    Nenhuma limpeza por reserva
-                </strong>
-
-                Não há quiosques programados
-                para limpeza hoje.
-
-            </div>
-
-        `;
-
-    } else {
-
-        reservas.forEach(
-            reserva => {
-
-                html +=
-                    criarCard(
-                        reserva.local,
-                        "🛖",
-                        "Limpeza após utilização",
-                        estaConcluida(
-                            reserva.local
-                        )
-                    );
-
-            }
-        );
-
-    }
-
-
-    html += `
-        </div>
-    `;
-
-
-    html += `
-
-        <div class="group">
-
-            <div class="group-title">
-                🔎 Ronda de conservação
-            </div>
-
-            <div class="tasks-grid">
-
-    `;
-
-
-    rondas.forEach(
-        item => {
-
-            html +=
-                criarCard(
-                    item.nome,
-                    item.icone,
-                    item.detalhe,
-                    estaConcluida(
-                        item.nome
-                    )
-                );
-
-        }
-    );
-
-
-    html += `
-
-            </div>
-
-        </div>
-
-        </section>
-
-    `;
-
-
-    content.innerHTML =
-        html;
-
-
-    atualizarContadoresZeladoria();
-
-}
-
-
-/* ==================================================
-   CARD GENÉRICO
-================================================== */
-
-function criarCard(
-    nome,
-    icone,
-    detalhe,
-    concluida
-) {
-
-    const status =
-        concluida
-        ? `
-            <span
-                class="status done"
-            >
-                ✓ CONCLUÍDO
-            </span>
-          `
-        : `
-            <span
-                class="status pending"
-            >
-                PENDENTE
-            </span>
-          `;
-
-
-    return `
-
-        <button
-            class="task"
-            onclick="
-                abrirAtividade(
-                    '${escaparJS(nome)}'
-                )
-            "
-        >
-
-            <div class="task-icon">
-                ${icone}
-            </div>
-
-
-            <div class="task-main">
-
-                <strong>
-                    ${escaparHTML(
-                        nome
-                    )}
-                </strong>
-
-                <span>
-                    ${escaparHTML(
-                        detalhe
-                    )}
-                </span>
-
-            </div>
-
-
-            ${status}
-
-        </button>
-
-    `;
-
-}
-
-
-/* ==================================================
-   ABRIR TORRE
-================================================== */
-
-function abrirTorre(
-    torre
-) {
-
-    localStorage.setItem(
-        "torreSelecionada",
-        torre
-    );
-
-
-    localStorage.setItem(
-        "localSelecionado",
-        "Térreo / Hall de entrada"
-    );
-
-
-    localStorage.setItem(
-        "tipoAtividadeAtual",
-        usuario.tipo
-    );
-
-
-    window.location.href =
-        "atividade.html";
-
-}
-
-
-/* ==================================================
-   ABRIR ATIVIDADE
-================================================== */
-
-function abrirAtividade(
-    local
-) {
-
-    localStorage.setItem(
-        "localSelecionado",
-        local
-    );
-
-
-    localStorage.setItem(
-        "torreSelecionada",
-        usuario.condominio
-    );
-
-
-    localStorage.setItem(
-        "tipoAtividadeAtual",
-        usuario.tipo
-    );
-
-
-    window.location.href =
-        "atividade.html";
-
-}
-
-
-/* ==================================================
-   CONTADORES LIMPEZA
-================================================== */
-
-function atualizarContadoresLimpeza() {
-
-    let total = 0;
-    let concluidas = 0;
-
-
-    usuario.atribuicoes.forEach(
-        item => {
-
-            if (
-                typeof item ===
-                    "object"
-                &&
-                item.tipo ===
-                    "torre"
-            ) {
-
-                const quantidade =
-                    estruturaTorres[
-                        item.nome
-                    ] || 17;
-
-
-                total +=
-                    quantidade;
-
-
-                concluidas +=
-                    obterConcluidas()
-                    .filter(
-                        atividade =>
-                            typeof atividade ===
-                                "object"
-                            &&
-                            atividade.torre ===
-                                item.nome
-                            &&
-                            (
-                                !atividade.data
-                                ||
-                                atividade.data ===
-                                    dataHoje
-                            )
-                    )
-                    .length;
-
-            }
-
-
-            if (
-                typeof item ===
-                    "object"
-                &&
-                item.tipo ===
-                    "espaco"
-            ) {
-
-                total++;
-
-
-                if (
-                    estaConcluida(
-                        item.nome
-                    )
-                ) {
-
-                    concluidas++;
-
-                }
-
-            }
-
-        }
-    );
-
-
-    atualizarResumo(
-        total,
-        concluidas
-    );
-
-}
-
-
-/* ==================================================
-   CONTADORES ZELADOR
-================================================== */
-
-function atualizarContadoresZeladoria() {
-
-    let tarefas = [
-        ...zeladoriaDiaria,
-        ...rondas
-    ];
-
-
-    const semanal =
-        zeladoriaSemanal[
-            diaSemana
-        ];
-
-
-    if (semanal) {
-
-        tarefas.push(
-            semanal
-        );
-
-    }
-
-
-    const reservas =
-        obterReservasHoje();
-
-
-    reservas.forEach(
-        reserva => {
-
-            tarefas.push({
-
-                nome:
-                    reserva.local
-
-            });
-
-        }
-    );
-
-
-    const total =
-        tarefas.length;
-
-
-    const concluidas =
-        tarefas.filter(
-            item =>
-                estaConcluida(
-                    item.nome
-                )
-        ).length;
-
-
-    atualizarResumo(
-        total,
-        concluidas
-    );
-
-}
-
-
-/* ==================================================
-   RESUMO
-================================================== */
-
-function atualizarResumo(
-    total,
-    concluidas
-) {
-
-    document
-        .getElementById(
-            "totalCount"
-        )
-        .textContent =
-            total;
-
-
-    document
-        .getElementById(
-            "completedCount"
-        )
-        .textContent =
-            concluidas;
-
-
-    document
-        .getElementById(
-            "pendingCount"
-        )
-        .textContent =
-            Math.max(
-                total -
-                concluidas,
-                0
-            );
-
-}
-
-
-/* ==================================================
-   ESCAPE
-================================================== */
-
-function escaparJS(
-    texto
-) {
-
-    return String(texto)
-        .replace(
-            /\\/g,
-            "\\\\"
-        )
-        .replace(
-            /'/g,
-            "\\'"
-        );
-
-}
-
-
-function escaparHTML(
-    texto
-) {
-
-    return String(
-        texto
-    )
-    .replace(
-        /&/g,
-        "&amp;"
-    )
-    .replace(
-        /</g,
-        "&lt;"
-    )
-    .replace(
-        />/g,
-        "&gt;"
-    )
-    .replace(
-        /"/g,
-        "&quot;"
-    )
-    .replace(
-        /'/g,
-        "&#039;"
-    );
-
-}
-
-
-/* ==================================================
-   LOGOUT
-================================================== */
-
-function sair() {
-
-    localStorage.removeItem(
-        "usuarioLogado"
-    );
-
-
-    localStorage.removeItem(
-        "tipoAtividadeAtual"
-    );
-
-
-    localStorage.removeItem(
-        "localSelecionado"
-    );
-
-
-    localStorage.removeItem(
-        "torreSelecionada"
-    );
-
-
-    window.location.replace(
-        "index.html"
-    );
-
-}
-
-
-document
-    .getElementById(
-        "logoutButton"
-    )
-    .addEventListener(
-        "click",
-        sair
-    );
-
-
-/* ==================================================
-   INICIAR
-================================================== */
-
-if (
-    usuario.tipo ===
-    "zeladoria"
-) {
-
-    renderZeladoria();
-
-} else {
-
-    renderLimpeza();
-
-}
-
+$("execModal").onclick=e=>{if(e.target===$("execModal"))fecharModal()};
+iniciar();
+setInterval(()=>{if(colaborador)renderProgramacoes()},60000);
 </script>
-
 </body>
-
 </html>
