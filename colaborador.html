@@ -13,7 +13,7 @@
 <style>
 :root{--primary:#7667b9;--primary-light:#eeeafd;--blue:#5d88a5;--blue-light:#eaf4f8;--green:#69a17f;--green-light:#eaf5ee;--yellow:#bd8d43;--yellow-light:#fff4df;--red:#c96565;--red-light:#fdecec;--text:#2d3742;--muted:#75808c;--background:#f4f6f8;--card:#fff;--border:#e4e9ee;--shadow:0 10px 30px rgba(35,48,65,.07)}
 *{box-sizing:border-box;margin:0;padding:0}body{min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--background);color:var(--text)}button,input,select,textarea{font-family:inherit}button{cursor:pointer}.hidden{display:none!important}
-header{background:linear-gradient(135deg,#6d80a8,#7c72ae);color:#fff;padding:calc(18px + env(safe-area-inset-top)) 18px 48px}.header-content{max-width:720px;margin:auto}.topbar{display:flex;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:10px}.brand-icon{width:39px;height:39px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.18);font-size:20px;font-weight:800}.brand strong{display:block;font-size:17px}.brand small{display:block;margin-top:2px;font-size:7px;letter-spacing:1.1px;opacity:.75}.logout{border:0;padding:10px 13px;border-radius:14px;background:rgba(255,255,255,.16);color:#fff;font-size:9px;font-weight:800}.header-title{margin-top:27px}.header-title small{display:block;font-size:14px;font-weight:800;letter-spacing:.8px;opacity:.92}.header-title h1{margin-top:6px;font-size:27px}.header-title p{margin-top:7px;font-size:11px;opacity:.8}
+header{background:linear-gradient(135deg,#6d80a8,#7c72ae);color:#fff;padding:calc(18px + env(safe-area-inset-top)) 18px 48px}.header-content{max-width:720px;margin:auto}.topbar{display:flex;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:10px}.brand-icon{width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:transparent;border:0;box-shadow:none;overflow:visible;font-size:20px;font-weight:800}.brand strong{display:block;font-size:17px}.brand small{display:block;margin-top:2px;font-size:7px;letter-spacing:1.1px;opacity:.75}.logout{border:0;padding:10px 13px;border-radius:14px;background:rgba(255,255,255,.16);color:#fff;font-size:9px;font-weight:800}.header-title{margin-top:24px}.header-title small{display:block;font-size:14px;font-weight:800;letter-spacing:.8px;opacity:.92}.header-title h1{margin-top:0;font-size:27px}.header-title p{margin-top:7px;font-size:11px;opacity:.8}
 main{max-width:720px;margin:-18px auto 80px;padding:0 15px}.user-card,.card,.item-card{background:#fff;box-shadow:var(--shadow);border-radius:21px}.user-card{padding:16px;display:flex;align-items:center;gap:13px}.user-icon{width:49px;height:49px;border-radius:15px;display:flex;align-items:center;justify-content:center;background:var(--primary-light);font-size:23px}.user-info{flex:1}.user-info strong{display:block;font-size:13px}.user-info span{display:block;margin-top:4px;color:var(--muted);font-size:9px}.user-tag{padding:7px 10px;border-radius:20px;background:var(--green-light);color:var(--green);font-size:8px;font-weight:800}
 .section{margin-top:23px}.section-title{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;margin-bottom:11px}.section-title h2{font-size:17px}.section-title p{margin-top:5px;color:var(--muted);font-size:9px;line-height:1.5}.card{padding:17px}.status-card{display:flex;align-items:center;gap:12px}.status-icon{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:var(--blue-light);font-size:20px}.status-info{flex:1}.status-info strong{display:block;font-size:11px}.status-info span{display:block;margin-top:4px;color:var(--muted);font-size:8px;line-height:1.4}.badge{padding:6px 9px;border-radius:20px;font-size:7px;font-weight:900}.green{background:var(--green-light);color:var(--green)}.yellow{background:var(--yellow-light);color:var(--yellow)}.purple{background:var(--primary-light);color:var(--primary)}.red{background:var(--red-light);color:var(--red)}
 .point-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:14px}.point-btn{min-height:48px;border:0;border-radius:14px;background:var(--primary-light);color:var(--primary);font-size:9px;font-weight:900}.point-btn.primary{background:var(--green);color:#fff}.point-btn:disabled{opacity:.4}.geo-note{margin-top:10px;color:var(--muted);font-size:8px;line-height:1.45}
@@ -81,8 +81,8 @@ main{max-width:720px;margin:-18px auto 80px;padding:0 15px}.user-card,.card,.ite
 /* ORAQUI — identidade visual por ícones oficiais */
 .ora-icon{width:22px;height:22px;object-fit:contain;display:block}
 .ora-icon.sm{width:16px;height:16px}.ora-icon.md{width:26px;height:26px}.ora-icon.lg{width:31px;height:31px}
-.brand-icon{padding:7px;background:rgba(255,255,255,.16)}
-.brand-icon img{width:100%;height:100%;object-fit:contain;border-radius:8px}
+.brand-icon{padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important}
+.brand-icon img{width:32px;height:32px;object-fit:contain;display:block;border:0;box-shadow:none;background:transparent}
 .user-icon,.item-icon,.status-icon,.notification-icon,.offline-icon,.condo-option-icon{overflow:hidden}
 .user-icon img,.item-icon img,.status-icon img,.notification-icon img,.offline-icon img,.condo-option-icon img{width:27px;height:27px;object-fit:contain}
 .action-with-icon,.photo-button,.confirm{display:flex;align-items:center;justify-content:center;gap:8px}
@@ -105,7 +105,7 @@ main{max-width:720px;margin:-18px auto 80px;padding:0 15px}.user-card,.card,.ite
   </div>
 </div>
 
-<header><div class="header-content"><div class="topbar"><div class="brand"><div class="brand-icon"><img src="/oraqui-brand/icon-app-192.png" alt=""></div><div><strong>ORAQUI</strong><small>AGORA. AQUI. REGISTRADO.</small></div></div><div><button class="condo-switch hidden" id="switchCondoButton" type="button">TROCAR LOCAL</button><button class="logout" id="logout">SAIR</button></div></div><div class="header-title"><small id="condominioNome">CONDOMÍNIO</small><h1>Minha operação</h1><p>Escala, ponto, demandas e atividades do dia.</p></div></div></header>
+<header><div class="header-content"><div class="topbar"><div class="brand"><div class="brand-icon"><img src="/oraqui-brand/icon-app-192.png" alt=""></div><div><strong>ORAQUI</strong><small>AGORA. AQUI. REGISTRADO.</small></div></div><button class="logout" id="logout">SAIR</button></div><div class="header-title"><h1>Minha operação</h1><p>Escala, ponto, demandas e atividades do dia.</p></div></div></header>
 <main>
 <div class="user-card"><div class="user-icon" id="userIcon"><img src="/oraqui-icons/perfil-128.png" alt=""></div><div class="user-info"><strong id="userName">Carregando...</strong><span id="userDescription">Validando acesso</span></div><span class="user-tag">ATIVO</span></div>
 <div class="workscope" id="workscope"><img src="/oraqui-icons/locais-128.png" alt=""><div><strong id="workscopeTitle">Locais de trabalho</strong><span id="workscopeText">Carregando permissões...</span></div></div>
@@ -143,7 +143,7 @@ const BUCKET="fotos-atividades";
 const VAPID_PUBLIC_KEY="BNOm_tsvH-uo-hfquzYmf_XxgiGAciYKyia_FdI1PVfBISDELIqnvSUArIIuUW3hpmHt-UynVot3YCb7krs25Bk";
 const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const $=id=>document.getElementById(id);
-let authUser=null,colaborador=null,condominio=null,areas=[],pontos=[],atividades=[],programacoes=[],demandas=[],escalaHoje=null,pontosHoje=[],execucoesHoje=[],pontosPermitidos=[];
+let authUser=null,colaborador=null,condominio=null,areas=[],pontos=[],atividades=[],programacoes=[],demandas=[],escalaHoje=null,pontosHoje=[],execucoesHoje=[],pontosPermitidos=[],vinculosColaborador=[];
 let execAtual=null,demandaAtual=null,fotoArquivo=null,previewURL=null,processando=false,anteriorAberto=false;
 let sincronizandoFila=false;
 
@@ -648,9 +648,7 @@ async function selecionarCondominioColaborador(condominioId){
   $("userName").textContent=colaborador.nome;
   $("userDescription").textContent=`${colaborador.funcao||"Colaborador"} • #${colaborador.matricula}`;
   $("userIcon").innerHTML=funcIcon(colaborador.funcao);
-  $("condominioNome").textContent=condominio.nome.toUpperCase();
   $("pontoSection").classList.toggle("hidden",!colaborador.ponto_ativo);
-  $("switchCondoButton").classList.toggle("hidden",vinculosColaborador.length<2);
   $("condoScreen").classList.add("hidden");
 
   await carregarTudo();
@@ -770,7 +768,7 @@ function renderEscala(){
   }
   const tipo=escalaHoje.tipo||"trabalho";
   const txt=tipo==="trabalho"&&escalaHoje.inicio_previsto?`${hora(escalaHoje.inicio_previsto)} às ${hora(escalaHoje.fim_previsto)}`:tipo.toUpperCase();
-  $("escalaBox").outerHTML=`<div id="escalaBox" class="card status-card"><div class="status-icon">📅</div><div class="status-info"><strong>${esc(txt)}</strong><span>${esc(escalaHoje.observacao||"Escala publicada pela gestão.")}</span></div><span class="badge ${tipo==="trabalho"?"green":"yellow"}">${esc(tipo.toUpperCase())}</span></div>`;
+  $("escalaBox").outerHTML=`<div id="escalaBox" class="card status-card"><div class="status-icon">${iconImg("agenda-128.png","md")}</div><div class="status-info"><strong>${esc(txt)}</strong><span>${esc(escalaHoje.observacao||"Escala publicada pela gestão.")}</span></div><span class="badge ${tipo==="trabalho"?"green":"yellow"}">${esc(tipo.toUpperCase())}</span></div>`;
 }
 
 function renderPonto(){
@@ -987,7 +985,7 @@ async function alternarDiaAnterior(){
   if(anteriorAberto){
     anteriorAberto=false;
     box.classList.add("hidden");
-    btn.textContent="📅 VER DIA ANTERIOR";
+    btn.innerHTML=`${iconImg("historico-128.png","sm")} VER DIA ANTERIOR`;
     return;
   }
 
@@ -1259,7 +1257,9 @@ async function confirmarExecucao(){
     }
   }finally{
     processando=false;$("confirmExec").disabled=false;
-    $("confirmExec").textContent=demandaAtual?"✓ CONCLUIR DEMANDA":"✓ REGISTRAR CONCLUSÃO";
+    $("confirmExec").innerHTML=demandaAtual
+      ?`${iconImg("finalizar-128.png","sm")} CONCLUIR DEMANDA`
+      :`${iconImg("finalizar-128.png","sm")} REGISTRAR CONCLUSÃO`;
   }
 }
 
@@ -1276,7 +1276,6 @@ async function sair(){
 }
 
 $("logout").onclick=sair;
-$("switchCondoButton").onclick=trocarCondominioColaborador;
 $("condoLogout").onclick=async()=>{sessionStorage.removeItem("oraqui_colaborador_condominio_id");await db.auth.signOut();location.href="./"};
 $("notificationBtn").onclick=acaoNotificacao;
 $("btnEntrada").onclick=()=>registrarPonto("entrada");
