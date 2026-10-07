@@ -844,10 +844,10 @@ async function salvarOrdemPontos(areaId,lista){
 }
 function iniciarOrdenacaoConfig(){
  if(typeof Sortable==="undefined"){console.warn("SortableJS não carregado.");return}
- new Sortable(configList,{animation:170,handle:".area-drag",draggable:":scope > [data-a]",ghostClass:"sortable-ghost",chosenClass:"sortable-chosen",dragClass:"sortable-drag",delayOnTouchOnly:true,delay:120,touchStartThreshold:4,onEnd:e=>{if(e.oldIndex!==e.newIndex)salvarOrdemAreas()}});
+ new Sortable(configList,{animation:170,handle:".area-drag",draggable:"[data-a]",ghostClass:"sortable-ghost",chosenClass:"sortable-chosen",dragClass:"sortable-drag",delayOnTouchOnly:true,delay:120,touchStartThreshold:4,onEnd:e=>{if(e.oldIndex!==e.newIndex)salvarOrdemAreas()}});
  configList.querySelectorAll("[data-point-area]").forEach(lista=>{
   const areaId=Number(lista.dataset.pointArea);
-  new Sortable(lista,{animation:160,handle:".point-drag",draggable:":scope > [data-p]",ghostClass:"sortable-ghost",chosenClass:"sortable-chosen",dragClass:"sortable-drag",delayOnTouchOnly:true,delay:120,touchStartThreshold:4,onEnd:e=>{if(e.oldIndex!==e.newIndex)salvarOrdemPontos(areaId,lista)}})
+  new Sortable(lista,{animation:160,handle:".point-drag",draggable:"[data-p]",ghostClass:"sortable-ghost",chosenClass:"sortable-chosen",dragClass:"sortable-drag",delayOnTouchOnly:true,delay:120,touchStartThreshold:4,onEnd:e=>{if(e.oldIndex!==e.newIndex)salvarOrdemPontos(areaId,lista)}})
  })
 }
 function novaArea(){areaEditandoId=null;$("areaModalTitle").textContent="Nova área";$("areaNome").value="";$("areaDescricao").value="";$("areaOrdem").value=(Math.max(0,...areasCarregadas.map(a=>Number(a.ordem)||0))+1);$("areaColaborador").checked=$("areaOcorrencia").checked=true;$("areaModal").classList.add("visible")}
