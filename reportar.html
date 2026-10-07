@@ -70,6 +70,11 @@ select:focus,input:focus,textarea:focus{border-color:#91adbd;background:#fff;box
 .success-commercial a{display:inline-flex;align-items:center;min-height:36px;padding:0 11px;border-radius:11px;background:#fff;border:1px solid #dce5ea;color:#557a95;text-decoration:none;font-size:8px;font-weight:900}
 
 .overlay{display:none;position:fixed;inset:0;z-index:999;padding:18px;align-items:center;justify-content:center;background:rgba(31,48,60,.72);backdrop-filter:blur(7px)}.success{width:100%;max-width:390px;padding:30px 22px 23px;border-radius:27px;background:#fff;text-align:center;box-shadow:0 25px 70px rgba(0,0,0,.25)}.success-icon{width:68px;height:68px;margin:auto;display:grid;place-items:center;border-radius:22px;background:#edf7f1;color:var(--ok);font-size:30px;font-weight:900}.success h2{margin:17px 0 7px;font-size:21px;letter-spacing:-.4px}.success p{margin:0;color:var(--muted);font-size:11px;line-height:1.5}.protocol{margin-top:17px;padding:15px;border-radius:16px;background:#f3f7f9;font-size:10px;line-height:1.65}.protocol strong{font-size:16px;color:var(--brand)}.access-code{margin-top:9px;padding-top:9px;border-top:1px solid var(--line);color:var(--muted);font-size:9px}.success button{width:100%;margin-top:17px;padding:14px;border:0;border-radius:15px;background:var(--brand);color:#fff;font-weight:850}
+
+.brand-full{min-width:0}
+.brand-logo-full{display:block;width:210px;max-width:52vw;height:auto;object-fit:contain;filter:drop-shadow(0 5px 12px rgba(20,42,58,.10))}
+@media(max-width:480px){.brand-logo-full{width:188px;max-width:58vw}.secure{padding:7px 9px}}
+
 @media(max-width:480px){.hero h1{font-size:28px}.card{padding:18px}.secure span{display:none}.brand-icon{width:46px;height:46px}.brand-word{font-size:20px}.brand-tag{font-size:8px}.brand-domain{font-size:7px}}
 </style>
 </head>
@@ -77,7 +82,7 @@ select:focus,input:focus,textarea:focus{border-color:#91adbd;background:#fff;box
 <div class="shell">
 <header class="hero">
  <div class="top">
-  <div class="brand"><img class="brand-icon" src="/icon-192.png" alt=""><div><div class="brand-word"><span class="o">O</span><span class="rest">RAQUI</span></div><span class="brand-tag">Agora. Aqui. Registrado.</span><span class="brand-domain">oraqui.app</span></div></div>
+  <div class="brand brand-full"><img class="brand-logo-full" src="/logo-oraqui-completo.png" alt="ORAQUI — Agora. Aqui. Registrado."></div>
   <div class="secure">● <span>CANAL DO CONDOMÍNIO</span></div>
  </div>
  <div class="hero-copy">
