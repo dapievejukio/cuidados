@@ -91,6 +91,10 @@ main{max-width:720px;margin:-18px auto 80px;padding:0 15px}.user-card,.card,.ite
 .workscope img{width:24px;height:24px;object-fit:contain;flex:0 0 auto}
 .workscope div{min-width:0}.workscope strong{display:block;font-size:9px}.workscope span{display:block;margin-top:3px;color:var(--muted);font-size:8px;line-height:1.4}
 
+
+.brand-clean{gap:0}
+.brand-clean strong{font-size:20px;letter-spacing:-.35px;font-weight:900}
+.brand-clean small{font-size:7px;letter-spacing:1.45px;opacity:.82}
 </style>
 </head>
 <body>
@@ -105,7 +109,7 @@ main{max-width:720px;margin:-18px auto 80px;padding:0 15px}.user-card,.card,.ite
   </div>
 </div>
 
-<header><div class="header-content"><div class="topbar"><div class="brand"><div class="brand-icon"><img src="/oraqui-brand/icon-app-192.png" alt=""></div><div><strong>ORAQUI</strong><small>AGORA. AQUI. REGISTRADO.</small></div></div><button class="logout" id="logout">SAIR</button></div><div class="header-title"><h1>Minha operação</h1><p>Escala, ponto, demandas e atividades do dia.</p></div></div></header>
+<header><div class="header-content"><div class="topbar"><div class="brand brand-clean"><div><strong>ORAQUI</strong><small>AGORA. AQUI. REGISTRADO.</small></div></div><button class="logout" id="logout">SAIR</button></div><div class="header-title"><h1>Minha operação</h1><p>Escala, ponto, demandas e atividades do dia.</p></div></div></header>
 <main>
 <div class="user-card"><div class="user-icon" id="userIcon"><img src="/oraqui-icons/perfil-128.png" alt=""></div><div class="user-info"><strong id="userName">Carregando...</strong><span id="userDescription">Validando acesso</span></div><span class="user-tag">ATIVO</span></div>
 <div class="workscope" id="workscope"><img src="/oraqui-icons/locais-128.png" alt=""><div><strong id="workscopeTitle">Locais de trabalho</strong><span id="workscopeText">Carregando permissões...</span></div></div>
@@ -1075,7 +1079,6 @@ function abrirExecucao(id=null){
     $("areaField").classList.remove("hidden");
     $("pontoField").classList.remove("hidden");
     popularAreas();
-    }
   }
   $("execModal").classList.add("visible");
 }
