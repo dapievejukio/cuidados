@@ -103,6 +103,27 @@
             .logo{width:56px;height:56px;flex-basis:56px}.login-card{padding-top:22px}
         }
 
+    
+        .brand-lockup{
+            width:min(330px,76vw);
+            margin:0 0 25px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+        }
+        .official-logo{
+            display:block;
+            width:100%;
+            height:auto;
+            object-fit:contain;
+        }
+        @media(max-width:600px){
+            .brand-lockup{width:min(300px,78vw);margin-bottom:22px}
+        }
+        @media(max-height:720px){
+            .brand-lockup{width:min(270px,72vw);margin-bottom:17px}
+        }
+
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -122,11 +143,7 @@
     <main>
 
         <div class="brand-lockup">
-            <div class="logo"><img src="/oraqui-brand/icon-app-192.png" alt=""></div>
-            <div class="brand-copy">
-                <h1>ORAQUI</h1>
-                <div class="tagline">Agora. Aqui. Registrado.</div>
-            </div>
+            <img class="official-logo" src="/oraqui-brand/logo-horizontal.png" alt="ORAQUI — Agora. Aqui. Registrado.">
         </div>
 
         <section class="login-card" id="loginCard">
