@@ -77,6 +77,20 @@ main{max-width:720px;margin:-18px auto 80px;padding:0 15px}.user-card,.card,.ite
 .condo-option-info{flex:1}.condo-option-info strong{display:block;font-size:12px;color:var(--text)}.condo-option-info span{display:block;margin-top:3px;font-size:8px;color:var(--muted)}
 .condo-exit{width:100%;min-height:50px;margin-top:18px;border:0;border-radius:14px;background:var(--primary);color:#fff;font-size:9px;font-weight:900}
 
+
+/* ORAQUI — identidade visual por ícones oficiais */
+.ora-icon{width:22px;height:22px;object-fit:contain;display:block}
+.ora-icon.sm{width:16px;height:16px}.ora-icon.md{width:26px;height:26px}.ora-icon.lg{width:31px;height:31px}
+.brand-icon{padding:7px;background:rgba(255,255,255,.16)}
+.brand-icon img{width:100%;height:100%;object-fit:contain;border-radius:8px}
+.user-icon,.item-icon,.status-icon,.notification-icon,.offline-icon,.condo-option-icon{overflow:hidden}
+.user-icon img,.item-icon img,.status-icon img,.notification-icon img,.offline-icon img,.condo-option-icon img{width:27px;height:27px;object-fit:contain}
+.action-with-icon,.photo-button,.confirm{display:flex;align-items:center;justify-content:center;gap:8px}
+.action-with-icon img,.photo-button img,.confirm img{width:17px;height:17px;object-fit:contain}
+.workscope{margin-top:10px;padding:10px 12px;border-radius:14px;background:#f7f5ff;border:1px solid #ddd7f5;display:flex;align-items:center;gap:10px}
+.workscope img{width:24px;height:24px;object-fit:contain;flex:0 0 auto}
+.workscope div{min-width:0}.workscope strong{display:block;font-size:9px}.workscope span{display:block;margin-top:3px;color:var(--muted);font-size:8px;line-height:1.4}
+
 </style>
 </head>
 <body>
@@ -91,12 +105,13 @@ main{max-width:720px;margin:-18px auto 80px;padding:0 15px}.user-card,.card,.ite
   </div>
 </div>
 
-<header><div class="header-content"><div class="topbar"><div class="brand"><div class="brand-icon">✓</div><div><strong>ORAQUI</strong><small>AGORA. AQUI. REGISTRADO.</small></div></div><div><button class="condo-switch hidden" id="switchCondoButton" type="button">🏢 TROCAR</button><button class="logout" id="logout">SAIR</button></div></div><div class="header-title"><small id="condominioNome">CONDOMÍNIO</small><h1>Minha operação</h1><p>Escala, ponto, demandas e atividades do dia.</p></div></div></header>
+<header><div class="header-content"><div class="topbar"><div class="brand"><div class="brand-icon"><img src="/oraqui-brand/icon-app-192.png" alt=""></div><div><strong>ORAQUI</strong><small>AGORA. AQUI. REGISTRADO.</small></div></div><div><button class="condo-switch hidden" id="switchCondoButton" type="button">TROCAR LOCAL</button><button class="logout" id="logout">SAIR</button></div></div><div class="header-title"><small id="condominioNome">CONDOMÍNIO</small><h1>Minha operação</h1><p>Escala, ponto, demandas e atividades do dia.</p></div></div></header>
 <main>
-<div class="user-card"><div class="user-icon" id="userIcon">👷</div><div class="user-info"><strong id="userName">Carregando...</strong><span id="userDescription">Validando acesso</span></div><span class="user-tag">ATIVO</span></div>
+<div class="user-card"><div class="user-icon" id="userIcon"><img src="/oraqui-icons/perfil-128.png" alt=""></div><div class="user-info"><strong id="userName">Carregando...</strong><span id="userDescription">Validando acesso</span></div><span class="user-tag">ATIVO</span></div>
+<div class="workscope" id="workscope"><img src="/oraqui-icons/locais-128.png" alt=""><div><strong id="workscopeTitle">Locais de trabalho</strong><span id="workscopeText">Carregando permissões...</span></div></div>
 <div class="message error" id="error"></div>
 <div class="notification-card" id="notificationCard">
-  <div class="notification-icon">🔔</div>
+  <div class="notification-icon"><img src="/oraqui-icons/notificacoes-128.png" alt=""></div>
   <div class="notification-info">
     <strong id="notificationTitle">Notificações do ORAQUI</strong>
     <span id="notificationText">Verificando este aparelho...</span>
@@ -104,21 +119,21 @@ main{max-width:720px;margin:-18px auto 80px;padding:0 15px}.user-card,.card,.ite
   <button class="notification-btn" id="notificationBtn">ATIVAR</button>
 </div>
 <div class="offline-card online" id="offlineCard">
-  <div class="offline-icon" id="offlineIcon">☁️</div>
+  <div class="offline-icon" id="offlineIcon"><img src="/oraqui-icons/inicio-128.png" alt=""></div>
   <div class="offline-info"><strong id="offlineTitle">ORAQUI conectado</strong><span id="offlineText">Os registros serão enviados normalmente.</span></div>
   <div style="display:flex;gap:6px;align-items:center"><button class="offline-btn hidden" id="discardOfflineBtn" type="button" style="background:#8c929c">DESCARTAR TESTE</button><button class="offline-btn hidden" id="syncBtn" type="button">SINCRONIZAR</button></div>
 </div>
 
-<section class="section"><div class="section-title"><div><h2>Registrar atividade</h2><p>Registre rapidamente uma atividade do dia a dia que não estava programada.</p></div></div><div class="card"><button class="action" id="avulso">＋ REGISTRAR ATIVIDADE</button></div></section>
+<section class="section"><div class="section-title"><div><h2>Registrar atividade</h2><p>Registre rapidamente uma atividade do dia a dia que não estava programada.</p></div></div><div class="card"><button class="action action-with-icon" id="avulso"><img src="/oraqui-icons/atividade-extra-128.png" alt="">REGISTRAR ATIVIDADE</button></div></section>
 <section class="section" id="escalaSection"><div class="section-title"><div><h2>Hoje</h2><p>Sua escala publicada para hoje.</p></div></div><div id="escalaBox" class="loading">Carregando escala...</div></section>
-<section class="section hidden" id="pontoSection"><div class="section-title"><div><h2>Ponto</h2><p>Registre os eventos da sua jornada.</p></div></div><div class="card"><div class="status-card"><div class="status-icon">🕒</div><div class="status-info"><strong id="pontoStatus">Carregando...</strong><span id="pontoDetalhe"></span></div><span class="badge purple" id="pontoBadge">PONTO</span></div><div class="point-actions"><button class="point-btn primary" id="btnEntrada">ENTRADA</button><button class="point-btn" id="btnIniIntervalo">INICIAR INTERVALO</button><button class="point-btn" id="btnFimIntervalo">RETORNAR</button><button class="point-btn" id="btnSaida">SAÍDA</button></div><div class="geo-note" id="geoNote"></div></div></section>
+<section class="section hidden" id="pontoSection"><div class="section-title"><div><h2>Ponto</h2><p>Registre os eventos da sua jornada.</p></div></div><div class="card"><div class="status-card"><div class="status-icon"><img src="/oraqui-icons/agenda-128.png" alt=""></div><div class="status-info"><strong id="pontoStatus">Carregando...</strong><span id="pontoDetalhe"></span></div><span class="badge purple" id="pontoBadge">PONTO</span></div><div class="point-actions"><button class="point-btn primary" id="btnEntrada">ENTRADA</button><button class="point-btn" id="btnIniIntervalo">INICIAR INTERVALO</button><button class="point-btn" id="btnFimIntervalo">RETORNAR</button><button class="point-btn" id="btnSaida">SAÍDA</button></div><div class="geo-note" id="geoNote"></div></div></section>
 <section class="section"><div class="section-title"><div><h2>Atividades programadas de hoje</h2><p>O que está previsto para sua rotina. Pendências ficam destacadas até a conclusão.</p></div></div><div id="programacoes" class="loading">Carregando...</div></section>
 <section class="section"><div class="section-title"><div><h2>Demandas e ocorrências</h2><p>Itens de hoje e pendências anteriores que ainda precisam de atendimento.</p></div></div><div id="demandas" class="loading">Carregando...</div></section>
 <section class="section"><div class="section-title"><div><h2>Executado hoje</h2><p>Seu histórico operacional somente de hoje.</p></div></div><div id="historico" class="loading">Carregando...</div></section>
-<section class="section"><div class="card"><button class="action secondary" id="verAnterior">📅 VER DIA ANTERIOR</button></div><div id="historicoAnterior" class="hidden" style="margin-top:10px"></div></section>
+<section class="section"><div class="card"><button class="action secondary action-with-icon" id="verAnterior"><img src="/oraqui-icons/historico-128.png" alt="">VER DIA ANTERIOR</button></div><div id="historicoAnterior" class="hidden" style="margin-top:10px"></div></section>
 </main>
 
-<div class="modal" id="execModal"><div class="modal-card"><div class="modal-head"><h2 id="modalTitle">Registrar execução</h2><button class="close" id="closeModal">×</button></div><div class="selection" id="modalSelection"></div><div class="field hidden" id="areaField"><label>ÁREA</label><select id="areaSelect"></select></div><div class="field hidden" id="pontoField"><label>PONTO / LOCAL</label><select id="pontoSelect"></select></div><button class="photo-button" id="photoButton">📷 ADICIONAR FOTO</button><input class="photo-input" id="photoInput" type="file" accept="image/*" capture="environment"><img class="preview" id="preview" alt="Prévia"><div class="field"><label>OBSERVAÇÃO</label><textarea id="observacao" maxlength="600" placeholder="Observação sobre a execução..."></textarea></div><button class="confirm" id="confirmExec">✓ REGISTRAR CONCLUSÃO</button></div></div>
+<div class="modal" id="execModal"><div class="modal-card"><div class="modal-head"><h2 id="modalTitle">Registrar execução</h2><button class="close" id="closeModal">×</button></div><div class="selection" id="modalSelection"></div><div class="field hidden" id="areaField"><label>ÁREA</label><select id="areaSelect"></select></div><div class="field hidden" id="pontoField"><label>PONTO / LOCAL</label><select id="pontoSelect"></select></div><button class="photo-button" id="photoButton"><img src="/oraqui-icons/registro-foto-128.png" alt="">ADICIONAR FOTO</button><input class="photo-input" id="photoInput" type="file" accept="image/*" capture="environment"><img class="preview" id="preview" alt="Prévia"><div class="field"><label>OBSERVAÇÃO</label><textarea id="observacao" maxlength="600" placeholder="Observação sobre a execução..."></textarea></div><button class="confirm" id="confirmExec"><img src="/oraqui-icons/finalizar-128.png" alt="">REGISTRAR CONCLUSÃO</button></div></div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -128,7 +143,7 @@ const BUCKET="fotos-atividades";
 const VAPID_PUBLIC_KEY="BNOm_tsvH-uo-hfquzYmf_XxgiGAciYKyia_FdI1PVfBISDELIqnvSUArIIuUW3hpmHt-UynVot3YCb7krs25Bk";
 const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const $=id=>document.getElementById(id);
-let authUser=null,colaborador=null,condominio=null,areas=[],pontos=[],atividades=[],programacoes=[],demandas=[],escalaHoje=null,pontosHoje=[],execucoesHoje=[];
+let authUser=null,colaborador=null,condominio=null,areas=[],pontos=[],atividades=[],programacoes=[],demandas=[],escalaHoje=null,pontosHoje=[],execucoesHoje=[],pontosPermitidos=[];
 let execAtual=null,demandaAtual=null,fotoArquivo=null,previewURL=null,processando=false,anteriorAberto=false;
 let sincronizandoFila=false;
 
@@ -190,16 +205,16 @@ async function salvarCacheOperacao(){
   const chave=chaveCacheOperacao();if(!chave)return;
   await idbPut(STORE_CACHE,{
     chave,salvo_em:new Date().toISOString(),
-    colaborador,condominio,areas,pontos,atividades,programacoes,demandas,escalaHoje,pontosHoje,execucoesHoje
+    colaborador,condominio,areas,pontos,pontosPermitidos,atividades,programacoes,demandas,escalaHoje,pontosHoje,execucoesHoje
   });
 }
 async function carregarCacheOperacao(){
   const chave=chaveCacheOperacao();if(!chave)return false;
   const c=await idbGet(STORE_CACHE,chave);if(!c)return false;
-  areas=c.areas||[];pontos=c.pontos||[];atividades=c.atividades||[];
+  areas=c.areas||[];pontos=c.pontos||[];pontosPermitidos=c.pontosPermitidos||[];atividades=c.atividades||[];
   programacoes=c.programacoes||[];demandas=c.demandas||[];
   escalaHoje=c.escalaHoje||null;pontosHoje=c.pontosHoje||[];execucoesHoje=c.execucoesHoje||[];
-  renderEscala();renderPonto();renderDemandas();renderProgramacoes();renderHistorico();
+  renderEscopoTrabalho();renderEscala();renderPonto();renderDemandas();renderProgramacoes();renderHistorico();
   toast("📱 Operação carregada do aparelho.");
   return true;
 }
@@ -215,7 +230,9 @@ async function atualizarEstadoOffline(){
   const online=navigator.onLine,card=$("offlineCard"),btn=$("syncBtn");
   let qtd=0;try{qtd=await quantidadeFilaAtual()}catch{}
   card.classList.toggle("online",online&&qtd===0);
-  $("offlineIcon").textContent=online?(qtd?"🔄":"☁️"):"📱";
+  $("offlineIcon").innerHTML=online
+    ?iconImg(qtd?"historico-128.png":"inicio-128.png","md")
+    :iconImg("registro-foto-128.png","md");
   if(!online){
     $("offlineTitle").textContent="Modo offline";
     $("offlineText").textContent=qtd?`${qtd} registro(s) salvo(s) neste aparelho aguardando internet.`:"Você pode registrar atividades; elas ficarão salvas neste aparelho.";
@@ -401,7 +418,21 @@ function hora(v){if(!v)return"--:--";const d=new Date(v);return Number.isNaN(d.g
 function toast(m){$("toast").textContent=m;$("toast").classList.add("visible");setTimeout(()=>$("toast").classList.remove("visible"),2600)}
 function erro(m){$("error").textContent=m;$("error").classList.add("visible")}
 function limparErro(){$("error").classList.remove("visible")}
-function funcIcon(f){f=String(f||"").toLowerCase();if(f.includes("zel"))return"🛠️";if(f.includes("port"))return"🛡️";if(f.includes("manut"))return"🔧";return"🧹"}
+function iconImg(nome,classe=""){return `<img class="ora-icon ${classe}" src="/oraqui-icons/${nome}" alt="">`}
+function funcIcon(){return iconImg("perfil-128.png","md")}
+function renderEscopoTrabalho(){
+  if(!$("workscopeText")||!colaborador)return;
+  if(colaborador.acesso_todos_pontos!==false){
+    $("workscopeTitle").textContent="Todos os locais liberados";
+    $("workscopeText").textContent="Você pode registrar atividades em todos os locais operacionais deste condomínio.";
+    return;
+  }
+  const qtd=pontos.length;
+  $("workscopeTitle").textContent=qtd===1?"1 local liberado":`${qtd} locais liberados`;
+  $("workscopeText").textContent=qtd
+    ?"Ao registrar uma atividade, somente os seus locais de trabalho serão exibidos."
+    :"Nenhum local foi liberado para registro avulso. Fale com a gestão.";
+}
 function atividadeNome(id){return atividades.find(x=>x.id===id)?.nome||"Atividade"}
 function vazio(t,s){return `<div class="empty"><strong>${esc(t)}</strong>${esc(s)}</div>`}
 function mesmoId(a,b){return Number(a)===Number(b)}
@@ -549,7 +580,7 @@ async function iniciar(){
   authUser=session.user;
   try{
     const {data:cs,error}=await db.from("colaboradores")
-      .select("id,condominio_id,condominio,nome,email,matricula,funcao,ativo,ponto_ativo,selfie_ponto_obrigatoria,geolocalizacao_ponto_obrigatoria,intervalo_ativo,intervalo_minutos")
+      .select("id,condominio_id,condominio,nome,email,matricula,funcao,ativo,ponto_ativo,selfie_ponto_obrigatoria,geolocalizacao_ponto_obrigatoria,intervalo_ativo,intervalo_minutos,acesso_todos_pontos")
       .eq("auth_user_id",authUser.id)
       .eq("ativo",true)
       .order("condominio_id");
@@ -591,7 +622,7 @@ function mostrarSeletorColaborador(){
   $("condoScreen").classList.remove("hidden");
   $("condoList").innerHTML=vinculosColaborador.map(v=>`
     <button class="condo-option" type="button" data-condo="${v.condominio.id}">
-      <div class="condo-option-icon">🏢</div>
+      <div class="condo-option-icon"><img src="/oraqui-icons/condominios-128.png" alt=""></div>
       <div class="condo-option-info">
         <strong>${esc(v.condominio.nome)}</strong>
         <span>${esc(v.colaborador.funcao||"Colaborador")} • #${esc(v.colaborador.matricula)}</span>
@@ -612,11 +643,11 @@ async function selecionarCondominioColaborador(condominioId){
   condominio=vinculo.condominio;
   sessionStorage.setItem("oraqui_colaborador_condominio_id",String(condominio.id));
 
-  areas=[];pontos=[];atividades=[];programacoes=[];demandas=[];pontosHoje=[];execucoesHoje=[];escalaHoje=null;anteriorAberto=false;$("historicoAnterior").classList.add("hidden");$("historicoAnterior").innerHTML="";$("verAnterior").textContent="📅 VER DIA ANTERIOR";
+  areas=[];pontos=[];pontosPermitidos=[];atividades=[];programacoes=[];demandas=[];pontosHoje=[];execucoesHoje=[];escalaHoje=null;anteriorAberto=false;$("historicoAnterior").classList.add("hidden");$("historicoAnterior").innerHTML="";$("verAnterior").innerHTML=`${iconImg("historico-128.png","sm")} VER DIA ANTERIOR`;
 
   $("userName").textContent=colaborador.nome;
   $("userDescription").textContent=`${colaborador.funcao||"Colaborador"} • #${colaborador.matricula}`;
-  $("userIcon").textContent=funcIcon(colaborador.funcao);
+  $("userIcon").innerHTML=funcIcon(colaborador.funcao);
   $("condominioNome").textContent=condominio.nome.toUpperCase();
   $("pontoSection").classList.toggle("hidden",!colaborador.ponto_ativo);
   $("switchCondoButton").classList.toggle("hidden",vinculosColaborador.length<2);
@@ -638,7 +669,11 @@ function trocarCondominioColaborador(){
 async function carregarTudo(){
   limparErro();
   try{
-    const [ar,po,at,pr,es,de,rp,ex]=await Promise.all([
+    const consultaPermissoes=colaborador.acesso_todos_pontos===false
+      ?db.from("colaborador_pontos").select("ponto_id").eq("condominio_id",colaborador.condominio_id).eq("colaborador_id",colaborador.id)
+      :Promise.resolve({data:[],error:null});
+
+    const [ar,po,at,pr,es,de,rp,ex,cp]=await Promise.all([
       db.from("areas").select("id,nome,descricao,ordem").eq("condominio_id",colaborador.condominio_id).eq("ativo",true).eq("visivel_colaborador",true).order("ordem",{ascending:true}).order("nome",{ascending:true}),
       db.from("pontos").select("id,area_id,nome,descricao,ordem").eq("condominio_id",colaborador.condominio_id).eq("ativo",true).eq("visivel_colaborador",true).order("ordem",{ascending:true}).order("nome",{ascending:true}),
       db.from("atividades_v2").select("id,nome,descricao,exige_foto,exige_observacao").eq("condominio_id",colaborador.condominio_id).eq("ativo",true),
@@ -646,20 +681,38 @@ async function carregarTudo(){
       db.from("escalas").select("*").eq("condominio_id",colaborador.condominio_id).eq("colaborador_id",colaborador.id).eq("data",hoje()),
       db.from("demandas").select("*").eq("condominio_id",colaborador.condominio_id).neq("status","cancelada").order("created_at",{ascending:false}),
       db.from("registros_ponto").select("*").eq("condominio_id",colaborador.condominio_id).eq("colaborador_id",colaborador.id).gte("registrado_em",inicioHojeISO()).lte("registrado_em",fimHojeISO()).order("registrado_em"),
-      db.from("execucoes").select("*").eq("condominio_id",colaborador.condominio_id).eq("colaborador_id",colaborador.id).gte("created_at",inicioHojeISO()).lte("created_at",fimHojeISO()).order("created_at",{ascending:false})
+      db.from("execucoes").select("*").eq("condominio_id",colaborador.condominio_id).eq("colaborador_id",colaborador.id).gte("created_at",inicioHojeISO()).lte("created_at",fimHojeISO()).order("created_at",{ascending:false}),
+      consultaPermissoes
     ]);
 
-    for(const r of [ar,po,at,pr,es,de,rp,ex])if(r.error)throw r.error;
+    for(const r of [ar,po,at,pr,es,de,rp,ex,cp])if(r.error)throw r.error;
 
-    areas=ar.data||[];
-    pontos=po.data||[];
+    const todasAreas=ar.data||[];
+    const todosPontos=po.data||[];
+    pontosPermitidos=(cp.data||[]).map(x=>Number(x.ponto_id)).filter(Boolean);
+
+    if(colaborador.acesso_todos_pontos===false){
+      const permitidos=new Set(pontosPermitidos);
+      pontos=todosPontos.filter(p=>permitidos.has(Number(p.id)));
+      const areasPermitidas=new Set(pontos.map(p=>Number(p.area_id)));
+      areas=todasAreas.filter(a=>areasPermitidas.has(Number(a.id)));
+    }else{
+      pontos=todosPontos;
+      areas=todasAreas;
+    }
+
     atividades=at.data||[];
-    programacoes=(pr.data||[]).filter(programacaoValeHoje).filter(programacaoParaColaborador);
+    programacoes=(pr.data||[]).filter(programacaoValeHoje).filter(programacaoParaColaborador).filter(p=>{
+      if(colaborador.acesso_todos_pontos!==false)return true;
+      if(p.colaborador_id&&mesmoId(p.colaborador_id,colaborador.id))return true;
+      return !p.ponto_id||pontosPermitidos.some(id=>mesmoId(id,p.ponto_id));
+    });
     escalaHoje=(es.data||[]).find(x=>x.status_publicacao==="publicada"||x.status_publicacao==="alterada")||(es.data||[])[0]||null;
     demandas=(de.data||[]).filter(demandaParaColaborador).filter(demandaVisivelHoje);
     pontosHoje=rp.data||[];
     execucoesHoje=ex.data||[];
 
+    renderEscopoTrabalho();
     renderEscala();
     renderPonto();
     renderDemandas();
@@ -813,7 +866,7 @@ function renderDemandas(){
     const prioridade=String(d.prioridade||"normal").toLowerCase();
     const local=nomeLocal(d.area_id,d.ponto_id);
     const classe=concluida?"demand-done":executando?"demand-running":ocorrencia?"demand-occurrence":"";
-    const icone=prioridade==="urgente"?"⚠️":d.tipo==="recado"?"💬":ocorrencia?"⚠️":"✓";
+    const icone=prioridade==="urgente"?iconImg("ocorrencias-128.png","md"):d.tipo==="recado"?iconImg("mensagens.png","md"):ocorrencia?iconImg("ocorrencias-128.png","md"):iconImg("tarefas-128.png","md");
     const badgeClass=prioridade==="urgente"?"red":concluida?"green":executando?"green":"purple";
     const origem=ocorrencia?`<div class="alert-strip"><span>OCORRÊNCIA ENCAMINHADA PELA GESTÃO</span><span>#${esc(d.ocorrencia_id)}</span></div>`:"";
     const requisitos=(d.exige_foto||d.exige_observacao)?`<div class="demand-requirements">${d.exige_foto?'<span class="demand-requirement on">📷 FOTO OBRIGATÓRIA</span>':""}${d.exige_observacao?'<span class="demand-requirement on">💬 OBSERVAÇÃO OBRIGATÓRIA</span>':""}</div>`:"";
@@ -822,7 +875,7 @@ function renderDemandas(){
     if(d.tipo==="recado"&&d.status==="pendente")acoes.push(`<button class="action secondary" onclick="mudarDemanda(${d.id},'visualizada')">MARCAR COMO LIDA</button>`);
     if(d.tipo!=="recado"&&!concluida&&!executando)acoes.push(`<button class="action start" onclick="iniciarDemanda(${d.id})">▶ INICIAR</button>`);
     if(d.tipo!=="recado"&&!concluida)acoes.push(`<button class="action done" onclick="abrirDemandaExecucao(${d.id})">✓ CONCLUIR</button>`);
-    return `<div class="item-card ${classe}">${origem}<div class="item-top"><div class="item-icon">${icone}</div><div class="item-info"><strong>${esc(d.titulo)}</strong><span>${esc(d.tipo||"tarefa")} • ${statusDemandaTexto(d.status)}${d.prazo_em?" • prazo "+new Date(d.prazo_em).toLocaleString("pt-BR",{dateStyle:"short",timeStyle:"short"}):""}</span></div><span class="badge ${badgeClass}">${esc(prioridade.toUpperCase())}</span></div>${local?`<div class="demand-local">📍 ${esc(local)}</div>`:""}${d.descricao?`<div class="item-description">${esc(d.descricao)}</div>`:""}${requisitos}${acoes.length?`<div class="item-actions">${acoes.join("")}</div>`:""}</div>`;
+    return `<div class="item-card ${classe}">${origem}<div class="item-top"><div class="item-icon">${icone}</div><div class="item-info"><strong>${esc(d.titulo)}</strong><span>${esc(d.tipo||"tarefa")} • ${statusDemandaTexto(d.status)}${d.prazo_em?" • prazo "+new Date(d.prazo_em).toLocaleString("pt-BR",{dateStyle:"short",timeStyle:"short"}):""}</span></div><span class="badge ${badgeClass}">${esc(prioridade.toUpperCase())}</span></div>${local?`<div class="demand-local">${iconImg("locais-128.png","sm")} ${esc(local)}</div>`:""}${d.descricao?`<div class="item-description">${esc(d.descricao)}</div>`:""}${requisitos}${acoes.length?`<div class="item-actions">${acoes.join("")}</div>`:""}</div>`;
   }).join("");
 }
 
@@ -853,14 +906,16 @@ function abrirDemandaExecucao(id){
   $("photoInput").value="";
   $("preview").classList.remove("visible");
   $("photoButton").classList.remove("has");
-  $("photoButton").textContent=d.exige_foto?"📷 ADICIONAR FOTO OBRIGATÓRIA":"📷 ADICIONAR FOTO";
+  $("photoButton").innerHTML=d.exige_foto
+    ?`${iconImg("registro-foto-128.png","sm")} ADICIONAR FOTO OBRIGATÓRIA`
+    :`${iconImg("registro-foto-128.png","sm")} ADICIONAR FOTO`;
   $("observacao").value="";
   $("modalTitle").textContent="Concluir demanda";
   const local=nomeLocal(d.area_id,d.ponto_id)||"Local informado pela gestão";
   $("modalSelection").textContent=`${d.titulo} • ${local}`;
   $("areaField").classList.add("hidden");
   $("pontoField").classList.add("hidden");
-  $("confirmExec").textContent="✓ CONCLUIR DEMANDA";
+  $("confirmExec").innerHTML=`${iconImg("finalizar-128.png","sm")} CONCLUIR DEMANDA`;
   $("execModal").classList.add("visible");
 }
 
@@ -889,10 +944,10 @@ function renderProgramacoes(){
     const urgente=!feito&&String(p.prioridade||"").toLowerCase()==="urgente";
     const local=nomeLocal(p.area_id,p.ponto_id)||"Local definido pela gestão";
 
-    let classe="programada-pendente",icone="🔔",badge="PENDENTE",badgeClass="purple",faixa="ATIVIDADE PENDENTE — TOQUE PARA CONCLUIR",faixaClass="";
-    if(atrasada){classe="programada-atrasada";icone="⏰";badge="ATRASADA";badgeClass="red";faixa="⚠ PRAZO ULTRAPASSADO — ATENÇÃO";faixaClass="urgent"}
-    else if(urgente){classe="programada-urgente";icone="⚠️";badge="URGENTE";badgeClass="red";faixa="⚠ ATIVIDADE URGENTE";faixaClass="urgent"}
-    else if(feito){classe="programada-concluida";icone="✓";badge="CONCLUÍDA";badgeClass="green";faixa="✓ ATIVIDADE CONCLUÍDA";faixaClass=""}
+    let classe="programada-pendente",icone=iconImg("tarefas-128.png","md"),badge="PENDENTE",badgeClass="purple",faixa="ATIVIDADE PENDENTE — TOQUE PARA CONCLUIR",faixaClass="";
+    if(atrasada){classe="programada-atrasada";icone=iconImg("agenda-128.png","md");badge="ATRASADA";badgeClass="red";faixa="⚠ PRAZO ULTRAPASSADO — ATENÇÃO";faixaClass="urgent"}
+    else if(urgente){classe="programada-urgente";icone=iconImg("ocorrencias-128.png","md");badge="URGENTE";badgeClass="red";faixa="⚠ ATIVIDADE URGENTE";faixaClass="urgent"}
+    else if(feito){classe="programada-concluida";icone=iconImg("finalizar-128.png","md");badge="CONCLUÍDA";badgeClass="green";faixa="✓ ATIVIDADE CONCLUÍDA";faixaClass=""}
 
     const prazo=p.horario_limite?`<div class="deadline ${atrasada?"late":""}">${atrasada?"⏰ ATRASADA — ERA ATÉ":"🕒 CONCLUIR ATÉ"} ${esc(String(p.horario_limite).slice(0,5))}</div>`:"";
 
@@ -922,7 +977,7 @@ function renderHistorico(){
   $("historico").className="list";
   $("historico").innerHTML=execucoesHoje.map(e=>{
     const nome=e.atividade_id?atividadeNome(e.atividade_id):(e.tipo==="avulsa"?"Atividade avulsa":"Atividade");
-    return `<div class="item-card"><div class="item-top"><div class="item-icon">✓</div><div class="item-info"><strong>${esc(nome)}</strong><span>${esc(nomeLocal(e.area_id,e.ponto_id)||"Registro avulso")} • ${hora(e.concluida_em||e.created_at)}</span></div><span class="badge green">REGISTRADO</span></div>${e.observacao?`<div class="item-description">${esc(e.observacao)}</div>`:""}</div>`;
+    return `<div class="item-card"><div class="item-top"><div class="item-icon">${iconImg("finalizar-128.png","md")}</div><div class="item-info"><strong>${esc(nome)}</strong><span>${esc(nomeLocal(e.area_id,e.ponto_id)||"Registro avulso")} • ${hora(e.concluida_em||e.created_at)}</span></div><span class="badge green">REGISTRADO</span></div>${e.observacao?`<div class="item-description">${esc(e.observacao)}</div>`:""}</div>`;
   }).join("");
 }
 
@@ -989,7 +1044,7 @@ async function alternarDiaAnterior(){
     }
 
     box.className="list";
-    box.innerHTML=itens.map(i=>`<div class="item-card"><div class="item-top"><div class="item-icon">✓</div><div class="item-info"><strong>${esc(i.titulo)}</strong><span>${esc(i.local)} • ${hora(i.quando)}</span></div><span class="badge green">REGISTRADO</span></div>${i.obs?`<div class="item-description">${esc(i.obs)}</div>`:""}</div>`).join("");
+    box.innerHTML=itens.map(i=>`<div class="item-card"><div class="item-top"><div class="item-icon">${iconImg("finalizar-128.png","md")}</div><div class="item-info"><strong>${esc(i.titulo)}</strong><span>${esc(i.local)} • ${hora(i.quando)}</span></div><span class="badge green">REGISTRADO</span></div>${i.obs?`<div class="item-description">${esc(i.obs)}</div>`:""}</div>`).join("");
   }catch(e){
     console.error(e);
     box.innerHTML=vazio("Falha ao carregar","Não foi possível consultar o dia anterior.");
@@ -1003,10 +1058,10 @@ function abrirExecucao(id=null){
   $("photoInput").value="";
   $("preview").classList.remove("visible");
   $("photoButton").classList.remove("has");
-  $("photoButton").textContent="📷 ADICIONAR FOTO";
+  $("photoButton").innerHTML=`${iconImg("registro-foto-128.png","sm")} ADICIONAR FOTO`;
   $("observacao").value="";
   $("modalTitle").textContent=execAtual?"Registrar execução":"Registro avulso";
-  $("confirmExec").textContent="✓ REGISTRAR CONCLUSÃO";
+  $("confirmExec").innerHTML=`${iconImg("finalizar-128.png","sm")} REGISTRAR CONCLUSÃO`;
 
   if(execAtual){
     const at=atividades.find(a=>mesmoId(a.id,execAtual.atividade_id));
@@ -1014,10 +1069,15 @@ function abrirExecucao(id=null){
     $("areaField").classList.add("hidden");
     $("pontoField").classList.add("hidden");
   }else{
-    $("modalSelection").textContent=areas.length?"Escolha primeiro a área e depois o ponto/local.":"Nenhuma área operacional está disponível para este colaborador.";
+    if(colaborador.acesso_todos_pontos===false&&!pontos.length){
+      $("modalSelection").textContent="Nenhum local de trabalho foi liberado para você. Solicite à gestão.";
+    }else{
+      $("modalSelection").textContent=areas.length?"Escolha primeiro a área e depois o ponto/local.":"Nenhuma área operacional está disponível para este colaborador.";
+    }
     $("areaField").classList.remove("hidden");
     $("pontoField").classList.remove("hidden");
     popularAreas();
+    }
   }
   $("execModal").classList.add("visible");
 }
@@ -1246,7 +1306,7 @@ $("photoInput").onchange=e=>{
   $("preview").src=previewURL;
   $("preview").classList.add("visible");
   $("photoButton").classList.add("has");
-  $("photoButton").textContent="📷 FOTO PRONTA • MARCA ORAQUI NO REGISTRO";
+  $("photoButton").innerHTML=`${iconImg("registro-foto-128.png","sm")} FOTO PRONTA • MARCA ORAQUI NO REGISTRO`;
 };
 $("execModal").onclick=e=>{if(e.target===$("execModal"))fecharModal()};
 iniciar();
