@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <title>Comunicar ocorrência — ORAQUI</title>
-<meta name="theme-color" content="#173f3b">
+<meta name="theme-color" content="#557a95">
 <link rel="icon" href="/favicon-48.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -48,6 +48,21 @@ select:focus,input:focus,textarea:focus{border-color:#91adbd;background:#fff;box
 .about-brand{display:flex;align-items:center;gap:11px}.about-brand img{width:43px;height:43px;border-radius:13px}.about-brand strong{display:block;color:#2d3e4b;font-size:17px;letter-spacing:.8px}.about-brand span{display:block;margin-top:2px;color:#7b8992;font-size:9px}
 .oraqui-about p{margin:14px 0;color:#667985;font-size:10px;line-height:1.65}.oraqui-about p b{color:#3f617a}.about-links{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.about-main{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:0 14px;border-radius:12px;background:#557a95;color:#fff;text-decoration:none;font-size:9px;font-weight:900;letter-spacing:.4px}.about-mail{color:#557a95;text-decoration:none;font-size:9px;font-weight:750}.about-site{margin-top:13px;padding-top:11px;border-top:1px solid #edf1f3;color:#6555b6;font-size:10px;font-weight:850;letter-spacing:.35px}
 .privacy-lock{color:#557a95;font-size:10px}
+
+.privacy{align-items:flex-start}.privacy a{color:var(--brand2);font-weight:850;text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+.data-note{margin-top:9px;padding:10px 11px;border-radius:12px;background:#f7f9fa;color:#71808b;font-size:8.5px;line-height:1.5}
+.data-note strong{color:#536b7b}
+.privacy-modal{display:none;position:fixed;inset:0;z-index:1200;background:rgba(31,48,60,.72);backdrop-filter:blur(7px);padding:14px;align-items:flex-end;justify-content:center}
+.privacy-sheet{width:100%;max-width:620px;max-height:88vh;overflow:auto;background:#fff;border-radius:26px 26px 18px 18px;padding:21px 19px 18px;box-shadow:0 28px 80px rgba(0,0,0,.28)}
+.privacy-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:13px;border-bottom:1px solid #e7ecef}
+.privacy-head-brand{display:flex;align-items:center;gap:10px}.privacy-head-brand img{width:38px;height:38px;border-radius:12px}.privacy-head-brand strong{display:block;font-size:15px}.privacy-head-brand span{display:block;color:#7d8b94;font-size:8px;margin-top:2px}
+.privacy-close{width:38px;height:38px;border:0;border-radius:12px;background:#f0f4f6;color:#536b7b;font-size:22px;cursor:pointer}
+.privacy-sheet h2{margin:17px 0 5px;font-size:19px;letter-spacing:-.35px}.privacy-sheet .lead{margin:0 0 14px;color:#6d7d87;font-size:10px;line-height:1.6}
+.privacy-block{padding:12px 0;border-top:1px solid #edf1f3}.privacy-block:first-of-type{border-top:0}.privacy-block h3{margin:0 0 5px;font-size:10px;color:#3f617a;letter-spacing:.25px}.privacy-block p,.privacy-block li{color:#667985;font-size:9px;line-height:1.62}.privacy-block p{margin:0}.privacy-block ul{margin:5px 0 0;padding-left:17px}.privacy-block a{color:#557a95;font-weight:800}
+.privacy-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}.privacy-actions button,.privacy-actions a{min-height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:9px;font-weight:900}
+.privacy-actions button{border:0;background:#557a95;color:#fff}.privacy-actions a{border:1px solid #dce5ea;background:#fff;color:#3f617a}
+@media(min-width:620px){.privacy-modal{align-items:center}.privacy-sheet{border-radius:26px}}
+
 .overlay{display:none;position:fixed;inset:0;z-index:999;padding:18px;align-items:center;justify-content:center;background:rgba(31,48,60,.72);backdrop-filter:blur(7px)}.success{width:100%;max-width:390px;padding:30px 22px 23px;border-radius:27px;background:#fff;text-align:center;box-shadow:0 25px 70px rgba(0,0,0,.25)}.success-icon{width:68px;height:68px;margin:auto;display:grid;place-items:center;border-radius:22px;background:#edf7f1;color:var(--ok);font-size:30px;font-weight:900}.success h2{margin:17px 0 7px;font-size:21px;letter-spacing:-.4px}.success p{margin:0;color:var(--muted);font-size:11px;line-height:1.5}.protocol{margin-top:17px;padding:15px;border-radius:16px;background:#f3f7f9;font-size:10px;line-height:1.65}.protocol strong{font-size:16px;color:var(--brand)}.access-code{margin-top:9px;padding-top:9px;border-top:1px solid var(--line);color:var(--muted);font-size:9px}.success button{width:100%;margin-top:17px;padding:14px;border:0;border-radius:15px;background:var(--brand);color:#fff;font-weight:850}
 @media(max-width:480px){.hero h1{font-size:28px}.card{padding:18px}.secure span{display:none}}
 </style>
@@ -101,19 +116,42 @@ select:focus,input:focus,textarea:focus{border-color:#91adbd;background:#fff;box
    <div class="return-copy"><strong>Quer saber quando for resolvido?</strong><span>Ative para receber a atualização por e-mail.</span></div>
    <label class="switch"><input id="retornoToggle" type="checkbox" onchange="toggleRetorno()"><span class="slider"></span></label>
   </div>
-  <div id="emailWrap" class="field"><label for="email">SEU E-MAIL</label><input id="email" type="email" inputmode="email" autocomplete="email" maxlength="180" placeholder="seuemail@exemplo.com"></div>
+  <div id="emailWrap" class="field"><label for="email">SEU E-MAIL</label><input id="email" type="email" inputmode="email" autocomplete="email" maxlength="180" placeholder="seuemail@exemplo.com"><div class="data-note"><strong>Uso do e-mail:</strong> somente para enviar atualizações relacionadas a esta ocorrência. O ORAQUI não usará este endereço para publicidade ou campanhas de marketing.</div></div>
  </section>
 
- <div class="privacy"><span class="privacy-lock">●</span><span><b>Privacidade:</b> não pedimos nome, apartamento ou telefone. O e-mail é opcional e usado apenas para acompanhar esta ocorrência.</span></div>
+ <div class="privacy"><span class="privacy-lock">●</span><span><b>Privacidade:</b> não pedimos nome, apartamento ou telefone. O e-mail é opcional e usado apenas para acompanhar esta ocorrência. Fotos e descrições podem conter dados pessoais; evite registrar rostos, documentos, placas ou outras informações de terceiros quando não forem necessários. <a href="#" onclick="abrirPrivacidade();return false">Como tratamos seus dados</a>.</span></div>
  <button class="send" id="sendButton" type="button" onclick="enviar()">ENVIAR PARA A EQUIPE</button>
  <section class="oraqui-about">
   <div class="about-brand"><img src="/icon-192.png" alt="ORAQUI"><div><strong>ORAQUI</strong><span>Agora. Aqui. Registrado.</span></div></div>
   <p>A empresa responsável pela limpeza do <b>Reserva Igara</b> utiliza o ORAQUI para registrar serviços, acompanhar atividades e melhorar a comunicação com o condomínio.</p>
-  <div class="about-links"><a href="/" class="about-main">CONHECER O ORAQUI</a><a href="mailto:atendimento@oraqui.app" class="about-mail">atendimento@oraqui.app</a></div>
+  <div class="about-links"><a href="/" class="about-main">CONHECER O ORAQUI</a><a href="/privacidade.html" class="about-mail">Privacidade e proteção de dados</a><a href="mailto:atendimento@oraqui.app" class="about-mail">atendimento@oraqui.app</a></div>
   <div class="about-site">oraqui.app</div>
  </section>
 
 </main>
+</div>
+
+
+<div class="privacy-modal" id="privacyModal" role="dialog" aria-modal="true" aria-labelledby="privacyTitle">
+ <div class="privacy-sheet">
+  <div class="privacy-head">
+   <div class="privacy-head-brand"><img src="/icon-192.png" alt=""><div><strong>ORAQUI</strong><span>PRIVACIDADE • AVISO RESUMIDO</span></div></div>
+   <button class="privacy-close" type="button" onclick="fecharPrivacidade()" aria-label="Fechar">×</button>
+  </div>
+  <h2 id="privacyTitle">Seus dados nesta ocorrência</h2>
+  <p class="lead">Este aviso explica, de forma resumida, o tratamento de dados quando você usa este canal público do ORAQUI.</p>
+
+  <div class="privacy-block"><h3>O QUE PODEMOS RECEBER</h3><p>Local selecionado, descrição da ocorrência, foto enviada, data e hora do registro e, somente se você escolher receber retorno, seu endereço de e-mail. Não solicitamos nome, telefone ou número do apartamento neste formulário.</p></div>
+  <div class="privacy-block"><h3>PARA QUE USAMOS</h3><p>Para registrar, encaminhar, acompanhar e resolver a ocorrência; manter o histórico operacional necessário; prevenir abuso e falhas; e enviar atualizações sobre esta ocorrência quando você fornecer e-mail.</p></div>
+  <div class="privacy-block"><h3>E-MAIL SEM MARKETING</h3><p>O e-mail informado neste formulário é destinado ao acompanhamento desta ocorrência. Ele não deve ser reutilizado pelo ORAQUI para publicidade ou campanhas de marketing sem uma finalidade e fundamento próprios.</p></div>
+  <div class="privacy-block"><h3>FOTOS E DADOS DE TERCEIROS</h3><p>Envie apenas o necessário para demonstrar o problema. Sempre que possível, evite fotografar rostos, crianças, documentos, placas de veículos, telas, correspondências ou outros elementos que identifiquem terceiros.</p></div>
+  <div class="privacy-block"><h3>QUEM ACESSA</h3><p>Os dados ficam disponíveis somente aos usuários autorizados necessários ao atendimento da ocorrência e aos fornecedores de tecnologia indispensáveis à operação do serviço, conforme suas funções e obrigações de proteção de dados.</p></div>
+  <div class="privacy-block"><h3>POR QUANTO TEMPO</h3><p>Os dados são mantidos pelo período necessário às finalidades operacionais, contratuais e legais aplicáveis. Encerrada a necessidade, devem ser eliminados ou anonimizados quando cabível, ressalvadas as hipóteses legais de conservação.</p></div>
+  <div class="privacy-block"><h3>SEUS DIREITOS</h3><p>Você pode solicitar informações sobre o tratamento, acesso, correção e, quando aplicável, anonimização, bloqueio, eliminação, oposição ou outras providências previstas na LGPD. Para solicitações de privacidade: <a href="mailto:atendimento@oraqui.app">atendimento@oraqui.app</a>.</p></div>
+  <div class="privacy-block"><h3>PAPÉIS DE PRIVACIDADE</h3><p>O ORAQUI fornece a plataforma tecnológica. A definição de controlador e operador depende de quem determina as finalidades e os elementos essenciais do tratamento em cada contratação. A identificação aplicável ao condomínio/cliente deve constar do aviso completo e dos instrumentos contratuais.</p></div>
+
+  <div class="privacy-actions"><button type="button" onclick="fecharPrivacidade()">ENTENDI</button><a href="/privacidade.html">AVISO COMPLETO</a></div>
+ </div>
 </div>
 
 <div class="overlay" id="successOverlay"><div class="success"><div class="success-icon">✓</div><h2>Recebemos.</h2><p>A ocorrência foi registrada e já pode ser visualizada pela equipe responsável.</p><div class="protocol" id="protocol"></div><button type="button" onclick="inicio()">CONCLUIR</button></div></div>
@@ -130,6 +168,18 @@ function toggleRetorno(){
  document.getElementById("emailWrap").style.display=ligado?"block":"none";
  if(!ligado)document.getElementById("email").value="";
 }
+
+function abrirPrivacidade(){
+ const m=document.getElementById("privacyModal");
+ m.style.display="flex";
+ document.body.style.overflow="hidden";
+}
+function fecharPrivacidade(){
+ const m=document.getElementById("privacyModal");
+ m.style.display="none";
+ document.body.style.overflow="";
+}
+document.addEventListener("keydown",e=>{if(e.key==="Escape")fecharPrivacidade()});
 
 async function carregarLocais(){
  const areaEl=document.getElementById("area"),status=document.getElementById("localStatus");
