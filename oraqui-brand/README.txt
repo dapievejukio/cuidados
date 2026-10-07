@@ -1,13 +1,17 @@
-ORAQUI — identidade visual
-Arquivos oficiais do conjunto aprovado em 06/10/2026.
+ORAQUI — logo horizontal transparente
 
-logo-horizontal.png  -> marca principal
-logo-vertical.png    -> versão vertical
-icon-app-1024.png    -> ícone O/check
-icon-app-512.png
-icon-app-192.png
-apple-touch-icon.png
-favicon-48.png
+Arquivos:
+- logo-horizontal-transparente.png        versão principal em alta resolução
+- logo-horizontal-transparente-1200.png   web/desktop
+- logo-horizontal-transparente-800.png    web responsivo
+- logo-horizontal-transparente-480.png    mobile
 
-Sugestão no repositório:
-  /oraqui-brand/
+Todos possuem fundo transparente.
+
+Sugestão no GitHub:
+main/
+└── oraqui-brand/
+    ├── logo-horizontal-transparente.png
+    ├── logo-horizontal-transparente-1200.png
+    ├── logo-horizontal-transparente-800.png
+    └── logo-horizontal-transparente-480.png
