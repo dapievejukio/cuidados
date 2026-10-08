@@ -48,7 +48,7 @@ main{max-width:720px;margin:-18px auto 80px;padding:0 15px}.user-card,.card,.ite
 .demo-mode-banner{display:none;margin:12px 0;padding:14px 15px;border:1px solid #d9d2f4;border-radius:17px;background:linear-gradient(135deg,#f8f6ff,#f0edff);align-items:center;gap:11px}.demo-mode-banner.visible{display:flex}.demo-mode-icon{width:43px;height:43px;flex:0 0 43px;border-radius:13px;background:#e7e1ff;display:flex;align-items:center;justify-content:center;font-size:19px}.demo-mode-info{flex:1}.demo-mode-info strong{display:block;color:var(--primary);font-size:10px}.demo-mode-info span{display:block;margin-top:4px;color:var(--muted);font-size:8px;line-height:1.4}.demo-back{border:0;padding:10px 11px;border-radius:11px;background:var(--primary);color:#fff;font-size:8px;font-weight:900}
 .empty,.loading{padding:25px 16px;border-radius:19px;background:#fff;box-shadow:var(--shadow);text-align:center;color:var(--muted);font-size:9px;line-height:1.5}.empty strong{display:block;color:var(--text);font-size:11px;margin-bottom:5px}
 .message{display:none;margin-top:13px;padding:12px;border-radius:14px;font-size:9px;line-height:1.5}.message.visible{display:block}.message.error{background:var(--red-light);color:var(--red)}
-.modal{position:fixed;inset:0;z-index:1000;display:none;align-items:flex-end;justify-content:center;background:rgba(25,32,45,.66)}.modal.visible{display:flex}.modal-card{width:100%;max-width:620px;max-height:92vh;overflow:auto;padding:21px;border-radius:25px 25px 0 0;background:#fff}.modal-head{display:flex;justify-content:space-between;align-items:center}.modal-head h2{font-size:18px}.close{width:38px;height:38px;border:0;border-radius:50%;background:#eef1f3;font-size:18px}.selection{margin-top:14px;padding:12px;border-radius:13px;background:var(--blue-light);color:var(--blue);font-size:9px;font-weight:800;line-height:1.5}.field{margin-top:14px}.field label{display:block;margin-bottom:6px;color:var(--muted);font-size:8px;font-weight:900}.field select,.field textarea{width:100%;border:1px solid var(--border);border-radius:14px;background:#fff;outline:none}.field select{height:49px;padding:0 12px}.field textarea{min-height:105px;padding:12px;resize:vertical}.photo-button{width:100%;min-height:51px;margin-top:14px;border:1.5px dashed #b8c6d4;border-radius:14px;background:#f7fafc;color:var(--blue);font-size:9px;font-weight:900}.photo-button.has{background:var(--green-light);color:var(--green);border-color:#a9d9bf}.photo-input{display:none}.preview{display:none;width:100%;max-height:320px;object-fit:cover;margin-top:10px;border-radius:14px}.preview.visible{display:block}.confirm{width:100%;min-height:54px;margin-top:16px;border:0;border-radius:14px;background:var(--green);color:#fff;font-size:9px;font-weight:900}.confirm:disabled{opacity:.5}
+.modal{position:fixed;inset:0;z-index:1000;display:none;align-items:flex-end;justify-content:center;background:rgba(25,32,45,.66)}.modal.visible{display:flex}.modal-card{width:100%;max-width:620px;max-height:92vh;overflow:auto;padding:21px;border-radius:25px 25px 0 0;background:#fff}.modal-head{display:flex;justify-content:space-between;align-items:center}.modal-head h2{font-size:18px}.close{width:38px;height:38px;border:0;border-radius:50%;background:#eef1f3;font-size:18px}.selection{margin-top:14px;padding:12px;border-radius:13px;background:var(--blue-light);color:var(--blue);font-size:9px;font-weight:800;line-height:1.5}.field{margin-top:14px}.field label{display:block;margin-bottom:6px;color:var(--muted);font-size:8px;font-weight:900}.field select,.field textarea{width:100%;border:1px solid var(--border);border-radius:14px;background:#fff;outline:none}.field select{height:49px;padding:0 12px}.field textarea{min-height:105px;padding:12px;resize:vertical}.photo-button{width:100%;min-height:51px;margin-top:14px;border:1.5px dashed #b8c6d4;border-radius:14px;background:#f7fafc;color:var(--blue);font-size:9px;font-weight:900}.photo-button.has{background:var(--green-light);color:var(--green);border-color:#a9d9bf}.photo-input{display:none}.preview{display:none;width:100%;max-height:320px;object-fit:cover;margin-top:10px;border-radius:14px}.preview.visible{display:block}.offline-card{margin-top:14px;border:1px solid #d6e3f0;background:#eef6ff;border-radius:16px;padding:13px;font-size:11px;line-height:1.5}.offline-card strong{display:block}.offline-card button{border:0;border-radius:9px;background:#5d88a5;color:white;padding:10px;margin-top:9px;font-weight:700}.offline-card button:disabled{opacity:.5}.confirm{width:100%;min-height:54px;margin-top:16px;border:0;border-radius:14px;background:var(--green);color:#fff;font-size:9px;font-weight:900}.confirm:disabled{opacity:.5}
 .toast{position:fixed;z-index:2000;left:50%;bottom:25px;transform:translateX(-50%) translateY(30px);opacity:0;padding:12px 18px;border-radius:14px;background:#25313c;color:#fff;font-size:9px;font-weight:800;transition:.25s}.toast.visible{opacity:1;transform:translateX(-50%) translateY(0)}
 @media(min-width:650px){.modal{align-items:center}.modal-card{border-radius:25px}.point-actions{grid-template-columns:repeat(4,1fr)}}
 </style>
@@ -58,7 +58,7 @@ main{max-width:720px;margin:-18px auto 80px;padding:0 15px}.user-card,.card,.ite
 <main>
 <div class="user-card"><div class="user-icon" id="userIcon">👷</div><div class="user-info"><strong id="userName">Carregando...</strong><span id="userDescription">Validando acesso</span></div><span class="user-tag">ATIVO</span></div>
 <div class="demo-mode-banner" id="demoModeBanner"><div class="demo-mode-icon">🧪</div><div class="demo-mode-info"><strong>MODO DEMONSTRAÇÃO</strong><span id="demoModeText">Você está testando a visão operacional de um colaborador.</span></div><button class="demo-back" id="demoBack" type="button">VOLTAR À GESTÃO</button></div>
-<div class="message error" id="error"></div>
+<div class="message error" id="error"></div><div class="offline-card" id="offlineCard" role="status"><strong id="offlineTitle">📶 Verificando conexão...</strong><span id="offlineDescription">Os registros pendentes permanecem neste aparelho até a sincronização.</span><br><button type="button" id="syncBtn">SINCRONIZAR AGORA</button></div>
 <div class="notification-card" id="notificationCard">
   <div class="notification-icon">🔔</div>
   <div class="notification-info">
@@ -87,7 +87,8 @@ const VAPID_PUBLIC_KEY="BNOm_tsvH-uo-hfquzYmf_XxgiGAciYKyia_FdI1PVfBISDELIqnvSUA
 const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const $=id=>document.getElementById(id);
 let authUser=null,colaborador=null,condominio=null,MODO_DEMO=false,DEMO_SESSAO=null,areas=[],pontos=[],atividades=[],programacoes=[],demandas=[],escalaHoje=null,pontosHoje=[],execucoesHoje=[];
-let execAtual=null,fotoArquivo=null,previewURL=null,processando=false;
+let execAtual=null,fotoArquivo=null,previewURL=null,processando=false,sincronizando=false;
+const FILA_DB="oraqui_fila_v3",FILA_STORE="registros",FILA_VERSION=1;
 
 function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
 function hoje(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
@@ -231,7 +232,7 @@ async function enviarPushTeste(){
 }
 
 async function acaoNotificacao(){
-  if(Notification.permission==="granted"){
+  if(typeof Notification!=="undefined"&&Notification.permission==="granted"){
     const reg=await navigator.serviceWorker.ready;
     const sub=await reg.pushManager.getSubscription();
     if(sub){await enviarPushTeste();return}
@@ -260,10 +261,10 @@ async function iniciar(){
       if(demoColError)throw demoColError;
       c=demoCol;MODO_DEMO=true;
     }else{
-      const {data:normalCol,error}=await db.from("colaboradores")
+      const {data:normalCol,error:normalColError}=await db.from("colaboradores")
         .select("id,condominio_id,condominio,nome,email,matricula,funcao,ativo,ponto_ativo,selfie_ponto_obrigatoria,geolocalizacao_ponto_obrigatoria,intervalo_ativo,intervalo_minutos")
         .eq("auth_user_id",authUser.id).eq("ativo",true).order("id",{ascending:true}).limit(100);
-      if(error)throw error;
+      if(normalColError)throw normalColError;
       const vinculos=normalCol||[];
       if(vinculos.length===0)throw new Error("Seu cadastro não está ativo.");
       if(vinculos.length===1){c=vinculos[0];}
@@ -292,6 +293,8 @@ async function iniciar(){
     if(c.ponto_ativo)$("pontoSection").classList.remove("hidden");
 
     await carregarTudo();
+    await atualizarEstadoOffline();
+    if(navigator.onLine)await sincronizarFilaOffline();
     if(!MODO_DEMO){try{await registrarServiceWorker();await atualizarEstadoNotificacao()}catch(pushError){console.warn(pushError)}}
   }catch(e){console.error(e);erro(e.message||"Não foi possível carregar seu acesso.")}
 }
@@ -550,6 +553,93 @@ function popularPontos(){
   $("modalSelection").textContent=ar?`${ar.nome}${ps.length?` • ${ps.length} ${ps.length===1?"local disponível":"locais disponíveis"}`:" • sem ponto cadastrado"}`:"Escolha primeiro a área e depois o ponto/local.";
 }
 
+
+// A fila é armazenada no IndexedDB do dispositivo. Não apague dados do navegador
+// enquanto existirem registros pendentes. Sincronização exige sessão válida.
+function abrirBancoFila(){
+  return new Promise((resolve,reject)=>{
+    if(!('indexedDB' in window)){reject(new Error('Este navegador não suporta armazenamento offline seguro.'));return}
+    const req=indexedDB.open(FILA_DB,FILA_VERSION);
+    req.onupgradeneeded=()=>{if(!req.result.objectStoreNames.contains(FILA_STORE))req.result.createObjectStore(FILA_STORE,{keyPath:'id'})};
+    req.onsuccess=()=>resolve(req.result);
+    req.onerror=()=>reject(req.error||new Error('Não foi possível abrir o armazenamento offline.'));
+  });
+}
+async function filaOperacao(modo,operacao){
+  const banco=await abrirBancoFila();
+  return new Promise((resolve,reject)=>{
+    const tx=banco.transaction(FILA_STORE,modo),store=tx.objectStore(FILA_STORE);
+    let resultado;let falhou=false;
+    tx.oncomplete=()=>{banco.close();resolve(resultado)};
+    tx.onerror=()=>{falhou=true;banco.close();reject(tx.error||new Error('Falha ao salvar registro offline.'))};
+    tx.onabort=()=>{if(!falhou){banco.close();reject(tx.error||new Error('Operação offline cancelada.'))}};
+    try{const req=operacao(store);req.onsuccess=()=>{resultado=req.result};req.onerror=()=>{resultado=undefined}}catch(e){tx.abort();reject(e)}
+  });
+}
+const filaTodos=()=>filaOperacao('readonly',s=>s.getAll());
+const filaSalvar=item=>filaOperacao('readwrite',s=>s.put(item));
+const filaExcluir=id=>filaOperacao('readwrite',s=>s.delete(id));
+async function atualizarEstadoOffline(){
+  const title=$('offlineTitle'),desc=$('offlineDescription');
+  if(!title)return;
+  try{
+    const fila=await filaTodos();
+    const minhas=fila.filter(x=>x.auth_user_id===authUser?.id&&Number(x.condominio_id)===Number(colaborador?.condominio_id));
+    title.textContent=(navigator.onLine?'🟢 Conectado':'🔴 Sem internet')+' • '+minhas.length+' pendente(s)';
+    desc.textContent=minhas.length?'Registros e fotos salvos neste aparelho. Não limpe os dados do navegador até sincronizar.':'Nenhum registro pendente neste condomínio.';
+    $('syncBtn').disabled=!navigator.onLine||!minhas.length||sincronizando;
+  }catch(e){title.textContent='⚠ Armazenamento offline indisponível';desc.textContent=e.message;$('syncBtn').disabled=true}
+}
+function carimboDataHora(data){
+  return new Intl.DateTimeFormat('pt-BR',{timeZone:'America/Sao_Paulo',day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(new Date(data));
+}
+async function fotoComCarimbo(arquivo,dataISO){
+  if(!arquivo)return null;
+  const bitmap=await createImageBitmap(arquivo);
+  try{
+    const limite=1920,escala=Math.min(1,limite/Math.max(bitmap.width,bitmap.height));
+    const canvas=document.createElement('canvas');canvas.width=Math.round(bitmap.width*escala);canvas.height=Math.round(bitmap.height*escala);
+    const ctx=canvas.getContext('2d');if(!ctx)throw new Error('Não foi possível processar a fotografia.');
+    ctx.drawImage(bitmap,0,0,canvas.width,canvas.height);
+    const fonte=Math.max(18,Math.round(canvas.width*.028));ctx.font=`bold ${fonte}px Arial,sans-serif`;
+    const linha1='ORAQUI • REGISTRO OPERACIONAL',linha2=carimboDataHora(dataISO)+' (Brasília)';
+    const padding=Math.max(14,Math.round(fonte*.65)),altura=fonte*2.9;
+    ctx.fillStyle='rgba(0,0,0,.73)';ctx.fillRect(0,canvas.height-altura,canvas.width,altura);
+    ctx.fillStyle='#fff';ctx.textBaseline='top';ctx.fillText(linha1,padding,canvas.height-altura+padding,canvas.width-padding*2);
+    ctx.fillText(linha2,padding,canvas.height-altura+padding+fonte*1.18,canvas.width-padding*2);
+    const blob=await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('Falha ao gerar foto carimbada.')),'image/jpeg',.84));
+    return blob;
+  }finally{bitmap.close()}
+}
+async function enviarRegistroPendente(item){
+  if(!navigator.onLine)throw new Error('Sem conexão.');
+  if(!colaborador||item.auth_user_id!==authUser?.id||Number(item.condominio_id)!==Number(colaborador.condominio_id))throw new Error('Este registro pertence a outra conta ou condomínio.');
+  // iniciada_em identifica unicamente a tentativa; evita reenvio duplicado após
+  // sucesso no banco seguido de falha local ao excluir a fila.
+  const {data:jaExiste,error:consultaErro}=await db.from('execucoes').select('id').eq('condominio_id',item.condominio_id).eq('colaborador_id',item.colaborador_id).eq('iniciada_em',item.payload.iniciada_em).limit(1);
+  if(consultaErro)throw consultaErro;
+  if(jaExiste?.length){await filaExcluir(item.id);return}
+  if(item.foto){
+    const {error:uploadErro}=await db.storage.from(BUCKET).upload(item.foto_path,item.foto,{upsert:true,contentType:'image/jpeg'});
+    if(uploadErro)throw new Error('Falha no envio da fotografia: '+uploadErro.message);
+  }
+  const {error:insertErro}=await db.from('execucoes').insert(item.payload);
+  if(insertErro)throw insertErro;
+  await filaExcluir(item.id);
+}
+async function sincronizarFilaOffline(){
+  if(sincronizando||!navigator.onLine||!colaborador||!authUser)return;
+  sincronizando=true;await atualizarEstadoOffline();let sucesso=0,erroSync=null;
+  try{
+    const todos=await filaTodos();
+    for(const item of todos.filter(x=>x.auth_user_id===authUser.id&&Number(x.condominio_id)===Number(colaborador.condominio_id)).sort((a,b)=>a.criado_em.localeCompare(b.criado_em))){
+      try{await enviarRegistroPendente(item);sucesso++}catch(e){erroSync=e;console.error('ORAQUI: registro pendente não sincronizado',e);break}
+    }
+    if(sucesso){toast(`✓ ${sucesso} registro(s) sincronizado(s).`);await carregarTudo()}
+    if(erroSync&&navigator.onLine)erro('Sincronização pendente: '+(erroSync.message||'Verifique a conexão e as permissões.'));
+  }catch(e){console.error(e);erro('Fila offline: '+e.message)}finally{sincronizando=false;await atualizarEstadoOffline()}
+}
+
 async function uploadFoto(areaId,pontoId){
   if(!fotoArquivo)return null;
   const ext=(fotoArquivo.name.split(".").pop()||"jpg").toLowerCase().replace(/[^a-z0-9]/g,"")||"jpg";
@@ -564,57 +654,40 @@ async function confirmarExecucao(){
   const at=execAtual?atividades.find(a=>mesmoId(a.id,execAtual.atividade_id)):null;
   const exigeFoto=execAtual?(execAtual.exige_foto??at?.exige_foto??false):false;
   const exigeObs=execAtual?(execAtual.exige_observacao??at?.exige_observacao??false):false;
-  const obs=$("observacao").value.trim();
-
-  if(exigeFoto&&!fotoArquivo){alert("Esta atividade exige foto.");return}
-  if(exigeObs&&!obs){alert("Esta atividade exige observação.");return}
-
+  const obs=$('observacao').value.trim();
+  if(exigeFoto&&!fotoArquivo){alert('Esta atividade exige foto.');return}
+  if(exigeObs&&!obs){alert('Esta atividade exige observação.');return}
   let areaId=execAtual?.area_id||null,pontoId=execAtual?.ponto_id||null;
-
   if(!execAtual){
-    areaId=Number($("areaSelect").value)||null;
-    pontoId=Number($("pontoSelect").value)||null;
-    if(!areaId){alert("Selecione uma área.");return}
-
+    areaId=Number($('areaSelect').value)||null;pontoId=Number($('pontoSelect').value)||null;
+    if(!areaId){alert('Selecione uma área.');return}
     const disponiveis=pontos.filter(p=>mesmoId(p.area_id,areaId));
-    if(disponiveis.length&&!pontoId){alert("Selecione o ponto/local.");return}
-    if(pontoId&&!disponiveis.some(p=>mesmoId(p.id,pontoId))){alert("O ponto selecionado não pertence à área escolhida.");return}
+    if(disponiveis.length&&!pontoId){alert('Selecione o ponto/local.');return}
+    if(pontoId&&!disponiveis.some(p=>mesmoId(p.id,pontoId))){alert('O ponto selecionado não pertence à área escolhida.');return}
   }
-
   if(pontoId&&!areaId)areaId=areaDoPonto(pontoId)?.id||null;
-
-  processando=true;
-  $("confirmExec").disabled=true;
-  $("confirmExec").textContent="REGISTRANDO...";
-
+  processando=true;$('confirmExec').disabled=true;$('confirmExec').textContent='SALVANDO...';
   try{
-    const fotoPath=await uploadFoto(areaId,pontoId),agora=new Date().toISOString();
+    const agora=new Date().toISOString(),id=crypto.randomUUID();
+    const foto=await fotoComCarimbo(fotoArquivo,agora);
+    const fotoPath=foto?`v2/${colaborador.condominio_id}/${colaborador.id}/${hoje()}/${id}.jpg`:null;
     const payload={
-      condominio_id:colaborador.condominio_id,
-      colaborador_id:colaborador.id,
-      programacao_id:execAtual?.id||null,
-      atividade_id:execAtual?.atividade_id||null,
-      area_id:areaId,
-      ponto_id:pontoId,
-      tipo:execAtual?(execAtual.tipo==="extraordinaria"?"extraordinaria":"programada"):"avulsa",
-      status:"concluida",
-      observacao:obs||null,
-      foto_path:fotoPath,
-      iniciada_em:null,
-      concluida_em:agora,
-      updated_at:agora
+      condominio_id:colaborador.condominio_id,colaborador_id:colaborador.id,
+      programacao_id:execAtual?.id||null,atividade_id:execAtual?.atividade_id||null,
+      area_id:areaId,ponto_id:pontoId,
+      tipo:execAtual?(execAtual.tipo==='extraordinaria'?'extraordinaria':'programada'):'avulsa',
+      status:'concluida',observacao:obs||null,foto_path:fotoPath,
+      iniciada_em:agora,concluida_em:agora,updated_at:agora
     };
-    const {error}=await db.from("execucoes").insert(payload);
-    if(error)throw error;
-    fecharModal();
-    toast("✓ Atividade registrada.");
-    await carregarTudo();
-  }catch(e){alert(e.message||"Não foi possível registrar.");}
-  finally{
-    processando=false;
-    $("confirmExec").disabled=false;
-    $("confirmExec").textContent="✓ REGISTRAR CONCLUSÃO";
-  }
+    await filaSalvar({id,auth_user_id:authUser.id,condominio_id:colaborador.condominio_id,colaborador_id:colaborador.id,criado_em:agora,payload,foto,foto_path:fotoPath});
+    fecharModal();await atualizarEstadoOffline();
+    if(navigator.onLine){
+      toast('Registro salvo. Sincronizando...');await sincronizarFilaOffline();
+    }else{
+      toast('📴 Registro e foto salvos no aparelho. Aguardando internet.');
+    }
+  }catch(e){console.error(e);alert('Não foi possível salvar o registro neste aparelho: '+(e.message||e))}
+  finally{processando=false;$('confirmExec').disabled=false;$('confirmExec').textContent='✓ REGISTRAR CONCLUSÃO'}
 }
 
 function fecharModal(){
@@ -648,6 +721,7 @@ $("pontoSelect").onchange=()=>{
   $("modalSelection").textContent=nomeLocal(aid,pid)||areas.find(a=>mesmoId(a.id,aid))?.nome||"Escolha primeiro a área e depois o ponto/local.";
 };
 $("confirmExec").onclick=confirmarExecucao;
+$("syncBtn").onclick=sincronizarFilaOffline;
 $("photoButton").onclick=()=>$("photoInput").click();
 $("photoInput").onchange=e=>{
   const f=e.target.files?.[0];
@@ -664,6 +738,9 @@ $("photoInput").onchange=e=>{
 };
 $("execModal").onclick=e=>{if(e.target===$("execModal"))fecharModal()};
 iniciar();
+window.addEventListener("online",()=>{atualizarEstadoOffline();sincronizarFilaOffline()});
+window.addEventListener("offline",atualizarEstadoOffline);
+setInterval(()=>{if(navigator.onLine&&colaborador)sincronizarFilaOffline()},120000);
 setInterval(()=>{if(colaborador)renderProgramacoes()},60000);
 </script>
 </body>
