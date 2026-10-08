@@ -214,7 +214,7 @@ async function detectarAcessos(user){
           .select("auth_user_id")
           .eq("auth_user_id", user.id)
           .eq("ativo", true)
-          .maybeSingle(),
+          .limit(1),
 
         db.from("usuarios_gestao")
           .select("id,condominio_id,perfil,ativo")
@@ -230,7 +230,7 @@ async function detectarAcessos(user){
     ]);
 
     // Se uma tabela não for visível por RLS, não derrubamos o login inteiro.
-    const admin = !adminResult.error && !!adminResult.data;
+    const admin = !adminResult.error && (adminResult.data || []).length > 0;
     const gestao = !gestaoResult.error && (gestaoResult.data || []).length > 0;
     const colaborador = !colaboradorResult.error && (colaboradorResult.data || []).length > 0;
 
