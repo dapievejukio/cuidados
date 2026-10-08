@@ -22,7 +22,7 @@ button{border:0;border-radius:12px;padding:11px 13px;font-size:8px;font-weight:9
 .lab{border:1px solid #7868bd24}.labtop{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.labmark{display:flex;align-items:center;gap:12px}.labmark h3{margin:0;font-size:14px}.labmark p{margin:4px 0 0;font-size:9px;color:var(--m);line-height:1.45}
 .formgrid{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:end;margin-top:16px}.formgrid .field{margin:0}.formgrid button{height:50px;padding:0 18px}
 .msg{display:none;margin-top:12px;padding:12px 14px;border-radius:13px;font-size:9px;line-height:1.45}.msg.ok{display:block;background:#edf6f0;color:#356c4c}.msg.error{display:block;background:#fff0f1;color:#9d3440}.msg.info{display:block;background:#f0edfb;color:#5f51a2}
-@media(max-width:650px){.formgrid{grid-template-columns:1fr}.formgrid button{width:100%}.head{align-items:flex-start}.row{align-items:center}}
+.testlist{display:flex;flex-direction:column;gap:10px;margin-top:16px}.testrow{background:#fff;border:1px solid var(--b);border-radius:16px;padding:14px;display:flex;align-items:center;gap:12px}.testmeta{flex:1;min-width:0}.testmeta strong{display:block;font-size:12px}.testmeta span{display:block;margin-top:4px;font-size:8px;color:var(--m);line-height:1.45}.testactions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.testactions button{white-space:nowrap}.danger{background:#fff0f1;color:var(--err)}.status{display:inline-block!important;width:max-content;margin-top:7px!important;font-size:7px!important;font-weight:900;padding:6px 8px;border-radius:20px}.status.ativo{background:#edf6f0;color:#356c4c!important}.status.aguardando{background:#fff8e8;color:#80631d!important}.status.expirado,.status.encerrado{background:#fff0f1;color:#9d3440!important}@media(max-width:650px){.formgrid{grid-template-columns:1fr}.formgrid button{width:100%}.head{align-items:flex-start}.row{align-items:center}.testrow{align-items:flex-start;flex-wrap:wrap}.testactions{width:100%;justify-content:flex-start}.testactions button{flex:1}}
 </style>
 </head>
 <body>
@@ -88,6 +88,8 @@ button{border:0;border-radius:12px;padding:11px 13px;font-size:8px;font-weight:9
       </div>
 
       <div id="testeMsg" class="msg"></div>
+      <div class="head" style="margin-top:20px"><div><h2 style="font-size:14px">Testes do Laboratório</h2><p>Acompanhe ativações, vencimentos e encerramentos.</p></div><button class="secondary" id="atualizarTestes">ATUALIZAR</button></div>
+      <div id="listaTestes" class="testlist"><div class="empty">Carregando testes...</div></div>
     </div>
   </section>
 
@@ -146,7 +148,7 @@ async function authz(u){
   $("adminName").textContent=p?.nome||"Administrador ORAQUI";
   $("auth").classList.add("hidden");
   $("app").classList.remove("hidden");
-  await load();
+  await Promise.all([load(),loadTestes()]);
 }
 
 async function login(){
@@ -215,6 +217,33 @@ async function openClient(id,nome,slug){
   `).join("")||'<div class="empty">Nenhum administrador ou gestor cadastrado.</div>';
 }
 
+
+function formatarData(valor){if(!valor)return "—";return new Intl.DateTimeFormat("pt-BR",{dateStyle:"short",timeStyle:"short"}).format(new Date(valor))}
+function diasRestantes(valor){if(!valor)return null;const ms=new Date(valor).getTime()-Date.now();return ms<=0?0:Math.ceil(ms/86400000)}
+function rotuloStatus(t){
+  if(t.status_teste==="aguardando_ativacao")return {texto:"AGUARDANDO ATIVAÇÃO",classe:"aguardando"};
+  if(t.status_teste==="ativo"){const d=diasRestantes(t.acesso_expira_em);return d===0?{texto:"EXPIRA HOJE",classe:"aguardando"}:{texto:d===1?"ATIVO • 1 DIA RESTANTE":`ATIVO • ${d} DIAS RESTANTES`,classe:"ativo"}}
+  if(t.status_teste==="expirado")return {texto:"EXPIRADO",classe:"expirado"};
+  return {texto:"ENCERRADO",classe:"encerrado"};
+}
+async function loadTestes(){
+  const box=$("listaTestes");if(!box)return;box.innerHTML='<div class="empty">Carregando testes...</div>';
+  const {data,error}=await db.rpc("oraqui_listar_testes");
+  if(error){box.innerHTML='<div class="empty">'+esc(error.message)+'</div>';return}
+  if(!data||!data.length){box.innerHTML='<div class="empty">Nenhum acesso de teste criado.</div>';return}
+  box.innerHTML=data.map(t=>{const s=rotuloStatus(t);return `<div class="testrow"><div class="icon">🧪</div><div class="testmeta"><strong>${esc(t.nome)}</strong><span>ID ${t.id}<br>Ativado: ${esc(formatarData(t.acesso_ativado_em))}<br>Vencimento: ${esc(formatarData(t.acesso_expira_em))}</span><span class="status ${s.classe}">${esc(s.texto)}</span></div><div class="testactions"><button class="secondary" data-renovar="${t.id}" ${t.acesso_ativado_em?"":"disabled"}>+7 DIAS</button><button class="danger" data-encerrar="${t.id}" ${t.ativo?"":"disabled"}>ENCERRAR</button></div></div>`}).join("");
+  document.querySelectorAll("[data-renovar]").forEach(b=>b.onclick=()=>renovarTeste(Number(b.dataset.renovar)));
+  document.querySelectorAll("[data-encerrar]").forEach(b=>b.onclick=()=>encerrarTeste(Number(b.dataset.encerrar)));
+}
+async function renovarTeste(id){
+  if(!confirm("Adicionar 7 dias a este acesso de teste?"))return;
+  try{const {data,error}=await db.rpc("oraqui_renovar_teste",{p_usuario_gestao_id:id});if(error)throw error;if(data?.ok!==true)throw Error(data?.error||"Não foi possível renovar.");msgTeste("Teste renovado por mais 7 dias.","ok");await loadTestes()}catch(e){msgTeste(e?.message||"Não foi possível renovar o teste.","error")}
+}
+async function encerrarTeste(id){
+  if(!confirm("Encerrar este acesso de teste agora? O usuário perderá o acesso ao Laboratório."))return;
+  try{const {data,error}=await db.rpc("oraqui_encerrar_teste",{p_usuario_gestao_id:id});if(error)throw error;if(data?.ok!==true)throw Error(data?.error||"Não foi possível encerrar.");msgTeste("Acesso de teste encerrado.","ok");await loadTestes()}catch(e){msgTeste(e?.message||"Não foi possível encerrar o teste.","error")}
+}
+
 async function liberarTeste(){
   limparMsgTeste();
 
@@ -266,7 +295,7 @@ async function liberarTeste(){
     $("testeEmail").value="";
     msgTeste(retorno?.mensagem||"Convite de teste enviado. Os 7 dias começarão quando a pessoa definir a senha.","ok");
 
-    await load();
+    await Promise.all([load(),loadTestes()]);
   }catch(e){
     msgTeste(e?.message||"Não foi possível liberar o teste.","error");
   }finally{
@@ -279,6 +308,7 @@ $("login").onclick=login;
 $("password").onkeydown=e=>{if(e.key==="Enter")login()};
 $("logout").onclick=async()=>{await db.auth.signOut();location.reload()};
 $("liberarTeste").onclick=liberarTeste;
+$("atualizarTestes").onclick=loadTestes;
 $("testeEmail").onkeydown=e=>{if(e.key==="Enter")liberarTeste()};
 $("back").onclick=()=>{
   $("client").classList.add("hidden");
