@@ -734,6 +734,7 @@ async function salvarCol(){
   const funcao=$("colFuncao").value;
   const ponto=$("colPontoAtivo").checked;
   const payload={
+    condominio_id:CONDOMINIO_ID,
     nome,email,matricula,funcao,
     ponto_ativo:ponto,
     selfie_ponto_obrigatoria:ponto&&$("colSelfie").checked,
