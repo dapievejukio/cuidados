@@ -262,9 +262,19 @@ async function iniciar(){
     }else{
       const {data:normalCol,error}=await db.from("colaboradores")
         .select("id,condominio_id,condominio,nome,email,matricula,funcao,ativo,ponto_ativo,selfie_ponto_obrigatoria,geolocalizacao_ponto_obrigatoria,intervalo_ativo,intervalo_minutos")
-        .eq("auth_user_id",authUser.id).eq("ativo",true).maybeSingle();
+        .eq("auth_user_id",authUser.id).eq("ativo",true).order("id",{ascending:true}).limit(100);
       if(error)throw error;
-      c=normalCol;
+      const vinculos=normalCol||[];
+      if(vinculos.length===0)throw new Error("Seu cadastro não está ativo.");
+      if(vinculos.length===1){c=vinculos[0];}
+      else{
+        const opcoes=vinculos.map((v,i)=>`${i+1} — ${v.condominio||"Condomínio #"+v.condominio_id} (${v.nome})`).join("\n");
+        const escolha=window.prompt("Você possui mais de um vínculo. Escolha o número do condomínio:\n"+opcoes,"1");
+        if(escolha===null)throw new Error("Seleção de condomínio cancelada.");
+        const indice=Number(escolha)-1;
+        if(!Number.isInteger(indice)||indice<0||indice>=vinculos.length)throw new Error("Condomínio inválido. Recarregue e selecione uma opção.");
+        c=vinculos[indice];
+      }
     }
     if(!c)throw new Error("Seu cadastro não está ativo.");
     colaborador=c;
