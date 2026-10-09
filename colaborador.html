@@ -83,9 +83,10 @@ main{max-width:720px;margin:-18px auto 80px;padding:0 15px}.user-card,.card,.ite
 
 <section class="section" id="escalaSection"><div class="section-title"><div><h2>Hoje</h2><p>Sua escala publicada para hoje.</p></div></div><div id="escalaBox" class="loading">Carregando escala...</div></section>
 <section class="section hidden" id="pontoSection"><div class="section-title"><div><h2>Ponto</h2><p>Registre os eventos da sua jornada.</p></div></div><div class="card"><div class="status-card"><div class="status-icon">🕒</div><div class="status-info"><strong id="pontoStatus">Carregando...</strong><span id="pontoDetalhe"></span></div><span class="badge purple" id="pontoBadge">PONTO</span></div><div class="point-actions"><button class="point-btn primary" id="btnEntrada">ENTRADA</button><button class="point-btn" id="btnIniIntervalo">INICIAR INTERVALO</button><button class="point-btn" id="btnFimIntervalo">RETORNAR</button><button class="point-btn" id="btnSaida">SAÍDA</button></div><div class="geo-note" id="geoNote"></div></div></section>
+<section class="section" id="registroAvulsoSection"><div class="section-title"><div><h2>Registro avulso</h2><p>Para atividade não programada, escolha uma área e um ponto cadastrados pela gestão.</p></div></div><div class="card"><button class="action" id="avulso" style="min-height:56px;font-size:12px;width:100%">＋ REGISTRAR ATIVIDADE AVULSA</button></div></section>
 <section class="section" id="secaoDemandas"><div class="section-title"><div><h2>Demandas</h2><p>Recados, tarefas e itens urgentes destinados a você.</p></div></div><div id="demandas" class="loading">Carregando...</div></section>
 <section class="section"><div class="section-title"><div><h2>Atividades programadas</h2><p>O que está previsto para sua rotina. Pendências ficam destacadas até a conclusão.</p></div></div><div id="programacoes" class="loading">Carregando...</div></section>
-<section class="section"><div class="section-title"><div><h2>Registro avulso</h2><p>Para atividade não programada, escolha uma área e um ponto cadastrados pela gestão.</p></div></div><div class="card"><button class="action" id="avulso">＋ REGISTRAR ATIVIDADE AVULSA</button></div></section>
+
 <section class="section"><div class="section-title"><div><h2>Executado hoje</h2><p>Seu histórico operacional de hoje.</p></div></div><div id="historico" class="loading">Carregando...</div></section>
 </main>
 
@@ -334,7 +335,7 @@ async function carregarTudo(){
     areas=ar.data||[];
     pontos=po.data||[];
     atividades=at.data||[];
-    programacoes=(pr.data||[]).filter(programacaoValeHoje).filter(programacaoParaColaborador);
+    programacoes=(pr.data||[]).filter(programacaoParaColaborador);
     escalaHoje=(es.data||[]).find(x=>x.status_publicacao==="publicada"||x.status_publicacao==="alterada")||(es.data||[])[0]||null;
     demandas=(de.data||[]).filter(demandaParaColaborador);
     pontosHoje=rp.data||[];
@@ -507,14 +508,28 @@ async function mudarDemanda(id,status){
   await carregarTudo();
 }
 
-function renderProgramacoes(){
-  if(!programacoes.length){
-    $("programacoes").className="";
-    $("programacoes").innerHTML=vazio("Nenhuma atividade programada","Quando a gestão cadastrar a rotina, ela aparecerá aqui automaticamente.");
-    return;
+function dataLocalISO(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
+function programacaoValeNaData(p,data){
+  const dia=dataLocalISO(data);
+  if(p.data_inicio&&dia<p.data_inicio)return false;
+  if(p.data_fim&&dia>p.data_fim)return false;
+  if(p.tipo==="extraordinaria")return true;
+  if(!p.dias_semana||!p.dias_semana.length)return true;
+  const js=data.getDay(),iso=js===0?7:js;
+  return p.dias_semana.map(Number).includes(iso)||p.dias_semana.map(Number).includes(js);
+}
+function proximaDataProgramacao(p){
+  const inicio=new Date();inicio.setHours(12,0,0,0);
+  for(let i=1;i<=30;i++){
+    const d=new Date(inicio);d.setDate(inicio.getDate()+i);
+    if(programacaoValeNaData(p,d))return d;
   }
-
-  const ordenadas=[...programacoes].sort((a,b)=>{
+  return null;
+}
+function renderProgramacoes(){
+  const hojeItens=programacoes.filter(programacaoValeHoje);
+  const futuros=programacoes.map(p=>({p,data:proximaDataProgramacao(p)})).filter(x=>x.data).sort((a,b)=>a.data-b.data);
+  const ordenadas=[...hojeItens].sort((a,b)=>{
     const pa=pesoProgramacao(a),pb=pesoProgramacao(b);
     if(pa!==pb)return pa-pb;
     const ha=minutosHorario(a.horario_limite),hb=minutosHorario(b.horario_limite);
@@ -523,37 +538,27 @@ function renderProgramacoes(){
     if(ha!==null&&hb!==null&&ha!==hb)return ha-hb;
     return Number(a.id)-Number(b.id);
   });
-
-  $("programacoes").className="list";
-  $("programacoes").innerHTML=ordenadas.map(p=>{
+  const cartao=p=>{
     const at=atividades.find(a=>mesmoId(a.id,p.atividade_id));
     const feito=execucoesHoje.some(e=>mesmoId(e.programacao_id,p.id)&&e.status==="concluida");
     const atrasada=estaAtrasada(p,feito);
     const urgente=!feito&&String(p.prioridade||"").toLowerCase()==="urgente";
     const local=nomeLocal(p.area_id,p.ponto_id)||"Local definido pela gestão";
-
     let classe="programada-pendente",icone="🔔",badge="PENDENTE",badgeClass="purple",faixa="ATIVIDADE PENDENTE — TOQUE PARA CONCLUIR",faixaClass="";
-    if(atrasada){classe="programada-atrasada";icone="⏰";badge="ATRASADA";badgeClass="red";faixa="⚠ PRAZO ULTRAPASSADO — ATENÇÃO";faixaClass="urgent"}
+    if(feito){classe="programada-concluida";icone="✓";badge="CONCLUÍDA";badgeClass="green";faixa="✓ ATIVIDADE CONCLUÍDA"}
+    else if(atrasada){classe="programada-atrasada";icone="⏰";badge="ATRASADA";badgeClass="red";faixa="⚠ PRAZO ULTRAPASSADO — ATENÇÃO";faixaClass="urgent"}
     else if(urgente){classe="programada-urgente";icone="⚠️";badge="URGENTE";badgeClass="red";faixa="⚠ ATIVIDADE URGENTE";faixaClass="urgent"}
-    else if(feito){classe="programada-concluida";icone="✓";badge="CONCLUÍDA";badgeClass="green";faixa="✓ ATIVIDADE CONCLUÍDA";faixaClass=""}
-
     const prazo=p.horario_limite?`<div class="deadline ${atrasada?"late":""}">${atrasada?"⏰ ATRASADA — ERA ATÉ":"🕒 CONCLUIR ATÉ"} ${esc(String(p.horario_limite).slice(0,5))}</div>`:"";
-
-    return `<div class="item-card ${classe}">
-      <div class="alert-strip ${faixaClass}"><span>${faixa}</span><span>${feito?"✓":"●"}</span></div>
-      <div class="item-top">
-        <div class="item-icon">${icone}</div>
-        <div class="item-info">
-          <strong>${esc(at?.nome||"Atividade")}</strong>
-          <span>${esc(local)}</span>
-          ${prazo}
-        </div>
-        <span class="badge ${badgeClass}">${badge}</span>
-      </div>
-      ${p.instrucoes?`<div class="item-description">${esc(p.instrucoes)}</div>`:""}
-      ${!feito?`<div class="item-actions"><button class="action" onclick="abrirExecucao(${p.id})">✓ REGISTRAR CONCLUSÃO</button></div>`:""}
-    </div>`;
+    return `<div class="item-card ${classe}"><div class="alert-strip ${faixaClass}"><span>${faixa}</span><span>${feito?"✓":"●"}</span></div><div class="item-top"><div class="item-icon">${icone}</div><div class="item-info"><strong>${esc(at?.nome||"Atividade")}</strong><span>${esc(local)}</span>${prazo}</div><span class="badge ${badgeClass}">${badge}</span></div>${p.instrucoes?`<div class="item-description">${esc(p.instrucoes)}</div>`:""}${!feito?`<div class="item-actions"><button class="action" onclick="abrirExecucao(${p.id})">✓ REGISTRAR CONCLUSÃO</button></div>`:""}</div>`;
+  };
+  const futurosHtml=futuros.map(({p,data})=>{
+    const at=atividades.find(a=>mesmoId(a.id,p.atividade_id));
+    const dia=data.toLocaleDateString("pt-BR",{weekday:"short",day:"2-digit",month:"2-digit"});
+    const prazo=p.horario_limite?` • até ${esc(String(p.horario_limite).slice(0,5))}`:"";
+    return `<div class="item-card" style="border:1px solid var(--border);padding:12px"><div class="item-top"><div class="item-icon">📅</div><div class="item-info"><strong>${esc(at?.nome||"Atividade")}</strong><span>${esc(dia)}${prazo} • ${esc(nomeLocal(p.area_id,p.ponto_id)||"Local definido pela gestão")}</span></div><span class="badge purple">AGENDADA</span></div></div>`;
   }).join("");
+  $("programacoes").className="list";
+  $("programacoes").innerHTML=(ordenadas.length?ordenadas.map(cartao).join(""):vazio("Nenhuma atividade para hoje","Consulte abaixo as próximas atividades agendadas."))+(futuros.length?`<details style="margin-top:12px" open><summary style="padding:14px;border-radius:14px;background:#eeeafd;color:#55468f;font-weight:800;cursor:pointer">📅 Próximas atividades (${futuros.length})</summary><div class="list" style="margin-top:10px">${futurosHtml}</div></details>`:"");
 }
 
 function renderHistorico(){
@@ -793,7 +798,8 @@ iniciar();
 window.addEventListener("online",()=>{atualizarEstadoOffline();sincronizarFilaOffline()});
 window.addEventListener("offline",atualizarEstadoOffline);
 setInterval(()=>{if(navigator.onLine&&colaborador)sincronizarFilaOffline()},120000);
-setInterval(()=>{if(colaborador)renderProgramacoes()},60000);
+let ultimaDataProgramacoes=hoje();
+setInterval(()=>{if(!colaborador)return;const data=hoje();if(data!==ultimaDataProgramacoes){ultimaDataProgramacoes=data;carregarTudo()}else renderProgramacoes()},60000);
 </script>
 </body>
 </html>
