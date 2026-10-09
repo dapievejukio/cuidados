@@ -3,35 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
-<title>Colaborador — ORAQUI</title>
+<title>Colaborador — ORAQUI • correção 09/10</title>
 <meta name="theme-color" content="#6d80a8">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="ORAQUI">
 <link rel="manifest" href="manifest.webmanifest">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
-/* Indicadores: mensagens realmente não lidas no servidor; documentos novos desde a última abertura neste dispositivo. */
-const ORAQUI_DOCS_LAST_PREFIX='oraqui_docs_last_open_';
-function oraquiBadge(id,count){const el=document.getElementById(id);if(!el)return;el.hidden=!count;el.textContent=count>99?'99+':String(count)}
-async function oraquiAtualizarIndicadores(){
- if(!authUser||!colaborador||MODO_DEMO)return;
- try{
-  const {count,error}=await db.from('oraqui_chat_mensagens').select('id',{count:'exact',head:true}).eq('condominio_id',colaborador.condominio_id).eq('destinatario',authUser.id).is('lida_em',null);
-  if(!error){oraquiBadge('oraquiChatCount',count||0);document.getElementById('oraquiChatCaption').textContent=count?`${count} não lida${count===1?'':'s'}`:'Mensagens';}
- }catch(e){console.warn('Indicador chat',e)}
- try{
-  const key=ORAQUI_DOCS_LAST_PREFIX+authUser.id;
-  const last=localStorage.getItem(key);
-  const q=db.from('documentos_colaborador').select('id',{count:'exact',head:true});
-  const {count,error}=await (last?q.gt('created_at',last):q);
-  if(!error){oraquiBadge('oraquiDocsCount',count||0);document.getElementById('oraquiDocsCaption').textContent=count?`${count} novo${count===1?'':'s'}`:'Meus arquivos';}
- }catch(e){console.warn('Indicador documentos',e)}
-}
-document.getElementById('oraquiQuickDocs')?.addEventListener('click',()=>{if(authUser)localStorage.setItem(ORAQUI_DOCS_LAST_PREFIX+authUser.id,new Date().toISOString())});
-window.addEventListener('pageshow',()=>setTimeout(oraquiAtualizarIndicadores,350));
-document.addEventListener('visibilitychange',()=>{if(!document.hidden)oraquiAtualizarIndicadores()});
-setInterval(()=>{if(!document.hidden)oraquiAtualizarIndicadores()},30000);
-</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{--primary:#7667b9;--primary-light:#eeeafd;--blue:#5d88a5;--blue-light:#eaf4f8;--green:#69a17f;--green-light:#eaf5ee;--yellow:#bd8d43;--yellow-light:#fff4df;--red:#c96565;--red-light:#fdecec;--text:#2d3742;--muted:#75808c;--background:#f4f6f8;--card:#fff;--border:#e4e9ee;--shadow:0 10px 30px rgba(35,48,65,.07)}
 *{box-sizing:border-box;margin:0;padding:0}body{min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--background);color:var(--text)}button,input,select,textarea{font-family:inherit}button{cursor:pointer}.hidden{display:none!important}
@@ -356,7 +334,9 @@ async function iniciar(){
     if(c.ponto_ativo)$("pontoSection").classList.remove("hidden");
 
     await carregarTudo();
-    oraquiAtualizarIndicadores();
+    if (typeof window.oraquiAtualizarIndicadores === "function") {
+      window.oraquiAtualizarIndicadores().catch(e => console.warn("Indicadores:", e));
+    }
     await atualizarEstadoOffline();
     if(navigator.onLine)await sincronizarFilaOffline();
     if(!MODO_DEMO){try{await registrarServiceWorker();await atualizarEstadoNotificacao()}catch(pushError){console.warn(pushError)}}
@@ -854,6 +834,31 @@ let ultimaDataProgramacoes=hoje();
 setInterval(()=>{if(!colaborador)return;const data=hoje();if(data!==ultimaDataProgramacoes){ultimaDataProgramacoes=data;carregarTudo()}else renderProgramacoes()},60000);
 
 async function carregarFotoColaborador(id){try{const {data,error}=await db.from("colaboradores").select("foto_perfil_path").eq("id",id).single();if(error||!data?.foto_perfil_path)return;const {data:url,error:se}=await db.storage.from("fotos-perfil-privadas").createSignedUrl(data.foto_perfil_path,3600);if(se||!url?.signedUrl)return;const el=document.getElementById("userIcon");if(el){el.replaceChildren();const img=document.createElement("img");img.className="oraqui-profile-photo";img.alt="Foto de perfil";img.src=url.signedUrl;el.append(img);const edit=document.createElement("span");edit.className="oraqui-avatar-edit";edit.textContent="✎";el.append(edit)}}catch(e){console.warn("Foto indisponível",e)}}
+
+
+/* Indicadores: mensagens realmente não lidas no servidor; documentos novos desde a última abertura neste dispositivo. */
+const ORAQUI_DOCS_LAST_PREFIX='oraqui_docs_last_open_';
+function oraquiBadge(id,count){const el=document.getElementById(id);if(!el)return;el.hidden=!count;el.textContent=count>99?'99+':String(count)}
+window.oraquiAtualizarIndicadores = async function oraquiAtualizarIndicadores(){
+ if(!authUser||!colaborador||MODO_DEMO)return;
+ try{
+  const {count,error}=await db.from('oraqui_chat_mensagens').select('id',{count:'exact',head:true}).eq('condominio_id',colaborador.condominio_id).eq('destinatario',authUser.id).is('lida_em',null);
+  if(!error){oraquiBadge('oraquiChatCount',count||0);document.getElementById('oraquiChatCaption').textContent=count?`${count} não lida${count===1?'':'s'}`:'Mensagens';}
+ }catch(e){console.warn('Indicador chat',e)}
+ try{
+  const key=ORAQUI_DOCS_LAST_PREFIX+authUser.id;
+  const last=localStorage.getItem(key);
+  const q=db.from('documentos_colaborador').select('id',{count:'exact',head:true});
+  const {count,error}=await (last?q.gt('created_at',last):q);
+  if(!error){oraquiBadge('oraquiDocsCount',count||0);document.getElementById('oraquiDocsCaption').textContent=count?`${count} novo${count===1?'':'s'}`:'Meus arquivos';}
+ }catch(e){console.warn('Indicador documentos',e)}
+}
+document.getElementById('oraquiQuickDocs')?.addEventListener('click',()=>{if(authUser)localStorage.setItem(ORAQUI_DOCS_LAST_PREFIX+authUser.id,new Date().toISOString())});
+window.addEventListener('pageshow',()=>setTimeout(()=>window.oraquiAtualizarIndicadores?.(),350));
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)window.oraquiAtualizarIndicadores?.()});
+setInterval(()=>{if(!document.hidden)window.oraquiAtualizarIndicadores?.()},30000);
+
 </script>
+<!-- ORAQUI_INDICADORES_FIX_20261009_V2 -->
 </body>
 </html>
