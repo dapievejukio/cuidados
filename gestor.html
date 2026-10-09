@@ -85,6 +85,7 @@ main{max-width:980px;margin:-18px auto 80px;padding:0 16px}.manager-card,.tower-
 <script>
 const SUPABASE_URL="https://rhiosvsohvqqrxzwohqu.supabase.co",SUPABASE_KEY="sb_publishable_vcjiMMCTxQJ7ArTGsQ-PuQ_5gaAfoIt";
 const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY),$=id=>document.getElementById(id);
+let versaoCondominio=0;
 let perfilGestor=null,CONDOMINIO="",CONDOMINIO_ID=null,AMBIENTE_DEMO=false,gestoresCarregados=[],ocorrenciasCarregadas=[],demandasOcorrencias=[],colaboradoresCarregados=[],areasCarregadas=[],pontosCarregados=[],atividadesCarregadas=[],programacoesCarregadas=[],filtroOcorrencias="todas",colaboradorEditandoId=null,areaEditandoId=null,pontoEditandoId=null,atividadeEditandoId=null,programacaoEditandoId=null,ocorrenciaDemandaId=null;const statusSelecionado={};
 const locationList=$("locationList"),activityContainer=$("activityContainer"),occurrenceList=$("occurrenceList"),collaboratorList=$("collaboratorList"),managementList=$("managementList"),configList=$("configList"),errorBox=$("errorBox");
 function esc(t){return String(t??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
@@ -178,6 +179,7 @@ function mostrarEscolhaCondominio(){
   $("condoChoice").classList.add("visible");
 }
 async function selecionarCondominioGestao({p,c}){
+  versaoCondominio++;
   sessionStorage.setItem("oraqui_gestao_condominio_id",String(c.id));
   perfilGestor=p;CONDOMINIO_ID=c.id;CONDOMINIO=c.nome;
   AMBIENTE_DEMO=!!c.ambiente_demo&&Number(c.demo_origem_id)===4&&!!p.acesso_temporario;
@@ -228,6 +230,7 @@ async function sair(){sessionStorage.removeItem("oraqui_gestao_condominio_id");c
 
 async function carregarDados(){
   if(!CONDOMINIO_ID)return;
+  const condoConsulta=CONDOMINIO_ID, versaoConsulta=versaoCondominio;
   semErro();
   try{
     const [ex,ar,po,co,at]=await Promise.all([
@@ -237,6 +240,7 @@ async function carregarDados(){
       db.from("colaboradores").select("id,nome,matricula").eq("condominio_id",CONDOMINIO_ID),
       db.from("atividades_v2").select("id,nome").eq("condominio_id",CONDOMINIO_ID)
     ]);
+    if(versaoConsulta!==versaoCondominio||Number(CONDOMINIO_ID)!==Number(condoConsulta))return;
     for(const r of [ex,ar,po,co,at])if(r.error)throw r.error;
     const areas=ar.data||[],pontos=po.data||[],cols=co.data||[],ats=at.data||[];
     const registros=(ex.data||[]).map(e=>{
@@ -256,7 +260,7 @@ async function carregarDados(){
     $("towerStatus").textContent=registros.length?"Atividades registradas pela equipe.":"Nenhuma atividade registrada hoje.";
     $("towerProgress").style.width=registros.length?"100%":"0%";
     montarLocais(registros);montarUltimos(registros);
-  }catch(e){console.error(e);erro("Não foi possível carregar a operação V2: "+e.message);locationList.innerHTML=vazio("⚠️","Dados indisponíveis","Falha ao consultar execuções.");activityContainer.innerHTML=vazio("⚠️","Dados indisponíveis","Falha ao consultar execuções.")}
+  }catch(e){if(versaoConsulta!==versaoCondominio)return;console.error(e);erro("Não foi possível carregar a operação V2: "+e.message);locationList.innerHTML=vazio("⚠️","Dados indisponíveis","Falha ao consultar execuções.");activityContainer.innerHTML=vazio("⚠️","Dados indisponíveis","Falha ao consultar execuções.")}
 }
 function montarLocais(r){if(!r.length){locationList.innerHTML=vazio("📍","Nenhum registro hoje","As atividades aparecerão aqui.");return}const g={};r.forEach(x=>(g[x.local_nome]??=[]).push(x));locationList.innerHTML=Object.entries(g).map(([local,itens],i)=>`<div class="location-card ${i===0?"open":""}"><div class="location-header"><div class="location-icon">📍</div><div class="location-info"><strong>${esc(local)}</strong><span>${esc([...new Set(itens.map(x=>x.colaborador_nome))].join(", "))}</span></div><span class="location-count">${itens.length} ${itens.length===1?"ITEM":"ITENS"}</span><span>⌄</span></div><div class="location-content">${itens.map(x=>`<div class="record">${foto(x.foto_path,"record-photo")}<div class="record-body"><strong>✓ ${esc(x.item_nome)}</strong><div class="record-meta">${esc(x.colaborador_nome)} • ${hora(x.concluida_em||x.created_at)}</div>${x.observacao?`<div class="record-observation">💬 ${esc(x.observacao)}</div>`:""}</div></div>`).join("")}</div></div>`).join("");locationList.querySelectorAll(".location-card").forEach(c=>c.querySelector(".location-header").onclick=()=>c.classList.toggle("open"))}
 function montarUltimos(r){if(!r.length){activityContainer.innerHTML=vazio("🕘","Sem atividades","Nenhuma atividade foi recebida hoje.");return}activityContainer.innerHTML=`<div class="activity-list">${r.slice(0,20).map(x=>`<div class="activity-row">${foto(x.foto_path,"activity-photo")}<div class="activity-info"><strong>${esc(x.item_nome)}</strong><span>${esc(x.local_nome)} • ${esc(x.colaborador_nome)}</span></div><div class="activity-time">${hora(x.concluida_em||x.created_at)}</div></div>`).join("")}</div>`}
@@ -296,10 +300,12 @@ function botoesFotoOcorrencia(o){
 }
 async function carregarOcorrencias(){
   if(!CONDOMINIO)return;
+  const condoConsulta=CONDOMINIO_ID, nomeConsulta=CONDOMINIO, versaoConsulta=versaoCondominio;
   const [oc,dm]=await Promise.all([
-    db.from("ocorrencias").select("*").eq("condominio",CONDOMINIO).eq("ambiente","producao").order("created_at",{ascending:false}),
-    db.from("demandas").select("*").eq("condominio_id",CONDOMINIO_ID).eq("ambiente","producao").not("ocorrencia_id","is",null).order("created_at",{ascending:false})
+    db.from("ocorrencias").select("*").eq("condominio",nomeConsulta).eq("ambiente","producao").order("created_at",{ascending:false}),
+    db.from("demandas").select("*").eq("condominio_id",condoConsulta).eq("ambiente","producao").not("ocorrencia_id","is",null).order("created_at",{ascending:false})
   ]);
+  if(versaoConsulta!==versaoCondominio||Number(CONDOMINIO_ID)!==Number(condoConsulta))return;
   if(oc.error){occurrenceList.innerHTML=vazio("⚠️","Erro",oc.error.message);return}
   if(dm.error){occurrenceList.innerHTML=vazio("⚠️","Erro ao carregar encaminhamentos",dm.error.message);return}
   ocorrenciasCarregadas=oc.data||[];
@@ -563,7 +569,9 @@ function podeAdministrarGestao(){return !!perfilGestor&&["admin_cliente","admin_
 function aplicarPermissoesGestao(){const a=podeAdministrarGestao();$("addManager").classList.toggle("hidden",!a);$("managementPermissionNote").classList.toggle("hidden",a)}
 async function carregarGestores(){
  if(!CONDOMINIO_ID)return;
+ const versaoConsulta=versaoCondominio;
  const {data,error}=await db.from("usuarios_gestao").select("id,auth_user_id,condominio_id,nome,perfil,ativo,created_at,updated_at").eq("condominio_id",CONDOMINIO_ID).order("ativo",{ascending:false}).order("nome");
+ if(versaoConsulta!==versaoCondominio)return;
  if(error){managementList.innerHTML=vazio("⚠️","Erro ao carregar gestão",error.message);return}
  gestoresCarregados=data||[];const admin=podeAdministrarGestao();
  managementList.innerHTML=gestoresCarregados.length?gestoresCarregados.map(g=>{const atual=Number(g.id)===Number(perfilGestor?.id),pl=g.perfil==="admin_cliente"?"ADMINISTRADOR":g.perfil==="admin_oraqui"?"ADMIN ORAQUI":g.perfil==="supervisor"?"SUPERVISOR":"GESTOR",pa=admin&&g.perfil!=="admin_oraqui"&&!atual;return `<div class="collaborator-card" data-g="${g.id}"><div class="collaborator-top"><div class="collaborator-avatar">${g.perfil==="admin_cliente"||g.perfil==="admin_oraqui"?"👑":"👤"}</div><div class="collaborator-info"><strong>${esc(g.nome)}${atual?" • você":""}</strong><span>${esc(CONDOMINIO)}</span></div><span class="${g.ativo?"active-badge":"inactive-badge"}">${g.ativo?"ATIVO":"INATIVO"}</span></div><div class="collaborator-flags"><span class="role-badge">${pl}</span></div>${pa?`<div class="collaborator-actions"><button class="action-button resend-manager">REENVIAR CONVITE</button><button class="action-button toggle-manager ${g.ativo?"danger":"success"}">${g.ativo?"DESATIVAR GESTOR":"REATIVAR GESTOR"}</button></div>`:""}</div>`}).join(""):vazio("👥","Nenhum gestor","Ainda não há usuários de gestão vinculados.");
@@ -641,6 +649,7 @@ async function toggleGestor(id){
 
 async function carregarColaboradores(){
   if(!CONDOMINIO_ID)return;
+  const versaoConsulta=versaoCondominio;
   collaboratorList.innerHTML=vazio("⏳","Carregando equipe","Buscando colaboradores do condomínio...");
 
   const {data,error}=await db
@@ -650,6 +659,7 @@ async function carregarColaboradores(){
     .order("ativo",{ascending:false})
     .order("nome");
 
+  if(versaoConsulta!==versaoCondominio)return;
   if(error){
     console.error("Erro ao carregar colaboradores:",error);
     $("colActive").textContent="0";
@@ -833,21 +843,31 @@ async function toggleCol(id){
   await carregarColaboradores();
 }
 
-async function carregarConfig(){const [a,p]=await Promise.all([db.from("areas").select("*").eq("condominio_id",CONDOMINIO_ID).order("ordem").order("nome"),db.from("pontos").select("*").eq("condominio_id",CONDOMINIO_ID).order("ordem").order("nome")]);if(a.error||p.error)return configList.innerHTML=vazio("⚠️","Erro",(a.error||p.error).message);areasCarregadas=a.data||[];pontosCarregados=p.data||[];configList.innerHTML=areasCarregadas.map(a=>{const ps=pontosCarregados.filter(p=>p.area_id===a.id);return `<div class="config-card" data-a="${a.id}"><div class="config-top"><div class="config-icon">📍</div><div class="config-info"><strong>${esc(a.nome)}</strong><span>${ps.length} pontos • ordem ${a.ordem}</span></div><span class="${a.ativo?"active-badge":"inactive-badge"}">${a.ativo?"ATIVA":"INATIVA"}</span></div>${a.descricao?`<div class="record-observation">${esc(a.descricao)}</div>`:""}<div class="config-flags"><span class="flag ${a.visivel_colaborador?"on":""}">COLABORADOR ${a.visivel_colaborador?"ON":"OFF"}</span><span class="flag ${a.visivel_ocorrencia?"on":""}">OCORRÊNCIA ${a.visivel_ocorrencia?"ON":"OFF"}</span></div><div class="config-actions"><button class="action-button edit-a">EDITAR ÁREA</button><button class="action-button add-p">＋ PONTO</button></div>${ps.map(p=>`<div class="point-row" data-p="${p.id}"><div class="config-info"><strong>${esc(p.nome)}</strong><span>ordem ${p.ordem} • ${p.ativo?"ativo":"inativo"}</span></div><div class="point-actions"><button class="mini edit-p">EDITAR</button><button class="mini danger toggle-p">${p.ativo?"DESATIVAR":"REATIVAR"}</button></div></div>`).join("")}</div>`}).join("");configList.querySelectorAll("[data-a]").forEach(el=>{const id=Number(el.dataset.a);el.querySelector(".edit-a").onclick=()=>editarArea(id);el.querySelector(".add-p").onclick=()=>novoPonto(id);el.querySelectorAll("[data-p]").forEach(row=>{const pid=Number(row.dataset.p);row.querySelector(".edit-p").onclick=()=>editarPonto(pid);row.querySelector(".toggle-p").onclick=()=>togglePonto(pid)})})}
+async function carregarConfig(){const versaoConsulta=versaoCondominio;const [a,p]=await Promise.all([db.from("areas").select("*").eq("condominio_id",CONDOMINIO_ID).order("ordem").order("nome"),db.from("pontos").select("*").eq("condominio_id",CONDOMINIO_ID).order("ordem").order("nome")]);if(versaoConsulta!==versaoCondominio)return;if(a.error||p.error)return configList.innerHTML=vazio("⚠️","Erro",(a.error||p.error).message);areasCarregadas=a.data||[];pontosCarregados=p.data||[];configList.innerHTML=areasCarregadas.map(a=>{const ps=pontosCarregados.filter(p=>p.area_id===a.id);return `<div class="config-card" data-a="${a.id}"><div class="config-top"><div class="config-icon">📍</div><div class="config-info"><strong>${esc(a.nome)}</strong><span>${ps.length} pontos • ordem ${a.ordem}</span></div><span class="${a.ativo?"active-badge":"inactive-badge"}">${a.ativo?"ATIVA":"INATIVA"}</span></div>${a.descricao?`<div class="record-observation">${esc(a.descricao)}</div>`:""}<div class="config-flags"><span class="flag ${a.visivel_colaborador?"on":""}">COLABORADOR ${a.visivel_colaborador?"ON":"OFF"}</span><span class="flag ${a.visivel_ocorrencia?"on":""}">OCORRÊNCIA ${a.visivel_ocorrencia?"ON":"OFF"}</span></div><div class="config-actions"><button class="action-button edit-a">EDITAR ÁREA</button><button class="action-button add-p">＋ PONTO</button></div>${ps.map(p=>`<div class="point-row" data-p="${p.id}"><div class="config-info"><strong>${esc(p.nome)}</strong><span>ordem ${p.ordem} • ${p.ativo?"ativo":"inativo"}</span></div><div class="point-actions"><button class="mini edit-p">EDITAR</button><button class="mini danger toggle-p">${p.ativo?"DESATIVAR":"REATIVAR"}</button></div></div>`).join("")}</div>`}).join("");configList.querySelectorAll("[data-a]").forEach(el=>{const id=Number(el.dataset.a);el.querySelector(".edit-a").onclick=()=>editarArea(id);el.querySelector(".add-p").onclick=()=>novoPonto(id);el.querySelectorAll("[data-p]").forEach(row=>{const pid=Number(row.dataset.p);row.querySelector(".edit-p").onclick=()=>editarPonto(pid);row.querySelector(".toggle-p").onclick=()=>togglePonto(pid)})})}
 function novaArea(){areaEditandoId=null;$("areaModalTitle").textContent="Nova área";$("areaNome").value="";$("areaDescricao").value="";$("areaOrdem").value=(Math.max(0,...areasCarregadas.map(a=>Number(a.ordem)||0))+1);$("areaColaborador").checked=$("areaOcorrencia").checked=true;$("areaModal").classList.add("visible")}
 function editarArea(id){const a=areasCarregadas.find(x=>x.id===id);areaEditandoId=id;$("areaModalTitle").textContent="Editar área";$("areaNome").value=a.nome;$("areaDescricao").value=a.descricao||"";$("areaOrdem").value=a.ordem;$("areaColaborador").checked=a.visivel_colaborador;$("areaOcorrencia").checked=a.visivel_ocorrencia;$("areaModal").classList.add("visible")}
-async function salvarArea(){const payload={nome:$("areaNome").value.trim(),descricao:$("areaDescricao").value.trim()||null,ordem:Number($("areaOrdem").value)||0,visivel_colaborador:$("areaColaborador").checked,visivel_ocorrencia:$("areaOcorrencia").checked,ativo:true,updated_at:new Date().toISOString()};if(!payload.nome)return alert("Informe o nome.");let q=areaEditandoId?db.from("areas").update(payload).eq("id",areaEditandoId).eq("condominio_id",CONDOMINIO_ID):db.from("areas").insert({...payload,condominio_id:CONDOMINIO_ID});const {error}=await q;if(error)return alert(error.message);$("areaModal").classList.remove("visible");await carregarConfig()}
+async function salvarArea(){const payload={nome:$("areaNome").value.trim(),descricao:$("areaDescricao").value.trim()||null,ordem:Number($("areaOrdem").value)||0,visivel_colaborador:$("areaColaborador").checked,visivel_ocorrencia:$("areaOcorrencia").checked,...(areaEditandoId?{}:{ativo:true}),updated_at:new Date().toISOString()};if(!payload.nome)return alert("Informe o nome.");let q=areaEditandoId?db.from("areas").update(payload).eq("id",areaEditandoId).eq("condominio_id",CONDOMINIO_ID):db.from("areas").insert({...payload,condominio_id:CONDOMINIO_ID});const {error}=await q;if(error)return alert(error.message);$("areaModal").classList.remove("visible");await carregarConfig()}
 function popularAreas(sel){$("pointArea").innerHTML=areasCarregadas.filter(a=>a.ativo).map(a=>`<option value="${a.id}" ${a.id===sel?"selected":""}>${esc(a.nome)}</option>`).join("")}
 function novoPonto(aid){pontoEditandoId=null;popularAreas(aid);$("pointNome").value="";$("pointDescricao").value="";$("pointOrdem").value=Math.max(0,...pontosCarregados.filter(p=>p.area_id===aid).map(p=>Number(p.ordem)||0))+1;$("pointColaborador").checked=$("pointOcorrencia").checked=true;$("pointModal").classList.add("visible")}
 function editarPonto(id){const p=pontosCarregados.find(x=>x.id===id);pontoEditandoId=id;popularAreas(p.area_id);$("pointNome").value=p.nome;$("pointDescricao").value=p.descricao||"";$("pointOrdem").value=p.ordem;$("pointColaborador").checked=p.visivel_colaborador;$("pointOcorrencia").checked=p.visivel_ocorrencia;$("pointModal").classList.add("visible")}
-async function salvarPonto(){const payload={area_id:Number($("pointArea").value),nome:$("pointNome").value.trim(),descricao:$("pointDescricao").value.trim()||null,ordem:Number($("pointOrdem").value)||0,visivel_colaborador:$("pointColaborador").checked,visivel_ocorrencia:$("pointOcorrencia").checked,ativo:true,updated_at:new Date().toISOString()};if(!payload.nome)return alert("Informe o nome.");let q=pontoEditandoId?db.from("pontos").update(payload).eq("id",pontoEditandoId).eq("condominio_id",CONDOMINIO_ID):db.from("pontos").insert({...payload,condominio_id:CONDOMINIO_ID});const {error}=await q;if(error)return alert(error.message);$("pointModal").classList.remove("visible");await carregarConfig()}
-async function togglePonto(id){const p=pontosCarregados.find(x=>x.id===id);await db.from("pontos").update({ativo:!p.ativo,updated_at:new Date().toISOString()}).eq("id",id);await carregarConfig()}
+async function salvarPonto(){const payload={area_id:Number($("pointArea").value),nome:$("pointNome").value.trim(),descricao:$("pointDescricao").value.trim()||null,ordem:Number($("pointOrdem").value)||0,visivel_colaborador:$("pointColaborador").checked,visivel_ocorrencia:$("pointOcorrencia").checked,...(pontoEditandoId?{}:{ativo:true}),updated_at:new Date().toISOString()};if(!payload.nome)return alert("Informe o nome.");let q=pontoEditandoId?db.from("pontos").update(payload).eq("id",pontoEditandoId).eq("condominio_id",CONDOMINIO_ID):db.from("pontos").insert({...payload,condominio_id:CONDOMINIO_ID});const {error}=await q;if(error)return alert(error.message);$("pointModal").classList.remove("visible");await carregarConfig()}
+async function togglePonto(id){
+  const p=pontosCarregados.find(x=>Number(x.id)===Number(id));
+  if(!p)return alert("Ponto não encontrado.");
+  const condominioId=CONDOMINIO_ID;
+  const {data,error}=await db.from("pontos")
+    .update({ativo:!p.ativo,updated_at:new Date().toISOString()})
+    .eq("id",id).eq("condominio_id",condominioId).select("id");
+  if(error)return alert("Não foi possível alterar o ponto: "+error.message);
+  if(!data?.length)return alert("Ponto não encontrado ou sem permissão para alteração.");
+  if(Number(CONDOMINIO_ID)===Number(condominioId))await carregarConfig();
+}
 
-async function carregarAP(){const[a,p,c]=await Promise.all([db.from("atividades_v2").select("*").eq("condominio_id",CONDOMINIO_ID).order("nome"),db.from("programacoes").select("*").eq("condominio_id",CONDOMINIO_ID).order("created_at",{ascending:false}),db.from("colaboradores").select("id,nome,funcao,ativo").eq("condominio_id",CONDOMINIO_ID).eq("ativo",true).order("nome")]);if(a.error)throw a.error;if(p.error)throw p.error;if(c.error)throw c.error;atividadesCarregadas=a.data||[];programacoesCarregadas=p.data||[];colaboradoresCarregados=c.data||[];renderAt();renderPr()}
+async function carregarAP(){const versaoConsulta=versaoCondominio;const[a,p,c]=await Promise.all([db.from("atividades_v2").select("*").eq("condominio_id",CONDOMINIO_ID).order("nome"),db.from("programacoes").select("*").eq("condominio_id",CONDOMINIO_ID).order("created_at",{ascending:false}),db.from("colaboradores").select("id,nome,funcao,ativo").eq("condominio_id",CONDOMINIO_ID).eq("ativo",true).order("nome")]);if(versaoConsulta!==versaoCondominio)return;if(a.error)throw a.error;if(p.error)throw p.error;if(c.error)throw c.error;atividadesCarregadas=a.data||[];programacoesCarregadas=p.data||[];colaboradoresCarregados=c.data||[];renderAt();renderPr()}
 function subConfig(t){$("subAreas").classList.toggle("active",t==="a");$("subAtividades").classList.toggle("active",t==="t");$("subProgramacoes").classList.toggle("active",t==="p");$("configAreas").classList.toggle("hidden",t!=="a");$("configAtividades").classList.toggle("hidden",t!=="t");$("configProgramacoes").classList.toggle("hidden",t!=="p");if(t!=="a")carregarAP().catch(e=>alert("Erro: "+e.message))}
 function renderAt(){let e=$("atividadeList");e.innerHTML=atividadesCarregadas.length?atividadesCarregadas.map(a=>`<div class="config-card" data-at="${a.id}"><div class="config-top"><div class="config-icon">🧹</div><div class="config-info"><strong>${esc(a.nome)}</strong><span>${esc(a.descricao||"Sem descrição")}</span></div><span class="${a.ativo?"active-badge":"inactive-badge"}">${a.ativo?"ATIVA":"INATIVA"}</span></div><div class="config-flags"><span class="flag ${a.exige_foto?"on":""}">FOTO ${a.exige_foto?"SIM":"NÃO"}</span><span class="flag ${a.exige_observacao?"on":""}">OBS ${a.exige_observacao?"SIM":"NÃO"}</span></div><div class="config-actions"><button class="action-button edit">EDITAR</button><button class="action-button toggle">${a.ativo?"DESATIVAR":"REATIVAR"}</button></div></div>`).join(""):vazio("🧹","Nenhuma atividade","Cadastre a primeira.");e.querySelectorAll("[data-at]").forEach(x=>{let id=+x.dataset.at,a=atividadesCarregadas.find(z=>z.id===id);x.querySelector(".edit").onclick=()=>editAt(id);x.querySelector(".toggle").onclick=()=>toggleAt(id,!a.ativo)})}
 function openAt(){atividadeEditandoId=null;$("atividadeNome").value="";$("atividadeDescricao").value="";$("atividadeFoto").checked=false;$("atividadeObs").checked=false;$("atividadeModal").classList.add("visible")}function editAt(id){let a=atividadesCarregadas.find(x=>x.id===id);atividadeEditandoId=id;$("atividadeNome").value=a.nome;$("atividadeDescricao").value=a.descricao||"";$("atividadeFoto").checked=!!a.exige_foto;$("atividadeObs").checked=!!a.exige_observacao;$("atividadeModal").classList.add("visible")}function closeAt(){$("atividadeModal").classList.remove("visible");atividadeEditandoId=null}
-async function saveAt(){let nome=$("atividadeNome").value.trim();if(!nome)return alert("Informe o nome.");let v={nome,descricao:$("atividadeDescricao").value.trim()||null,exige_foto:$("atividadeFoto").checked,exige_observacao:$("atividadeObs").checked,ativo:true,updated_at:new Date().toISOString()};let q=atividadeEditandoId?db.from("atividades_v2").update(v).eq("id",atividadeEditandoId).eq("condominio_id",CONDOMINIO_ID):db.from("atividades_v2").insert({...v,condominio_id:CONDOMINIO_ID});let{error}=await q;if(error)return alert(error.message);closeAt();await carregarAP()}
+async function saveAt(){let nome=$("atividadeNome").value.trim();if(!nome)return alert("Informe o nome.");let v={nome,descricao:$("atividadeDescricao").value.trim()||null,exige_foto:$("atividadeFoto").checked,exige_observacao:$("atividadeObs").checked,...(atividadeEditandoId?{}:{ativo:true}),updated_at:new Date().toISOString()};let q=atividadeEditandoId?db.from("atividades_v2").update(v).eq("id",atividadeEditandoId).eq("condominio_id",CONDOMINIO_ID):db.from("atividades_v2").insert({...v,condominio_id:CONDOMINIO_ID});let{error}=await q;if(error)return alert(error.message);closeAt();await carregarAP()}
 async function toggleAt(id,ativo){let{error}=await db.from("atividades_v2").update({ativo,updated_at:new Date().toISOString()}).eq("id",id).eq("condominio_id",CONDOMINIO_ID);if(error)return alert(error.message);await carregarAP()}
 function diasNome(d){if(!d?.length)return"Todos os dias";let n={1:"Seg",2:"Ter",3:"Qua",4:"Qui",5:"Sex",6:"Sáb",7:"Dom"};return d.map(x=>n[x]||x).join(", ")}
 function renderPr(){let e=$("programacaoList");e.innerHTML=programacoesCarregadas.length?programacoesCarregadas.map(p=>{let a=atividadesCarregadas.find(x=>x.id===p.atividade_id),ar=areasCarregadas.find(x=>x.id===p.area_id),pt=pontosCarregados.find(x=>x.id===p.ponto_id),c=colaboradoresCarregados.find(x=>x.id===p.colaborador_id);return`<div class="config-card" data-pr="${p.id}"><div class="config-top"><div class="config-icon">📅</div><div class="config-info"><strong>${esc(a?.nome||"Atividade")}</strong><span>${esc([ar?.nome,pt?.nome].filter(Boolean).join(" • "))} • ${esc(c?.nome||p.funcao||"Equipe")}</span></div><span class="${p.ativo?"active-badge":"inactive-badge"}">${p.ativo?"ATIVA":"INATIVA"}</span></div><div class="record-observation">${esc(diasNome(p.dias_semana))}${p.horario_limite?" • até "+String(p.horario_limite).slice(0,5):""}</div><div class="config-actions"><button class="action-button edit">EDITAR</button><button class="action-button toggle">${p.ativo?"DESATIVAR":"REATIVAR"}</button></div></div>`}).join(""):vazio("📅","Nenhuma programação","Crie a primeira rotina.");e.querySelectorAll("[data-pr]").forEach(x=>{let id=+x.dataset.pr,p=programacoesCarregadas.find(z=>z.id===id);x.querySelector(".edit").onclick=()=>editPr(id);x.querySelector(".toggle").onclick=()=>togglePr(id,!p.ativo)})}
@@ -890,7 +910,7 @@ async function savePr(){
     exige_foto:$("progFoto").checked,
     exige_observacao:$("progObs").checked,
     instrucoes:$("progInstrucoes").value.trim()||null,
-    ativo:true,
+    ...(programacaoEditandoId?{}:{ativo:true}),
     updated_at:new Date().toISOString()
   };
 
@@ -944,7 +964,18 @@ $("closePoint").onclick=$("cancelPoint").onclick=()=>$("pointModal").classList.r
 $("subAreas").onclick=()=>subConfig("a");$("subAtividades").onclick=()=>subConfig("t");$("subProgramacoes").onclick=()=>subConfig("p");$("addAtividade").onclick=openAt;$("closeAtividade").onclick=$("cancelAtividade").onclick=closeAt;$("saveAtividade").onclick=saveAt;$("addProgramacao").onclick=openPr;$("closeProgramacao").onclick=$("cancelProgramacao").onclick=closePr;$("saveProgramacao").onclick=savePr;$("progArea").onchange=()=>fillPoints();$("progDestino").onchange=dest;document.querySelectorAll(".filter").forEach(b=>b.onclick=()=>{filtroOcorrencias=b.dataset.filter;document.querySelectorAll(".filter").forEach(x=>x.classList.remove("active"));b.classList.add("active");renderOcorrencias()});
 }
 async function iniciar(){eventos();$("todayDate").textContent=new Date().toLocaleDateString("pt-BR");const {data:{session}}=await db.auth.getSession();if(session){try{await validarGestor(session.user)}catch(e){console.error(e);$("authError").textContent=e.message;$("authError").style.display="block"}}}
-iniciar();setInterval(()=>{if(perfilGestor){carregarDados();carregarOcorrencias()}},60000);
+iniciar();
+let atualizacaoAutomaticaEmAndamento=false;
+setInterval(async()=>{
+  if(!perfilGestor||document.hidden||atualizacaoAutomaticaEmAndamento)return;
+  const versaoConsulta=versaoCondominio;
+  atualizacaoAutomaticaEmAndamento=true;
+  try{
+    if($("panelOperacao").classList.contains("active"))await carregarDados();
+    else if($("panelOcorrencias").classList.contains("active"))await carregarOcorrencias();
+  }catch(e){if(versaoConsulta===versaoCondominio)console.warn("Atualização automática:",e)}
+  finally{atualizacaoAutomaticaEmAndamento=false}
+},60000);
 </script>
 </body>
 </html>
