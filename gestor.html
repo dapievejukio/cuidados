@@ -128,7 +128,7 @@ async function ativarPushGestao(){
     let sub=await reg.pushManager.getSubscription();
     if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:base64UrlToUint8Array(VAPID_PUBLIC_KEY)});
     const j=sub.toJSON();
-    const {data,error}=await db.rpc("registrar_push_gestao",{p_endpoint:j.endpoint,p_p256dh:j.keys?.p256dh,p_auth:j.keys?.auth,p_user_agent:navigator.userAgent});
+    const {data,error}=await db.rpc("registrar_push_gestao",{p_endpoint:j.endpoint,p_p256dh:j.keys?.p256dh,p_auth:j.keys?.auth,p_user_agent:navigator.userAgent,p_condominio_id:CONDOMINIO_ID});
     if(error)throw error;if(data?.ok===false)throw new Error(data.error||"Não foi possível vincular este aparelho à gestão.");
     toast("🔔 Notificações da gestão ativadas.");await atualizarEstadoPushGestao();
   }catch(e){console.error(e);alert(e.message||"Não foi possível ativar as notificações.")}
@@ -158,8 +158,9 @@ async function validarGestor(user){
   if(!vinculosGestaoValidos.length)throw new Error("Nenhum condomínio ativo disponível para esta conta.");
   const params=new URLSearchParams(location.search);
   const slug=params.get("condominio");
+  const idAlvo=Number(slug);
   const armazenado=sessionStorage.getItem("oraqui_gestao_condominio_id");
-  const escolhido=(slug&&vinculosGestaoValidos.find(x=>x.c.slug===slug))
+  const escolhido=(slug&&vinculosGestaoValidos.find(x=>x.c.slug===slug||Number(x.c.id)===idAlvo))
     ||(armazenado&&vinculosGestaoValidos.find(x=>String(x.c.id)===armazenado))
     ||(vinculosGestaoValidos.length===1?vinculosGestaoValidos[0]:null);
   if(!escolhido){mostrarEscolhaCondominio();return;}
@@ -191,6 +192,11 @@ async function selecionarCondominioGestao({p,c}){
   aplicarPermissoesGestao();
   await Promise.all([carregarDados(),carregarOcorrencias()]);
   await atualizarEstadoPushGestao();
+  const ocorrenciaAlvo=Number(new URLSearchParams(location.search).get("ocorrencia"));
+  if(ocorrenciaAlvo){
+    const card=document.querySelector(`[data-occ="${ocorrenciaAlvo}"]`);
+    if(card){card.scrollIntoView({behavior:"smooth",block:"center"});card.style.outline="3px solid #E3A52C";}
+  }
 }
 
 async function abrirDemoColaborador(){
