@@ -51,6 +51,19 @@ main{max-width:720px;margin:-18px auto 80px;padding:0 15px}.user-card,.card,.ite
 .modal{position:fixed;inset:0;z-index:1000;display:none;align-items:flex-end;justify-content:center;background:rgba(25,32,45,.66)}.modal.visible{display:flex}.modal-card{width:100%;max-width:620px;max-height:92vh;overflow:auto;padding:21px;border-radius:25px 25px 0 0;background:#fff}.modal-head{display:flex;justify-content:space-between;align-items:center}.modal-head h2{font-size:18px}.close{width:38px;height:38px;border:0;border-radius:50%;background:#eef1f3;font-size:18px}.selection{margin-top:14px;padding:12px;border-radius:13px;background:var(--blue-light);color:var(--blue);font-size:9px;font-weight:800;line-height:1.5}.field{margin-top:14px}.field label{display:block;margin-bottom:6px;color:var(--muted);font-size:8px;font-weight:900}.field select,.field textarea{width:100%;border:1px solid var(--border);border-radius:14px;background:#fff;outline:none}.field select{height:49px;padding:0 12px}.field textarea{min-height:105px;padding:12px;resize:vertical}.photo-button{width:100%;min-height:51px;margin-top:14px;border:1.5px dashed #b8c6d4;border-radius:14px;background:#f7fafc;color:var(--blue);font-size:9px;font-weight:900}.photo-button.has{background:var(--green-light);color:var(--green);border-color:#a9d9bf}.photo-input{display:none}.preview{display:none;width:100%;max-height:320px;object-fit:cover;margin-top:10px;border-radius:14px}.preview.visible{display:block}.offline-card{margin-top:14px;border:1px solid #d6e3f0;background:#eef6ff;border-radius:16px;padding:13px;font-size:11px;line-height:1.5}.offline-card strong{display:block}.offline-card button{border:0;border-radius:9px;background:#5d88a5;color:white;padding:10px;margin-top:9px;font-weight:700}.offline-card button:disabled{opacity:.5}.confirm{width:100%;min-height:54px;margin-top:16px;border:0;border-radius:14px;background:var(--green);color:#fff;font-size:9px;font-weight:900}.confirm:disabled{opacity:.5}
 .toast{position:fixed;z-index:2000;left:50%;bottom:25px;transform:translateX(-50%) translateY(30px);opacity:0;padding:12px 18px;border-radius:14px;background:#25313c;color:#fff;font-size:9px;font-weight:800;transition:.25s}.toast.visible{opacity:1;transform:translateX(-50%) translateY(0)}
 @media(min-width:650px){.modal{align-items:center}.modal-card{border-radius:25px}.point-actions{grid-template-columns:repeat(4,1fr)}}
+/* Histórico de demandas: dia atual visível, dias anteriores recolhidos */
+.demandas-grupo-titulo{font-size:12px;font-weight:800;color:var(--green);padding:10px 4px 2px}
+.demanda-antiga{display:flex;align-items:center;gap:10px;background:#fff;border-radius:13px;padding:11px 13px;min-width:0}
+.demanda-antiga-icone{color:var(--green);font-size:17px;font-weight:800}
+.demanda-antiga>div{flex:1;min-width:0}
+.demanda-antiga strong{display:block;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.demanda-antiga small{display:block;font-size:9px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:3px}
+.demandas-anteriores{border:1px solid var(--border);background:#fff;border-radius:15px;overflow:hidden}
+.demandas-anteriores summary{cursor:pointer;padding:14px;font-size:12px;font-weight:800;color:var(--text);list-style:none}
+.demandas-anteriores summary::-webkit-details-marker{display:none}
+.demandas-anteriores[open] summary{border-bottom:1px solid var(--border)}
+.demandas-anteriores[open] summary::first-letter{color:var(--primary)}
+.demandas-anteriores-lista{display:flex;flex-direction:column;gap:5px;padding:8px;background:#f4f6f8}
 </style>
 </head>
 <body>
@@ -427,20 +440,46 @@ async function registrarPonto(tipo){
   }catch(e){alert(e.message||"Não foi possível registrar o ponto.")}
 }
 
+function dataLocalRegistro(valor){
+  if(!valor)return null;
+  const d=new Date(valor);
+  if(Number.isNaN(d.getTime()))return null;
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+}
+
+function demandaConcluidaHoje(d){
+  if(d.status!=="concluida")return false;
+  // Não usar created_at: a demanda pode ter sido criada em outro dia.
+  return dataLocalRegistro(d.concluida_em||d.updated_at)===hoje();
+}
+
+function htmlDemanda(d,compacta=false){
+  const urgente=d.tipo==="urgente"||d.prioridade==="urgente";
+  const pendente=urgente&&d.status!=="concluida";
+  if(compacta){
+    return `<div class="demanda-antiga"><span class="demanda-antiga-icone">✓</span><div><strong>${esc(d.titulo||"Demanda")}</strong><small>${esc(d.descricao||"Concluída")}</small></div><span class="badge green">CONCLUÍDA</span></div>`;
+  }
+  return `<div class="item-card" style="${pendente?'border:3px solid #dc2626;background:#fff7f7;box-shadow:0 0 0 3px #fecaca;':''}"><div class="item-top"><div class="item-icon">${urgente?"🚨":d.tipo==="recado"?"💬":"✓"}</div><div class="item-info"><strong>${esc(d.titulo)}</strong><span>${esc(d.tipo||"tarefa")} • ${esc(d.status)}${d.prazo_em?" • prazo "+hora(d.prazo_em):""}</span></div><span class="badge ${urgente?"red":"purple"}">${urgente?"🚨 URGENTE":esc(String(d.tipo||"tarefa").toUpperCase())}</span></div>${d.descricao?`<div class="item-description">${esc(d.descricao)}</div>`:""}<div class="item-actions">${d.status==="pendente"?`<button class="action secondary" onclick="mudarDemanda(${d.id},'visualizada')">MARCAR COMO LIDA</button>`:""}${d.tipo!=="recado"&&d.status!=="concluida"?`<button class="action" onclick="mudarDemanda(${d.id},'concluida')">CONCLUIR</button>`:""}</div></div>`;
+}
+
 function renderDemandas(){
-  if(!demandas.length){$("demandas").className="";$("demandas").innerHTML=vazio("Nenhuma demanda pendente","Recados e tarefas enviados pela gestão aparecerão aqui.");return}
+  const box=$("demandas");
   const urgente=d=>d.tipo==="urgente"||d.prioridade==="urgente";
-  const lista=[...demandas].sort((a,b)=>Number(urgente(b)&&b.status!=="concluida")-Number(urgente(a)&&a.status!=="concluida"));
-  const urgentes=lista.filter(d=>urgente(d)&&d.status!=="concluida");
+  const abertas=demandas.filter(d=>d.status!=="concluida");
+  const concluidasHoje=demandas.filter(d=>demandaConcluidaHoje(d));
+  const antigas=demandas.filter(d=>d.status==="concluida"&&!demandaConcluidaHoje(d));
+  const urgentes=abertas.filter(urgente);
+  const lista=[...abertas].sort((a,b)=>Number(urgente(b))-Number(urgente(a)));
   $("secaoDemandas").style.border=urgentes.length?"3px solid #dc2626":"";
   $("secaoDemandas").style.borderRadius=urgentes.length?"18px":"";
   $("secaoDemandas").style.background=urgentes.length?"#fff1f2":"";
-  $("demandas").className="list";
-  $("demandas").innerHTML=(urgentes.length?`<div role="alert" style="padding:14px;background:#b91c1c;color:white;border-radius:12px;font-weight:900;font-size:16px">🚨 ${urgentes.length} DEMANDA(S) URGENTE(S) — ATENÇÃO IMEDIATA</div>`:"")+lista.map(d=>{
-    const u=urgente(d),pendente=u&&d.status!=="concluida";
-    return `<div class="item-card" style="${pendente?'border:3px solid #dc2626;background:#fff7f7;box-shadow:0 0 0 3px #fecaca;':''}"><div class="item-top"><div class="item-icon">${u?"🚨":d.tipo==="recado"?"💬":"✓"}</div><div class="item-info"><strong>${esc(d.titulo)}</strong><span>${esc(d.tipo||"tarefa")} • ${esc(d.status)}${d.prazo_em?" • prazo "+hora(d.prazo_em):""}</span></div><span class="badge ${u?"red":"purple"}">${u?"🚨 URGENTE":esc(String(d.tipo||"tarefa").toUpperCase())}</span></div>${d.descricao?`<div class="item-description">${esc(d.descricao)}</div>`:""}<div class="item-actions">${d.status==="pendente"?`<button class="action secondary" onclick="mudarDemanda(${d.id},'visualizada')">MARCAR COMO LIDA</button>`:""}${d.tipo!=="recado"&&d.status!=="concluida"?`<button class="action" onclick="mudarDemanda(${d.id},'concluida')">CONCLUIR</button>`:""}</div></div>`
-  }).join("");
-  if(urgentes.length&&!window.__urgenteAvisado){window.__urgenteAvisado=true;setTimeout(()=>$("secaoDemandas").scrollIntoView({behavior:"smooth",block:"start"}),400)}
+  box.className="list";
+  const alerta=urgentes.length?`<div role="alert" style="padding:14px;background:#b91c1c;color:white;border-radius:12px;font-weight:900;font-size:16px">🚨 ${urgentes.length} DEMANDA(S) URGENTE(S) — ATENÇÃO IMEDIATA</div>`:"";
+  const ativas=lista.map(d=>htmlDemanda(d)).join("");
+  const hojeHtml=concluidasHoje.length?`<div class="demandas-grupo-titulo">✓ Concluídas hoje (${concluidasHoje.length})</div>${concluidasHoje.map(d=>htmlDemanda(d,true)).join("")}`:"";
+  const anteriores=antigas.length?`<details class="demandas-anteriores"><summary>▸ Dias anteriores (${antigas.length})</summary><div class="demandas-anteriores-lista">${antigas.map(d=>htmlDemanda(d,true)).join("")}</div></details>`:"";
+  box.innerHTML=alerta+ativas+hojeHtml+anteriores||vazio("Nenhuma demanda pendente","Recados e tarefas enviados pela gestão aparecerão aqui.");
+  if(urgentes.length&&!window.__urgenteAvisado){window.__urgenteAvisado=true;setTimeout(()=>$('secaoDemandas').scrollIntoView({behavior:'smooth',block:'start'}),400)}
   if(!urgentes.length)window.__urgenteAvisado=false;
 }
 
