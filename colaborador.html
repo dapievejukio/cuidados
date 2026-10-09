@@ -101,6 +101,7 @@ const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const $=id=>document.getElementById(id);
 let authUser=null,colaborador=null,condominio=null,MODO_DEMO=false,DEMO_SESSAO=null,areas=[],pontos=[],atividades=[],programacoes=[],demandas=[],escalaHoje=null,pontosHoje=[],execucoesHoje=[];
 let execAtual=null,fotoArquivo=null,previewURL=null,processando=false,sincronizando=false;
+let versaoCarregamento=0; // Ignora respostas antigas quando há atualizações concorrentes.
 const FILA_DB="oraqui_fila_v3",FILA_STORE="registros",FILA_VERSION=1;
 
 function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
@@ -313,6 +314,7 @@ async function iniciar(){
 }
 
 async function carregarTudo(){
+  const versao=++versaoCarregamento;
   limparErro();
   try{
     const [ar,po,at,pr,es,de,rp,ex]=await Promise.all([
@@ -326,6 +328,7 @@ async function carregarTudo(){
       db.from("execucoes").select("*").eq("condominio_id",colaborador.condominio_id).eq("colaborador_id",colaborador.id).gte("created_at",inicioHojeISO()).lte("created_at",fimHojeISO()).order("created_at",{ascending:false})
     ]);
 
+    if(versao!==versaoCarregamento)return;
     for(const r of [ar,po,at,pr,es,de,rp,ex])if(r.error)throw r.error;
 
     areas=ar.data||[];
@@ -343,6 +346,7 @@ async function carregarTudo(){
     renderProgramacoes();
     renderHistorico();
   }catch(e){
+    if(versao!==versaoCarregamento)return;
     console.error(e);
     erro(e.message||"Não foi possível carregar sua operação.");
     $("demandas").innerHTML=vazio("Falha ao carregar","Verifique as permissões do seu acesso.");
@@ -484,11 +488,21 @@ function renderDemandas(){
 }
 
 async function mudarDemanda(id,status){
+  if(!colaborador||!authUser)return;
+  const demanda=demandas.find(d=>mesmoId(d.id,id));
+  if(!demanda||!demandaParaColaborador(demanda)){
+    alert("Esta demanda não está disponível para este colaborador.");return;
+  }
+  if(!["visualizada","concluida"].includes(status)||demanda.status==="concluida")return;
   const agora=new Date().toISOString(),payload={status,updated_at:agora};
   if(status==="visualizada")payload.visualizada_em=agora;
   if(status==="concluida")payload.concluida_em=agora;
-  const {error}=await db.from("demandas").update(payload).eq("id",id);
+  const {data,error}=await db.from("demandas").update(payload)
+    .eq("id",id).eq("condominio_id",colaborador.condominio_id)
+    .neq("status","cancelada").neq("status","concluida")
+    .select("id");
   if(error){alert(error.message);return}
+  if(!data?.length){alert("A demanda foi alterada ou você não tem permissão para atualizá-la.");await carregarTudo();return}
   toast("✓ Demanda atualizada.");
   await carregarTudo();
 }
@@ -619,7 +633,7 @@ async function filaOperacao(modo,operacao){
     tx.oncomplete=()=>{banco.close();resolve(resultado)};
     tx.onerror=()=>{falhou=true;banco.close();reject(tx.error||new Error('Falha ao salvar registro offline.'))};
     tx.onabort=()=>{if(!falhou){banco.close();reject(tx.error||new Error('Operação offline cancelada.'))}};
-    try{const req=operacao(store);req.onsuccess=()=>{resultado=req.result};req.onerror=()=>{resultado=undefined}}catch(e){tx.abort();reject(e)}
+    try{const req=operacao(store);req.onsuccess=()=>{resultado=req.result};req.onerror=()=>{falhou=true}}catch(e){tx.abort();reject(e)}
   });
 }
 const filaTodos=()=>filaOperacao('readonly',s=>s.getAll());
@@ -686,14 +700,6 @@ async function sincronizarFilaOffline(){
   }catch(e){console.error(e);erro('Fila offline: '+e.message)}finally{sincronizando=false;await atualizarEstadoOffline()}
 }
 
-async function uploadFoto(areaId,pontoId){
-  if(!fotoArquivo)return null;
-  const ext=(fotoArquivo.name.split(".").pop()||"jpg").toLowerCase().replace(/[^a-z0-9]/g,"")||"jpg";
-  const path=`v2/${colaborador.condominio_id}/${colaborador.id}/${hoje()}/${Date.now()}-${areaId||"area"}-${pontoId||"ponto"}.${ext}`;
-  const {error}=await db.storage.from(BUCKET).upload(path,fotoArquivo,{upsert:false,contentType:fotoArquivo.type||"image/jpeg"});
-  if(error)throw new Error("Erro ao enviar foto: "+error.message);
-  return path;
-}
 
 async function confirmarExecucao(){
   if(processando)return;
