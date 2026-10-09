@@ -64,12 +64,25 @@ main{max-width:720px;margin:-18px auto 80px;padding:0 15px}.user-card,.card,.ite
 .demandas-anteriores[open] summary{border-bottom:1px solid var(--border)}
 .demandas-anteriores[open] summary::first-letter{color:var(--primary)}
 .demandas-anteriores-lista{display:flex;flex-direction:column;gap:5px;padding:8px;background:#f4f6f8}
+
+/* ORAQUI — refinamento visual e atalhos */
+.header-title small#condominioNome,.header-title small#headerCondominio{display:block!important;font-size:clamp(17px,4.6vw,25px)!important;font-weight:850!important;line-height:1.2!important;letter-spacing:.1px!important;color:#fff!important;text-transform:none!important;margin:14px 0 6px!important;text-shadow:0 1px 3px #0002}
+.header-title h1{font-size:clamp(19px,5vw,28px)!important}
+.oraqui-quick{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:15px 0 18px}
+.oraqui-quick a{min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;min-height:93px;border-radius:19px;padding:12px 5px;text-decoration:none;background:#fff;color:#394459;border:1px solid #e9e7f5;box-shadow:0 8px 22px #34345a0c;font-size:11px;font-weight:800;text-align:center}
+.oraqui-quick a .quick-icon{display:grid;place-items:center;width:44px;height:44px;border-radius:14px;background:#efecff;font-size:22px}
+.oraqui-quick a:nth-child(2) .quick-icon{background:#eaf4ff}.oraqui-quick a:nth-child(3) .quick-icon{background:#edf7f0}
+.oraqui-quick a:active{transform:scale(.98)}
+.oraqui-profile-photo{width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block}
+.oraqui-photo-button{border:1px solid #d9d3f5;background:#f5f2ff;color:#6254a6;border-radius:11px;padding:9px 11px;font-size:11px;font-weight:800;cursor:pointer}
+@media(max-width:350px){.oraqui-quick a{font-size:10px;min-height:85px}}
 </style>
 </head>
 <body>
 <header><div class="header-content"><div class="topbar"><div class="brand"><div class="brand-icon">✓</div><div><strong>ORAQUI</strong><small>AGORA. AQUI. REGISTRADO.</small></div></div><button class="logout" id="logout">SAIR</button></div><div class="header-title"><small id="condominioNome">CONDOMÍNIO</small><h1>Minha operação</h1><p>Escala, ponto, demandas e atividades do dia.</p></div></div></header>
 <main>
 <div class="user-card"><div class="user-icon" id="userIcon">👷</div><div class="user-info"><strong id="userName">Carregando...</strong><span id="userDescription">Validando acesso</span></div><span class="user-tag">ATIVO</span></div>
+<div class="oraqui-quick" aria-label="Acessos rápidos"><a id="oraquiQuickChat" href="chat.html"><span class="quick-icon">💬</span>Chat</a><a href="documentos-colaborador.html"><span class="quick-icon">📄</span>Documentos</a><a href="perfil-foto.html"><span class="quick-icon">📷</span>Minha foto</a></div>
 <div class="demo-mode-banner" id="demoModeBanner"><div class="demo-mode-icon">🧪</div><div class="demo-mode-info"><strong>MODO DEMONSTRAÇÃO</strong><span id="demoModeText">Você está testando a visão operacional de um colaborador.</span></div><button class="demo-back" id="demoBack" type="button">VOLTAR À GESTÃO</button></div>
 <div class="message error" id="error"></div><div class="offline-card" id="offlineCard" role="status"><strong id="offlineTitle">📶 Verificando conexão...</strong><span id="offlineDescription">Os registros pendentes permanecem neste aparelho até a sincronização.</span><br><button type="button" id="syncBtn">SINCRONIZAR AGORA</button></div>
 <div class="notification-card" id="notificationCard">
@@ -295,7 +308,7 @@ async function iniciar(){
       }
     }
     if(!c)throw new Error("Seu cadastro não está ativo.");
-    colaborador=c;document.getElementById("oraquiChatColaborador")?.setAttribute("href",`chat.html?condominio_id=${c.condominio_id}`);
+    colaborador=c;document.getElementById("oraquiChatColaborador")?.setAttribute("href",`chat.html?condominio_id=${c.condominio_id}`);document.getElementById("oraquiQuickChat")?.setAttribute("href",`chat.html?condominio_id=${c.condominio_id}`);
 
     const {data:co,error:ce}=await db.from("condominios")
       .select("id,nome,slug,ativo").eq("id",c.condominio_id).eq("ativo",true).single();
@@ -304,7 +317,7 @@ async function iniciar(){
 
     $("userName").textContent=c.nome;
     $("userDescription").textContent=`${c.funcao||"Colaborador"} • #${c.matricula}`;
-    $("userIcon").textContent=funcIcon(c.funcao);
+    $("userIcon").textContent="👤"; carregarFotoColaborador(c.id);
     $("condominioNome").textContent=co.nome.toUpperCase();
     if(MODO_DEMO){$("demoModeBanner").classList.add("visible");$("demoModeText").textContent=`Você está operando como ${c.nome} • ${c.funcao||"Colaborador"}. Tudo que registrar aparecerá na Gestão deste ambiente.`;$("logout").textContent="SAIR";$("notificationCard").classList.add("hidden")}
     if(c.ponto_ativo)$("pontoSection").classList.remove("hidden");
@@ -805,6 +818,8 @@ window.addEventListener("offline",atualizarEstadoOffline);
 setInterval(()=>{if(navigator.onLine&&colaborador)sincronizarFilaOffline()},120000);
 let ultimaDataProgramacoes=hoje();
 setInterval(()=>{if(!colaborador)return;const data=hoje();if(data!==ultimaDataProgramacoes){ultimaDataProgramacoes=data;carregarTudo()}else renderProgramacoes()},60000);
+
+async function carregarFotoColaborador(id){try{const {data,error}=await db.from("colaboradores").select("foto_perfil_path").eq("id",id).single();if(error||!data?.foto_perfil_path)return;const {data:url,error:se}=await db.storage.from("fotos-perfil-privadas").createSignedUrl(data.foto_perfil_path,3600);if(se||!url?.signedUrl)return;const el=document.getElementById("userIcon");if(el){el.textContent="";const img=document.createElement("img");img.className="oraqui-profile-photo";img.alt="Foto de perfil";img.src=url.signedUrl;el.append(img)}}catch(e){console.warn("Foto indisponível",e)}}
 </script>
 </body>
 </html>
