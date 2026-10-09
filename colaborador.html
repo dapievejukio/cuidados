@@ -9,7 +9,29 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="ORAQUI">
 <link rel="manifest" href="manifest.webmanifest">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+/* Indicadores: mensagens realmente não lidas no servidor; documentos novos desde a última abertura neste dispositivo. */
+const ORAQUI_DOCS_LAST_PREFIX='oraqui_docs_last_open_';
+function oraquiBadge(id,count){const el=document.getElementById(id);if(!el)return;el.hidden=!count;el.textContent=count>99?'99+':String(count)}
+async function oraquiAtualizarIndicadores(){
+ if(!authUser||!colaborador||MODO_DEMO)return;
+ try{
+  const {count,error}=await db.from('oraqui_chat_mensagens').select('id',{count:'exact',head:true}).eq('condominio_id',colaborador.condominio_id).eq('destinatario',authUser.id).is('lida_em',null);
+  if(!error){oraquiBadge('oraquiChatCount',count||0);document.getElementById('oraquiChatCaption').textContent=count?`${count} não lida${count===1?'':'s'}`:'Mensagens';}
+ }catch(e){console.warn('Indicador chat',e)}
+ try{
+  const key=ORAQUI_DOCS_LAST_PREFIX+authUser.id;
+  const last=localStorage.getItem(key);
+  const q=db.from('documentos_colaborador').select('id',{count:'exact',head:true});
+  const {count,error}=await (last?q.gt('created_at',last):q);
+  if(!error){oraquiBadge('oraquiDocsCount',count||0);document.getElementById('oraquiDocsCaption').textContent=count?`${count} novo${count===1?'':'s'}`:'Meus arquivos';}
+ }catch(e){console.warn('Indicador documentos',e)}
+}
+document.getElementById('oraquiQuickDocs')?.addEventListener('click',()=>{if(authUser)localStorage.setItem(ORAQUI_DOCS_LAST_PREFIX+authUser.id,new Date().toISOString())});
+window.addEventListener('pageshow',()=>setTimeout(oraquiAtualizarIndicadores,350));
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)oraquiAtualizarIndicadores()});
+setInterval(()=>{if(!document.hidden)oraquiAtualizarIndicadores()},30000);
+</script>
 <style>
 :root{--primary:#7667b9;--primary-light:#eeeafd;--blue:#5d88a5;--blue-light:#eaf4f8;--green:#69a17f;--green-light:#eaf5ee;--yellow:#bd8d43;--yellow-light:#fff4df;--red:#c96565;--red-light:#fdecec;--text:#2d3742;--muted:#75808c;--background:#f4f6f8;--card:#fff;--border:#e4e9ee;--shadow:0 10px 30px rgba(35,48,65,.07)}
 *{box-sizing:border-box;margin:0;padding:0}body{min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--background);color:var(--text)}button,input,select,textarea{font-family:inherit}button{cursor:pointer}.hidden{display:none!important}
@@ -76,13 +98,25 @@ main{max-width:720px;margin:-18px auto 80px;padding:0 15px}.user-card,.card,.ite
 .oraqui-profile-photo{width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block}
 .oraqui-photo-button{border:1px solid #d9d3f5;background:#f5f2ff;color:#6254a6;border-radius:11px;padding:9px 11px;font-size:11px;font-weight:800;cursor:pointer}
 @media(max-width:350px){.oraqui-quick a{font-size:10px;min-height:85px}}
+
+/* ORAQUI: atalhos compactos, foto editável e avisos */
+.oraqui-quick{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:15px}
+.oraqui-quick a{min-height:106px;gap:5px;border-radius:21px;font-size:13px;position:relative}
+.oraqui-quick a strong{font-size:13px}.oraqui-quick a small{font-size:10px;color:#8190a1;font-weight:500}
+.oraqui-quick a .quick-icon{position:relative;width:49px;height:49px;font-size:25px}
+.oraqui-count{position:absolute;top:-7px;right:-12px;min-width:21px;height:21px;padding:0 5px;display:flex;align-items:center;justify-content:center;background:#d63b59;color:#fff;border:2px solid white;border-radius:20px;font-size:10px;font-weight:900;box-shadow:0 3px 8px #0002}
+.oraqui-count[hidden]{display:none!important}
+.oraqui-avatar-link{position:relative;flex-shrink:0;width:62px;height:62px;border-radius:19px;text-decoration:none;color:#6656ad;overflow:visible;outline-offset:4px}
+.oraqui-avatar-link img{border-radius:19px}
+.oraqui-avatar-edit{position:absolute;right:-6px;bottom:-5px;background:#6859b2;color:#fff;border:2px solid white;border-radius:50%;width:23px;height:23px;display:grid;place-items:center;font-size:13px;font-weight:900;box-shadow:0 2px 7px #0002}
+.oraqui-avatar-link:focus-visible{outline:3px solid #6859b2}
 </style>
 </head>
 <body>
 <header><div class="header-content"><div class="topbar"><div class="brand"><div class="brand-icon">✓</div><div><strong>ORAQUI</strong><small>AGORA. AQUI. REGISTRADO.</small></div></div><button class="logout" id="logout">SAIR</button></div><div class="header-title"><small id="condominioNome">CONDOMÍNIO</small><h1>Minha operação</h1><p>Escala, ponto, demandas e atividades do dia.</p></div></div></header>
 <main>
-<div class="user-card"><div class="user-icon" id="userIcon">👷</div><div class="user-info"><strong id="userName">Carregando...</strong><span id="userDescription">Validando acesso</span></div><span class="user-tag">ATIVO</span></div>
-<div class="oraqui-quick" aria-label="Acessos rápidos"><a id="oraquiQuickChat" href="chat.html"><span class="quick-icon">💬</span>Chat</a><a href="documentos-colaborador.html"><span class="quick-icon">📄</span>Documentos</a><a href="perfil-foto.html"><span class="quick-icon">📷</span>Minha foto</a></div>
+<div class="user-card"><a class="user-icon oraqui-avatar-link" id="userIcon" href="perfil-foto.html" aria-label="Toque para escolher ou alterar sua foto" title="Alterar foto">👤<span class="oraqui-avatar-edit">✎</span></a><div class="user-info"><strong id="userName">Carregando...</strong><span id="userDescription">Validando acesso</span></div><span class="user-tag">ATIVO</span></div>
+<div class="oraqui-quick" aria-label="Acessos rápidos"><a id="oraquiQuickChat" href="chat.html"><span class="quick-icon">💬<span class="oraqui-count" id="oraquiChatCount" hidden></span></span><strong>Chat</strong><small id="oraquiChatCaption">Mensagens</small></a><a id="oraquiQuickDocs" href="documentos-colaborador.html"><span class="quick-icon">📄<span class="oraqui-count" id="oraquiDocsCount" hidden></span></span><strong>Documentos</strong><small id="oraquiDocsCaption">Meus arquivos</small></a></div>
 <div class="demo-mode-banner" id="demoModeBanner"><div class="demo-mode-icon">🧪</div><div class="demo-mode-info"><strong>MODO DEMONSTRAÇÃO</strong><span id="demoModeText">Você está testando a visão operacional de um colaborador.</span></div><button class="demo-back" id="demoBack" type="button">VOLTAR À GESTÃO</button></div>
 <div class="message error" id="error"></div><div class="offline-card" id="offlineCard" role="status"><strong id="offlineTitle">📶 Verificando conexão...</strong><span id="offlineDescription">Os registros pendentes permanecem neste aparelho até a sincronização.</span><br><button type="button" id="syncBtn">SINCRONIZAR AGORA</button></div>
 <div class="notification-card" id="notificationCard">
@@ -98,8 +132,7 @@ main{max-width:720px;margin:-18px auto 80px;padding:0 15px}.user-card,.card,.ite
 <section class="section hidden" id="pontoSection"><div class="section-title"><div><h2>Ponto</h2><p>Registre os eventos da sua jornada.</p></div></div><div class="card"><div class="status-card"><div class="status-icon">🕒</div><div class="status-info"><strong id="pontoStatus">Carregando...</strong><span id="pontoDetalhe"></span></div><span class="badge purple" id="pontoBadge">PONTO</span></div><div class="point-actions"><button class="point-btn primary" id="btnEntrada">ENTRADA</button><button class="point-btn" id="btnIniIntervalo">INICIAR INTERVALO</button><button class="point-btn" id="btnFimIntervalo">RETORNAR</button><button class="point-btn" id="btnSaida">SAÍDA</button></div><div class="geo-note" id="geoNote"></div></div></section>
 <section class="section" id="atividadesProgramadasSection"><div class="section-title"><div><h2>Atividades programadas</h2><p>Atividades de hoje e próximos agendamentos.</p></div></div><div id="programacoes" class="loading">Carregando...</div></section>
 <section class="section" id="registroAvulsoSection"><div class="section-title"><div><h2>Registrar atividade</h2><p>Registre uma atividade realizada fora da programação.</p></div></div><div class="card"><button class="action" id="avulso" style="min-height:56px;font-size:12px;width:100%">＋ REGISTRAR ATIVIDADE</button></div></section>
-<section class="section" id="oraquiChatSection"><div class="section-title"><div><h2>💬 Mensagens</h2><p>Converse com a gestão e contatos autorizados.</p></div></div><div class="card"><a class="action" id="oraquiChatColaborador" href="chat.html" style="display:block;text-align:center;text-decoration:none;padding:16px">💬 ABRIR MENSAGENS</a></div></section>
-<section class="section" id="meusDocumentosSection"><div class="section-title"><div><h2>📁 Meus documentos</h2><p>Holerites, recibos e arquivos compartilhados com você.</p></div></div><div class="card"><p style="font-size:11px;color:var(--muted);margin-bottom:12px">Seus documentos são privados e ficam disponíveis para consulta e compartilhamento.</p><a class="action" href="documentos-colaborador.html" style="display:block;text-align:center;text-decoration:none;padding:16px">📄 ABRIR MEUS DOCUMENTOS</a></div></section>
+
 <section class="section" id="secaoDemandas"><div class="section-title"><div><h2>Demandas</h2><p>Recados, tarefas e itens urgentes destinados a você.</p></div></div><div id="demandas" class="loading">Carregando...</div></section>
 <section class="section"><div class="section-title"><div><h2>Executado hoje</h2><p>Seu histórico operacional de hoje.</p></div></div><div id="historico" class="loading">Carregando...</div></section>
 <section class="section hidden" id="diasAnterioresSection"><div id="diasAnteriores"></div></section>
@@ -308,7 +341,7 @@ async function iniciar(){
       }
     }
     if(!c)throw new Error("Seu cadastro não está ativo.");
-    colaborador=c;document.getElementById("oraquiChatColaborador")?.setAttribute("href",`chat.html?condominio_id=${c.condominio_id}`);document.getElementById("oraquiQuickChat")?.setAttribute("href",`chat.html?condominio_id=${c.condominio_id}`);
+    colaborador=c;document.getElementById("oraquiQuickChat")?.setAttribute("href",`chat.html?condominio_id=${c.condominio_id}`);
 
     const {data:co,error:ce}=await db.from("condominios")
       .select("id,nome,slug,ativo").eq("id",c.condominio_id).eq("ativo",true).single();
@@ -323,6 +356,7 @@ async function iniciar(){
     if(c.ponto_ativo)$("pontoSection").classList.remove("hidden");
 
     await carregarTudo();
+    oraquiAtualizarIndicadores();
     await atualizarEstadoOffline();
     if(navigator.onLine)await sincronizarFilaOffline();
     if(!MODO_DEMO){try{await registrarServiceWorker();await atualizarEstadoNotificacao()}catch(pushError){console.warn(pushError)}}
@@ -819,7 +853,7 @@ setInterval(()=>{if(navigator.onLine&&colaborador)sincronizarFilaOffline()},1200
 let ultimaDataProgramacoes=hoje();
 setInterval(()=>{if(!colaborador)return;const data=hoje();if(data!==ultimaDataProgramacoes){ultimaDataProgramacoes=data;carregarTudo()}else renderProgramacoes()},60000);
 
-async function carregarFotoColaborador(id){try{const {data,error}=await db.from("colaboradores").select("foto_perfil_path").eq("id",id).single();if(error||!data?.foto_perfil_path)return;const {data:url,error:se}=await db.storage.from("fotos-perfil-privadas").createSignedUrl(data.foto_perfil_path,3600);if(se||!url?.signedUrl)return;const el=document.getElementById("userIcon");if(el){el.textContent="";const img=document.createElement("img");img.className="oraqui-profile-photo";img.alt="Foto de perfil";img.src=url.signedUrl;el.append(img)}}catch(e){console.warn("Foto indisponível",e)}}
+async function carregarFotoColaborador(id){try{const {data,error}=await db.from("colaboradores").select("foto_perfil_path").eq("id",id).single();if(error||!data?.foto_perfil_path)return;const {data:url,error:se}=await db.storage.from("fotos-perfil-privadas").createSignedUrl(data.foto_perfil_path,3600);if(se||!url?.signedUrl)return;const el=document.getElementById("userIcon");if(el){el.replaceChildren();const img=document.createElement("img");img.className="oraqui-profile-photo";img.alt="Foto de perfil";img.src=url.signedUrl;el.append(img);const edit=document.createElement("span");edit.className="oraqui-avatar-edit";edit.textContent="✎";el.append(edit)}}catch(e){console.warn("Foto indisponível",e)}}
 </script>
 </body>
 </html>
