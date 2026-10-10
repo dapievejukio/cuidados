@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#173D35">
+
+<title>OraQui | Portal do Morador</title>
+
+<style>
+:root {
+  --verde: #173D35;
+  --verde2: #276454;
+  --fundo: #F4F6F5;
+  --branco: #FFFFFF;
+  --texto: #26332F;
+  --cinza: #718079;
+  --borda: #E1E7E3;
+  --laranja: #D88B42;
+  --vermelho: #B94D4D;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont,
+               "Segoe UI", Arial, sans-serif;
+  background: var(--fundo);
+  color: var(--texto);
+}
+
+header {
+  background: var(--verde);
+  color: white;
+  padding: 25px 20px 30px;
+  text-align: center;
+}
+
+.logo {
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+.logo span {
+  color: #9BD4B5;
+}
+
+.sublogo {
+  font-size: 12px;
+  opacity: .8;
+  margin-top: 5px;
+}
+
+.condominio {
+  margin-top: 23px;
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.local {
+  margin-top: 7px;
+  font-size: 14px;
+  opacity: .85;
+}
+
+main {
+  max-width: 600px;
+  margin: -12px auto 50px;
+  padding: 0 15px;
+}
+
+.card {
+  background: white;
+  border-radius: 16px;
+  padding: 22px;
+  margin-bottom: 16px;
+  box-shadow: 0 3px 15px rgba(0,0,0,.045);
+}
+
+.card h2 {
+  margin: 0 0 16px;
+  font-size: 18px;
+  color: var(--verde);
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px;
+  background: #F0F5F2;
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+
+.bolinha {
+  width: 10px;
+  height: 10px;
+  background: #9AA7A0;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status strong {
+  display: block;
+  font-size: 13px;
+}
+
+.status small {
+  color: var(--cinza);
+  font-size: 12px;
+}
+
+.info {
+  padding: 13px 0;
+  border-bottom: 1px solid var(--borda);
+}
+
+.info:last-child {
+  border: 0;
+}
+
+.info label {
+  display: block;
+  font-size: 12px;
+  color: var(--cinza);
+  margin-bottom: 5px;
+}
+
+.info strong {
+  font-size: 15px;
+}
+
+.btn {
+  width: 100%;
+  border: none;
+  border-radius: 11px;
+  padding: 16px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.btn-primary {
+  background: var(--verde);
+  color: white;
+}
+
+.btn-alerta {
+  background: var(--laranja);
+  color: white;
+}
+
+.btn-outline {
+  background: white;
+  color: var(--verde);
+  border: 1px solid var(--verde);
+}
+
+.btn:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+.descricao {
+  font-size: 13px;
+  color: var(--cinza);
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid var(--borda);
+  border-radius: 9px;
+  font-size: 15px;
+  background: white;
+  font-family: inherit;
+  margin-top: 7px;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 110px;
+}
+
+.campo {
+  margin-bottom: 17px;
+}
+
+.campo label {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.oculto {
+  display: none;
+}
+
+.aviso {
+  background: #FFF5E9;
+  color: #86541F;
+  padding: 13px;
+  border-radius: 9px;
+  font-size: 12px;
+  line-height: 1.5;
+  margin-top: 15px;
+}
+
+.mensagem {
+  margin-top: 12px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.erro {
+  color: var(--vermelho);
+}
+
+footer {
+  text-align: center;
+  padding: 25px;
+  color: var(--cinza);
+  font-size: 12px;
+}
+
+footer strong {
+  color: var(--verde);
+}
+
+@media(max-width:480px) {
+  header {
+    padding-top: 23px;
+  }
+
+  .card {
+    padding: 19px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+  <div class="logo">ora<span>qui</span></div>
+
+  <div class="sublogo">
+    Cuidado, organização e transparência
+  </div>
+
+  <div class="condominio" id="nomeCondominio">
+    Carregando condomínio...
+  </div>
+
+  <div class="local" id="nomeLocal">
+    Portal do morador
+  </div>
+
+</header>
+
+<main>
+
+  <!-- APRESENTAÇÃO -->
+
+  <section class="card">
+
+    <h2>👋 Bem-vindo ao OraQui</h2>
+
+    <p class="descricao">
+      Este é o canal de acompanhamento dos serviços
+      realizados nas áreas comuns do seu condomínio.
+    </p>
+
+    <p class="descricao">
+      Aqui você poderá consultar atividades,
+      comunicar problemas e acompanhar solicitações.
+    </p>
+
+  </section>
+
+
+  <!-- ATIVIDADES -->
+
+  <section class="card">
+
+    <h2>🧹 Cuidados com este local</h2>
+
+    <div class="status">
+
+      <div class="bolinha"></div>
+
+      <div>
+        <strong id="statusAtividade">
+          Aguardando integração
+        </strong>
+
+        <small>
+          Informações operacionais
+        </small>
+      </div>
+
+    </div>
+
+    <div class="info">
+      <label>Última atividade registrada</label>
+      <strong id="ultimaAtividade">
+        Ainda não consultada
+      </strong>
+    </div>
+
+    <div class="info">
+      <label>Próxima atividade programada</label>
+      <strong id="proximaAtividade">
+        Ainda não consultada
+      </strong>
+    </div>
+
+    <div class="info">
+      <label>Frequência de atendimento</label>
+      <strong id="frequencia">
+        Ainda não consultada
+      </strong>
+    </div>
+
+    <p class="descricao" style="margin-top:15px">
+      As informações serão apresentadas conforme
+      os registros realizados pela equipe responsável.
+    </p>
+
+  </section>
+
+
+  <!-- OCORRÊNCIA -->
+
+  <section class="card">
+
+    <h2>📸 Encontrou algum problema?</h2>
+
+    <p class="descricao">
+      Informe uma situação que precise de atenção
+      da equipe de limpeza, zeladoria ou administração.
+    </p>
+
+    <button
+      class="btn btn-alerta"
+      onclick="abrirOcorrencia()"
+      id="botaoOcorrencia">
+
+      + REPORTAR UM PROBLEMA
+
+    </button>
+
+  </section>
+
+
+  <!-- FORMULÁRIO -->
+
+  <section class="card oculto" id="formOcorrencia">
+
+    <h2>Registrar ocorrência</h2>
+
+    <form id="ocorrenciaForm">
+
+      <div class="campo">
+
+        <label>Local da ocorrência</label>
+
+        <input
+          type="text"
+          id="localOcorrencia"
+          placeholder="Ex.: Hall, garagem, elevador"
+          maxlength="150"
+          required>
+
+      </div>
+
+      <div class="campo">
+
+        <label>Tipo de problema</label>
+
+        <select id="tipoOcorrencia" required>
+
+          <option value="">
+            Selecione
+          </option>
+
+          <option value="limpeza">
+            Limpeza
+          </option>
+
+          <option value="manutencao">
+            Manutenção
+          </option>
+
+          <option value="iluminacao">
+            Iluminação
+          </option>
+
+          <option value="residuos">
+            Resíduos / Lixo
+          </option>
+
+          <option value="equipamento">
+            Equipamentos
+          </option>
+
+          <option value="outros">
+            Outros
+          </option>
+
+        </select>
+
+      </div>
+
+      <div class="campo">
+
+        <label>Descreva o problema</label>
+
+        <textarea
+          id="descricaoOcorrencia"
+          maxlength="2000"
+          placeholder="Descreva o que precisa de atenção..."
+          required></textarea>
+
+      </div>
+
+      <div class="campo">
+
+        <label>Fotografia (opcional)</label>
+
+        <input
+          type="file"
+          id="fotoOcorrencia"
+          accept="image/jpeg,image/png,image/webp"
+          capture="environment">
+
+        <p class="descricao">
+          Você pode fotografar o problema
+          ou selecionar uma imagem do celular.
+        </p>
+
+      </div>
+
+      <div class="campo">
+
+        <label>E-mail para acompanhamento (opcional)</label>
+
+        <input
+          type="email"
+          id="emailMorador"
+          maxlength="254"
+          placeholder="seuemail@exemplo.com">
+
+      </div>
+
+      <div class="aviso">
+        O e-mail é opcional e será utilizado
+        exclusivamente para comunicações
+        relacionadas à ocorrência, quando
+        essa função estiver habilitada.
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-primary"
+        id="enviarOcorrencia"
+        disabled>
+
+        ENVIO EM CONFIGURAÇÃO
+
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-outline"
+        onclick="fecharOcorrencia()">
+
+        CANCELAR
+
+      </button>
+
+      <div class="mensagem" id="mensagemOcorrencia"></div>
+
+    </form>
+
+  </section>
+
+
+  <!-- ACOMPANHAMENTO -->
+
+  <section class="card">
+
+    <h2>🔎 Acompanhar solicitação</h2>
+
+    <p class="descricao">
+      Consulte o andamento de uma ocorrência
+      registrada anteriormente.
+    </p>
+
+    <input
+      type="text"
+      id="protocolo"
+      placeholder="Número do protocolo"
+      maxlength="50">
+
+    <button
+      class="btn btn-outline"
+      onclick="consultarProtocolo()">
+
+      CONSULTAR OCORRÊNCIA
+
+    </button>
+
+    <div class="mensagem" id="resultadoProtocolo"></div>
+
+  </section>
+
+</main>
+
+
+<footer>
+
+  Tecnologia <strong>OraQui</strong>
+
+  <br><br>
+
+  Gestão inteligente de serviços condominiais
+
+  <br><br>
+
+  © 2026 OraQui
+
+</footer>
+
+
+<script>
+
+/* ========================================
+   ORAQUI 2.0
+   PORTAL PÚBLICO DO MORADOR
+======================================== */
+
+const parametros = new URLSearchParams(
+  window.location.search
+);
+
+const condominio = parametros.get("condominio");
+
+const localQR = parametros.get("local");
+
+const nomeCondominio = document.getElementById(
+  "nomeCondominio"
+);
+
+const nomeLocal = document.getElementById(
+  "nomeLocal"
+);
+
+/*
+  Identificação inicial pela URL.
+
+  A identificação definitiva do condomínio
+  deverá ser validada no Supabase.
+*/
+
+function formatarNome(texto) {
+
+  if (!texto) return "";
+
+  return texto
+    .replace(/[-_]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .replace(/\b\w/g, letra => letra.toUpperCase());
+
+}
+
+function iniciarPagina() {
+
+  if (!condominio) {
+
+    nomeCondominio.textContent =
+      "Condomínio não identificado";
+
+    nomeLocal.textContent =
+      "Acesse pelo QR Code do condomínio";
+
+    document.getElementById(
+      "botaoOcorrencia"
+    ).disabled = true;
+
+    return;
+  }
+
+  nomeCondominio.textContent =
+    formatarNome(condominio);
+
+  if (localQR) {
+
+    nomeLocal.textContent =
+      "📍 " + formatarNome(localQR);
+
+    document.getElementById(
+      "localOcorrencia"
+    ).value = formatarNome(localQR);
+
+  } else {
+
+    nomeLocal.textContent =
+      "Portal do morador";
+
+  }
+
+}
+
+
+/* ========================================
+   ABRIR FORMULÁRIO
+======================================== */
+
+function abrirOcorrencia() {
+
+  const formulario = document.getElementById(
+    "formOcorrencia"
+  );
+
+  formulario.classList.remove("oculto");
+
+  formulario.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+
+}
+
+
+/* ========================================
+   FECHAR FORMULÁRIO
+======================================== */
+
+function fecharOcorrencia() {
+
+  document.getElementById(
+    "formOcorrencia"
+  ).classList.add("oculto");
+
+}
+
+
+/* ========================================
+   ENVIO DE OCORRÊNCIA
+======================================== */
+
+/*
+  O envio será conectado às tabelas
+  existentes no Supabase.
+
+  Não será feita gravação simulada.
+
+  O formulário permanecerá bloqueado
+  até a integração ser concluída.
+*/
+
+document.getElementById(
+  "ocorrenciaForm"
+).addEventListener("submit", function(event) {
+
+  event.preventDefault();
+
+  document.getElementById(
+    "mensagemOcorrencia"
+  ).textContent =
+    "O envio ainda não está disponível.";
+
+});
+
+
+/* ========================================
+   CONSULTA DE PROTOCOLO
+======================================== */
+
+function consultarProtocolo() {
+
+  const protocolo = document.getElementById(
+    "protocolo"
+  ).value.trim();
+
+  const resultado = document.getElementById(
+    "resultadoProtocolo"
+  );
+
+  if (!protocolo) {
+
+    resultado.textContent =
+      "Informe o número do protocolo.";
+
+    resultado.className =
+      "mensagem erro";
+
+    return;
+  }
+
+  resultado.textContent =
+    "A consulta de protocolos será ativada após a integração com o banco de dados.";
+
+  resultado.className = "mensagem";
+
+}
+
+
+/* ========================================
+   INICIALIZAÇÃO
+======================================== */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  iniciarPagina
+);
+
+</script>
+
+</body>
+</html>
