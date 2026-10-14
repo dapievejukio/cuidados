@@ -117,7 +117,7 @@ main{max-width:720px;margin:-18px auto 80px;padding:0 15px}.user-card,.card,.ite
 </main>
 
 <div class="modal" id="execModal"><div class="modal-card"><div class="modal-head"><h2 id="modalTitle">Registrar execução</h2><button class="close" id="closeModal">×</button></div><div class="selection" id="modalSelection"></div><div class="field hidden" id="areaField"><label>ÁREA</label><select id="areaSelect"></select></div><div class="field hidden" id="pontoField"><label>PONTO / LOCAL</label><select id="pontoSelect"></select></div><button class="photo-button" id="photoButton">📷 ADICIONAR FOTO</button><input class="photo-input" id="photoInput" type="file" accept="image/*" capture="environment"><img class="preview" id="preview" alt="Prévia"><div class="field"><label>OBSERVAÇÃO</label><textarea id="observacao" maxlength="600" placeholder="Observação sobre a execução..."></textarea></div><button class="confirm" id="confirmExec">✓ REGISTRAR CONCLUSÃO</button></div></div>
-<div class="toast" id="toast"></div>
+<div class="modal" id="demandaConclusaoModal"><div class="modal-card"><div class="modal-head"><h2>Concluir demanda</h2><button class="close" id="fecharDemandaConclusao" type="button">×</button></div><div class="selection" id="demandaConclusaoTitulo"></div><div class="field"><label>OBSERVAÇÃO DA EXECUÇÃO</label><textarea id="demandaConclusaoObs" maxlength="600" placeholder="Descreva o serviço realizado..."></textarea></div><button class="photo-button" id="demandaConclusaoFotoBtn" type="button">📷 ADICIONAR FOTO</button><input class="photo-input" id="demandaConclusaoFoto" type="file" accept="image/*" capture="environment"><img class="preview" id="demandaConclusaoPreview" alt="Foto da execução"><button class="confirm" id="salvarDemandaConclusao" type="button">✓ CONFIRMAR CONCLUSÃO</button></div></div><div class="toast" id="toast"></div>
 
 <script>
 const SUPABASE_URL="https://rhiosvsohvqqrxzwohqu.supabase.co";
@@ -128,6 +128,7 @@ const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const $=id=>document.getElementById(id);
 let authUser=null,colaborador=null,condominio=null,MODO_DEMO=false,DEMO_SESSAO=null,areas=[],pontos=[],atividades=[],programacoes=[],demandas=[],escalaHoje=null,pontosHoje=[],execucoesHoje=[];
 let execAtual=null,fotoArquivo=null,previewURL=null,processando=false,sincronizando=false;
+let demandaEmConclusao=null;
 let versaoCarregamento=0; // Ignora respostas antigas quando há atualizações concorrentes.
 const FILA_DB="oraqui_fila_v3",FILA_STORE="registros",FILA_VERSION=1;
 
@@ -493,7 +494,7 @@ function htmlDemanda(d,compacta=false){
   if(compacta){
     return `<div class="demanda-antiga"><span class="demanda-antiga-icone">✓</span><div><strong>${esc(d.titulo||"Demanda")}</strong><small>${esc(d.descricao||"Concluída")}</small></div><span class="badge green">CONCLUÍDA</span></div>`;
   }
-  return `<div class="item-card" style="${pendente?'border:3px solid #dc2626;background:#fff7f7;box-shadow:0 0 0 3px #fecaca;':''}"><div class="item-top"><div class="item-icon">${urgente?"🚨":d.tipo==="recado"?"💬":"✓"}</div><div class="item-info"><strong>${esc(d.titulo)}</strong><span>${esc(d.tipo||"tarefa")} • ${esc(d.status)}${d.prazo_em?" • prazo "+hora(d.prazo_em):""}</span></div><span class="badge ${urgente?"red":"purple"}">${urgente?"🚨 URGENTE":esc(String(d.tipo||"tarefa").toUpperCase())}</span></div>${d.descricao?`<div class="item-description">${esc(d.descricao)}</div>`:""}<div class="item-actions">${d.status==="pendente"?`<button class="action secondary" onclick="mudarDemanda(${d.id},'visualizada')">MARCAR COMO LIDA</button>`:""}${d.tipo!=="recado"&&d.status!=="concluida"?`<button class="action" onclick="mudarDemanda(${d.id},'concluida')">CONCLUIR</button>`:""}</div></div>`;
+  return `<div class="item-card" style="${pendente?'border:3px solid #dc2626;background:#fff7f7;box-shadow:0 0 0 3px #fecaca;':''}"><div class="item-top"><div class="item-icon">${urgente?"🚨":d.tipo==="recado"?"💬":"✓"}</div><div class="item-info"><strong>${esc(d.titulo)}</strong><span>${esc(d.tipo||"tarefa")} • ${esc(d.status)}${d.prazo_em?" • prazo "+hora(d.prazo_em):""}</span></div><span class="badge ${urgente?"red":"purple"}">${urgente?"🚨 URGENTE":esc(String(d.tipo||"tarefa").toUpperCase())}</span></div>${d.descricao?`<div class="item-description">${esc(d.descricao)}</div>`:""}<div class="item-actions">${d.status==="pendente"?`<button class="action secondary" onclick="mudarDemanda(${d.id},'visualizada')">MARCAR COMO LIDA</button>`:""}${d.tipo!=="recado"&&d.status!=="concluida"?`<button class="action" onclick="abrirConclusaoDemanda(${d.id})">CONCLUIR</button>`:""}</div></div>`;
 }
 
 function renderDemandas(){
@@ -520,6 +521,42 @@ function renderDemandas(){
   if(!urgentes.length)window.__urgenteAvisado=false;
 }
 
+function abrirConclusaoDemanda(id){
+  const d=demandas.find(x=>mesmoId(x.id,id));
+  if(!d||d.status==='concluida'||!demandaParaColaborador(d))return;
+  demandaEmConclusao=d;
+  $('demandaConclusaoTitulo').textContent=`#${d.id} • ${d.titulo||'Demanda'}`;
+  $('demandaConclusaoObs').value='';$('demandaConclusaoFoto').value='';
+  $('demandaConclusaoPreview').classList.remove('visible');
+  $('demandaConclusaoFotoBtn').textContent='📷 ADICIONAR FOTO';
+  $('demandaConclusaoModal').classList.add('visible');
+}
+function fecharConclusaoDemanda(){$('demandaConclusaoModal').classList.remove('visible');demandaEmConclusao=null}
+async function salvarConclusaoDemanda(){
+  const d=demandaEmConclusao;if(!d||!colaborador||!authUser)return;
+  const obs=$('demandaConclusaoObs').value.trim(),foto=$('demandaConclusaoFoto').files?.[0];
+  if(d.exige_foto&&!foto)return alert('Esta demanda exige fotografia.');
+  if(d.exige_observacao&&!obs)return alert('Esta demanda exige observação.');
+  if(!navigator.onLine)return alert('Para concluir demandas, conecte-se à internet.');
+  const btn=$('salvarDemandaConclusao');btn.disabled=true;
+  try{
+    const agora=new Date().toISOString();let path=null;
+    if(foto){
+      const blob=await fotoComCarimbo(foto,agora);
+      path=`demandas/${colaborador.condominio_id}/${colaborador.id}/${d.id}/${crypto.randomUUID()}.jpg`;
+      const {error:uploadErro}=await db.storage.from(BUCKET).upload(path,blob,{contentType:'image/jpeg'});
+      if(uploadErro)throw uploadErro;
+    }
+    const payload={status:'concluida',concluida_em:agora,updated_at:agora,observacao_execucao:obs||null,foto_execucao_path:path};
+    const {data,error}=await db.from('demandas').update(payload)
+      .eq('id',d.id).eq('condominio_id',colaborador.condominio_id)
+      .neq('status','cancelada').neq('status','concluida').select('id');
+    if(error)throw error;
+    if(!data?.length)throw new Error('Demanda alterada ou sem permissão para concluir.');
+    fecharConclusaoDemanda();toast('✓ Demanda concluída.');await carregarTudo();
+  }catch(e){console.error(e);alert('Não foi possível concluir a demanda: '+(e.message||e))}
+  finally{btn.disabled=false}
+}
 async function mudarDemanda(id,status){
   if(!colaborador||!authUser)return;
   const demanda=demandas.find(d=>mesmoId(d.id,id));
@@ -795,6 +832,10 @@ async function sair(){
   location.href="index.html";
 }
 
+$('fecharDemandaConclusao').onclick=fecharConclusaoDemanda;
+$('salvarDemandaConclusao').onclick=salvarConclusaoDemanda;
+$('demandaConclusaoFotoBtn').onclick=()=>$('demandaConclusaoFoto').click();
+$('demandaConclusaoFoto').onchange=e=>{const f=e.target.files?.[0];if(!f)return;if(!f.type.startsWith('image/')||f.size>10*1024*1024){alert('Selecione imagem de até 10 MB.');e.target.value='';return}const img=$('demandaConclusaoPreview');img.src=URL.createObjectURL(f);img.classList.add('visible');$('demandaConclusaoFotoBtn').textContent='📷 FOTO SELECIONADA'};
 $("logout").onclick=sair;
 $("demoBack").onclick=voltarGestaoDemo;
 $("notificationBtn").onclick=acaoNotificacao;
@@ -830,6 +871,8 @@ iniciar();
 window.addEventListener("online",()=>{atualizarEstadoOffline();sincronizarFilaOffline()});
 window.addEventListener("offline",atualizarEstadoOffline);
 setInterval(()=>{if(navigator.onLine&&colaborador)sincronizarFilaOffline()},120000);
+// Novas demandas devem aparecer sem recarregar a página; evita fechar modais em uso.
+setInterval(()=>{if(!document.hidden&&navigator.onLine&&colaborador&&!$('demandaConclusaoModal').classList.contains('visible')&&!$('execModal').classList.contains('visible'))carregarTudo().catch(console.warn)},60000);
 let ultimaDataProgramacoes=hoje();
 setInterval(()=>{if(!colaborador)return;const data=hoje();if(data!==ultimaDataProgramacoes){ultimaDataProgramacoes=data;carregarTudo()}else renderProgramacoes()},60000);
 
