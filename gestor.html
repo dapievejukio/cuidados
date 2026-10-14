@@ -751,12 +751,9 @@ async function carregarColaboradores(){
   $("colActive").textContent=colaboradoresCarregados.filter(x=>x.ativo).length;
   $("colInactive").textContent=colaboradoresCarregados.filter(x=>!x.ativo).length;
 
-  if(!colaboradoresCarregados.length){
-    collaboratorList.innerHTML=vazio("👷","Nenhum colaborador visível","Não há colaboradores disponíveis para este condomínio ou a permissão de leitura precisa ser revisada.");
-    return;
-  }
-
-  collaboratorList.innerHTML=colaboradoresCarregados.map(c=>{
+  const ativos=colaboradoresCarregados.filter(c=>c.ativo);
+  const arquivados=colaboradoresCarregados.filter(c=>!c.ativo);
+  const cartoes=(lista)=>lista.map(c=>{
     const ponto=!!c.ponto_ativo;
     const selfie=ponto&&!!c.selfie_ponto_obrigatoria;
     const geo=ponto&&!!c.geolocalizacao_ponto_obrigatoria;
@@ -787,6 +784,14 @@ async function carregarColaboradores(){
       </div>
     </div>`;
   }).join("");
+
+  // A equipe atual ocupa a tela principal; os inativos só aparecem após abrir o submenu.
+  collaboratorList.innerHTML=`
+    <div id="oraquiEquipeAtiva">${ativos.length?cartoes(ativos):vazio("👷","Nenhum colaborador ativo","Cadastre ou reative um colaborador.")}</div>
+    ${arquivados.length?`<details id="oraquiArquivados" style="margin-top:18px;border:1px solid #e4e9ee;border-radius:16px;background:#fff;overflow:hidden">
+      <summary style="cursor:pointer;list-style:revert;padding:17px 20px;font-weight:800;color:#44566b;user-select:none">📁 Ver arquivados (${arquivados.length})</summary>
+      <div style="padding:0 12px 12px" class="collaborator-list">${cartoes(arquivados)}</div>
+    </details>`:""}`;
 
   carregarFotosEquipe();
   collaboratorList.querySelectorAll("[data-c]").forEach(el=>{
