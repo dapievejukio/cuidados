@@ -182,6 +182,11 @@ function base64UrlToUint8Array(base64Url){
 function isStandalone(){
   return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone===true;
 }
+function isIOS(){
+  const ua=navigator.userAgent||"";
+  return /iPad|iPhone|iPod/i.test(ua) || (navigator.platform==="MacIntel" && navigator.maxTouchPoints>1);
+}
+function exigeInstalacaoParaPush(){return isIOS() && !isStandalone();}
 
 async function registrarServiceWorker(){
   if(!("serviceWorker" in navigator))throw new Error("Este aparelho/navegador não oferece Service Worker.");
@@ -195,21 +200,21 @@ async function atualizarEstadoNotificacao(){
     txt.textContent="Este navegador não oferece Web Push.";
     btn.textContent="INDISPONÍVEL";btn.disabled=true;return;
   }
-  if(!isStandalone()){
+  if(exigeInstalacaoParaPush()){
     title.textContent="Instale o ORAQUI na Tela de Início";
     txt.textContent="No iPhone, abra pelo ícone da Tela de Início para ativar notificações.";
     btn.textContent="COMO ATIVAR";btn.disabled=false;return;
   }
   if(Notification.permission==="denied"){
     title.textContent="Notificações bloqueadas";
-    txt.textContent="Ative ORAQUI em Ajustes > Notificações no iPhone.";
+    txt.textContent=isIOS()?"Ative ORAQUI em Ajustes > Notificações no iPhone.":"Permita notificações para oraqui.app nas configurações do navegador Android.";
     btn.textContent="BLOQUEADA";btn.disabled=true;return;
   }
   const reg=await navigator.serviceWorker.ready;
   const sub=await reg.pushManager.getSubscription();
   if(sub&&Notification.permission==="granted"){
     title.textContent="Notificações ativas";
-    txt.textContent="Este iPhone pode receber avisos do ORAQUI mesmo com a tela fechada.";
+    txt.textContent="Este aparelho possui uma assinatura Push no navegador. Confira também o registro no servidor.";
     btn.textContent="✓ ATIVAS";btn.classList.add("enabled");btn.disabled=false;return;
   }
   title.textContent="Notificações do ORAQUI";
@@ -235,7 +240,7 @@ async function salvarAssinaturaPush(subscription){
 }
 
 async function ativarNotificacoes(){
-  if(!isStandalone()){
+  if(exigeInstalacaoParaPush()){
     alert("No iPhone: abra oraqui.app no Safari, toque em Compartilhar > Adicionar à Tela de Início. Depois abra o ORAQUI pelo ícone criado e toque novamente em ATIVAR.");
     return;
   }
