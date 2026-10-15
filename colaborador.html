@@ -116,8 +116,8 @@ main{max-width:720px;margin:-18px auto 80px;padding:0 15px}.user-card,.card,.ite
 <section class="section hidden" id="diasAnterioresSection"><div id="diasAnteriores"></div></section>
 </main>
 
-<div class="modal" id="execModal"><div class="modal-card"><div class="modal-head"><h2 id="modalTitle">Registrar execução</h2><button class="close" id="closeModal">×</button></div><div class="selection" id="modalSelection"></div><div class="field hidden" id="areaField"><label>ÁREA</label><select id="areaSelect"></select></div><div class="field hidden" id="pontoField"><label>PONTO / LOCAL</label><select id="pontoSelect"></select></div><button class="photo-button" id="photoButton">📷 ADICIONAR FOTO</button><input class="photo-input" id="photoInput" type="file" accept="image/*" capture="environment"><img class="preview" id="preview" alt="Prévia"><div class="field"><label>OBSERVAÇÃO</label><textarea id="observacao" maxlength="600" placeholder="Observação sobre a execução..."></textarea></div><button class="confirm" id="confirmExec">✓ REGISTRAR CONCLUSÃO</button></div></div>
-<div class="modal" id="demandaConclusaoModal"><div class="modal-card"><div class="modal-head"><h2>Concluir demanda</h2><button class="close" id="fecharDemandaConclusao" type="button">×</button></div><div class="selection" id="demandaConclusaoTitulo"></div><div class="field"><label>OBSERVAÇÃO DA EXECUÇÃO</label><textarea id="demandaConclusaoObs" maxlength="600" placeholder="Descreva o serviço realizado..."></textarea></div><button class="photo-button" id="demandaConclusaoFotoBtn" type="button">📷 ADICIONAR FOTO</button><input class="photo-input" id="demandaConclusaoFoto" type="file" accept="image/*" capture="environment"><img class="preview" id="demandaConclusaoPreview" alt="Foto da execução"><button class="confirm" id="salvarDemandaConclusao" type="button">✓ CONFIRMAR CONCLUSÃO</button></div></div><div class="toast" id="toast"></div>
+<div class="modal" id="execModal"><div class="modal-card"><div class="modal-head"><h2 id="modalTitle">Registrar execução</h2><button class="close" id="closeModal">×</button></div><div class="selection" id="modalSelection"></div><div class="field hidden" id="areaField"><label>ÁREA</label><select id="areaSelect"></select></div><div class="field hidden" id="pontoField"><label>PONTO / LOCAL</label><select id="pontoSelect"></select></div><div class="field"><label>📸 ANTES — situação encontrada</label><input id="fotoAntesExec" type="file" accept="image/*" capture="environment" style="width:100%"><small>Opcional, salvo no ORAQUI e não na galeria pelo aplicativo.</small></div><button class="photo-button" id="photoButton">📷 DEPOIS — FOTO DA EXECUÇÃO</button><input class="photo-input" id="photoInput" type="file" accept="image/*" capture="environment"><img class="preview" id="preview" alt="Prévia"><div class="field"><label>OBSERVAÇÃO</label><textarea id="observacao" maxlength="600" placeholder="Observação sobre a execução..."></textarea></div><button class="confirm" id="confirmExec">✓ REGISTRAR CONCLUSÃO</button></div></div>
+<div class="modal" id="demandaConclusaoModal"><div class="modal-card"><div class="modal-head"><h2>Concluir demanda</h2><button class="close" id="fecharDemandaConclusao" type="button">×</button></div><div class="selection" id="demandaConclusaoTitulo"></div><div class="field"><label>OBSERVAÇÃO DA EXECUÇÃO</label><textarea id="demandaConclusaoObs" maxlength="600" placeholder="Descreva o serviço realizado..."></textarea></div><div class="field"><label>📸 ANTES — situação encontrada</label><input id="demandaFotoAntes" type="file" accept="image/*" capture="environment" style="width:100%"></div><button class="photo-button" id="demandaConclusaoFotoBtn" type="button">📷 DEPOIS — FOTO DA EXECUÇÃO</button><input class="photo-input" id="demandaConclusaoFoto" type="file" accept="image/*" capture="environment"><img class="preview" id="demandaConclusaoPreview" alt="Foto da execução"><button class="confirm" id="salvarDemandaConclusao" type="button">✓ CONFIRMAR CONCLUSÃO</button></div></div><div class="toast" id="toast"></div>
 
 <script>
 const SUPABASE_URL="https://rhiosvsohvqqrxzwohqu.supabase.co";
@@ -356,8 +356,8 @@ async function carregarTudo(){
     const [ar,po,at,pr,es,de,rp,ex]=await Promise.all([
       db.from("areas").select("id,nome,descricao,ordem").eq("condominio_id",colaborador.condominio_id).eq("ativo",true).eq("visivel_colaborador",true).order("ordem",{ascending:true}).order("nome",{ascending:true}),
       db.from("pontos").select("id,area_id,nome,descricao,ordem").eq("condominio_id",colaborador.condominio_id).eq("ativo",true).eq("visivel_colaborador",true).order("ordem",{ascending:true}).order("nome",{ascending:true}),
-      db.from("atividades_v2").select("id,nome,descricao,exige_foto,exige_observacao").eq("condominio_id",colaborador.condominio_id).eq("ativo",true),
-      db.from("programacoes").select("id,atividade_id,area_id,ponto_id,colaborador_id,funcao,tipo,dias_semana,data_inicio,data_fim,horario_limite,prioridade,exige_foto,exige_observacao,instrucoes").eq("condominio_id",colaborador.condominio_id).eq("ativo",true),
+      db.from("atividades_v2").select("id,nome,descricao,exige_foto,exige_foto_antes,exige_observacao").eq("condominio_id",colaborador.condominio_id).eq("ativo",true),
+      db.from("programacoes").select("id,atividade_id,area_id,ponto_id,colaborador_id,funcao,tipo,dias_semana,data_inicio,data_fim,horario_limite,prioridade,exige_foto,exige_foto_antes,exige_observacao,instrucoes").eq("condominio_id",colaborador.condominio_id).eq("ativo",true),
       db.from("escalas").select("*").eq("condominio_id",colaborador.condominio_id).eq("colaborador_id",colaborador.id).eq("data",hoje()),
       db.from("demandas").select("*").eq("condominio_id",colaborador.condominio_id).neq("status","cancelada").order("created_at",{ascending:false}),
       db.from("registros_ponto").select("*").eq("condominio_id",colaborador.condominio_id).eq("colaborador_id",colaborador.id).gte("registrado_em",inicioHojeISO()).lte("registrado_em",fimHojeISO()).order("registrado_em"),
@@ -531,7 +531,7 @@ function abrirConclusaoDemanda(id){
   if(!d||d.status==='concluida'||!demandaParaColaborador(d))return;
   demandaEmConclusao=d;
   $('demandaConclusaoTitulo').textContent=`#${d.id} • ${d.titulo||'Demanda'}`;
-  $('demandaConclusaoObs').value='';$('demandaConclusaoFoto').value='';
+  $('demandaConclusaoObs').value='';$('demandaConclusaoFoto').value='';$('demandaFotoAntes').value='';
   $('demandaConclusaoPreview').classList.remove('visible');
   $('demandaConclusaoFotoBtn').textContent='📷 ADICIONAR FOTO';
   $('demandaConclusaoModal').classList.add('visible');
@@ -539,20 +539,27 @@ function abrirConclusaoDemanda(id){
 function fecharConclusaoDemanda(){$('demandaConclusaoModal').classList.remove('visible');demandaEmConclusao=null}
 async function salvarConclusaoDemanda(){
   const d=demandaEmConclusao;if(!d||!colaborador||!authUser)return;
-  const obs=$('demandaConclusaoObs').value.trim(),foto=$('demandaConclusaoFoto').files?.[0];
+  const obs=$('demandaConclusaoObs').value.trim(),foto=$('demandaConclusaoFoto').files?.[0],fotoAntes=$('demandaFotoAntes').files?.[0];
+  if(d.exige_foto_antes&&!fotoAntes)return alert('Esta demanda exige foto ANTES.');
   if(d.exige_foto&&!foto)return alert('Esta demanda exige fotografia.');
   if(d.exige_observacao&&!obs)return alert('Esta demanda exige observação.');
   if(!navigator.onLine)return alert('Para concluir demandas, conecte-se à internet.');
   const btn=$('salvarDemandaConclusao');btn.disabled=true;
   try{
-    const agora=new Date().toISOString();let path=null;
+    const agora=new Date().toISOString();let path=null,pathAntes=null;
+    if(fotoAntes){
+      const blobAntes=await fotoComCarimbo(fotoAntes,agora);
+      pathAntes=`demandas/${colaborador.condominio_id}/${colaborador.id}/${d.id}/antes-${crypto.randomUUID()}.jpg`;
+      const {error:erroAntes}=await db.storage.from(BUCKET).upload(pathAntes,blobAntes,{contentType:'image/jpeg'});
+      if(erroAntes)throw erroAntes;
+    }
     if(foto){
       const blob=await fotoComCarimbo(foto,agora);
       path=`demandas/${colaborador.condominio_id}/${colaborador.id}/${d.id}/${crypto.randomUUID()}.jpg`;
       const {error:uploadErro}=await db.storage.from(BUCKET).upload(path,blob,{contentType:'image/jpeg'});
       if(uploadErro)throw uploadErro;
     }
-    const payload={status:'concluida',concluida_em:agora,updated_at:agora,observacao_execucao:obs||null,foto_execucao_path:path};
+    const payload={status:'concluida',concluida_em:agora,updated_at:agora,observacao_execucao:obs||null,foto_execucao_path:path,foto_antes_path:pathAntes};
     const {data,error}=await db.from('demandas').update(payload)
       .eq('id',d.id).eq('condominio_id',colaborador.condominio_id)
       .neq('status','cancelada').neq('status','concluida').select('id');
@@ -651,7 +658,7 @@ function renderHistorico(){
 function abrirExecucao(id=null){
   execAtual=id?programacoes.find(p=>mesmoId(p.id,id)):null;
   fotoArquivo=null;
-  $("photoInput").value="";
+  $("photoInput").value="";$("fotoAntesExec").value="";
   $("preview").classList.remove("visible");
   $("photoButton").classList.remove("has");
   $("photoButton").textContent="📷 ADICIONAR FOTO";
@@ -758,6 +765,10 @@ async function enviarRegistroPendente(item){
   const {data:jaExiste,error:consultaErro}=await db.from('execucoes').select('id').eq('condominio_id',item.condominio_id).eq('colaborador_id',item.colaborador_id).eq('iniciada_em',item.payload.iniciada_em).limit(1);
   if(consultaErro)throw consultaErro;
   if(jaExiste?.length){await filaExcluir(item.id);return}
+  if(item.foto_antes){
+    const {error:erroAntes}=await db.storage.from(BUCKET).upload(item.foto_antes_path,item.foto_antes,{upsert:true,contentType:"image/jpeg"});
+    if(erroAntes)throw new Error("Falha no envio da foto ANTES: "+erroAntes.message);
+  }
   if(item.foto){
     const {error:uploadErro}=await db.storage.from(BUCKET).upload(item.foto_path,item.foto,{upsert:true,contentType:'image/jpeg'});
     if(uploadErro)throw new Error('Falha no envio da fotografia: '+uploadErro.message);
@@ -786,7 +797,10 @@ async function confirmarExecucao(){
   const exigeFoto=execAtual?(execAtual.exige_foto??at?.exige_foto??false):false;
   const exigeObs=execAtual?(execAtual.exige_observacao??at?.exige_observacao??false):false;
   const obs=$('observacao').value.trim();
-  if(exigeFoto&&!fotoArquivo){alert('Esta atividade exige foto.');return}
+  const fotoAntesArquivo=$('fotoAntesExec').files?.[0]||null;
+  const exigeAntes=!!(execAtual?.exige_foto_antes??at?.exige_foto_antes);
+  if(exigeAntes&&!fotoAntesArquivo){alert('Esta atividade exige foto ANTES.');return}
+  if(exigeFoto&&!fotoArquivo){alert('Esta atividade exige foto DEPOIS.');return}
   if(exigeObs&&!obs){alert('Esta atividade exige observação.');return}
   let areaId=execAtual?.area_id||null,pontoId=execAtual?.ponto_id||null;
   if(!execAtual){
@@ -801,16 +815,18 @@ async function confirmarExecucao(){
   try{
     const agora=new Date().toISOString(),id=crypto.randomUUID();
     const foto=await fotoComCarimbo(fotoArquivo,agora);
+    const fotoAntes=await fotoComCarimbo(fotoAntesArquivo,agora);
     const fotoPath=foto?`v2/${colaborador.condominio_id}/${colaborador.id}/${hoje()}/${id}.jpg`:null;
+    const fotoAntesPath=fotoAntes?`v2/${colaborador.condominio_id}/${colaborador.id}/${hoje()}/${id}-antes.jpg`:null;
     const payload={
       condominio_id:colaborador.condominio_id,colaborador_id:colaborador.id,
       programacao_id:execAtual?.id||null,atividade_id:execAtual?.atividade_id||null,
       area_id:areaId,ponto_id:pontoId,
       tipo:execAtual?(execAtual.tipo==='extraordinaria'?'extraordinaria':'programada'):'avulsa',
-      status:'concluida',observacao:obs||null,foto_path:fotoPath,
+      status:'concluida',observacao:obs||null,foto_path:fotoPath,foto_antes_path:fotoAntesPath,
       iniciada_em:agora,concluida_em:agora,updated_at:agora
     };
-    await filaSalvar({id,auth_user_id:authUser.id,condominio_id:colaborador.condominio_id,colaborador_id:colaborador.id,criado_em:agora,payload,foto,foto_path:fotoPath});
+    await filaSalvar({id,auth_user_id:authUser.id,condominio_id:colaborador.condominio_id,colaborador_id:colaborador.id,criado_em:agora,payload,foto,foto_path:fotoPath,foto_antes:fotoAntes,foto_antes_path:fotoAntesPath});
     fecharModal();await atualizarEstadoOffline();
     if(navigator.onLine){
       toast('Registro salvo. Sincronizando...');await sincronizarFilaOffline();
