@@ -88,6 +88,18 @@ main{max-width:720px;margin:-18px auto 80px;padding:0 15px}.user-card,.card,.ite
 .oraqui-avatar-link img{border-radius:19px}
 .oraqui-avatar-edit{position:absolute;right:-6px;bottom:-5px;background:#6859b2;color:#fff;border:2px solid white;border-radius:50%;width:23px;height:23px;display:grid;place-items:center;font-size:13px;font-weight:900;box-shadow:0 2px 7px #0002}
 .oraqui-avatar-link:focus-visible{outline:3px solid #6859b2}
+
+/* ORAQUI 2.0 — etapas fotográficas ANTES e DEPOIS */
+#blocoInicioExec,#blocoInicioDemanda{padding:17px;border:2px solid #d59b39;border-radius:18px;background:linear-gradient(145deg,#fff8e9,#fff1d3);margin-top:18px;box-shadow:0 5px 16px #9b681b16}
+#blocoInicioExec>label,#blocoInicioDemanda>label{display:block;font-size:16px!important;letter-spacing:.2px;color:#8b4c08!important;font-weight:900!important;margin-bottom:11px}
+#fotoAntesExec,#demandaFotoAntes{display:block;width:100%;padding:13px;border:2px dashed #d69a3d;border-radius:13px;background:#fff;color:#77480b;font-size:13px}
+#fotoAntesExec::file-selector-button,#demandaFotoAntes::file-selector-button{border:0;border-radius:10px;padding:12px 15px;margin-right:10px;background:#b86b15;color:#fff;font-weight:900;cursor:pointer}
+#inicioExecInfo,#inicioDemandaInfo{display:block;margin-top:10px;color:#80571f;font-size:12px;line-height:1.5}
+#iniciarExec,#iniciarDemanda{min-height:64px!important;background:#a85b10!important;border:2px solid #8e4a09!important;color:#fff!important;font-size:15px!important;letter-spacing:.35px;box-shadow:0 6px 16px #9d561b35}
+#photoButton,#demandaConclusaoFotoBtn{min-height:76px!important;margin-top:20px!important;border:3px solid #1975ad!important;border-radius:17px!important;background:linear-gradient(135deg,#e3f4ff,#cceaff)!important;color:#095684!important;font-size:17px!important;font-weight:900!important;letter-spacing:.3px;box-shadow:0 7px 18px #1975ad24}
+#photoButton.has{background:#d8f5e6!important;border-color:#218656!important;color:#16633f!important}
+#photoButton:focus-visible,#demandaConclusaoFotoBtn:focus-visible,#iniciarExec:focus-visible,#iniciarDemanda:focus-visible{outline:3px solid #222;outline-offset:3px}
+@media(max-width:420px){#blocoInicioExec>label,#blocoInicioDemanda>label{font-size:15px!important}#photoButton,#demandaConclusaoFotoBtn{font-size:15px!important}#fotoAntesExec::file-selector-button,#demandaFotoAntes::file-selector-button{padding:10px}}
 </style>
 </head>
 <body>
@@ -116,8 +128,8 @@ main{max-width:720px;margin:-18px auto 80px;padding:0 15px}.user-card,.card,.ite
 <section class="section hidden" id="diasAnterioresSection"><div id="diasAnteriores"></div></section>
 </main>
 
-<div class="modal" id="execModal"><div class="modal-card"><div class="modal-head"><h2 id="modalTitle">Registrar execução</h2><button class="close" id="closeModal">×</button></div><div class="selection" id="modalSelection"></div><div class="field hidden" id="areaField"><label>ÁREA</label><select id="areaSelect"></select></div><div class="field hidden" id="pontoField"><label>PONTO / LOCAL</label><select id="pontoSelect"></select></div><div class="field" id="blocoInicioExec"><label>📸 ANTES — situação encontrada</label><input id="fotoAntesExec" type="file" accept="image/*" capture="environment" style="width:100%"><small id="inicioExecInfo">Fotografe e toque em INICIAR. A foto será enviada ao ORAQUI.</small><button class="photo-button" type="button" id="iniciarExec">▶ INICIAR ATIVIDADE</button></div><button class="photo-button" id="photoButton">📷 DEPOIS — FOTO DA EXECUÇÃO</button><input class="photo-input" id="photoInput" type="file" accept="image/*" capture="environment"><img class="preview" id="preview" alt="Prévia"><div class="field"><label>OBSERVAÇÃO</label><textarea id="observacao" maxlength="600" placeholder="Observação sobre a execução..."></textarea></div><button class="confirm" id="confirmExec">✓ REGISTRAR CONCLUSÃO</button></div></div>
-<div class="modal" id="demandaConclusaoModal"><div class="modal-card"><div class="modal-head"><h2>Concluir demanda</h2><button class="close" id="fecharDemandaConclusao" type="button">×</button></div><div class="selection" id="demandaConclusaoTitulo"></div><div class="field"><label>OBSERVAÇÃO DA EXECUÇÃO</label><textarea id="demandaConclusaoObs" maxlength="600" placeholder="Descreva o serviço realizado..."></textarea></div><div class="field" id="blocoInicioDemanda"><label>📸 ANTES — situação encontrada</label><input id="demandaFotoAntes" type="file" accept="image/*" capture="environment" style="width:100%"><small id="inicioDemandaInfo">Fotografe a situação e inicie a demanda antes de executar.</small><button class="photo-button" type="button" id="iniciarDemanda">▶ INICIAR DEMANDA</button></div><button class="photo-button" id="demandaConclusaoFotoBtn" type="button">📷 DEPOIS — FOTO DA EXECUÇÃO</button><input class="photo-input" id="demandaConclusaoFoto" type="file" accept="image/*" capture="environment"><img class="preview" id="demandaConclusaoPreview" alt="Foto da execução"><button class="confirm" id="salvarDemandaConclusao" type="button">✓ CONFIRMAR CONCLUSÃO</button></div></div><div class="toast" id="toast"></div>
+<div class="modal" id="execModal"><div class="modal-card"><div class="modal-head"><h2 id="modalTitle">Registrar execução</h2><button class="close" id="closeModal">×</button></div><div class="selection" id="modalSelection"></div><div class="field hidden" id="areaField"><label>ÁREA</label><select id="areaSelect"></select></div><div class="field hidden" id="pontoField"><label>PONTO / LOCAL</label><select id="pontoSelect"></select></div><div class="field" id="blocoInicioExec"><label>📸 ANTES — COMO ESTAVA</label><input id="fotoAntesExec" type="file" accept="image/*" capture="environment" style="width:100%"><small id="inicioExecInfo">Fotografe e toque em INICIAR. A foto será enviada ao ORAQUI.</small><button class="photo-button" type="button" id="iniciarExec">▶ INICIAR ATIVIDADE</button></div><button class="photo-button" id="photoButton">📸 DEPOIS — COMO FICOU</button><input class="photo-input" id="photoInput" type="file" accept="image/*" capture="environment"><img class="preview" id="preview" alt="Prévia"><div class="field"><label>OBSERVAÇÃO</label><textarea id="observacao" maxlength="600" placeholder="Observação sobre a execução..."></textarea></div><button class="confirm" id="confirmExec">✓ REGISTRAR CONCLUSÃO</button></div></div>
+<div class="modal" id="demandaConclusaoModal"><div class="modal-card"><div class="modal-head"><h2>Concluir demanda</h2><button class="close" id="fecharDemandaConclusao" type="button">×</button></div><div class="selection" id="demandaConclusaoTitulo"></div><div class="field"><label>OBSERVAÇÃO DA EXECUÇÃO</label><textarea id="demandaConclusaoObs" maxlength="600" placeholder="Descreva o serviço realizado..."></textarea></div><div class="field" id="blocoInicioDemanda"><label>📸 ANTES — COMO ESTAVA</label><input id="demandaFotoAntes" type="file" accept="image/*" capture="environment" style="width:100%"><small id="inicioDemandaInfo">Fotografe a situação e inicie a demanda antes de executar.</small><button class="photo-button" type="button" id="iniciarDemanda">▶ INICIAR DEMANDA</button></div><button class="photo-button" id="demandaConclusaoFotoBtn" type="button">📸 DEPOIS — COMO FICOU</button><input class="photo-input" id="demandaConclusaoFoto" type="file" accept="image/*" capture="environment"><img class="preview" id="demandaConclusaoPreview" alt="Foto da execução"><button class="confirm" id="salvarDemandaConclusao" type="button">✓ CONFIRMAR CONCLUSÃO</button></div></div><div class="toast" id="toast"></div>
 
 <script>
 const SUPABASE_URL="https://rhiosvsohvqqrxzwohqu.supabase.co";
@@ -536,7 +548,7 @@ function abrirConclusaoDemanda(id){
   $('demandaConclusaoTitulo').textContent=`#${d.id} • ${d.titulo||'Demanda'}`;
   $('demandaConclusaoObs').value='';$('demandaConclusaoFoto').value='';$('demandaFotoAntes').value='';
   $('demandaConclusaoPreview').classList.remove('visible');
-  $('demandaConclusaoFotoBtn').textContent='📷 ADICIONAR FOTO';
+  $('demandaConclusaoFotoBtn').textContent='📸 DEPOIS — FOTOGRAFAR RESULTADO';
   $('demandaConclusaoModal').classList.add('visible');
   atualizarBlocoInicio('demanda',d.id);
 }
@@ -768,7 +780,7 @@ async function abrirExecucao(id=null,manterAvulsa=false){
   $("photoInput").value="";$("fotoAntesExec").value="";
   $("preview").classList.remove("visible");
   $("photoButton").classList.remove("has");
-  $("photoButton").textContent="📷 ADICIONAR FOTO";
+  $("photoButton").textContent="📸 DEPOIS — FOTOGRAFAR RESULTADO";
   $("observacao").value="";
   $("modalTitle").textContent=execAtual?"Registrar execução":"Registrar atividade";
 
@@ -989,7 +1001,7 @@ async function sair(){
 $('fecharDemandaConclusao').onclick=fecharConclusaoDemanda;
 $('salvarDemandaConclusao').onclick=salvarConclusaoDemanda;
 $('demandaConclusaoFotoBtn').onclick=()=>$('demandaConclusaoFoto').click();
-$('demandaConclusaoFoto').onchange=e=>{const f=e.target.files?.[0];if(!f)return;if(!f.type.startsWith('image/')||f.size>10*1024*1024){alert('Selecione imagem de até 10 MB.');e.target.value='';return}const img=$('demandaConclusaoPreview');img.src=URL.createObjectURL(f);img.classList.add('visible');$('demandaConclusaoFotoBtn').textContent='📷 FOTO SELECIONADA'};
+$('demandaConclusaoFoto').onchange=e=>{const f=e.target.files?.[0];if(!f)return;if(!f.type.startsWith('image/')||f.size>10*1024*1024){alert('Selecione imagem de até 10 MB.');e.target.value='';return}const img=$('demandaConclusaoPreview');img.src=URL.createObjectURL(f);img.classList.add('visible');$('demandaConclusaoFotoBtn').textContent='✓ DEPOIS — FOTO SELECIONADA'};
 $("logout").onclick=sair;
 $("demoBack").onclick=voltarGestaoDemo;
 $("notificationBtn").onclick=acaoNotificacao;
@@ -1020,7 +1032,7 @@ $("photoInput").onchange=e=>{
   $("preview").src=previewURL;
   $("preview").classList.add("visible");
   $("photoButton").classList.add("has");
-  $("photoButton").textContent="📷 FOTO SELECIONADA";
+  $("photoButton").textContent="✓ DEPOIS — FOTO SELECIONADA";
 };
 $("execModal").onclick=e=>{if(e.target===$("execModal"))fecharModal()};
 iniciar();
