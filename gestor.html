@@ -5,15 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Gestão — ORAQUI</title>
 <meta name="theme-color" content="#342a67">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
-document.addEventListener('click',e=>{
-  const b=e.target.closest('.demand-before-photo');
-  if(!b)return;
-  e.preventDefault();e.stopPropagation();
-  const d=demandasOcorrencias.find(x=>Number(x.id)===Number(b.dataset.demand));
-  if(d?.foto_antes_path)abrirFotoStorage(d.foto_antes_path,'atividade');
-});
-</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{--primary:#7667b9;--primary-light:#eeeafd;--blue:#5d88a5;--blue-light:#eaf4f8;--green:#69a17f;--green-light:#eaf5ee;--yellow:#c4974d;--yellow-light:#fff5df;--red:#c96565;--red-light:#fdecec;--text:#2d3742;--muted:#75808c;--background:#f4f6f8;--card:#fff;--border:#e4e9ee;--shadow:0 10px 30px rgba(35,48,65,.06)}
 *{box-sizing:border-box;margin:0;padding:0}body{min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--background);color:var(--text)}button,input,select,textarea{font-family:inherit}button{cursor:pointer}.hidden{display:none!important}
@@ -1195,6 +1187,14 @@ async function criarDemandaPortal(m){
   await carregarPortalSindico();toast(`Demanda #${demanda.id} criada e vinculada.`);
  }catch(e){alert('Erro ao criar demanda: '+e.message)}
 }
+
+document.addEventListener('click',e=>{
+  const b=e.target.closest('.demand-before-photo');
+  if(!b)return;
+  e.preventDefault();e.stopPropagation();
+  const d=demandasOcorrencias.find(x=>Number(x.id)===Number(b.dataset.demand));
+  if(d?.foto_antes_path)abrirFotoStorage(d.foto_antes_path,'atividade');
+});
 </script>
 </body>
 </html>
