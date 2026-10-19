@@ -1,4 +1,4 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Documentos — Gestão ORAQUI</title><style>body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f3f5f8;color:#2d3742;margin:0}header{background:linear-gradient(120deg,#6d80a8,#7c72ae);color:white;padding:24px 18px}main{max-width:760px;margin:auto;padding:18px}h1{font-size:24px}.card{background:white;border-radius:18px;padding:17px;margin:13px 0;box-shadow:0 7px 24px #25313c0c}.muted{color:#73808d;font-size:13px}.row{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}.btn{background:#7667b9;color:white;border:0;border-radius:12px;padding:12px 16px;cursor:pointer;font-weight:700;text-decoration:none;display:inline-block}.btn.secondary{background:#eae7f6;color:#55478e}.btn:disabled{opacity:.5}input,select{width:100%;padding:12px;box-sizing:border-box;border:1px solid #dce2e9;border-radius:11px;margin:6px 0 12px}label{font-size:12px;font-weight:700}.error{color:#ad2533}.ok{color:#2b8153}.actions{display:flex;gap:8px;flex-wrap:wrap}.actions button{font-size:12px}small{color:#73808d}#status{margin:12px 0}</style></head><body><header><div class="row"><h1>📁 Documentos — Gestão</h1><a class="btn secondary" href="gestor.html">← VOLTAR</a></div></header><main><div id="status"></div><div class="card"><label>CONDOMÍNIO</label><select id="condo"></select><label>COLABORADOR</label><select id="colab"></select><label>TIPO DE DOCUMENTO</label><select id="tipo"><option>Holerite</option><option>Recibo de férias</option><option>Informe de rendimentos</option><option>Comprovante de pagamento</option><option>Comunicado</option><option>Outro</option></select><label>COMPETÊNCIA (AAAA-MM)</label><input type="month" id="competencia"><label>PDF</label><input type="file" id="arquivo" accept="application/pdf"><label style="display:flex;align-items:center;gap:10px;font-size:14px;margin:12px 0"><input id="exigirCiencia" type="checkbox" style="width:auto;margin:0;transform:scale(1.3)"> Exigir confirmação de recebimento e ciência</label><button id="enviar" class="btn">ENVIAR DOCUMENTO</button></div><h2>Documentos publicados</h2><div id="lista"></div></main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Documentos — Gestão ORAQUI</title><style>body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f3f5f8;color:#2d3742;margin:0}header{background:linear-gradient(120deg,#6d80a8,#7c72ae);color:white;padding:24px 18px}main{max-width:760px;margin:auto;padding:18px}h1{font-size:24px}.card{background:white;border-radius:18px;padding:17px;margin:13px 0;box-shadow:0 7px 24px #25313c0c}.muted{color:#73808d;font-size:13px}.row{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}.btn{background:#7667b9;color:white;border:0;border-radius:12px;padding:12px 16px;cursor:pointer;font-weight:700;text-decoration:none;display:inline-block}.btn.secondary{background:#eae7f6;color:#55478e}.btn:disabled{opacity:.5}input,select{width:100%;padding:12px;box-sizing:border-box;border:1px solid #dce2e9;border-radius:11px;margin:6px 0 12px}label{font-size:12px;font-weight:700}.error{color:#ad2533}.ok{color:#2b8153}.actions{display:flex;gap:8px;flex-wrap:wrap}.actions button{font-size:12px}small{color:#73808d}#status{margin:12px 0}</style></head><body><header><div class="row"><h1>📁 Documentos — Gestão</h1><a class="btn secondary" href="gestor.html">← VOLTAR</a></div></header><main><div id="status"></div><div class="card"><label>CONDOMÍNIO</label><select id="condo"></select><label>COLABORADOR</label><select id="colab"></select><label>TIPO DE DOCUMENTO</label><select id="tipo"><option>Holerite</option><option>Recibo de férias</option><option>Informe de rendimentos</option><option>Comprovante de pagamento</option><option>Comunicado</option><option>Outro</option></select><label>COMPETÊNCIA (AAAA-MM)</label><input type="month" id="competencia"><label>PDF</label><input type="file" id="arquivo" accept="application/pdf"><label style="display:flex;align-items:center;gap:10px;font-size:14px;margin:12px 0"><input id="exigirCiencia" type="checkbox" style="width:auto;margin:0;transform:scale(1.3)"> Exigir confirmação de recebimento e ciência</label><button id="enviar" class="btn">ENVIAR DOCUMENTO</button></div><section class="card" id="loteBox"><h2>📦 Importar holerites em lote</h2><p class="muted">Selecione a pasta ou vários PDFs. O ORAQUI identifica a empresa (1, 2, 3, 4 ou 6) e o registro da folha no nome do arquivo. A conferência é obrigatória antes da publicação.</p><div class="actions"><label class="btn secondary" style="font-size:13px">📁 SELECIONAR PASTA<input id="pastaLote" type="file" webkitdirectory directory multiple accept=".pdf,application/pdf" style="display:none"></label><label class="btn secondary" style="font-size:13px">📄 SELECIONAR PDFs<input id="arquivosLote" type="file" multiple accept=".pdf,application/pdf" style="display:none"></label></div><label style="display:flex;align-items:center;gap:9px;margin:15px 0;font-size:14px"><input type="checkbox" id="cienciaLote" checked style="width:auto;margin:0"> Exigir confirmação de recebimento e ciência neste lote</label><div id="resumoLote" class="muted" aria-live="polite">Nenhum arquivo selecionado.</div><div id="tabelaLote" style="margin-top:12px;max-height:390px;overflow:auto"></div><div class="actions" style="margin-top:15px"><button class="btn" id="publicarLote" disabled>PUBLICAR DOCUMENTOS IDENTIFICADOS</button><button class="btn secondary" id="limparLote" type="button">LIMPAR SELEÇÃO</button></div><div id="progressoLote" class="muted" aria-live="polite" style="margin-top:12px"></div></section><h2>Documentos publicados</h2><div id="lista"></div></main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
 const db=window.supabase.createClient('https://rhiosvsohvqqrxzwohqu.supabase.co','sb_publishable_vcjiMMCTxQJ7ArTGsQ-PuQ_5gaAfoIt');
 const BUCKET='documentos-privados';const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');
@@ -31,8 +31,104 @@ function gerarComprovante(doc,colab){
  catch(e){aviso('Falha ao gerar comprovante: '+e.message,true)}
 }
 
+
+// Importador: mantém o vínculo de condomínio em cada documento e respeita o acesso do gestor.
+// A seleção não exige separar arquivos por condomínio; o destino é encontrado pela conta cadastrada.
+const EMPRESAS_FOLHA=new Set([1,2,3,4,6]);
+let condominiosAutorizados=[],itensLote=[],publicandoLote=false;
+function normalizarNome(v){return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/[^A-Z0-9]/g,'')}
+function registroNormalizado(v){const t=String(v??'').trim();return /^\d+$/.test(t)?t.replace(/^0+(?=\d)/,''):''}
+function extrairFolha(nome){
+ const m=String(nome).match(/^([0-9]+)-(0[1-9]|1[0-2])-(20\d\d)-([A-Za-z0-9]+)-([0-9]+)-(.+?)\.pdf$/i);
+ if(!m)return {erro:'Nome fora do padrão empresa-mês-ano-tipo-registro-nome.pdf'};
+ const empresa=Number(m[1]),tipoFolha=m[4].toUpperCase(),registro=registroNormalizado(m[5]);
+ if(!EMPRESAS_FOLHA.has(empresa))return {erro:'Empresa não permitida (use 1, 2, 3, 4 ou 6)'};
+ if(tipoFolha!=='M')return {erro:'Não é holerite mensal (tipo '+tipoFolha+'). Revise manualmente.'};
+ if(!/recibo\s*de\s*pagamento/i.test(m[6]))return {erro:'Arquivo não identificado como recibo de pagamento'};
+ const nomePessoa=m[6].replace(/[-_ ]*recibo\s*de\s*pagamento.*$/i,'').replace(/[-_]+$/,'');
+ if(!normalizarNome(nomePessoa))return {erro:'Nome do colaborador ausente'};
+ return {empresa,registro,competencia:m[3]+'-'+m[2],nomePessoa};
+}
+function linhaLote(i){const estado=i.estado==='pronto'?'✅ Pronto':i.estado==='enviado'?'✅ Publicado':i.estado==='enviando'?'⏳ Enviando':i.estado==='erro'?'❌ Erro':'⚠️ Revisar';return `<div style="border-bottom:1px solid #e2e6eb;padding:10px 0;font-size:13px"><strong>${esc(i.file.name)}</strong><div class="muted">${esc(i.destino?.nome||'Sem destinatário')} · ${esc(i.destino?'Empresa '+i.info.empresa+' / registro '+i.info.registro:'')}</div><div>${estado} — ${esc(i.motivo||'Correspondência confirmada')}</div></div>`}
+function desenharLote(){const pronto=itensLote.filter(i=>i.estado==='pronto').length,erro=itensLote.filter(i=>i.estado==='erro').length,enviado=itensLote.filter(i=>i.estado==='enviado').length,pendente=itensLote.length-pronto-erro-enviado;
+ $('resumoLote').textContent=`${itensLote.length} arquivos | ${pronto} prontos | ${enviado} publicados | ${pendente} para revisar | ${erro} erros`;
+ $('tabelaLote').innerHTML=itensLote.map(linhaLote).join('');$('publicarLote').disabled=publicandoLote||!pronto;
+}
+async function consultarCadastrados(){
+ if(!condominiosAutorizados.length)throw Error('Sem condomínios autorizados para publicar documentos.');
+ let todos=[];
+ for(const cid of condominiosAutorizados){
+   let inicio=0;
+   while(true){
+     const {data,error}=await db.from('colaboradores').select('id,nome,empresa_folha,registro_folha,condominio_id,auth_user_id,ativo').eq('condominio_id',cid).eq('ativo',true).range(inicio,inicio+499);
+     if(error)throw error;
+     todos.push(...(data||[]));
+     if((data||[]).length<500)break;
+     inicio+=500;
+   }
+ }
+ return todos;
+}
+async function selecionarLote(files){
+ if(publicandoLote)return;
+ itensLote=[];$('progressoLote').textContent='Verificando cadastros e nomes...';desenharLote();
+ try{
+  const lista=Array.from(files||[]).filter(f=>/\.pdf$/i.test(f.name));
+  if(!lista.length)throw Error('Selecione uma pasta com arquivos PDF.');
+  const cadastrados=await consultarCadastrados();
+  const mapa=new Map();
+  for(const c of cadastrados){const r=registroNormalizado(c.registro_folha);if(!r||!EMPRESAS_FOLHA.has(Number(c.empresa_folha)))continue;const chave=`${c.empresa_folha}:${r}`;if(!mapa.has(chave))mapa.set(chave,[]);mapa.get(chave).push(c)}
+  const vistos=new Set();
+  itensLote=lista.map(file=>{
+   const info=extrairFolha(file.name),item={file,info,estado:'bloqueado',motivo:'',destino:null};
+   if(info.erro){item.motivo=info.erro;return item}
+   if(file.size>10*1024*1024||file.size===0){item.motivo='PDF vazio ou acima de 10 MB';return item}
+   const chave=`${info.empresa}:${info.registro}`,destinos=mapa.get(chave)||[];
+   if(destinos.length!==1){item.motivo=destinos.length?'Registro duplicado em cadastros acessíveis':'Empresa e registro não encontrados';return item}
+   const c=destinos[0];
+   if(!c.auth_user_id){item.motivo='Colaborador ainda não possui conta autenticada vinculada';return item}
+   const arquivoNome=normalizarNome(info.nomePessoa),cadNome=normalizarNome(c.nome);
+   if(arquivoNome!==cadNome){item.motivo='Nome diferente do cadastro: '+c.nome;return item}
+   if(vistos.has(chave+':'+info.competencia)){item.motivo='Documento repetido neste lote';return item}
+   vistos.add(chave+':'+info.competencia);
+   item.destino=c;item.estado='pronto';item.motivo='Destino validado';return item;
+  });
+  $('progressoLote').textContent='Confira os documentos identificados. Somente os marcados como Pronto serão publicados.';
+ }catch(e){$('progressoLote').textContent='Erro na análise: '+e.message}
+ desenharLote();
+}
+async function publicarLote(){
+ if(publicandoLote)return;
+ const pendentes=itensLote.filter(i=>i.estado==='pronto');if(!pendentes.length)return;
+ if(!confirm(`Publicar ${pendentes.length} documento(s) identificado(s)? Os itens com divergência não serão enviados.`))return;
+ publicandoLote=true;desenharLote();
+ try{
+  const {data:{user},error:ue}=await db.auth.getUser();if(ue||!user)throw Error('Faça login novamente.');
+  const exigir=$('cienciaLote').checked;
+  for(let n=0;n<pendentes.length;n++){
+   const i=pendentes[n];i.estado='enviando';i.motivo='Publicando...';desenharLote();
+   const cid=i.destino.condominio_id,id=crypto.randomUUID(),path=`${cid}/${i.destino.id}/${id}.pdf`;
+   try{
+    const {error:up}=await db.storage.from(BUCKET).upload(path,i.file,{contentType:'application/pdf',upsert:false});if(up)throw up;
+    const {error:ins}=await db.from('documentos_colaborador').insert({id,condominio_id:cid,colaborador_id:i.destino.id,tipo:'Holerite',competencia:i.info.competencia,nome_arquivo:i.file.name,storage_path:path,criado_por:user.id,exigir_ciencia:exigir});
+    if(ins){await db.storage.from(BUCKET).remove([path]);throw ins}
+    i.estado='enviado';i.motivo='Publicado para '+i.destino.nome;
+   }catch(e){i.estado='erro';i.motivo=e.message}
+   $('progressoLote').textContent=`Processados ${n+1} de ${pendentes.length}. Não feche esta página até terminar.`;
+   desenharLote();
+  }
+  $('progressoLote').textContent='Processamento concluído. Confira os resultados abaixo. Itens com erro não foram confirmados como publicados.';
+  await carregar();
+ }catch(e){$('progressoLote').textContent='Envio interrompido: '+e.message}
+ finally{publicandoLote=false;desenharLote()}
+}
+$('pastaLote').addEventListener('change',e=>selecionarLote(e.target.files));
+$('arquivosLote').addEventListener('change',e=>selecionarLote(e.target.files));
+$('publicarLote').addEventListener('click',publicarLote);
+$('limparLote').addEventListener('click',()=>{if(publicandoLote)return;itensLote=[];$('pastaLote').value='';$('arquivosLote').value='';$('progressoLote').textContent='';desenharLote()});
+
 let condoAtual=null,usuarios=[];
-async function iniciar(){try{const {data:{user},error:ue}=await db.auth.getUser();if(ue||!user)throw Error('Faça login como gestor.');const {data,error}=await db.from('usuarios_gestao').select('condominio_id').eq('auth_user_id',user.id).eq('ativo',true);if(error)throw error;const ids=[...new Set((data||[]).map(x=>x.condominio_id))];if(!ids.length)throw Error('Sem acesso à gestão de condomínios.');const {data:cs,error:ce}=await db.from('condominios').select('id,nome').in('id',ids).order('nome');if(ce)throw ce;$('condo').innerHTML=(cs||[]).map(c=>`<option value="${c.id}">${esc(c.nome)}</option>`).join('');const preferido=sessionStorage.getItem('oraqui_gestao_condominio_id');if(ids.map(String).includes(preferido))$('condo').value=preferido;$('condo').onchange=carregar;await carregar();}catch(e){aviso(e.message,true)}}
+async function iniciar(){try{const {data:{user},error:ue}=await db.auth.getUser();if(ue||!user)throw Error('Faça login como gestor.');const {data,error}=await db.from('usuarios_gestao').select('condominio_id').eq('auth_user_id',user.id).eq('ativo',true);if(error)throw error;const ids=[...new Set((data||[]).map(x=>x.condominio_id))];if(!ids.length)throw Error('Sem acesso à gestão de condomínios.');condominiosAutorizados=ids;const {data:cs,error:ce}=await db.from('condominios').select('id,nome').in('id',ids).order('nome');if(ce)throw ce;$('condo').innerHTML=(cs||[]).map(c=>`<option value="${c.id}">${esc(c.nome)}</option>`).join('');const preferido=sessionStorage.getItem('oraqui_gestao_condominio_id');if(ids.map(String).includes(preferido))$('condo').value=preferido;$('condo').onchange=carregar;await carregar();}catch(e){aviso(e.message,true)}}
 async function carregar(){condoAtual=Number($('condo').value);const alvo=condoAtual;const [c,d]=await Promise.all([db.from('colaboradores').select('id,nome,matricula').eq('condominio_id',alvo).order('nome'),db.from('documentos_colaborador').select('id,colaborador_id,tipo,competencia,nome_arquivo,storage_path,created_at,exigir_ciencia,ciencia_em,ciencia_por').eq('condominio_id',alvo).order('created_at',{ascending:false}).limit(100)]);if(alvo!==Number($('condo').value))return;if(c.error||d.error){aviso((c.error||d.error).message,true);return}usuarios=c.data||[];$('colab').innerHTML=usuarios.map(x=>`<option value="${x.id}">${esc(x.nome)} • ${esc(x.matricula||'')}</option>`).join('');const docs=d.data||[];$('lista').innerHTML=docs.length?docs.map(x=>`<div class="card"><strong>${esc(x.tipo)} — ${esc(x.competencia||'')}</strong><div class="muted">${esc(usuarios.find(u=>u.id===x.colaborador_id)?.nome||'Colaborador')} · ${esc(x.nome_arquivo)}</div><div class="muted" style="margin-top:8px">${!x.exigir_ciencia?'Ciência não exigida':x.ciencia_em?'✅ Ciência confirmada em '+esc(new Date(x.ciencia_em).toLocaleString('pt-BR')):'⏳ Aguardando ciência'}</div><button class="btn secondary" data-id="${x.id}" style="margin-top:10px">VISUALIZAR</button>${x.ciencia_em?` <button class="btn" data-comprovante="${x.id}" style="margin-top:10px">📄 COMPROVANTE PDF</button>`:''}</div>`).join(''):'<div class="card">Nenhum documento publicado.</div>';$('lista').onclick=e=>{const b=e.target.closest('button');if(!b)return;const id=b.dataset.id||b.dataset.comprovante;const x=docs.find(x=>String(x.id)===id);if(!x)return;if(b.dataset.comprovante)gerarComprovante(x,usuarios.find(u=>u.id===x.colaborador_id));else abrirDocumento(x.storage_path)};}
 $('enviar').onclick=async()=>{const btn=$('enviar');btn.disabled=true;try{const file=$('arquivo').files[0];if(!file||file.type!=='application/pdf'||file.size>10*1024*1024)throw Error('Selecione um PDF de até 10 MB.');const colaboradorId=Number($('colab').value);if(!colaboradorId)throw Error('Selecione o colaborador.');const {data:{user}}=await db.auth.getUser();if(!user)throw Error('Sessão expirada.');const id=crypto.randomUUID();const path=`${condoAtual}/${colaboradorId}/${id}.pdf`;const {error:up}=await db.storage.from(BUCKET).upload(path,file,{contentType:'application/pdf',upsert:false});if(up)throw up;const {error:ins}=await db.from('documentos_colaborador').insert({id,condominio_id:condoAtual,colaborador_id:colaboradorId,tipo:$('tipo').value,competencia:$('competencia').value||null,nome_arquivo:file.name,storage_path:path,criado_por:user.id,exigir_ciencia:$('exigirCiencia').checked});if(ins){await db.storage.from(BUCKET).remove([path]);throw ins}aviso('Documento disponibilizado para o colaborador.');$('arquivo').value='';$('exigirCiencia').checked=false;await carregar();}catch(e){aviso('Falha no envio: '+e.message,true)}finally{btn.disabled=false}};iniciar();
 </script></body></html>
