@@ -72,6 +72,21 @@ main{max-width:980px;margin:-18px auto 80px;padding:0 16px}.manager-card,.tower-
 .oraqui-profile-photo{width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block}
 .oraqui-photo-button{border:1px solid #d9d3f5;background:#f5f2ff;color:#6254a6;border-radius:11px;padding:9px 11px;font-size:11px;font-weight:800;cursor:pointer}
 @media(max-width:350px){.oraqui-quick a{font-size:10px;min-height:85px}}
+
+/* ORAQUI 2.0 — painel inicial com seis acessos grandes */
+#app main.ora-home-mode > .tabs,#app main.ora-home-mode > .panel,#app main.ora-home-mode > .oraqui-quick{display:none!important}
+#oraHome{display:none}#app main.ora-home-mode #oraHome{display:block}
+.ora-home-heading{margin:18px 0 15px}.ora-home-heading h2{font-size:23px;margin:0 0 6px;color:#26314b}.ora-home-heading p{font-size:13px;color:#67748b;margin:0}
+.ora-home-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.ora-home-tile{min-height:152px;background:#fff;border:1px solid #e4e8f0;border-radius:22px;padding:20px 14px;text-align:left;box-shadow:0 5px 16px #172b4d0d;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:8px;color:#28324a}
+.ora-home-tile:focus-visible,.ora-bottom button:focus-visible{outline:3px solid #7567b9;outline-offset:2px}
+.ora-home-tile .ora-tile-icon{font-size:38px;line-height:1.1}.ora-home-tile strong{font-size:17px}.ora-home-tile small{font-size:12px;color:#68758a;line-height:1.3}
+.ora-bottom{position:sticky;bottom:0;z-index:60;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));background:#fff;border-top:1px solid #e1e6ef;box-shadow:0 -5px 22px #18243b12;padding:7px 4px max(7px,env(safe-area-inset-bottom))}
+.ora-bottom button,.ora-bottom a{min-height:56px;border:0;background:transparent;text-decoration:none;color:#52617c;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:11px;font-weight:750;cursor:pointer;border-radius:12px}
+.ora-bottom .ora-nav-icon{font-size:24px;line-height:1.2}.ora-bottom .ora-nav-active{color:#6855aa;background:#f0ebff}
+.ora-detail-back{display:none;margin:12px 0 6px;border:0;border-radius:12px;background:#ede9fa;color:#55408f;padding:12px 15px;font-weight:800;cursor:pointer}
+#app main:not(.ora-home-mode) .ora-detail-back{display:inline-flex}
+@media(max-width:380px){.ora-home-grid{gap:9px}.ora-home-tile{min-height:136px;padding:14px 11px}.ora-home-tile strong{font-size:15px}}
 </style>
 </head>
 <body>
@@ -79,7 +94,15 @@ main{max-width:980px;margin:-18px auto 80px;padding:0 16px}.manager-card,.tower-
 <div class="condo-choice" id="condoChoice"><div class="condo-choice-card"><h2>Selecionar condomínio</h2><p>Escolha o ambiente de gestão que deseja acessar.</p><div id="condoChoiceList"></div></div></div>
 <div id="app" class="hidden">
 <header><div class="header-content"><div class="topbar"><div class="brand"><div class="brand-icon">✓</div><div><strong>ORAQUI</strong><small>AGORA. AQUI. REGISTRADO.</small></div></div><div><button class="condo-switch hidden" id="changeCondoButton" type="button">TROCAR</button> <button class="logout" id="logoutButton">SAIR</button></div></div><div class="header-title"><small id="headerCondominio">CONDOMÍNIO</small><h1>Painel de Gestão</h1><p>Operação, ocorrências, equipe e configuração operacional.</p></div></div></header>
-<main>
+<main class="ora-home-mode"><section id="oraHome" aria-label="Painel inicial"><div class="ora-home-heading"><h2>O que deseja fazer?</h2><p>Acesse rapidamente as principais funções da gestão.</p></div><div class="ora-home-grid">
+<button class="ora-home-tile" type="button" data-ora-go="ocorrencias"><span class="ora-tile-icon">📋</span><strong>Demandas</strong><small>Serviços e solicitações</small></button>
+<button class="ora-home-tile" type="button" data-ora-go="ocorrencias"><span class="ora-tile-icon">🚨</span><strong>Ocorrências</strong><small>Registros e pendências</small></button>
+<button class="ora-home-tile" type="button" data-ora-go="colaboradores"><span class="ora-tile-icon">👥</span><strong>Equipe</strong><small>Colaboradores e gestores</small></button>
+<button class="ora-home-tile" type="button" data-ora-go="cronograma"><span class="ora-tile-icon">📅</span><strong>Cronograma</strong><small>Atividades programadas</small></button>
+<button class="ora-home-tile" type="button" data-ora-go="operacao"><span class="ora-tile-icon">📊</span><strong>Relatórios</strong><small>Registros e resultados</small></button>
+<button class="ora-home-tile" type="button" data-ora-go="documentos"><span class="ora-tile-icon">📁</span><strong>Documentos</strong><small>Arquivos da equipe</small></button>
+</div><p style="font-size:12px;color:#69758b;margin:17px 0">As demais funções continuam disponíveis em <b>Mais</b>.</p></section><button type="button" class="ora-detail-back" id="oraBackHome">← Voltar ao início</button>
+
 <div class="manager-card"><div class="manager-icon">📊</div><div class="manager-info"><strong id="managerName">Gestão</strong><span id="managerProfile">Gestor autenticado</span></div><span class="online">● ONLINE</span></div>
 <div class="demo-switch-card" id="demoSwitchCard"><div class="demo-switch-icon">🧪</div><div class="demo-switch-info"><strong>TESTE O FLUXO DO COLABORADOR</strong><span>Entre temporariamente como um colaborador fictício e execute atividades reais deste ambiente.</span></div><button class="demo-switch-button" id="demoSwitchButton" type="button">TESTAR</button></div>
 <div class="push-card"><div class="push-icon">🔔</div><div class="push-info"><strong>Notificações da gestão</strong><span id="pushGestaoStatus">Ative para receber novas ocorrências mesmo com o ORAQUI fechado.</span></div><button class="push-button" id="pushGestaoButton" type="button">ATIVAR</button></div><div class="error-box" id="errorBox"></div>
@@ -91,7 +114,7 @@ main{max-width:980px;margin:-18px auto 80px;padding:0 16px}.manager-card,.tower-
 <div class="panel" id="panelPortalSindico"><section class="section"><div class="section-title"><div><h2>🏢 Mensagens do Síndico</h2><p>Manifestações privadas de cada autor. Visíveis apenas à gestão autorizada e ao próprio remetente.</p></div><button class="refresh" id="portalAtualizar" type="button">↻ ATUALIZAR</button></div><div class="filters" id="portalFiltros"><button class="filter active" data-portal-filtro="todas">TODAS</button><button class="filter" data-portal-filtro="recebida">RECEBIDAS</button><button class="filter" data-portal-filtro="em_atendimento">EM ATENDIMENTO</button><button class="filter" data-portal-filtro="respondida">RESPONDIDAS</button></div><div id="portalLista" class="occurrence-list">Abra esta aba para consultar as mensagens.</div></section></div>
 <div class="panel" id="panelColaboradores"><section class="section"><div class="section-title"><div><h2>Equipe operacional</h2><p>Cadastro, convite e configurações dos colaboradores.</p></div><button class="add-button" id="addCollaborator">＋ CADASTRAR</button></div><div class="kpis"><div class="kpi"><strong id="colActive">0</strong><span>ATIVOS</span></div><div class="kpi"><strong id="colInactive">0</strong><span>INATIVOS</span></div></div><div id="collaboratorList" class="collaborator-list"></div></section><section class="section"><div class="section-title"><div><h2>Equipe de gestão</h2><p>Administradores e gestores vinculados ao condomínio.</p></div><button class="add-button hidden" id="addManager">＋ CONVIDAR GESTOR</button></div><div id="managementList" class="management-list"></div><section class="section"><div class="section-title"><div><h2>📁 Documentos dos colaboradores</h2><p>Envie holerites e outros PDFs com acesso individual.</p></div></div><a href="documentos-gestao.html" class="add-button" style="display:inline-block;text-decoration:none;padding:14px">📄 GERENCIAR DOCUMENTOS</a></section><section class="section"><div class="section-title"><div><h2>💬 Chat interno</h2><p>Mensagens entre gestão e colaboradores, com permissões configuráveis.</p></div></div><a class="add-button" id="oraquiChatGestao" href="chat.html" style="display:inline-block;text-decoration:none;padding:14px;margin-right:8px">💬 ABRIR CHAT <span id="oraquiGestorChatBadgeEquipe" style="display:none;background:#c33;color:white;border-radius:20px;padding:2px 7px;font-size:11px">0</span></a><a class="add-button" id="oraquiChatConfig" href="chat-config.html" style="display:inline-block;text-decoration:none;padding:14px">⚙️ CONFIGURAR CHAT</a></section><div id="managementPermissionNote" class="management-note hidden">Somente o administrador do cliente pode convidar ou alterar gestores.</div></section></div>
 <div class="panel" id="panelConfig"><section class="section"><div class="section-title"><div><h2>Configuração operacional</h2><p>Áreas e pontos usados pelo colaborador e pelo canal de ocorrências.</p></div><button class="add-button" id="addArea">＋ NOVA ÁREA</button></div><div class="config-subtabs" style="grid-template-columns:repeat(3,1fr)"><button class="config-subtab active" id="subAreas">ÁREAS + PONTOS</button><button class="config-subtab" id="subAtividades">ATIVIDADES</button><button class="config-subtab" id="subProgramacoes">PROGRAMAÇÕES</button></div><div id="configAreas"><div id="configList" class="config-list"></div></div><div id="configAtividades" class="hidden"><div class="section-title"><div><h2>Atividades</h2><p>Defina o que deve ser executado.</p></div><button class="add-button" id="addAtividade">＋ NOVA ATIVIDADE</button></div><div id="atividadeList" class="config-list"></div></div><div id="configProgramacoes" class="hidden"><div class="section-title"><div><h2>Programações</h2><p>Defina local, responsável, dias e prazo.</p></div><button class="add-button" id="addProgramacao">＋ NOVA PROGRAMAÇÃO</button></div><div id="programacaoList" class="config-list"></div></div></section></div>
-</main></div>
+</main><nav class="ora-bottom" aria-label="Navegação do gestor"><button type="button" data-ora-go="inicio" class="ora-nav-active"><span class="ora-nav-icon">🏠</span>Início</button><button type="button" data-ora-go="ocorrencias"><span class="ora-nav-icon">📋</span>Demandas</button><button type="button" data-ora-go="registrar"><span class="ora-nav-icon">➕</span>Registrar</button><a id="oraBottomChat" href="chat.html"><span class="ora-nav-icon">💬</span>Chat</a><button type="button" data-ora-go="mais"><span class="ora-nav-icon">☰</span>Mais</button></nav></div>
 
 <div class="modal" id="demoCollaboratorModal"><div class="modal-card"><div class="modal-head"><div><h2>Testar como colaborador</h2><p style="margin-top:5px;color:var(--muted);font-size:9px">Escolha um colaborador fictício deste ambiente. Você poderá executar tarefas e depois voltar à Gestão.</p></div><button class="modal-close" id="closeDemoCollaborator">×</button></div><div class="demo-person-list" id="demoCollaboratorList"></div></div></div>
 
@@ -1224,6 +1247,28 @@ async function criarDemandaPortal(m){
   await carregarPortalSindico();toast(`Demanda #${demanda.id} criada e vinculada.`);
  }catch(e){alert('Erro ao criar demanda: '+e.message)}
 }
+
+/* Navegação visual: usa os botões e carregadores já existentes. */
+(function(){
+ const main=document.querySelector('#app main');
+ const back=document.getElementById('oraBackHome');
+ if(!main||!back)return;
+ function go(target){
+  if(target==='documentos'){location.href='documentos-gestao.html';return}
+  if(target==='inicio'){main.classList.add('ora-home-mode');mark('inicio');window.scrollTo({top:0,behavior:'instant'});return}
+  const map={ocorrencias:'tabOcorrencias',colaboradores:'tabColaboradores',operacao:'tabOperacao',cronograma:'tabConfig',mais:'tabConfig',registrar:'tabOcorrencias'};
+  const tab=document.getElementById(map[target]);if(!tab)return;
+  main.classList.remove('ora-home-mode');tab.click();mark(target);
+  if(target==='cronograma')document.getElementById('subProgramacoes')?.click();
+  if(target==='registrar')document.getElementById('novaDemandaUrgente')?.click();
+  window.scrollTo({top:0,behavior:'instant'});
+ }
+ function mark(target){document.querySelectorAll('.ora-bottom button').forEach(b=>b.classList.toggle('ora-nav-active',b.dataset.oraGo===target))}
+ document.querySelectorAll('[data-ora-go]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.oraGo)));
+ back.addEventListener('click',()=>go('inicio'));
+ const chat=document.getElementById('oraquiQuickChatGestor');const bottom=document.getElementById('oraBottomChat');
+ if(chat&&bottom){const sync=()=>{bottom.href=chat.href};sync();new MutationObserver(sync).observe(chat,{attributes:true,attributeFilter:['href']})}
+})();
 </script>
 </body>
 </html>
