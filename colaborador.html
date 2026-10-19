@@ -1032,11 +1032,11 @@ async function enviarRegistroPendente(item){
     await filaExcluir(item.id);return;
   }
   if(item.foto_antes){
-    const {error:erroAntes}=await db.storage.from(BUCKET).upload(item.foto_antes_path,item.foto_antes,{upsert:true,contentType:"image/jpeg"});
+    const {error:erroAntes}=await db.storage.from(BUCKET).upload(item.foto_antes_path,item.foto_antes,{upsert:false,contentType:"image/jpeg"});
     if(erroAntes)throw new Error("Falha no envio da foto ANTES: "+erroAntes.message);
   }
   if(item.foto){
-    const {error:uploadErro}=await db.storage.from(BUCKET).upload(item.foto_path,item.foto,{upsert:true,contentType:'image/jpeg'});
+    const {error:uploadErro}=await db.storage.from(BUCKET).upload(item.foto_path,item.foto,{upsert:false,contentType:'image/jpeg'});
     if(uploadErro)throw new Error('Falha no envio da fotografia: '+uploadErro.message);
   }
   const {error:insertErro}=await db.from('execucoes').insert(item.payload);
