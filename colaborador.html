@@ -176,9 +176,9 @@ body:has(.modal.visible) .oraqui-bottom-nav{display:none}
 <section class="section" id="escalaSection"><div class="section-title"><div><h2>Hoje</h2><p>Sua escala publicada para hoje.</p></div></div><div id="escalaBox" class="loading">Carregando escala...</div></section>
 <section class="section hidden" id="pontoSection"><div class="section-title"><div><h2>Ponto</h2><p>Registre os eventos da sua jornada.</p></div></div><div class="card"><div class="status-card"><div class="status-icon">🕒</div><div class="status-info"><strong id="pontoStatus">Carregando...</strong><span id="pontoDetalhe"></span></div><span class="badge purple" id="pontoBadge">PONTO</span></div><div class="point-actions"><button class="point-btn primary" id="btnEntrada">ENTRADA</button><button class="point-btn" id="btnIniIntervalo">INICIAR INTERVALO</button><button class="point-btn" id="btnFimIntervalo">RETORNAR</button><button class="point-btn" id="btnSaida">SAÍDA</button></div><div class="geo-note" id="geoNote"></div></div></section>
 <section class="section" id="atividadesProgramadasSection"><div class="section-title"><div><h2>Atividades programadas</h2><p>Atividades de hoje e próximos agendamentos.</p></div></div><div id="programacoes" class="loading">Carregando...</div></section>
-<section class="section" id="registroAvulsoSection"><div class="section-title"><div><h2>Registrar atividade</h2><p>Registre uma atividade realizada fora da programação.</p></div></div><div class="card"><button class="action" id="avulso" style="min-height:56px;font-size:12px;width:100%">＋ REGISTRAR ATIVIDADE</button><button type="button" id="btnRegistroPosterior">📝 REGISTRO POSTERIOR — SEM FOTOS</button></div></section>
+<section class="section" id="registroAvulsoSection"><div class="section-title"><div><h2>Registrar atividade</h2><p>Registre uma atividade que não esteja na programação.</p></div></div><div class="card"><button class="action" id="avulso" style="min-height:56px;font-size:12px;width:100%">＋ REGISTRAR ATIVIDADE</button><button type="button" id="btnRegistroPosterior" class="hidden" hidden aria-hidden="true" tabindex="-1">Registro posterior</button></div></section>
 
-<section class="section" id="registrosPosterioresSection"><div class="section-title"><div><h2>Registros posteriores</h2><p>Declarações enviadas para aprovação.</p></div></div><div class="card" id="listaRegistrosPosteriores">Carregando...</div></section>
+<section class="section hidden" id="registrosPosterioresSection"><div class="section-title"><div><h2>Registros posteriores</h2><p>Declarações enviadas para aprovação.</p></div></div><div class="card" id="listaRegistrosPosteriores">Carregando...</div></section>
 <section class="section" id="secaoDemandas"><div class="section-title"><div><h2>Demandas</h2><p>Recados, tarefas e itens urgentes destinados a você.</p></div></div><div id="demandas" class="loading">Carregando...</div></section>
 <section class="section"><div class="section-title"><div><h2>Executado hoje</h2><p>Seu histórico operacional de hoje.</p></div></div><div id="historico" class="loading">Carregando...</div></section>
 <section class="section hidden" id="diasAnterioresSection"><div id="diasAnteriores"></div></section>
@@ -193,7 +193,6 @@ body:has(.modal.visible) .oraqui-bottom-nav{display:none}
  <button type="button" class="oraqui-nav-item" id="navDocumentos" aria-label="Abrir documentos"><span class="nav-icon">📄</span><span>Documentos</span><span class="oraqui-nav-badge" id="navDocsBadge" hidden></span></button>
  <button type="button" class="oraqui-nav-item" id="navCronograma" aria-label="Ver cronograma"><span class="nav-icon">📅</span><span>Cronograma</span></button>
 </nav>
-<div class="oraqui-sheet-backdrop" id="oraquiRegistrarSheet" aria-hidden="true"><div class="oraqui-sheet" role="dialog" aria-modal="true" aria-labelledby="oraquiRegistrarTitulo"><div class="oraqui-sheet-header"><strong id="oraquiRegistrarTitulo">O que deseja registrar?</strong><button type="button" class="oraqui-sheet-close" id="oraquiSheetClose" aria-label="Fechar">×</button></div><div class="oraqui-sheet-grid"><button type="button" id="oraquiSheetAvulsa"><span class="sheet-icon">➕</span>Atividade avulsa</button><button type="button" id="oraquiSheetPosterior"><span class="sheet-icon">📝</span>Registro posterior</button><button type="button" id="oraquiSheetProgramada"><span class="sheet-icon">📅</span>Programadas</button></div></div></div>
 
 <div class="modal" id="execModal"><div class="modal-card"><div class="modal-head"><h2 id="modalTitle">Registrar execução</h2><button class="close" id="closeModal">×</button></div><div class="selection" id="modalSelection"></div><div class="field hidden" id="areaField"><label>ÁREA</label><select id="areaSelect"></select></div><div class="field hidden" id="pontoField"><label>PONTO / LOCAL</label><select id="pontoSelect"></select></div><div class="field" id="blocoInicioExec"><label>📷 ANTES — REGISTRE A SITUAÇÃO</label><input id="fotoAntesExec" type="file" accept="image/*" capture="environment"><button type="button" class="oraqui-antes-botao" id="fotoAntesExecBtn">📷 TIRAR FOTO DO ANTES</button><img id="fotoAntesExecPreview" class="oraqui-antes-previa" alt="Prévia da foto antes"><small id="inicioExecInfo">Fotografe o local antes de começar. Depois, toque em INICIAR.</small><button class="photo-button" type="button" id="iniciarExec">▶ INICIAR ATIVIDADE</button></div><div id="depoisExecArea" class="oraqui-depois-area bloqueada"><div class="oraqui-etapa-label">📷 DEPOIS — REGISTRE O RESULTADO</div><button class="photo-button" id="photoButton">📷 TIRAR FOTO DO DEPOIS</button><small class="oraqui-etapa-ajuda">Fotografe o serviço concluído.</small></div><input class="photo-input" id="photoInput" type="file" accept="image/*" capture="environment"><img class="preview" id="preview" alt="Prévia"><div class="field"><label>OBSERVAÇÃO</label><textarea id="observacao" maxlength="600" placeholder="Observação sobre a execução..."></textarea></div><button class="confirm" id="confirmExec">✓ REGISTRAR CONCLUSÃO</button></div></div>
 <div class="modal" id="demandaConclusaoModal"><div class="modal-card"><div class="modal-head"><h2>Concluir demanda</h2><button class="close" id="fecharDemandaConclusao" type="button">×</button></div><div class="selection" id="demandaConclusaoTitulo"></div><div class="field"><label>OBSERVAÇÃO DA EXECUÇÃO</label><textarea id="demandaConclusaoObs" maxlength="600" placeholder="Descreva o serviço realizado..."></textarea></div><div class="field" id="blocoInicioDemanda"><label>📷 ANTES — REGISTRE A SITUAÇÃO</label><input id="demandaFotoAntes" type="file" accept="image/*" capture="environment"><button type="button" class="oraqui-antes-botao" id="demandaFotoAntesBtn">📷 TIRAR FOTO DO ANTES</button><img id="demandaFotoAntesPreview" class="oraqui-antes-previa" alt="Prévia da foto antes"><small id="inicioDemandaInfo">Fotografe o local antes de iniciar a demanda.</small><button class="photo-button" type="button" id="iniciarDemanda">▶ INICIAR DEMANDA</button></div><div id="depoisDemandaArea" class="oraqui-depois-area bloqueada"><div class="oraqui-etapa-label">📷 DEPOIS — REGISTRE O RESULTADO</div><button class="photo-button" id="demandaConclusaoFotoBtn" type="button">📷 TIRAR FOTO DO DEPOIS</button><small class="oraqui-etapa-ajuda">Fotografe o serviço concluído.</small></div><input class="photo-input" id="demandaConclusaoFoto" type="file" accept="image/*" capture="environment"><img class="preview" id="demandaConclusaoPreview" alt="Foto da execução"><button class="confirm" id="salvarDemandaConclusao" type="button">✓ CONFIRMAR CONCLUSÃO</button></div></div><div class="toast" id="toast"></div>
@@ -409,7 +408,12 @@ async function iniciar(){
       if(normalColError)throw normalColError;
       const vinculos=normalCol||[];
       if(vinculos.length===0)throw new Error("Seu cadastro não está ativo.");
+      // Guarda a escolha por conta, e somente reutiliza se o vínculo continuar autorizado.
+      const chaveCondominio='oraqui_colaborador_condominio_'+authUser.id;
+      const escolhaSalva=localStorage.getItem(chaveCondominio);
+      const vinculoSalvo=vinculos.find(v=>String(v.id)===escolhaSalva);
       if(vinculos.length===1){c=vinculos[0];}
+      else if(vinculoSalvo){c=vinculoSalvo;}
       else{
         const opcoes=vinculos.map((v,i)=>`${i+1} — ${v.condominio||"Condomínio #"+v.condominio_id} (${v.nome})`).join("\n");
         const escolha=window.prompt("Você possui mais de um vínculo. Escolha o número do condomínio:\n"+opcoes,"1");
@@ -418,6 +422,7 @@ async function iniciar(){
         if(!Number.isInteger(indice)||indice<0||indice>=vinculos.length)throw new Error("Condomínio inválido. Recarregue e selecione uma opção.");
         c=vinculos[indice];
       }
+      localStorage.setItem(chaveCondominio,String(c.id));
     }
     if(!c)throw new Error("Seu cadastro não está ativo.");
     colaborador=c;document.getElementById("oraquiQuickChat")?.setAttribute("href",`chat.html?condominio_id=${c.condominio_id}`);
@@ -1098,6 +1103,7 @@ function voltarGestaoDemo(){
   location.href="gestor.html";
 }
 async function sair(){
+  if(authUser?.id)localStorage.removeItem('oraqui_colaborador_condominio_'+authUser.id);
   localStorage.removeItem("usuarioLogado");
   localStorage.removeItem("tipoAtividadeAtual");
   sessionStorage.removeItem("oraqui_demo_colaborador");
@@ -1227,23 +1233,30 @@ configurarFotoAntes('fotoAntesExec');
 configurarFotoAntes('demandaFotoAntes');
 
 
-/* Navegação inferior: atalhos apontam para funções já existentes. */
+/* Menu inferior: registrar abre diretamente a atividade programada pendente,
+   ou o registro comum quando não houver programação para hoje. */
 (function configurarNavegacaoInferior(){
- const sheet=$('oraquiRegistrarSheet');
- const fechar=()=>{sheet.classList.remove('visible');sheet.setAttribute('aria-hidden','true');document.body.classList.remove('oraqui-sheet-open');};
- const abrir=()=>{sheet.classList.add('visible');sheet.setAttribute('aria-hidden','false');document.body.classList.add('oraqui-sheet-open');$('oraquiSheetClose').focus();};
- const ir=(id)=>{fechar();const alvo=$(id);if(!alvo)return;alvo.scrollIntoView({behavior:'smooth',block:'start'});};
+ const ir=(id)=>{const alvo=$(id);if(alvo)alvo.scrollIntoView({behavior:'smooth',block:'start'});};
  $('navDemandas').addEventListener('click',()=>ir('secaoDemandas'));
  $('navCronograma').addEventListener('click',()=>ir('atividadesProgramadasSection'));
  $('navChat').addEventListener('click',()=>{location.href=$('oraquiQuickChat').href;});
  $('navDocumentos').addEventListener('click',()=>{$('oraquiQuickDocs').click();});
- $('navRegistrar').addEventListener('click',abrir);
- $('oraquiSheetClose').addEventListener('click',fechar);
- sheet.addEventListener('click',e=>{if(e.target===sheet)fechar();});
- document.addEventListener('keydown',e=>{if(e.key==='Escape'&&sheet.classList.contains('visible'))fechar();});
- $('oraquiSheetAvulsa').addEventListener('click',()=>{fechar();$('avulso').click();});
- $('oraquiSheetPosterior').addEventListener('click',()=>{fechar();$('btnRegistroPosterior').click();});
- $('oraquiSheetProgramada').addEventListener('click',()=>ir('atividadesProgramadasSection'));
+ $('navRegistrar').addEventListener('click',async()=>{
+   const pendentes=programacoes.filter(p=>programacaoValeHoje(p)&&!execucoesHoje.some(e=>mesmoId(e.programacao_id,p.id)&&e.status==='concluida'));
+   pendentes.sort((a,b)=>{
+     const pa=pesoProgramacao(a),pb=pesoProgramacao(b);
+     if(pa!==pb)return pa-pb;
+     const ha=minutosHorario(a.horario_limite),hb=minutosHorario(b.horario_limite);
+     return (ha??99999)-(hb??99999);
+   });
+   if(pendentes.length>1){
+     // Quando há várias atividades, o colaborador escolhe qual executar no cronograma.
+     ir('atividadesProgramadasSection');
+     return;
+   }
+   if(pendentes.length===1){await abrirExecucao(pendentes[0].id);return;}
+   await abrirExecucao();
+ });
  const badges=[['oraquiChatCount','navChatBadge'],['oraquiDocsCount','navDocsBadge']];
  const atualizar=()=>{
    for(const [origem,destino] of badges){const a=$(origem),b=$(destino);if(!a||!b)continue;b.hidden=a.hidden||!a.textContent.trim();b.textContent=a.textContent;}
