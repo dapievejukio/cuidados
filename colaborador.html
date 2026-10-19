@@ -155,6 +155,18 @@ main{margin-bottom:35px}
 body.oraqui-sheet-open{overflow:hidden}
 body:has(.modal.visible) .oraqui-bottom-nav{display:none}
 @media(min-width:800px){.oraqui-bottom-nav{left:50%;right:auto;transform:translateX(-50%);width:min(720px,100%);border-radius:20px 20px 0 0;border:1px solid #e3e9f0}}
+
+/* ORAQUI: histórico recolhível e registro posterior ao fim da página */
+.oraqui-historico-recolhivel,.oraqui-posterior-recolhivel{border:1px solid var(--border);border-radius:19px;background:#fff;overflow:hidden;box-shadow:var(--shadow)}
+.oraqui-historico-recolhivel>summary,.oraqui-posterior-recolhivel>summary{cursor:pointer;padding:17px 18px;font-size:15px;font-weight:850;color:var(--text);list-style:none;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.oraqui-historico-recolhivel>summary::-webkit-details-marker,.oraqui-posterior-recolhivel>summary::-webkit-details-marker{display:none}
+.oraqui-historico-recolhivel>summary::after,.oraqui-posterior-recolhivel>summary::after{content:'⌄';font-size:19px;color:var(--blue)}
+.oraqui-historico-recolhivel[open]>summary::after,.oraqui-posterior-recolhivel[open]>summary::after{content:'⌃'}
+.oraqui-historico-recolhivel[open]>summary,.oraqui-posterior-recolhivel[open]>summary{border-bottom:1px solid var(--border)}
+.oraqui-historico-recolhivel #historico{padding:12px;box-shadow:none}
+.oraqui-summary-hint{font-size:9px;font-weight:500;color:var(--muted);margin-left:auto}
+.oraqui-posterior-recolhivel .card{box-shadow:none}
+.oraqui-posterior-info{font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:12px}
 </style>
 </head>
 <body>
@@ -176,12 +188,14 @@ body:has(.modal.visible) .oraqui-bottom-nav{display:none}
 <section class="section" id="escalaSection"><div class="section-title"><div><h2>Hoje</h2><p>Sua escala publicada para hoje.</p></div></div><div id="escalaBox" class="loading">Carregando escala...</div></section>
 <section class="section hidden" id="pontoSection"><div class="section-title"><div><h2>Ponto</h2><p>Registre os eventos da sua jornada.</p></div></div><div class="card"><div class="status-card"><div class="status-icon">🕒</div><div class="status-info"><strong id="pontoStatus">Carregando...</strong><span id="pontoDetalhe"></span></div><span class="badge purple" id="pontoBadge">PONTO</span></div><div class="point-actions"><button class="point-btn primary" id="btnEntrada">ENTRADA</button><button class="point-btn" id="btnIniIntervalo">INICIAR INTERVALO</button><button class="point-btn" id="btnFimIntervalo">RETORNAR</button><button class="point-btn" id="btnSaida">SAÍDA</button></div><div class="geo-note" id="geoNote"></div></div></section>
 <section class="section" id="atividadesProgramadasSection"><div class="section-title"><div><h2>Atividades programadas</h2><p>Atividades de hoje e próximos agendamentos.</p></div></div><div id="programacoes" class="loading">Carregando...</div></section>
-<section class="section" id="registroAvulsoSection"><div class="section-title"><div><h2>Registrar atividade</h2><p>Registre uma atividade que não esteja na programação.</p></div></div><div class="card"><button class="action" id="avulso" style="min-height:56px;font-size:12px;width:100%">＋ REGISTRAR ATIVIDADE</button><button type="button" id="btnRegistroPosterior" class="hidden" hidden aria-hidden="true" tabindex="-1">Registro posterior</button></div></section>
+<section class="section" id="registroAvulsoSection"><div class="section-title"><div><h2>Registrar atividade</h2><p>Registre uma atividade que não esteja na programação.</p></div></div><div class="card"><button class="action" id="avulso" style="min-height:56px;font-size:12px;width:100%">＋ REGISTRAR ATIVIDADE</button></div></section>
 
-<section class="section hidden" id="registrosPosterioresSection"><div class="section-title"><div><h2>Registros posteriores</h2><p>Declarações enviadas para aprovação.</p></div></div><div class="card" id="listaRegistrosPosteriores">Carregando...</div></section>
+
 <section class="section" id="secaoDemandas"><div class="section-title"><div><h2>Demandas</h2><p>Recados, tarefas e itens urgentes destinados a você.</p></div></div><div id="demandas" class="loading">Carregando...</div></section>
-<section class="section"><div class="section-title"><div><h2>Executado hoje</h2><p>Seu histórico operacional de hoje.</p></div></div><div id="historico" class="loading">Carregando...</div></section>
+<section class="section" id="execucoesHojeSection"><details class="oraqui-historico-recolhivel"><summary>✓ Executado hoje <span class="oraqui-summary-hint">Toque para expandir ou recolher</span></summary><div id="historico" class="loading">Carregando...</div></details></section>
 <section class="section hidden" id="diasAnterioresSection"><div id="diasAnteriores"></div></section>
+<section class="section" id="registroPosteriorFinalSection"><details class="oraqui-posterior-recolhivel"><summary>📝 Registro posterior (sem fotos)</summary><div class="card"><p class="oraqui-posterior-info">Para declarar uma atividade realizada anteriormente. O registro fica sujeito à aprovação da gestão.</p><button type="button" id="btnRegistroPosterior">＋ REGISTRAR SEM FOTOS</button></div></details></section>
+<section class="section hidden" id="registrosPosterioresSection"><div class="section-title"><div><h2>Registros posteriores</h2><p>Declarações enviadas para aprovação.</p></div></div><div class="card" id="listaRegistrosPosteriores">Carregando...</div></section>
 </main>
 
 
