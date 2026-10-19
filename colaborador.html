@@ -1019,9 +1019,27 @@ async function fotoComCarimbo(arquivo,dataISO,localInformado='Local não informa
     return await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('Falha ao gerar foto carimbada.')),'image/jpeg',.84));
   }finally{bitmap.close()}
 }
+// Upload idempotente: um envio anterior pode ter gravado a foto antes de a execução ser salva.
+// Nunca sobrescreve objetos existentes e nunca interpreta um erro de permissão como sucesso.
+async function enviarFotoPendente(path,arquivo,rotulo){
+  if(!path||!arquivo)throw new Error('Fotografia '+rotulo+' sem arquivo ou caminho válido.');
+  const storage=db.storage.from(BUCKET);
+  const {error}=await storage.upload(path,arquivo,{upsert:false,contentType:'image/jpeg'});
+  if(!error)return;
+  const codigo=String(error.statusCode||error.status||'');
+  const duplicado=codigo==='409'||/resource already exists|already exists|duplicate/i.test(error.message||'');
+  if(duplicado){
+    // Confirma que o objeto existe antes de tratar a tentativa como concluída.
+    const {data:existente,error:verificacao}=await storage.info(path);
+    if(!verificacao&&existente)return;
+    throw new Error('Foto '+rotulo+' já existente, mas não foi possível confirmar seu armazenamento: '+(verificacao?.message||error.message));
+  }
+  throw new Error('Falha no envio da foto '+rotulo+': '+error.message);
+}
+
 async function enviarRegistroPendente(item){
   if(!navigator.onLine)throw new Error('Sem conexão.');
-  if(!colaborador||item.auth_user_id!==authUser?.id||Number(item.condominio_id)!==Number(colaborador.condominio_id))throw new Error('Este registro pertence a outra conta ou condomínio.');
+  if(!colaborador||item.auth_user_id!==authUser?.id||Number(item.condominio_id)!==Number(colaborador.condominio_id)||Number(item.colaborador_id)!==Number(colaborador.id)||Number(item.payload?.colaborador_id)!==Number(colaborador.id))throw new Error('Registro offline vinculado a outro usuário, colaborador ou condomínio. Mantido no aparelho para revisão.');
   // iniciada_em identifica unicamente a tentativa; evita reenvio duplicado após
   // sucesso no banco seguido de falha local ao excluir a fila.
   const {data:jaExiste,error:consultaErro}=await db.from('execucoes').select('id').eq('condominio_id',item.condominio_id).eq('colaborador_id',item.colaborador_id).eq('iniciada_em',item.payload.iniciada_em).limit(1);
@@ -1032,12 +1050,10 @@ async function enviarRegistroPendente(item){
     await filaExcluir(item.id);return;
   }
   if(item.foto_antes){
-    const {error:erroAntes}=await db.storage.from(BUCKET).upload(item.foto_antes_path,item.foto_antes,{upsert:false,contentType:"image/jpeg"});
-    if(erroAntes)throw new Error("Falha no envio da foto ANTES: "+erroAntes.message);
+    await enviarFotoPendente(item.foto_antes_path,item.foto_antes,'ANTES');
   }
   if(item.foto){
-    const {error:uploadErro}=await db.storage.from(BUCKET).upload(item.foto_path,item.foto,{upsert:false,contentType:'image/jpeg'});
-    if(uploadErro)throw new Error('Falha no envio da fotografia: '+uploadErro.message);
+    await enviarFotoPendente(item.foto_path,item.foto,'DEPOIS');
   }
   const {error:insertErro}=await db.from('execucoes').insert(item.payload);
   if(insertErro)throw insertErro;
@@ -1054,14 +1070,14 @@ async function enviarRegistroPendente(item){
 }
 async function sincronizarFilaOffline(){
   if(sincronizando||!navigator.onLine||!colaborador||!authUser)return;
-  sincronizando=true;await atualizarEstadoOffline();let sucesso=0,erroSync=null;
+  sincronizando=true;await atualizarEstadoOffline();let sucesso=0,errosSync=[];
   try{
     const todos=await filaTodos();
     for(const item of todos.filter(x=>x.auth_user_id===authUser.id&&Number(x.condominio_id)===Number(colaborador.condominio_id)).sort((a,b)=>a.criado_em.localeCompare(b.criado_em))){
-      try{await enviarRegistroPendente(item);sucesso++}catch(e){erroSync=e;console.error('ORAQUI: registro pendente não sincronizado',e);break}
+      try{await enviarRegistroPendente(item);sucesso++}catch(e){errosSync.push({id:item.id,motivo:e.message||String(e)});console.error('ORAQUI: registro pendente não sincronizado',item.id,e);}
     }
     if(sucesso){toast(`✓ ${sucesso} registro(s) sincronizado(s).`);await carregarTudo()}
-    if(erroSync&&navigator.onLine)erro('Sincronização pendente: '+(erroSync.message||'Verifique a conexão e as permissões.'));
+    if(errosSync.length&&navigator.onLine)erro(`Sincronização: ${sucesso} enviado(s), ${errosSync.length} pendente(s) com erro. Primeiro erro: ${errosSync[0].motivo}. Os registros continuam salvos neste aparelho.`);
   }catch(e){console.error(e);erro('Fila offline: '+e.message)}finally{sincronizando=false;await atualizarEstadoOffline();await carregarAvulsaPendente()}
 }
 
