@@ -102,7 +102,7 @@ body{padding-bottom:88px!important}.oraqui-bottom{position:fixed;bottom:0;left:0
 
 <div class="modal" id="demoCollaboratorModal"><div class="modal-card"><div class="modal-head"><div><h2>Testar como colaborador</h2><p style="margin-top:5px;color:var(--muted);font-size:9px">Escolha um colaborador fictício deste ambiente. Você poderá executar tarefas e depois voltar à Gestão.</p></div><button class="modal-close" id="closeDemoCollaborator">×</button></div><div class="demo-person-list" id="demoCollaboratorList"></div></div></div>
 
-<div class="modal" id="collaboratorModal"><div class="modal-card"><div class="modal-head"><h2 id="collaboratorModalTitle">Cadastrar colaborador</h2><button class="modal-close" id="closeCollaborator">×</button></div><div class="form-grid"><div class="field full"><label>NOME</label><input id="colNome"></div><div class="field full"><label>E-MAIL</label><input id="colEmail" type="email"></div><div class="field"><label>MATRÍCULA</label><input id="colMatricula"></div><div class="field"><label>FUNÇÃO</label><select id="colFuncao"><option>Limpeza</option><option>Zeladoria</option><option>Portaria</option><option>Manutenção</option><option>Supervisor</option><option>Outro</option></select></div><div class="switch-card full"><span>Ponto</span><label class="switch"><input id="colPontoAtivo" type="checkbox"><span class="slider"></span></label></div><div class="switch-card"><span>Selfie</span><label class="switch"><input id="colSelfie" type="checkbox"><span class="slider"></span></label></div><div class="switch-card"><span>Geolocalização</span><label class="switch"><input id="colGeo" type="checkbox"><span class="slider"></span></label></div><div class="switch-card"><span>Intervalo</span><label class="switch"><input id="colIntervalo" type="checkbox"><span class="slider"></span></label></div><div class="field"><label>INTERVALO MIN.</label><input id="colIntervaloMinutos" type="number" value="60"></div></div><div class="modal-actions"><button class="cancel-button" id="cancelCollaborator">CANCELAR</button><button class="confirm-button" id="saveCollaborator">SALVAR</button></div></div></div>
+<div class="modal" id="collaboratorModal"><div class="modal-card"><div class="modal-head"><h2 id="collaboratorModalTitle">Cadastrar colaborador</h2><button class="modal-close" id="closeCollaborator">×</button></div><div class="form-grid"><div class="field full"><label>NOME</label><input id="colNome"></div><div class="field full"><label>E-MAIL</label><input id="colEmail" type="email"></div><div class="field"><label>MATRÍCULA</label><input id="colMatricula"></div><div class="field"><label>EMPRESA DA FOLHA</label><select id="colEmpresaFolha"><option value="">Não vinculada</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></div><div class="field"><label>REGISTRO NA FOLHA</label><input id="colRegistroFolha" inputmode="numeric" placeholder="Ex.: 68"></div><div class="field"><label>FUNÇÃO</label><select id="colFuncao"><option>Limpeza</option><option>Zeladoria</option><option>Portaria</option><option>Manutenção</option><option>Supervisor</option><option>Outro</option></select></div><div class="switch-card full"><span>Ponto</span><label class="switch"><input id="colPontoAtivo" type="checkbox"><span class="slider"></span></label></div><div class="switch-card"><span>Selfie</span><label class="switch"><input id="colSelfie" type="checkbox"><span class="slider"></span></label></div><div class="switch-card"><span>Geolocalização</span><label class="switch"><input id="colGeo" type="checkbox"><span class="slider"></span></label></div><div class="switch-card"><span>Intervalo</span><label class="switch"><input id="colIntervalo" type="checkbox"><span class="slider"></span></label></div><div class="field"><label>INTERVALO MIN.</label><input id="colIntervaloMinutos" type="number" value="60"></div></div><div class="modal-actions"><button class="cancel-button" id="cancelCollaborator">CANCELAR</button><button class="confirm-button" id="saveCollaborator">SALVAR</button></div></div></div>
 
 <div class="modal" id="managerModal"><div class="modal-card"><div class="modal-head"><div><h2>Convidar gestor</h2><p style="margin-top:5px;color:var(--muted);font-size:9px">O novo gestor receberá um convite por e-mail para criar a própria senha.</p></div><button class="modal-close" id="closeManager">×</button></div><div class="form-grid"><div class="field full"><label>NOME</label><input id="managerInviteName" autocomplete="name" placeholder="Nome do gestor"></div><div class="field full"><label>E-MAIL</label><input id="managerInviteEmail" type="email" autocomplete="email" placeholder="email@exemplo.com"></div></div><div class="modal-actions"><button class="cancel-button" id="cancelManager">CANCELAR</button><button class="confirm-button" id="saveManager">ENVIAR CONVITE</button></div></div></div>
 <div class="modal" id="areaModal"><div class="modal-card"><div class="modal-head"><h2 id="areaModalTitle">Nova área</h2><button class="modal-close" id="closeArea">×</button></div><div class="form-grid"><div class="field full"><label>NOME</label><input id="areaNome"></div><div class="field full"><label>DESCRIÇÃO</label><textarea id="areaDescricao"></textarea></div><div class="field"><label>ORDEM</label><input id="areaOrdem" type="number"></div><div class="switch-card"><span>Colaborador</span><label class="switch"><input id="areaColaborador" type="checkbox" checked><span class="slider"></span></label></div><div class="switch-card"><span>Ocorrências</span><label class="switch"><input id="areaOcorrencia" type="checkbox" checked><span class="slider"></span></label></div></div><div class="modal-actions"><button class="cancel-button" id="cancelArea">CANCELAR</button><button class="confirm-button" id="saveArea">SALVAR</button></div></div></div>
@@ -762,7 +762,7 @@ async function carregarColaboradores(){
 
   const {data,error}=await db
     .from("colaboradores")
-    .select("id,condominio,condominio_id,nome,matricula,funcao,ativo,email,auth_user_id,ponto_ativo,selfie_ponto_obrigatoria,geolocalizacao_ponto_obrigatoria,intervalo_ativo,intervalo_minutos,foto_perfil_path,created_at,updated_at")
+    .select("id,condominio,condominio_id,nome,matricula,funcao,ativo,email,auth_user_id,ponto_ativo,selfie_ponto_obrigatoria,geolocalizacao_ponto_obrigatoria,intervalo_ativo,intervalo_minutos,empresa_folha,registro_folha,foto_perfil_path,created_at,updated_at")
     .eq("condominio_id",CONDOMINIO_ID)
     .order("ativo",{ascending:false})
     .order("nome");
@@ -792,7 +792,7 @@ async function carregarColaboradores(){
         <div class="collaborator-avatar" data-avatar-col="${c.id}">👤</div>
         <div class="collaborator-info">
           <strong>${esc(c.nome)}</strong>
-          <span>${esc(c.funcao)} • #${esc(c.matricula)}</span>
+          <span>${esc(c.funcao)} • #${esc(c.matricula)}</span><span>${c.empresa_folha&&c.registro_folha?"Folha: "+esc(c.empresa_folha)+"-"+esc(c.registro_folha):"Folha não vinculada"}</span>
         </div>
         <span class="${c.ativo?"active-badge":"inactive-badge"}">${c.ativo?"ATIVO":"INATIVO"}</span>
       </div>
@@ -844,6 +844,8 @@ function novoCol(){
   colaboradorEditandoId=null;
   $("collaboratorModalTitle").textContent="Cadastrar colaborador";
   ["colNome","colEmail","colMatricula"].forEach(i=>$(i).value="");
+  $("colEmpresaFolha").value="";
+  $("colRegistroFolha").value="";
   $("colFuncao").value="Limpeza";
   $("colPontoAtivo").checked=false;
   $("colSelfie").checked=false;
@@ -862,6 +864,8 @@ function editarCol(id){
   $("colNome").value=c.nome||"";
   $("colEmail").value=c.email||"";
   $("colMatricula").value=c.matricula||"";
+  $("colEmpresaFolha").value=c.empresa_folha||"";
+  $("colRegistroFolha").value=c.registro_folha||"";
   $("colFuncao").value=c.funcao||"Limpeza";
   $("colPontoAtivo").checked=!!c.ponto_ativo;
   $("colSelfie").checked=!!c.selfie_ponto_obrigatoria;
@@ -889,6 +893,11 @@ async function salvarCol(){
   const nome=$("colNome").value.trim();
   const email=$("colEmail").value.trim().toLowerCase();
   const matricula=$("colMatricula").value.replace(/\D/g,"");
+  const empresaFolha=$("colEmpresaFolha").value;
+  const registroFolha=$("colRegistroFolha").value.trim();
+  if((empresaFolha&&!registroFolha)||(!empresaFolha&&registroFolha))return alert("Informe empresa e registro da folha juntos, ou deixe ambos vazios.");
+  if(registroFolha&&!/^\d+$/.test(registroFolha))return alert("O registro da folha deve conter apenas números.");
+  const camposFolha={empresa_folha:empresaFolha?Number(empresaFolha):null,registro_folha:registroFolha||null};
   const funcao=$("colFuncao").value;
   const ponto=$("colPontoAtivo").checked;
   const payload={
@@ -905,7 +914,7 @@ async function salvarCol(){
 
   if(colaboradorEditandoId){
     const {error}=await db.from("colaboradores")
-      .update({...payload,updated_at:new Date().toISOString()})
+      .update({...payload,...camposFolha,updated_at:new Date().toISOString()})
       .eq("id",colaboradorEditandoId)
       .eq("condominio_id",CONDOMINIO_ID);
     if(error)return alert(error.message);
@@ -914,6 +923,19 @@ async function salvarCol(){
     if(error||data?.success===false){
       const msg=await mensagemFunction(error,data,"Não foi possível convidar o colaborador.");
       return alert(msg);
+    }
+    // A Edge Function existente cria o colaborador. Os campos de folha são
+    // gravados em seguida para não depender de alterações nessa função.
+    if(empresaFolha){
+      const {data:criados,error:buscaErro}=await db.from("colaboradores")
+        .select("id").eq("condominio_id",CONDOMINIO_ID).eq("email",email).order("id",{ascending:false}).limit(2);
+      if(buscaErro||!criados||criados.length!==1){
+        alert("Convite realizado, mas não foi possível identificar com segurança o novo cadastro para vincular a folha. Abra EDITAR e salve empresa e registro.");
+      }else{
+        const {error:erroFolha}=await db.from("colaboradores").update(camposFolha)
+          .eq("id",criados[0].id).eq("condominio_id",CONDOMINIO_ID);
+        if(erroFolha)alert("Convite realizado, mas o vínculo da folha não foi salvo: "+erroFolha.message+". Ajuste em EDITAR.");
+      }
     }
   }
 
