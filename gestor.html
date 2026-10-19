@@ -5,22 +5,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Gestão — ORAQUI</title>
 <meta name="theme-color" content="#342a67">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
-document.addEventListener('click',e=>{
-  const b=e.target.closest('.demand-before-photo');
-  if(!b)return;
-  e.preventDefault();e.stopPropagation();
-  const d=demandasOcorrencias.find(x=>Number(x.id)===Number(b.dataset.demand));
-  if(d?.foto_antes_path)abrirFotoStorage(d.foto_antes_path,'atividade');
-});
-</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{--primary:#7667b9;--primary-light:#eeeafd;--blue:#5d88a5;--blue-light:#eaf4f8;--green:#69a17f;--green-light:#eaf5ee;--yellow:#c4974d;--yellow-light:#fff5df;--red:#c96565;--red-light:#fdecec;--text:#2d3742;--muted:#75808c;--background:#f4f6f8;--card:#fff;--border:#e4e9ee;--shadow:0 10px 30px rgba(35,48,65,.06)}
 *{box-sizing:border-box;margin:0;padding:0}body{min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--background);color:var(--text)}button,input,select,textarea{font-family:inherit}button{cursor:pointer}.hidden{display:none!important}
 .auth-screen{position:fixed;inset:0;z-index:5000;background:linear-gradient(135deg,#657ba5,#7c72ae);display:flex;align-items:center;justify-content:center;padding:22px}.auth-card{width:min(430px,100%);background:#fff;border-radius:25px;padding:27px;box-shadow:0 20px 60px rgba(25,30,50,.25)}.auth-logo{width:48px;height:48px;border-radius:15px;background:var(--primary-light);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900}.auth-card h1{font-size:24px;margin-top:17px}.auth-card>p{font-size:10px;color:var(--muted);margin-top:7px;line-height:1.5}.auth-field{margin-top:17px}.auth-field label{display:block;font-size:8px;font-weight:800;color:var(--muted);margin-bottom:6px}.auth-field input{width:100%;height:52px;border:1px solid var(--border);border-radius:14px;padding:0 14px;font-size:13px;outline:none}.auth-button{width:100%;height:52px;border:0;border-radius:14px;background:var(--primary);color:#fff;font-size:10px;font-weight:900;margin-top:20px}.auth-error{display:none;margin-top:13px;padding:11px;border-radius:12px;background:var(--red-light);color:var(--red);font-size:9px}
 header{background:linear-gradient(135deg,#6d80a8,#7c72ae);color:#fff;padding:calc(18px + env(safe-area-inset-top)) 18px 52px}.header-content{max-width:980px;margin:auto}.topbar{display:flex;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:11px}.brand-icon{width:39px;height:39px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.18);font-size:20px;font-weight:800}.brand strong{display:block;font-size:17px}.brand small{display:block;font-size:7px;letter-spacing:1.2px;opacity:.75}.logout{border:0;padding:10px 13px;border-radius:14px;background:rgba(255,255,255,.16);color:#fff;font-size:9px;font-weight:800}.header-title{margin-top:29px}.header-title small{font-size:9px;opacity:.72}.header-title h1{margin-top:6px;font-size:28px}.header-title p{margin-top:7px;font-size:11px;opacity:.8}
 main{max-width:980px;margin:-18px auto 80px;padding:0 16px}.manager-card,.tower-card,.kpi,.location-card,.activity-list,.occurrence-card,.collaborator-card,.config-card{background:#fff;box-shadow:var(--shadow)}.manager-card{padding:16px;border-radius:21px;display:flex;align-items:center;gap:13px}.manager-icon{width:48px;height:48px;border-radius:15px;display:flex;align-items:center;justify-content:center;background:var(--primary-light);font-size:22px}.manager-info{flex:1}.manager-info strong{display:block;font-size:13px}.manager-info span{font-size:9px;color:var(--muted)}.online{padding:7px 10px;border-radius:20px;background:var(--green-light);color:var(--green);font-size:8px;font-weight:800}
-.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:16px;padding:5px;border-radius:17px;background:#e9edf1}.tab{border:0;padding:14px 5px;border-radius:13px;background:transparent;color:var(--muted);font-size:8px;font-weight:800;transition:.18s ease}.tab.active{background:var(--primary);color:#fff;box-shadow:0 7px 18px rgba(118,103,185,.28);transform:translateY(-1px)}#tabOcorrencias.has-open{background:#fff0f1;color:#b4232d;box-shadow:inset 0 0 0 1px #f1c7cb}#tabOcorrencias.has-open.active{background:#b4232d;color:#fff;box-shadow:0 7px 18px rgba(180,35,45,.24)}.tab-badge{display:inline-flex;min-width:20px;height:20px;padding:0 5px;align-items:center;justify-content:center;border-radius:20px;background:var(--red-light);color:var(--red);font-weight:950}.has-open .tab-badge{background:#c93642;color:#fff;box-shadow:0 0 0 4px rgba(201,54,66,.10)}.panel{display:none}.panel.active{display:block}@media(max-width:700px){#tabOcorrencias{font-size:8.5px}.tabs{gap:4px}.tab{padding:13px 3px}}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:16px;padding:5px;border-radius:17px;background:#e9edf1}.tab{border:0;padding:14px 5px;border-radius:13px;background:transparent;color:var(--muted);font-size:8px;font-weight:800;transition:.18s ease}.tab.active{background:var(--primary);color:#fff;box-shadow:0 7px 18px rgba(118,103,185,.28);transform:translateY(-1px)}#tabOcorrencias.has-open{background:#fff0f1;color:#b4232d;box-shadow:inset 0 0 0 1px #f1c7cb}#tabOcorrencias.has-open.active{background:#b4232d;color:#fff;box-shadow:0 7px 18px rgba(180,35,45,.24)}.tab-badge{display:inline-flex;min-width:20px;height:20px;padding:0 5px;align-items:center;justify-content:center;border-radius:20px;background:var(--red-light);color:var(--red);font-weight:950}.has-open .tab-badge{background:#c93642;color:#fff;box-shadow:0 0 0 4px rgba(201,54,66,.10)}.panel{display:none}.panel.active{display:block}@media(max-width:700px){#tabOcorrencias{font-size:8.5px}.tabs{gap:4px}.tab{padding:13px 3px}}
 .date-row,.section-title{display:flex;align-items:center;justify-content:space-between;gap:10px}.date-row{margin-top:24px}.date-row h2,.section-title h2{font-size:17px}.date-pill{padding:8px 11px;border-radius:14px;background:#fff;color:var(--muted);font-size:9px}.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px}.kpi{min-height:105px;padding:16px;border-radius:19px}.kpi strong{display:block;margin-top:9px;font-size:24px}.kpi span,.section-title p{color:var(--muted);font-size:8px}.section{margin-top:27px}.section-title{margin-bottom:12px}.refresh,.add-button{border:0;padding:10px 12px;border-radius:12px;background:var(--blue-light);color:var(--blue);font-size:8px;font-weight:800}.add-button{background:var(--primary);color:#fff}
 .tower-card{padding:17px;border-radius:21px}.tower-top{display:flex;align-items:center;gap:12px}.tower-icon{width:48px;height:48px;border-radius:15px;background:var(--blue-light);display:flex;align-items:center;justify-content:center;font-size:22px}.tower-info{flex:1}.tower-info strong{font-size:13px}.tower-info span{display:block;color:var(--muted);font-size:8px}.percent{font-size:20px;font-weight:800;color:var(--green)}.progress{height:9px;margin-top:15px;border-radius:20px;background:#e9edf2;overflow:hidden}.progress-fill{height:100%;background:var(--green)}.progress-info{display:flex;justify-content:space-between;margin-top:9px;color:var(--muted);font-size:8px}
 .location-list,.occurrence-list,.collaborator-list,.config-list{display:flex;flex-direction:column;gap:10px}.location-card{border-radius:18px;overflow:hidden}.location-header{padding:14px;display:flex;align-items:center;gap:11px}.location-icon{width:40px;height:40px;border-radius:12px;background:var(--blue-light);display:flex;align-items:center;justify-content:center}.location-info{flex:1}.location-info strong{font-size:11px}.location-info span{display:block;color:var(--muted);font-size:8px}.location-count{padding:5px 8px;border-radius:20px;background:var(--green-light);color:var(--green);font-size:8px;font-weight:800}.location-content{display:none;padding:0 14px 14px}.location-card.open .location-content{display:block}.record{padding:12px 0;border-top:1px solid var(--border);display:grid;grid-template-columns:54px 1fr;gap:11px}.record-photo,.activity-photo{background:#edf1f5;overflow:hidden}.foto-clicavel{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:var(--blue);box-shadow:inset 0 0 0 1px #d8e4ec}.foto-clicavel span{font-size:18px;line-height:1}.foto-clicavel small{font-size:6px;font-weight:900;letter-spacing:.4px}.foto-clicavel:active{transform:scale(.96)}.panel.active{animation:panelIn .16s ease}@keyframes panelIn{from{opacity:.55;transform:translateY(3px)}to{opacity:1;transform:none}}.record-photo{width:54px;height:54px;border-radius:11px}.record-photo img,.activity-photo img{width:100%;height:100%;object-fit:cover}.record-body strong{font-size:10px}.record-meta{color:var(--muted);font-size:8px}.record-observation{margin-top:6px;padding:7px 9px;border-radius:9px;background:#f6f8fa;font-size:8px}.activity-list{border-radius:20px;padding:0 15px}.activity-row{min-height:67px;display:flex;align-items:center;gap:11px;border-bottom:1px solid var(--border)}.activity-photo{width:44px;height:44px;border-radius:11px}.activity-info{flex:1}.activity-info strong{font-size:10px}.activity-info span,.activity-time{display:block;color:var(--muted);font-size:8px}
@@ -73,6 +65,10 @@ main{max-width:980px;margin:-18px auto 80px;padding:0 16px}.manager-card,.tower-
 .oraqui-photo-button{border:1px solid #d9d3f5;background:#f5f2ff;color:#6254a6;border-radius:11px;padding:9px 11px;font-size:11px;font-weight:800;cursor:pointer}
 @media(max-width:350px){.oraqui-quick a{font-size:10px;min-height:85px}}
 </style>
+<style>
+.exec-fotos{display:flex;gap:7px;align-items:flex-start;flex-shrink:0}.exec-foto-item{display:flex;flex-direction:column;gap:4px;align-items:center}.exec-foto-item>span{font-size:8px;font-weight:850;color:var(--muted);letter-spacing:.35px}.exec-foto-item button{border:0;cursor:pointer}.sem-foto{font-size:9px;color:var(--muted)}.activity-row{padding:9px 0}.record{grid-template-columns:auto minmax(0,1fr)}.record-body{min-width:0}.activity-info{min-width:0}
+@media(max-width:400px){.exec-fotos{gap:4px}.activity-photo{width:39px;height:39px}.activity-row{gap:7px}}
+</style>
 </head>
 <body>
 <div class="auth-screen" id="authScreen"><div class="auth-card"><div class="auth-logo">✓</div><h1>Gestão ORAQUI</h1><p>Acesso administrativo protegido pelo Supabase Auth.</p><div class="auth-field"><label>E-MAIL</label><input id="loginEmail" type="email" value="atendimento@oraqui.app"></div><div class="auth-field"><label>SENHA</label><input id="loginPassword" type="password"></div><button class="auth-button" id="loginButton">ENTRAR</button><div class="auth-error" id="authError"></div></div></div>
@@ -83,13 +79,12 @@ main{max-width:980px;margin:-18px auto 80px;padding:0 16px}.manager-card,.tower-
 <div class="manager-card"><div class="manager-icon">📊</div><div class="manager-info"><strong id="managerName">Gestão</strong><span id="managerProfile">Gestor autenticado</span></div><span class="online">● ONLINE</span></div>
 <div class="demo-switch-card" id="demoSwitchCard"><div class="demo-switch-icon">🧪</div><div class="demo-switch-info"><strong>TESTE O FLUXO DO COLABORADOR</strong><span>Entre temporariamente como um colaborador fictício e execute atividades reais deste ambiente.</span></div><button class="demo-switch-button" id="demoSwitchButton" type="button">TESTAR</button></div>
 <div class="push-card"><div class="push-icon">🔔</div><div class="push-info"><strong>Notificações da gestão</strong><span id="pushGestaoStatus">Ative para receber novas ocorrências mesmo com o ORAQUI fechado.</span></div><button class="push-button" id="pushGestaoButton" type="button">ATIVAR</button></div><div class="error-box" id="errorBox"></div>
-<div class="oraqui-quick" aria-label="Acessos rápidos"><a id="oraquiQuickChatGestor" href="chat.html"><span class="quick-icon">💬</span>Chat <span id="oraquiGestorChatBadge" aria-label="Mensagens não lidas" style="display:none;background:#c33;color:white;border-radius:20px;padding:2px 7px;font-size:11px;margin-left:4px">0</span></a><a href="documentos-gestao.html"><span class="quick-icon">📄</span>Documentos</a><a href="#panelOcorrencias" onclick="document.getElementById('tabOcorrencias').click();document.getElementById('novaOcorrencia').click();return false;"><span class="quick-icon">🚨</span>Criar ocorrência</a><a id="oraquiQuickChatConfig" href="chat-config.html"><span class="quick-icon">⚙️</span>Configurar chat</a></div>
-<div class="tabs"><button class="tab active" id="tabOperacao">✓ OPERAÇÃO</button><button class="tab" id="tabOcorrencias">⚠ OCORRÊNCIAS <span class="tab-badge" id="occurrenceBadge">0</span></button><button class="tab" id="tabRegistrosPosteriores">📝 POSTERIORES <span class="tab-badge" id="rpBadge">0</span></button><button class="tab" id="tabPortalSindico">🏢 SÍNDICO <span class="tab-badge" id="portalBadge">0</span></button><button class="tab" id="tabColaboradores">👥 EQUIPE</button><button class="tab" id="tabConfig">⚙ CONFIG.</button></div>
+<div class="oraqui-quick" aria-label="Acessos rápidos"><a id="oraquiQuickChatGestor" href="chat.html"><span class="quick-icon">💬</span>Chat</a><a href="documentos-gestao.html"><span class="quick-icon">📄</span>Documentos</a><a href="#panelOcorrencias" onclick="document.getElementById('tabOcorrencias').click();document.getElementById('novaOcorrencia').click();return false;"><span class="quick-icon">🚨</span>Criar ocorrência</a><a id="oraquiQuickChatConfig" href="chat-config.html"><span class="quick-icon">⚙️</span>Configurar chat</a></div>
+<div class="tabs"><button class="tab active" id="tabOperacao">✓ OPERAÇÃO</button><button class="tab" id="tabOcorrencias">⚠ OCORRÊNCIAS <span class="tab-badge" id="occurrenceBadge">0</span></button><button class="tab" id="tabRegistrosPosteriores">📝 POSTERIORES <span class="tab-badge" id="rpBadge">0</span></button><button class="tab" id="tabColaboradores">👥 EQUIPE</button><button class="tab" id="tabConfig">⚙ CONFIG.</button></div>
 <div class="panel active" id="panelOperacao"><div class="date-row"><h2>Hoje</h2><div class="date-pill" id="todayDate">--</div></div><div class="kpis"><div class="kpi"><strong id="kpiItems">0</strong><span>REGISTROS HOJE</span></div><div class="kpi"><strong id="kpiPhotos">0</strong><span>FOTOS RECEBIDAS</span></div><div class="kpi"><strong id="kpiWorkers">0</strong><span>COLABORADORES HOJE</span></div><div class="kpi"><strong id="kpiLocations">0</strong><span>LOCAIS REGISTRADOS</span></div></div><section class="section"><div class="section-title"><div><h2>Operação de hoje</h2><p>Registros concluídos pela equipe.</p></div><button class="refresh" id="refreshDados">↻ ATUALIZAR</button></div><div class="tower-card"><div class="tower-top"><div class="tower-icon">🏢</div><div class="tower-info"><strong id="towerName">Condomínio</strong><span id="towerStatus">Carregando...</span></div><div class="percent" id="towerPercent">0</div></div><div class="progress"><div class="progress-fill" id="towerProgress"></div></div><div class="progress-info"><span id="towerDone">0 registros</span><span id="towerTotal">hoje</span></div></div></section><section class="section"><div class="section-title"><div><h2>Registros por local</h2><p>Toque no local para visualizar fotos e informações.</p></div></div><div id="locationList" class="location-list"></div></section><section class="section"><div class="section-title"><div><h2>Últimos registros</h2></div></div><div id="activityContainer"></div></section></div>
 <div class="panel" id="panelOcorrencias"><section class="section"><div class="section-title"><div><h2>🚨 Demandas diretas da gestão</h2><p>Pendentes, em execução e concluídas, sem ocorrência de morador.</p></div></div><div id="demandasDiretasGestor" class="occurrence-list">Carregando demandas...</div></section><section class="section"><div class="section-title"><div><h2>Ocorrências</h2><p>Acompanhamento dos registros enviados.</p></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="confirm-button" id="novaOcorrencia">＋ NOVA OCORRÊNCIA</button><button class="confirm-button" id="novaDemandaUrgente">🚨 NOVA DEMANDA URGENTE</button><button class="refresh" id="refreshOcorrencias">↻ ATUALIZAR</button></div></div><div class="kpis"><div class="kpi"><strong id="occOpen">0</strong><span>ABERTAS</span></div><div class="kpi"><strong id="occProgress">0</strong><span>EM ATENDIMENTO</span></div><div class="kpi"><strong id="occResolved">0</strong><span>RESOLVIDAS</span></div><div class="kpi"><strong id="occReturn">0</strong><span>SOLICITAM RETORNO</span></div></div></section><section class="section"><div class="filters"><button class="filter active" data-filter="todas">TODAS</button><button class="filter" data-filter="aberta">ABERTAS</button><button class="filter" data-filter="em atendimento">EM ATENDIMENTO</button><button class="filter" data-filter="resolvida">RESOLVIDAS</button></div><div id="occurrenceList" class="occurrence-list"></div></section></div>
 <div class="panel" id="panelRegistrosPosteriores"><section class="section"><div class="section-title"><div><h2>📝 Registros posteriores</h2><p>Serviços declarados sem fotografia. Aprovação obrigatória pelo gestor; horários declarados não são comprovados pelo aplicativo.</p></div><button class="refresh" id="rpAtualizar" type="button">↻ ATUALIZAR</button></div><div class="kpis"><div class="kpi"><strong id="rpPendentes">0</strong><span>AGUARDANDO</span></div><div class="kpi"><strong id="rpAprovados">0</strong><span>APROVADOS</span></div><div class="kpi"><strong id="rpRejeitados">0</strong><span>REJEITADOS</span></div><div class="kpi"><strong id="rpCorrecoes">0</strong><span>CORREÇÕES</span></div></div><div class="filters" id="rpFiltros"><button class="filter active" data-rp-filter="pendente">PENDENTES</button><button class="filter" data-rp-filter="todos">TODOS</button><button class="filter" data-rp-filter="aprovado">APROVADOS</button><button class="filter" data-rp-filter="rejeitado">REJEITADOS</button><button class="filter" data-rp-filter="correcao_solicitada">CORREÇÕES</button></div><div id="rpLista" class="occurrence-list">Carregando registros...</div></section></div>
-<div class="panel" id="panelPortalSindico"><section class="section"><div class="section-title"><div><h2>🏢 Mensagens do Síndico</h2><p>Manifestações privadas de cada autor. Visíveis apenas à gestão autorizada e ao próprio remetente.</p></div><button class="refresh" id="portalAtualizar" type="button">↻ ATUALIZAR</button></div><div class="filters" id="portalFiltros"><button class="filter active" data-portal-filtro="todas">TODAS</button><button class="filter" data-portal-filtro="recebida">RECEBIDAS</button><button class="filter" data-portal-filtro="em_atendimento">EM ATENDIMENTO</button><button class="filter" data-portal-filtro="respondida">RESPONDIDAS</button></div><div id="portalLista" class="occurrence-list">Abra esta aba para consultar as mensagens.</div></section></div>
-<div class="panel" id="panelColaboradores"><section class="section"><div class="section-title"><div><h2>Equipe operacional</h2><p>Cadastro, convite e configurações dos colaboradores.</p></div><button class="add-button" id="addCollaborator">＋ CADASTRAR</button></div><div class="kpis"><div class="kpi"><strong id="colActive">0</strong><span>ATIVOS</span></div><div class="kpi"><strong id="colInactive">0</strong><span>INATIVOS</span></div></div><div id="collaboratorList" class="collaborator-list"></div></section><section class="section"><div class="section-title"><div><h2>Equipe de gestão</h2><p>Administradores e gestores vinculados ao condomínio.</p></div><button class="add-button hidden" id="addManager">＋ CONVIDAR GESTOR</button></div><div id="managementList" class="management-list"></div><section class="section"><div class="section-title"><div><h2>📁 Documentos dos colaboradores</h2><p>Envie holerites e outros PDFs com acesso individual.</p></div></div><a href="documentos-gestao.html" class="add-button" style="display:inline-block;text-decoration:none;padding:14px">📄 GERENCIAR DOCUMENTOS</a></section><section class="section"><div class="section-title"><div><h2>💬 Chat interno</h2><p>Mensagens entre gestão e colaboradores, com permissões configuráveis.</p></div></div><a class="add-button" id="oraquiChatGestao" href="chat.html" style="display:inline-block;text-decoration:none;padding:14px;margin-right:8px">💬 ABRIR CHAT <span id="oraquiGestorChatBadgeEquipe" style="display:none;background:#c33;color:white;border-radius:20px;padding:2px 7px;font-size:11px">0</span></a><a class="add-button" id="oraquiChatConfig" href="chat-config.html" style="display:inline-block;text-decoration:none;padding:14px">⚙️ CONFIGURAR CHAT</a></section><div id="managementPermissionNote" class="management-note hidden">Somente o administrador do cliente pode convidar ou alterar gestores.</div></section></div>
+<div class="panel" id="panelColaboradores"><section class="section"><div class="section-title"><div><h2>Equipe operacional</h2><p>Cadastro, convite e configurações dos colaboradores.</p></div><button class="add-button" id="addCollaborator">＋ CADASTRAR</button></div><div class="kpis"><div class="kpi"><strong id="colActive">0</strong><span>ATIVOS</span></div><div class="kpi"><strong id="colInactive">0</strong><span>INATIVOS</span></div></div><div id="collaboratorList" class="collaborator-list"></div></section><section class="section"><div class="section-title"><div><h2>Equipe de gestão</h2><p>Administradores e gestores vinculados ao condomínio.</p></div><button class="add-button hidden" id="addManager">＋ CONVIDAR GESTOR</button></div><div id="managementList" class="management-list"></div><section class="section"><div class="section-title"><div><h2>📁 Documentos dos colaboradores</h2><p>Envie holerites e outros PDFs com acesso individual.</p></div></div><a href="documentos-gestao.html" class="add-button" style="display:inline-block;text-decoration:none;padding:14px">📄 GERENCIAR DOCUMENTOS</a></section><section class="section"><div class="section-title"><div><h2>💬 Chat interno</h2><p>Mensagens entre gestão e colaboradores, com permissões configuráveis.</p></div></div><a class="add-button" id="oraquiChatGestao" href="chat.html" style="display:inline-block;text-decoration:none;padding:14px;margin-right:8px">💬 ABRIR CHAT</a><a class="add-button" id="oraquiChatConfig" href="chat-config.html" style="display:inline-block;text-decoration:none;padding:14px">⚙️ CONFIGURAR CHAT</a></section><div id="managementPermissionNote" class="management-note hidden">Somente o administrador do cliente pode convidar ou alterar gestores.</div></section></div>
 <div class="panel" id="panelConfig"><section class="section"><div class="section-title"><div><h2>Configuração operacional</h2><p>Áreas e pontos usados pelo colaborador e pelo canal de ocorrências.</p></div><button class="add-button" id="addArea">＋ NOVA ÁREA</button></div><div class="config-subtabs" style="grid-template-columns:repeat(3,1fr)"><button class="config-subtab active" id="subAreas">ÁREAS + PONTOS</button><button class="config-subtab" id="subAtividades">ATIVIDADES</button><button class="config-subtab" id="subProgramacoes">PROGRAMAÇÕES</button></div><div id="configAreas"><div id="configList" class="config-list"></div></div><div id="configAtividades" class="hidden"><div class="section-title"><div><h2>Atividades</h2><p>Defina o que deve ser executado.</p></div><button class="add-button" id="addAtividade">＋ NOVA ATIVIDADE</button></div><div id="atividadeList" class="config-list"></div></div><div id="configProgramacoes" class="hidden"><div class="section-title"><div><h2>Programações</h2><p>Defina local, responsável, dias e prazo.</p></div><button class="add-button" id="addProgramacao">＋ NOVA PROGRAMAÇÃO</button></div><div id="programacaoList" class="config-list"></div></div></section></div>
 </main></div>
 
@@ -160,34 +155,6 @@ async function ativarPushGestao(){
   finally{b.disabled=false}
 }
 
-
-// Chat: indicador restrito ao condomínio ativo e ao usuário autenticado.
-// A página chat.html seleciona automaticamente a conversa não lida mais recente.
-let oraquiChatGestorIntervalo=null;
-async function atualizarIndicadorChatGestor(){
-  if(!CONDOMINIO_ID||!perfilGestor)return;
-  try{
-    const {data:{user},error:authError}=await db.auth.getUser();
-    if(authError||!user)return;
-    const condominioConsulta=CONDOMINIO_ID;
-    const {count,error}=await db.from('oraqui_chat_mensagens')
-      .select('id',{count:'exact',head:true})
-      .eq('condominio_id',condominioConsulta)
-      .eq('destinatario',user.id)
-      .is('lida_em',null);
-    if(error||condominioConsulta!==CONDOMINIO_ID)return;
-    for(const id of ['oraquiGestorChatBadge','oraquiGestorChatBadgeEquipe']){
-      const badge=document.getElementById(id);
-      if(!badge)continue;
-      badge.textContent=count>99?'99+':String(count||0);
-      badge.style.display=count?'inline-block':'none';
-    }
-  }catch(e){console.warn('Indicador de chat da gestão:',e)}
-}
-window.addEventListener('focus',atualizarIndicadorChatGestor);
-document.addEventListener('visibilitychange',()=>{if(!document.hidden)atualizarIndicadorChatGestor()});
-oraquiChatGestorIntervalo=setInterval(()=>{if(!document.hidden)atualizarIndicadorChatGestor()},15000);
-
 async function login(){const email=$("loginEmail").value.trim(),password=$("loginPassword").value,box=$("authError");box.style.display="none";try{const {data,error}=await db.auth.signInWithPassword({email,password});if(error)throw error;await validarGestor(data.user)}catch(e){await db.auth.signOut();box.textContent=e.message||"Falha no acesso.";box.style.display="block"}}
 let vinculosGestaoValidos=[];
 function acessoGestaoValido(p){
@@ -233,7 +200,7 @@ function mostrarEscolhaCondominio(){
 async function selecionarCondominioGestao({p,c}){
   versaoCondominio++;
   sessionStorage.setItem("oraqui_gestao_condominio_id",String(c.id));
-  perfilGestor=p;CONDOMINIO_ID=c.id;CONDOMINIO=c.nome;document.getElementById("oraquiChatGestao")?.setAttribute("href",`chat.html?condominio_id=${c.id}`);document.getElementById("oraquiChatConfig")?.setAttribute("href",`chat-config.html?condominio_id=${c.id}`);document.getElementById("oraquiQuickChatGestor")?.setAttribute("href",`chat.html?condominio_id=${c.id}`);document.getElementById("oraquiQuickChatConfig")?.setAttribute("href",`chat-config.html?condominio_id=${c.id}`);
+  perfilGestor=p;CONDOMINIO_ID=c.id;CONDOMINIO=c.nome;document.getElementById("oraquiChatGestao")?.setAttribute("href",`chat.html?condominio_id=${c.id}&voltar=gestor.html`);document.getElementById("oraquiChatConfig")?.setAttribute("href",`chat-config.html?condominio_id=${c.id}`);document.getElementById("oraquiQuickChatGestor")?.setAttribute("href",`chat.html?condominio_id=${c.id}&voltar=gestor.html`);document.getElementById("oraquiQuickChatConfig")?.setAttribute("href",`chat-config.html?condominio_id=${c.id}`);
   AMBIENTE_DEMO=!!c.ambiente_demo&&Number(c.demo_origem_id)===4&&!!p.acesso_temporario;
   $("headerCondominio").textContent=CONDOMINIO.toUpperCase();
   $("towerName").textContent=CONDOMINIO;
@@ -246,7 +213,6 @@ async function selecionarCondominioGestao({p,c}){
   aplicarPermissoesGestao();
   await Promise.all([carregarDados(),carregarOcorrencias()]);
   await atualizarEstadoPushGestao();
-  atualizarIndicadorChatGestor();
   const ocorrenciaAlvo=Number(new URLSearchParams(location.search).get("ocorrencia"));
   if(ocorrenciaAlvo){
     const card=document.querySelector(`[data-occ="${ocorrenciaAlvo}"]`);
@@ -315,8 +281,10 @@ async function carregarDados(){
     montarLocais(registros);montarUltimos(registros);
   }catch(e){if(versaoConsulta!==versaoCondominio)return;console.error(e);erro("Não foi possível carregar a operação V2: "+e.message);locationList.innerHTML=vazio("⚠️","Dados indisponíveis","Falha ao consultar execuções.");activityContainer.innerHTML=vazio("⚠️","Dados indisponíveis","Falha ao consultar execuções.")}
 }
-function montarLocais(r){if(!r.length){locationList.innerHTML=vazio("📍","Nenhum registro hoje","As atividades aparecerão aqui.");return}const g={};r.forEach(x=>(g[x.local_nome]??=[]).push(x));locationList.innerHTML=Object.entries(g).map(([local,itens],i)=>`<div class="location-card ${i===0?"open":""}"><div class="location-header"><div class="location-icon">📍</div><div class="location-info"><strong>${esc(local)}</strong><span>${esc([...new Set(itens.map(x=>x.colaborador_nome))].join(", "))}</span></div><span class="location-count">${itens.length} ${itens.length===1?"ITEM":"ITENS"}</span><span>⌄</span></div><div class="location-content">${itens.map(x=>`<div class="record">${foto(x.foto_path,"record-photo")}<div class="record-body"><strong>✓ ${esc(x.item_nome)}</strong><div class="record-meta">${esc(x.colaborador_nome)} • ${hora(x.concluida_em||x.created_at)}</div>${x.observacao?`<div class="record-observation">💬 ${esc(x.observacao)}</div>`:""}</div></div>`).join("")}</div></div>`).join("");locationList.querySelectorAll(".location-card").forEach(c=>c.querySelector(".location-header").onclick=()=>c.classList.toggle("open"))}
-function montarUltimos(r){if(!r.length){activityContainer.innerHTML=vazio("🕘","Sem atividades","Nenhuma atividade foi recebida hoje.");return}activityContainer.innerHTML=`<div class="activity-list">${r.slice(0,20).map(x=>`<div class="activity-row">${foto(x.foto_path,"activity-photo")}<div class="activity-info"><strong>${esc(x.item_nome)}</strong><span>${esc(x.local_nome)} • ${esc(x.colaborador_nome)}</span></div><div class="activity-time">${hora(x.concluida_em||x.created_at)}</div></div>`).join("")}</div>`}
+document.addEventListener('click',e=>{const b=e.target.closest('.demand-before-photo');if(!b)return;e.preventDefault();e.stopPropagation();const d=demandasOcorrencias.find(x=>Number(x.id)===Number(b.dataset.demand));if(d?.foto_antes_path)abrirFotoStorage(d.foto_antes_path,'atividade')});
+function fotosExecucao(x,classe){return `<div class="exec-fotos">${x.foto_antes_path?`<div class="exec-foto-item"><span>ANTES</span>${foto(x.foto_antes_path,classe)}</div>`:""}${x.foto_path?`<div class="exec-foto-item"><span>DEPOIS</span>${foto(x.foto_path,classe)}</div>`:""}${!x.foto_antes_path&&!x.foto_path?`<span class="sem-foto">Sem foto</span>`:""}</div>`}
+function montarLocais(r){if(!r.length){locationList.innerHTML=vazio("📍","Nenhum registro hoje","As atividades aparecerão aqui.");return}const g={};r.forEach(x=>(g[x.local_nome]??=[]).push(x));locationList.innerHTML=Object.entries(g).map(([local,itens],i)=>`<div class="location-card"><div class="location-header"><div class="location-icon">📍</div><div class="location-info"><strong>${esc(local)}</strong><span>${esc([...new Set(itens.map(x=>x.colaborador_nome))].join(", "))}</span></div><span class="location-count">${itens.length} ${itens.length===1?"ITEM":"ITENS"}</span><span>⌄</span></div><div class="location-content">${itens.map(x=>`<div class="record">${fotosExecucao(x,"record-photo")}<div class="record-body"><strong>✓ ${esc(x.item_nome)}</strong><div class="record-meta">${esc(x.colaborador_nome)} • ${hora(x.concluida_em||x.created_at)}</div>${x.observacao?`<div class="record-observation">💬 ${esc(x.observacao)}</div>`:""}</div></div>`).join("")}</div></div>`).join("");locationList.querySelectorAll(".location-card").forEach(c=>c.querySelector(".location-header").onclick=()=>c.classList.toggle("open"))}
+function montarUltimos(r){if(!r.length){activityContainer.innerHTML=vazio("🕘","Sem atividades","Nenhuma atividade foi recebida hoje.");return}activityContainer.innerHTML=`<div class="activity-list">${r.slice(0,20).map(x=>`<div class="activity-row">${fotosExecucao(x,"activity-photo")}<div class="activity-info"><strong>${esc(x.item_nome)}</strong><span>${esc(x.local_nome)} • ${esc(x.colaborador_nome)}</span></div><div class="activity-time">${hora(x.concluida_em||x.created_at)}</div></div>`).join("")}</div>`}
 
 function normalizarReferenciaFoto(valor){
   let raw=String(valor||"").trim();
@@ -330,10 +298,14 @@ function normalizarReferenciaFoto(valor){
   if(partes.length>1&&conhecidos.includes(partes[0]))return {bucket:partes.shift(),path:partes.join("/")};
   return {path:raw};
 }
+function abrirLinkFoto(url){
+  const a=document.createElement("a");a.href=url;a.target="_blank";a.rel="noopener noreferrer";
+  document.body.appendChild(a);a.click();a.remove();
+}
 async function abrirFotoStorage(valor,tipo="atividade"){
   const ref=normalizarReferenciaFoto(valor);
   if(!ref)return alert("Nenhuma foto registrada.");
-  if(ref.url){window.open(ref.url,"_blank","noopener");return}
+  if(ref.url){abrirLinkFoto(ref.url);return}
   const preferidos=tipo==="ocorrencia"
     ?["fotos-ocorrencias","ocorrencias","ocorrencias-fotos","fotos-atividades","fotos"]
     :["fotos-atividades","fotos-ocorrencias","ocorrencias","ocorrencias-fotos","fotos"];
@@ -341,7 +313,7 @@ async function abrirFotoStorage(valor,tipo="atividade"){
   for(const bucket of buckets){
     try{
       const {data,error}=await db.storage.from(bucket).createSignedUrl(ref.path,600);
-      if(!error&&data?.signedUrl){window.open(data.signedUrl,"_blank","noopener");return}
+      if(!error&&data?.signedUrl){abrirLinkFoto(data.signedUrl);return}
     }catch(e){console.warn("Falha ao gerar link assinado:",bucket,e)}
   }
   alert("A foto está registrada, mas o Storage não liberou a visualização para este usuário.");
@@ -426,7 +398,7 @@ function renderDemandasDiretasGestor(){
       const foto=(d.foto_antes_path?`<button class="photo-action execution" type="button" data-foto-antes-demanda="${d.id}">📸 ANTES</button>`:"")+(d.foto_execucao_path?`<button class="photo-action execution" type="button" data-foto-demanda="${d.id}">📸 DEPOIS</button>`:"");
       return `<article class="occurrence-card" style="${!concluida&&d.prioridade==='urgente'?'border:2px solid #dc2626;':''}"><div class="occurrence-top"><div><strong>#${d.id} • ${esc(d.titulo||'Demanda')}</strong><div class="occurrence-date">${esc(nomeResponsavelDemanda(d))} • ${esc(d.tipo||'tarefa')}</div></div><span class="status-badge ${concluida?'status-resolvida':'status-aberta'}">${statusDemandaLabel(d.status)}</span></div>${d.descricao?`<div class="occurrence-description">${esc(d.descricao)}</div>`:''}${d.observacao_execucao?`<div class="record-observation">Execução: ${esc(d.observacao_execucao)}</div>`:''}${foto}</article>`;
     }).join(''):vazio('✓','Nenhuma demanda direta','Demandas criadas pelo gestor aparecerão aqui.'));
-    box.querySelectorAll('[data-foto-antes-demanda]').forEach(b=>{
+    box.querySelectorAll('[data-foto-antes-demanda]').forEach(b=>b.onclick=()=>{
     const d=demandasDiretasGestor.find(x=>Number(x.id)===Number(b.dataset.fotoAntesDemanda));
     if(d?.foto_antes_path)abrirFotoStorage(d.foto_antes_path,'atividade');
   });
@@ -1132,11 +1104,11 @@ async function revisarRegistroPosterior(id,status){
  }catch(e){alert("Não foi possível revisar: "+e.message)}finally{rpCarregando=false}
 }
 
-function painel(p){["Operacao","Ocorrencias","RegistrosPosteriores","PortalSindico","Colaboradores","Config"].forEach(n=>{$("panel"+n).classList.toggle("active",n.toLowerCase()===p);$("tab"+n).classList.toggle("active",n.toLowerCase()===p)});if(p==="portalsindico")carregarPortalSindico();if(p==="ocorrencias")carregarOcorrencias();if(p==="registrosposteriores")carregarRegistrosPosteriores();if(p==="colaboradores"){carregarColaboradores();carregarGestores()}if(p==="config")carregarConfig()}
+function painel(p){["Operacao","Ocorrencias","RegistrosPosteriores","Colaboradores","Config"].forEach(n=>{$("panel"+n).classList.toggle("active",n.toLowerCase()===p);$("tab"+n).classList.toggle("active",n.toLowerCase()===p)});if(p==="ocorrencias")carregarOcorrencias();if(p==="registrosposteriores")carregarRegistrosPosteriores();if(p==="colaboradores"){carregarColaboradores();carregarGestores()}if(p==="config")carregarConfig()}
 function eventos(){
 $("changeCondoButton").onclick=mostrarEscolhaCondominio;$("loginButton").onclick=login;$("pushGestaoButton").onclick=ativarPushGestao;$("loginPassword").onkeydown=e=>{if(e.key==="Enter")login()};$("logoutButton").onclick=sair;
 $("demoSwitchButton").onclick=abrirDemoColaborador;$("closeDemoCollaborator").onclick=fecharDemoColaborador;$("demoCollaboratorModal").onclick=e=>{if(e.target===$("demoCollaboratorModal"))fecharDemoColaborador()};
-$("tabPortalSindico").onclick=()=>painel("portalsindico");$("portalAtualizar").onclick=carregarPortalSindico;document.querySelectorAll("[data-portal-filtro]").forEach(b=>b.onclick=()=>{portalFiltro=b.dataset.portalFiltro;document.querySelectorAll("[data-portal-filtro]").forEach(x=>x.classList.toggle("active",x===b));renderPortalSindico()});$("tabOperacao").onclick=()=>painel("operacao");$("tabOcorrencias").onclick=()=>painel("ocorrencias");$("tabRegistrosPosteriores").onclick=()=>painel("registrosposteriores");$("rpAtualizar").onclick=carregarRegistrosPosteriores;document.querySelectorAll("[data-rp-filter]").forEach(b=>b.onclick=()=>{rpFiltro=b.dataset.rpFilter;document.querySelectorAll("[data-rp-filter]").forEach(x=>x.classList.toggle("active",x===b));renderRegistrosPosteriores()});$("tabColaboradores").onclick=()=>painel("colaboradores");$("tabConfig").onclick=()=>painel("config");
+$("tabOperacao").onclick=()=>painel("operacao");$("tabOcorrencias").onclick=()=>painel("ocorrencias");$("tabRegistrosPosteriores").onclick=()=>painel("registrosposteriores");$("rpAtualizar").onclick=carregarRegistrosPosteriores;document.querySelectorAll("[data-rp-filter]").forEach(b=>b.onclick=()=>{rpFiltro=b.dataset.rpFilter;document.querySelectorAll("[data-rp-filter]").forEach(x=>x.classList.toggle("active",x===b));renderRegistrosPosteriores()});$("tabColaboradores").onclick=()=>painel("colaboradores");$("tabConfig").onclick=()=>painel("config");
 $("novaOcorrencia").onclick=abrirNovaOcorrencia;$("novaOcArea").onchange=atualizarPontosNovaOcorrencia;$("fecharNovaOcorrencia").onclick=$("cancelarNovaOcorrencia").onclick=fecharNovaOcorrencia;$("salvarNovaOcorrencia").onclick=salvarNovaOcorrencia;$("novaDemandaUrgente").onclick=abrirUrgente;$("urgArea").onchange=atualizarPontosUrgentes;$("fecharUrgente").onclick=$("cancelarUrgente").onclick=fecharUrgente;$("salvarUrgente").onclick=salvarUrgente;$("refreshDados").onclick=carregarDados;$("refreshOcorrencias").onclick=carregarOcorrencias;
 $("closeDemanda").onclick=$("cancelDemanda").onclick=fecharDemanda;$("saveDemanda").onclick=salvarDemandaOcorrencia;$("demandaDestino").onchange=destinoDemanda;
 $("addCollaborator").onclick=novoCol;$("closeCollaborator").onclick=$("cancelCollaborator").onclick=()=>$("collaboratorModal").classList.remove("visible");$("saveCollaborator").onclick=salvarCol;$("colPontoAtivo").onchange=dependencias;$("colIntervalo").onchange=dependencias;$("addManager").onclick=abrirConviteGestor;$("closeManager").onclick=$("cancelManager").onclick=fecharConviteGestor;$("saveManager").onclick=convidarGestor;
@@ -1144,7 +1116,7 @@ $("addArea").onclick=novaArea;$("closeArea").onclick=$("cancelArea").onclick=()=
 $("closePoint").onclick=$("cancelPoint").onclick=()=>$("pointModal").classList.remove("visible");$("savePoint").onclick=salvarPonto;
 $("subAreas").onclick=()=>subConfig("a");$("subAtividades").onclick=()=>subConfig("t");$("subProgramacoes").onclick=()=>subConfig("p");$("addAtividade").onclick=openAt;$("closeAtividade").onclick=$("cancelAtividade").onclick=closeAt;$("saveAtividade").onclick=saveAt;$("addProgramacao").onclick=openPr;$("closeProgramacao").onclick=$("cancelProgramacao").onclick=closePr;$("saveProgramacao").onclick=savePr;$("progArea").onchange=()=>fillPoints();$("progDestino").onchange=dest;document.querySelectorAll(".filter").forEach(b=>b.onclick=()=>{filtroOcorrencias=b.dataset.filter;document.querySelectorAll(".filter").forEach(x=>x.classList.remove("active"));b.classList.add("active");renderOcorrencias()});
 }
-async function iniciar(){eventos();$("todayDate").textContent=new Date().toLocaleDateString("pt-BR");const {data:{session}}=await db.auth.getSession();if(session){try{await validarGestor(session.user)}catch(e){console.error(e);$("authError").textContent=e.message;$("authError").style.display="block"}}}
+async function iniciar(){eventos();painel("operacao");$("todayDate").textContent=new Date().toLocaleDateString("pt-BR");const {data:{session}}=await db.auth.getSession();if(session){try{await validarGestor(session.user)}catch(e){console.error(e);$("authError").textContent=e.message;$("authError").style.display="block"}}}
 iniciar();
 let atualizacaoAutomaticaEmAndamento=false;
 setInterval(async()=>{
@@ -1154,76 +1126,11 @@ setInterval(async()=>{
   try{
     if($("panelOperacao").classList.contains("active"))await carregarDados();
     else if($("panelOcorrencias").classList.contains("active"))await carregarOcorrencias();
-    else if($("panelPortalSindico").classList.contains("active"))await carregarPortalSindico();
   }catch(e){if(versaoConsulta===versaoCondominio)console.warn("Atualização automática:",e)}
   finally{atualizacaoAutomaticaEmAndamento=false}
 },60000);
 
 async function carregarFotosEquipe(){for(const c of colaboradoresCarregados){if(!c.foto_perfil_path)continue;try{const {data}=await db.storage.from("fotos-perfil-privadas").createSignedUrl(c.foto_perfil_path,3600);if(!data?.signedUrl)continue;const el=Array.from(document.querySelectorAll("[data-avatar-col]")).find(e=>e.dataset.avatarCol===String(c.id));if(!el)continue;el.textContent="";const img=document.createElement("img");img.className="oraqui-profile-photo";img.alt="Foto de "+c.nome;img.src=data.signedUrl;el.append(img)}catch(e){console.warn("Foto da equipe indisponível",e)}}}
-</script>
-
-<script>
-// ORAQUI 2.0 — Atendimento ao síndico. As permissões efetivas são verificadas pelo RLS no Supabase.
-let portalMensagens=[],portalFiltro='todas',portalCarregando=false;
-const portalEsc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const portalData=v=>v?new Date(v).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'}):'—';
-async function carregarPortalSindico(){
- if(!CONDOMINIO_ID||portalCarregando)return;
- portalCarregando=true;const idConsulta=Number(CONDOMINIO_ID);
- const lista=document.getElementById('portalLista');lista.textContent='Carregando mensagens…';
- try{
-  const {data,error}=await db.rpc('oraqui_portal_listar_mensagens_gestao',{p_condominio_id:idConsulta});
-  if(error)throw error;
-  if(Number(CONDOMINIO_ID)!==idConsulta)return;
-  portalMensagens=data||[];
-  document.getElementById('portalBadge').textContent=portalMensagens.filter(m=>m.status==='recebida').length;
-  renderPortalSindico();
- }catch(e){lista.textContent='Não foi possível consultar o portal: '+e.message;}finally{portalCarregando=false;}
-}
-function renderPortalSindico(){
- const lista=document.getElementById('portalLista');
- const itens=portalMensagens.filter(m=>portalFiltro==='todas'||m.status===portalFiltro);
- lista.innerHTML=itens.length?itens.map(m=>`<article class="occurrence-card" style="margin-bottom:14px" data-portal-id="${Number(m.id)}">
- <div class="occurrence-top"><div><strong>#${Number(m.id)} · ${portalEsc(m.titulo)}</strong><div class="occurrence-date">${portalEsc(m.tipo||'Mensagem')} · ${portalData(m.criado_em)} · Autor: ${portalEsc(m.autor_auth_id)}</div></div><span class="online">${portalEsc(m.status||'recebida')}</span></div>
- <p style="white-space:pre-wrap;margin:12px 0">${portalEsc(m.mensagem)}</p>
- <div class="record-observation">Área ID: ${m.area_id??'—'} · Ponto ID: ${m.ponto_id??'—'} · Demanda vinculada: ${m.demanda_id?'#'+m.demanda_id:'nenhuma'}</div>
- ${m.foto_path?`<div style="margin:8px 0;font-size:12px">📷 Foto enviada: ${portalEsc(m.foto_path)} (arquivo privado; acesso sujeito às permissões do storage)</div>`:''}
- <div class="field full" style="margin-top:12px"><label>RESPOSTA AO SÍNDICO (visível somente ao autor)</label><textarea data-portal-resposta rows="3" placeholder="Escreva a resposta ao síndico…">${portalEsc(m.resposta_cliente||'')}</textarea></div>
- <div class="field full" style="margin-top:8px"><label>NOTA INTERNA (não aparece no portal do síndico)</label><textarea data-portal-nota rows="2" placeholder="Anotação interna da gestão…">${portalEsc(m.nota_interna||'')}</textarea></div>
- <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="confirm-button" type="button" data-portal-acao="responder">💬 SALVAR / RESPONDER</button><button class="refresh" type="button" data-portal-acao="atender">EM ATENDIMENTO</button><button class="refresh" type="button" data-portal-acao="demanda" disabled title="Disponível após homologação">🚨 CRIAR DEMANDA</button></div></article>`).join(''):'<div class="record-observation">Nenhuma mensagem nesta categoria.</div>';
- lista.querySelectorAll('[data-portal-acao]').forEach(b=>b.onclick=()=>acaoPortalSindico(b.closest('[data-portal-id]'),b.dataset.portalAcao));
-}
-async function acaoPortalSindico(card,acao){
- const id=Number(card.dataset.portalId),m=portalMensagens.find(x=>Number(x.id)===id);
- if(!m||Number(m.condominio_id)!==Number(CONDOMINIO_ID))return;
- const resposta=card.querySelector('[data-portal-resposta]').value.trim(),nota=card.querySelector('[data-portal-nota]').value.trim();
- if(acao==='demanda')return alert('Vinculação de demandas em homologação. Nenhuma demanda foi criada.');
- if(acao==='responder'&&!resposta)return alert('Preencha a resposta para o síndico.');
- const {data:{user},error:authError}=await db.auth.getUser();if(authError||!user)return alert('Sessão expirada.');
- const payload={resposta_cliente:resposta||null,nota_interna:nota||null,status:acao==='atender'?'em_atendimento':'respondida',atualizado_em:new Date().toISOString()};
- if(acao==='responder'){payload.respondido_em=new Date().toISOString();payload.respondido_por=user.id;}
- try{const {data,error}=await db.from('oraqui_portal_mensagens').update(payload).eq('id',id).eq('condominio_id',CONDOMINIO_ID).select('id');if(error)throw error;if(!data?.length)throw Error('Sem permissão para atualizar.');await carregarPortalSindico();toast('Mensagem atualizada.');}catch(e){alert('Erro ao atualizar: '+e.message);}
-}
-async function criarDemandaPortal(m){
- if(m.demanda_id)return alert('Esta mensagem já possui uma demanda vinculada.');
- try{await garantirDadosEncaminhamento()}catch(e){return alert('Falha ao carregar equipe: '+e.message)}
- const nomeCol=colaboradoresCarregados.map(c=>`${c.id} — ${c.nome} (${c.funcao||'sem função'})`).join('\n');
- const escolha=prompt('Informe o ID do colaborador responsável:\n'+nomeCol);if(escolha===null)return;
- const col=colaboradoresCarregados.find(c=>Number(c.id)===Number(escolha));if(!col)return alert('Colaborador inválido.');
- const area=areasCarregadas.find(a=>Number(a.id)===Number(m.area_id));
- if(!area)return alert('A mensagem não possui área operacional válida. Defina a área no cadastro antes de encaminhar.');
- const descricao=prompt('Instruções para o colaborador:',m.mensagem||m.titulo);if(descricao===null)return;if(!descricao.trim())return alert('Informe instruções.');
- if(!confirm(`Criar demanda para ${col.nome} vinculada à mensagem #${m.id}?`))return;
- const condo=Number(CONDOMINIO_ID),agora=new Date().toISOString();
- const payload={condominio_id:condo,ocorrencia_id:null,ambiente:'producao',colaborador_id:Number(col.id),funcao:null,area_id:Number(area.id),ponto_id:m.ponto_id?Number(m.ponto_id):null,tipo:'urgente',titulo:String(m.titulo||'Solicitação do síndico').slice(0,140),descricao:descricao.trim(),inicio_em:agora,prazo_em:null,exige_foto:true,exige_foto_antes:false,exige_observacao:false,status:'pendente',prioridade:'alta',updated_at:agora};
- try{
-  const {data:demanda,error}=await db.from('demandas').insert(payload).select('id').single();if(error)throw error;
-  const {data:msg,error:erroVinculo}=await db.from('oraqui_portal_mensagens').update({demanda_id:demanda.id,status:'em_atendimento',atualizado_em:new Date().toISOString()}).eq('id',m.id).eq('condominio_id',condo).is('demanda_id',null).select('id');
-  if(erroVinculo||!msg?.length){alert(`Demanda #${demanda.id} criada, mas o vínculo falhou. NÃO crie outra demanda. Vincule manualmente. ${erroVinculo?.message||''}`);return;}
-  try{await db.functions.invoke('enviar-push-demanda',{body:{demanda_id:demanda.id}})}catch(e){console.warn('Push não confirmado',e)}
-  await carregarPortalSindico();toast(`Demanda #${demanda.id} criada e vinculada.`);
- }catch(e){alert('Erro ao criar demanda: '+e.message)}
-}
 </script>
 </body>
 </html>
