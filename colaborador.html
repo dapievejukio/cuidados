@@ -612,7 +612,7 @@ async function salvarConclusaoDemanda(){
     const agora=new Date().toISOString();let path=null,pathAntes=null;
     pathAntes=inicio.foto_antes_path||null;
     if(foto){
-      const blob=await fotoComCarimbo(foto,agora);
+      const blob=await fotoComCarimbo(foto,agora,contextoFoto(d.area_id,d.ponto_id));
       path=`demandas/${colaborador.condominio_id}/${colaborador.id}/${d.id}/${crypto.randomUUID()}.jpg`;
       const {error:uploadErro}=await db.storage.from(BUCKET).upload(path,blob,{contentType:'image/jpeg'});
       if(uploadErro)throw uploadErro;
@@ -759,7 +759,7 @@ async function iniciarComFoto(tipo){
     if(existente){inicioAtual=existente;toast('Atividade já iniciada.');return}
     const agora=new Date().toISOString();let path=null;
     if(arquivo){
-      const blob=await fotoComCarimbo(arquivo,agora);
+      const blob=await fotoComCarimbo(arquivo,agora,tipo==='demanda'?contextoFoto(demanda?.area_id,demanda?.ponto_id):tipo==='avulsa'?contextoFoto(Number($('areaSelect').value),Number($('pontoSelect').value)||null):contextoFoto(execAtual?.area_id,execAtual?.ponto_id));
       path=`inicios/${colaborador.condominio_id}/${colaborador.id}/${tipo}/${id||crypto.randomUUID()}/${crypto.randomUUID()}.jpg`;
       const {error}=await db.storage.from(BUCKET).upload(path,blob,{contentType:'image/jpeg'});
       if(error)throw new Error('Falha no envio da foto ANTES: '+error.message);
@@ -917,22 +917,43 @@ async function atualizarEstadoOffline(){
 function carimboDataHora(data){
   return new Intl.DateTimeFormat('pt-BR',{timeZone:'America/Sao_Paulo',day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(new Date(data));
 }
-async function fotoComCarimbo(arquivo,dataISO){
+// A localização escolhida no cadastro é declaratória; o GPS é uma leitura independente.
+async function obterGPSFoto(){
+  if(!navigator.geolocation || !window.isSecureContext)return null;
+  return new Promise(resolve=>{
+    let encerrado=false;
+    const concluir=v=>{if(!encerrado){encerrado=true;resolve(v)}};
+    navigator.geolocation.getCurrentPosition(
+      p=>concluir({latitude:p.coords.latitude,longitude:p.coords.longitude,precisao:p.coords.accuracy}),
+      ()=>concluir(null),
+      {enableHighAccuracy:true,timeout:4500,maximumAge:0}
+    );
+  });
+}
+function contextoFoto(areaId,pontoId){
+  return nomeLocal(areaId,pontoId)||'Local não informado';
+}
+async function fotoComCarimbo(arquivo,dataISO,localInformado='Local não informado'){
   if(!arquivo)return null;
-  const bitmap=await createImageBitmap(arquivo);
+  const [bitmap,gps]=await Promise.all([createImageBitmap(arquivo),obterGPSFoto()]);
   try{
     const limite=1920,escala=Math.min(1,limite/Math.max(bitmap.width,bitmap.height));
     const canvas=document.createElement('canvas');canvas.width=Math.round(bitmap.width*escala);canvas.height=Math.round(bitmap.height*escala);
     const ctx=canvas.getContext('2d');if(!ctx)throw new Error('Não foi possível processar a fotografia.');
     ctx.drawImage(bitmap,0,0,canvas.width,canvas.height);
-    const fonte=Math.max(18,Math.round(canvas.width*.028));ctx.font=`bold ${fonte}px Arial,sans-serif`;
-    const linha1='ORAQUI • REGISTRO OPERACIONAL',linha2=carimboDataHora(dataISO)+' (Brasília)';
-    const padding=Math.max(14,Math.round(fonte*.65)),altura=fonte*2.9;
-    ctx.fillStyle='rgba(0,0,0,.73)';ctx.fillRect(0,canvas.height-altura,canvas.width,altura);
-    ctx.fillStyle='#fff';ctx.textBaseline='top';ctx.fillText(linha1,padding,canvas.height-altura+padding,canvas.width-padding*2);
-    ctx.fillText(linha2,padding,canvas.height-altura+padding+fonte*1.18,canvas.width-padding*2);
-    const blob=await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('Falha ao gerar foto carimbada.')),'image/jpeg',.84));
-    return blob;
+    const fonte=Math.max(16,Math.round(canvas.width*.024));
+    const linhas=[
+      'ORAQUI • REGISTRO OPERACIONAL',
+      carimboDataHora(dataISO)+' (Brasília)',
+      'Local informado: '+String(localInformado||'Não informado'),
+      gps?`GPS: ${gps.latitude.toFixed(6)}, ${gps.longitude.toFixed(6)} (±${Math.round(gps.precisao)} m)`:'GPS: indisponível / não autorizado'
+    ];
+    const padding=Math.max(12,Math.round(fonte*.65)),espaco=Math.round(fonte*1.30);
+    const altura=padding*2+linhas.length*espaco;
+    ctx.fillStyle='rgba(0,0,0,.78)';ctx.fillRect(0,canvas.height-altura,canvas.width,altura);
+    ctx.fillStyle='#fff';ctx.textBaseline='top';ctx.font=`bold ${fonte}px Arial,sans-serif`;
+    linhas.forEach((linha,i)=>ctx.fillText(linha,padding,canvas.height-altura+padding+i*espaco,canvas.width-padding*2));
+    return await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('Falha ao gerar foto carimbada.')),'image/jpeg',.84));
   }finally{bitmap.close()}
 }
 async function enviarRegistroPendente(item){
@@ -1007,7 +1028,7 @@ async function confirmarExecucao(){
   processando=true;$('confirmExec').disabled=true;$('confirmExec').textContent='SALVANDO...';
   try{
     const agora=new Date().toISOString(),id=crypto.randomUUID();
-    const foto=await fotoComCarimbo(fotoArquivo,agora);
+    const foto=await fotoComCarimbo(fotoArquivo,agora,contextoFoto(areaId,pontoId));
     const fotoAntes=null;
     const fotoPath=foto?`v2/${colaborador.condominio_id}/${colaborador.id}/${hoje()}/${id}.jpg`:null;
     const fotoAntesPath=inicio?.foto_antes_path||null;
