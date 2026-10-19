@@ -1,36 +1,43 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Chat — ORAQUI</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f4f6f8;color:#263442;margin:0}header{background:#6d80a8;color:white;padding:22px 18px}main{max-width:760px;margin:auto;padding:18px}section{background:white;border-radius:16px;padding:18px;margin-bottom:15px;box-shadow:0 5px 18px #25313c10}button,a.btn{border:0;background:#7567b9;color:white;border-radius:10px;padding:12px;cursor:pointer;text-decoration:none;display:inline-block;font-weight:700}button:disabled{opacity:.45}select,textarea{width:100%;box-sizing:border-box;padding:12px;border:1px solid #ccd5dc;border-radius:10px;margin:8px 0}label{display:block;padding:9px 0;border-bottom:1px solid #eef1f4}small,.hint{color:#697989}#mensagens{height:42vh;overflow:auto;background:#f8f9fb;padding:10px;border-radius:12px;margin:12px 0}.msg{padding:10px;margin:8px 0;border-radius:12px;background:#e5ecf3;max-width:80%;white-space:pre-wrap;overflow-wrap:anywhere}.minha{margin-left:auto;background:#e6defb}.msg small{display:block;margin-top:6px}#status{margin:12px 0;color:#8a3e3e}h1{margin:0;font-size:22px}</style></head><body><header><h1>💬 ORAQUI — Mensagens</h1></header><main><section><a class="btn" href="javascript:history.back()">← VOLTAR</a><p class="hint">Conversa individual, restrita ao condomínio selecionado.</p><strong id="titulo"></strong><p id="status"></p><select id="contato"><option>Carregando contatos...</option></select></section><section><div id="mensagens"></div><textarea id="texto" rows="3" maxlength="2000" placeholder="Digite sua mensagem..."></textarea><button id="enviar">ENVIAR MENSAGEM</button><p class="hint">As mensagens são atualizadas automaticamente. Versão inicial: somente texto.</p></section></main><script>const db=supabase.createClient('https://rhiosvsohvqqrxzwohqu.supabase.co','sb_publishable_vcjiMMCTxQJ7ArTGsQ-PuQ_5gaAfoIt');const $=id=>document.getElementById(id);const esc=s=>String(s??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');const cid=Number(new URLSearchParams(location.search).get('condominio_id'));let uid=null;const falha=e=>{$('status').textContent=e?.message||String(e)};
-let contatos=[],timer=null,primeiraAbertura=true,contatoAnterior="";
-async function init(){try{if(!cid)throw Error('Abra o chat pelo painel do ORAQUI.');const {data:{user},error}=await db.auth.getUser();if(error||!user)throw Error('Entre no ORAQUI primeiro.');uid=user.id;const [r,co]=await Promise.all([db.rpc('oraqui_chat_listar_contatos',{p_condominio_id:cid}),db.from('condominios').select('nome').eq('id',cid).single()]);
-if(r.error)throw r.error;
-if(co.error)throw co.error;
-contatos=[...new Map((r.data||[]).map(x=>[x.usuario_id,{uid:x.usuario_id,nome:x.nome,tipo:x.tipo}])).values()];
-$('titulo').textContent=co.data?.nome||'Condomínio';
-$('contato').innerHTML=contatos.length?'<option value="">Selecione um destinatário...</option>'+contatos.map(x=>`<option value="${esc(x.uid)}">${esc(x.nome)} • ${esc(x.tipo)}</option>`).join(''):'<option value="">Nenhum contato disponível — verifique os acessos e as permissões</option>';
-$('contato').onchange=()=>{primeiraAbertura=true;carregar()};
-// Prioriza a conversa que recebeu a mensagem não lida mais recente.
-// Sem pendências, retoma a conversa mais recente; sem histórico, mantém a seleção manual.
-const destinoURL=new URLSearchParams(location.search).get('contato');
-if(destinoURL&&contatos.some(c=>c.uid===destinoURL))$('contato').value=destinoURL;
-else{
- const {data:recentes,error:erroRecentes}=await db.from('oraqui_chat_mensagens')
-  .select('remetente,destinatario,criada_em,lida_em')
-  .eq('condominio_id',cid)
-  .or(`remetente.eq.${uid},destinatario.eq.${uid}`)
-  .order('criada_em',{ascending:false}).limit(200);
- if(erroRecentes)console.warn('Não foi possível selecionar a conversa automaticamente:',erroRecentes);
- else{
-  const permitidos=new Set(contatos.map(c=>c.uid));
-  const minhas=(recentes||[]).filter(m=>m.remetente===uid||m.destinatario===uid);
-  const pendente=minhas.find(m=>m.destinatario===uid&&!m.lida_em&&permitidos.has(m.remetente));
-  const ultima=minhas.find(m=>permitidos.has(m.remetente===uid?m.destinatario:m.remetente));
-  const escolhido=pendente?.remetente||(ultima?(ultima.remetente===uid?ultima.destinatario:ultima.remetente):null);
-  if(escolhido)$('contato').value=escolhido;
- }
-}
-await carregar();timer=setInterval(carregar,6000);
-}catch(e){falha(e)}}
-async function carregar(){const outro=$('contato').value;if(!uid||!outro)return;const {data,error}=await db.from('oraqui_chat_mensagens').select('id,remetente,destinatario,mensagem,criada_em,lida_em').eq('condominio_id',cid).or(`and(remetente.eq.${uid},destinatario.eq.${outro}),and(remetente.eq.${outro},destinatario.eq.${uid})`).order('criada_em',{ascending:false}).limit(100);if(error){falha(error);return}const el=$('mensagens'),mudou=outro!==contatoAnterior,antes=el.scrollTop+el.clientHeight>=el.scrollHeight-60;el.innerHTML=(data||[]).reverse().map(m=>`<div class="msg ${m.remetente===uid?'minha':''}">${esc(m.mensagem)}<small>${new Date(m.criada_em).toLocaleString('pt-BR')}</small></div>`).join('')||'<p class="hint">Nenhuma mensagem nesta conversa.</p>';if(antes||mudou||primeiraAbertura)el.scrollTop=el.scrollHeight;contatoAnterior=outro;primeiraAbertura=false;
-const pendentes=(data||[]).filter(m=>m.destinatario===uid&&!m.lida_em).map(m=>m.id);if(pendentes.length)await db.from('oraqui_chat_mensagens').update({lida_em:new Date().toISOString()}).in('id',pendentes);
-}
-$('enviar').onclick=async()=>{const texto=$('texto').value.trim(),outro=$('contato').value;if(!texto||!outro)return; $('enviar').disabled=true;try{const {error}=await db.from('oraqui_chat_mensagens').insert({condominio_id:cid,remetente:uid,destinatario:outro,mensagem:texto});if(error)throw error;$('texto').value='';$('status').textContent='';await carregar()}catch(e){falha(e)}finally{$('enviar').disabled=false}};
-init();</script></body></html>
+ORAQUI 2.0 — CENTRAL ÚNICA DE CHAT E ABERTURA DIRETA
+18/10/2026
+
+OBJETIVO
+Uma única caixa de entrada para gestores e supergestores, com conversas entre gestores de condomínios diferentes, sem conceder acesso aos dados operacionais desses condomínios. O colaborador continua restrito aos contatos autorizados.
+
+COMPORTAMENTO APROVADO
+1. Ao tocar em Chat, abrir diretamente a conversa que contém a mensagem NÃO LIDA mais recente.
+2. Se não houver mensagens não lidas, abrir a conversa com atividade mais recente.
+3. Se não houver histórico, exibir contatos disponíveis.
+4. Abrir a conversa posicionada na última mensagem; não obrigar o usuário a escolher o remetente.
+5. Exibir contadores de mensagens não lidas por conversa e no botão Chat.
+6. Quando houver mensagens de vários remetentes, mostrar também uma lista de conversas para alternar sem voltar ao início.
+7. Gestores podem trocar mensagens entre si mesmo pertencendo a condomínios diferentes.
+8. Supergestor visualiza conversas autorizadas de toda a sua rede em uma única caixa de entrada.
+9. Uma pessoa usa um único login Supabase Auth, mesmo com múltiplos vínculos.
+
+REGRAS DE ACESSO
+- O acesso ao chat é diferente do acesso operacional: permitir mensagem não concede acesso a atividades, documentos, ocorrências ou relatórios de outro condomínio.
+- Conversas de colaborador com gestor continuam vinculadas ao condomínio.
+- Conversas entre gestores de condomínios distintos precisam de escopo de comunicação próprio, não de um condominio_id arbitrário.
+- Cada mensagem deve registrar remetente, destinatário, data/hora, leitura e escopo (condomínio ou rede autorizada).
+- Consultas e políticas RLS devem validar os dois participantes e o vínculo/escopo permitido.
+- Não usar SERVICE_ROLE no navegador e não desabilitar RLS.
+- Preservar todo o histórico existente em oraqui_chat_mensagens.
+
+SITUAÇÃO DO CÓDIGO RECEBIDO
+O chat.html original usa a tabela oraqui_chat_mensagens e a RPC oraqui_chat_listar_contatos(p_condominio_id), ambas operando dentro de um único condomínio. Não é seguro simplesmente remover o filtro condominio_id: isso não cria permissão para conversas entre condomínios e pode quebrar o isolamento.
+
+ENTREGA JÁ PRONTA
+O arquivo ORAQUI_CHAT_ABERTURA_DIRETA.txt contém o chat.html completo para substituir a página atual. Implementa a abertura da mensagem não lida mais recente NO CONDOMÍNIO SELECIONADO; se não houver, abre a conversa mais recente. Mantém as consultas filtradas por condominio_id.
+
+ETAPAS PARA ATIVAR A CENTRALIZAÇÃO REAL
+A. Conferir no Supabase a estrutura das tabelas de gestores/supergestores, vínculos e as políticas RLS atuais de oraqui_chat_mensagens.
+B. Criar uma identidade única de usuário (auth.uid()) e a lista de contatos autorizados por rede/condomínio.
+C. Criar escopo de conversa entre gestores de condomínios diferentes com políticas RLS próprias, sem misturar dados operacionais.
+D. Criar consulta/RPC de caixa de entrada agregada que retorne última mensagem, total não lido, contato, escopo e condomínio quando aplicável.
+E. Atualizar chat.html para usar a caixa de entrada agregada e permitir trocar conversas sem selecionar condomínio.
+F. Atualizar os botões de Chat do gestor e supergestor para abrir a caixa unificada; atualizar indicadores globais.
+G. Testar com dois gestores de condomínios diferentes, supergestor e colaborador; confirmar que o chat funciona e que os dados operacionais permanecem inacessíveis entre condomínios.
+
+IMPORTANTE
+A centralização ENTRE CONDOMÍNIOS ainda NÃO foi ativada. Depende das políticas e da estrutura reais do Supabase. Não executar migrações ou políticas genéricas sem verificar o banco. O arquivo do chat entregue resolve a abertura automática apenas dentro do condomínio atual.
