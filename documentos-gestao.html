@@ -51,11 +51,9 @@ function extrairFolha(nome){
 }
 function linhaLote(i,idx){
  const estado=i.estado==='pronto'?'✅ Pronto':i.estado==='enviado'?'✅ Publicado':i.estado==='enviando'?'⏳ Enviando':i.estado==='erro'?'❌ Erro':'⚠️ Bloqueado';
- const pendente=i.estado==='bloqueado'&&!i.info.erro;
- const nomeArquivo=normalizarNome(i.info.nomePessoa);
- const candidatos=cadastradosLote.filter(c=>c.auth_user_id&&normalizarNome(c.nome)===nomeArquivo&&!cadastradosLote.some(o=>String(o.id)!==String(c.id)&&Number(o.empresa_folha)===i.info.empresa&&registroNormalizado(o.registro_folha)===i.info.registro));
- const opcoes=candidatos.map(c=>`<option value="${esc(c.id)}">${esc(c.nome)} — ${esc(c.empresa_folha||'sem empresa')}/${esc(c.registro_folha||'sem registro')}</option>`).join('');
- return `<div style="border-bottom:1px solid #e2e6eb;padding:12px 0;font-size:13px"><strong>${esc(i.file.name)}</strong><div class="muted">${esc(i.destino?.nome||'Sem destinatário validado')} · ${esc(i.info.empresa?'Empresa '+i.info.empresa+' / registro '+i.info.registro:'')}</div><div>${estado} — ${esc(i.motivo||'Correspondência confirmada')}</div>${pendente&&candidatos.length?`<div style="margin-top:8px"><label for="vinculo_${idx}">VINCULAR SOMENTE SE FOR A MESMA PESSOA</label><select id="vinculo_${idx}"><option value="">Selecione um cadastro com nome idêntico</option>${opcoes}</select><button class="btn secondary" data-confirmar="${idx}" type="button">CONFIRMAR VÍNCULO</button></div>`:pendente?'<div class="muted">Cadastre o colaborador com seu nome verdadeiro e conta autenticada no Gestor. Depois selecione a pasta novamente.</div>':''}</div>`;
+ const nome=i.destino?.nome||'Sem usuário vinculado';
+ const avisoNome=i.estado==='pronto'&&normalizarNome(i.info.nomePessoa)!==normalizarNome(nome)?'<div style="color:#985b00;font-weight:700">⚠️ Nome do PDF diferente do cadastro. Confira o vínculo numérico antes de publicar.</div>':'';
+ return `<div style="border-bottom:1px solid #e2e6eb;padding:12px 0;font-size:13px"><strong>${esc(i.file.name)}</strong><div class="muted">Destinatário: ${esc(nome)} · ${esc(i.info.empresa?'Empresa '+i.info.empresa+' / registro '+i.info.registro:'')}</div><div>${estado} — ${esc(i.motivo||'Correspondência numérica')}</div>${avisoNome}</div>`;
 }
 function desenharLote(){const pronto=itensLote.filter(i=>i.estado==='pronto').length,erro=itensLote.filter(i=>i.estado==='erro').length,enviado=itensLote.filter(i=>i.estado==='enviado').length,pendente=itensLote.length-pronto-erro-enviado;
  $('resumoLote').textContent=`${itensLote.length} arquivos | ${pronto} prontos | ${enviado} publicados | ${pendente} para revisar | ${erro} erros`;
@@ -78,7 +76,7 @@ async function consultarCadastrados(){
 }
 async function selecionarLote(files){
  if(publicandoLote)return;
- itensLote=[];$('progressoLote').textContent='Verificando cadastros e nomes...';desenharLote();
+ itensLote=[];$('progressoLote').textContent='Verificando empresa e registro da folha...';desenharLote();
  try{
   const lista=Array.from(files||[]).filter(f=>/\.pdf$/i.test(f.name));
   if(!lista.length)throw Error('Selecione uma pasta com arquivos PDF.');
@@ -94,53 +92,25 @@ async function selecionarLote(files){
    if(destinos.length!==1){item.motivo=destinos.length?'Registro duplicado em cadastros acessíveis':'Empresa e registro não encontrados';return item}
    const c=destinos[0];
    if(!c.auth_user_id){item.motivo='Colaborador ainda não possui conta autenticada vinculada';return item}
-   const arquivoNome=normalizarNome(info.nomePessoa),cadNome=normalizarNome(c.nome);
-   if(arquivoNome!==cadNome){item.motivo='BLOQUEADO: registro aponta para '+c.nome+', mas PDF é de '+info.nomePessoa+'. Corrija empresa/registro no cadastro antes de enviar.';return item}
    if(vistos.has(chave+':'+info.competencia)){item.motivo='Documento repetido neste lote';return item}
    vistos.add(chave+':'+info.competencia);
-   item.destino=c;item.estado='pronto';item.motivo='Destino validado';return item;
+   item.destino=c;item.estado='pronto';item.motivo='Identificado por empresa e registro';return item;
   });
-  $('progressoLote').textContent='Confira os documentos identificados. Somente os marcados como Pronto serão publicados.';
+  $('progressoLote').textContent='Confira os documentos identificados. Somente os marcados como Pronto serão publicados. Confira os destinatários, inclusive quando o nome for diferente.';
  }catch(e){$('progressoLote').textContent='Erro na análise: '+e.message}
  desenharLote();
 }
-async function confirmarVinculo(idx){
- const item=itensLote[idx];if(!item||item.estado!=='bloqueado'||item.info.erro)return;
- const sel=$('vinculo_'+idx),id=sel?.value;
- const c=cadastradosLote.find(x=>String(x.id)===String(id));
- if(!c||!c.auth_user_id){aviso('Selecione um colaborador cadastrado com conta autenticada.',true);return}
- if(normalizarNome(c.nome)!==normalizarNome(item.info.nomePessoa)){
-  aviso('Nome do PDF não corresponde ao cadastro. Não é permitido vincular usuários diferentes.',true);return;
- }
- const outros=cadastradosLote.filter(x=>String(x.id)!==String(c.id)&&Number(x.empresa_folha)===item.info.empresa&&registroNormalizado(x.registro_folha)===item.info.registro);
- if(outros.length){aviso('Empresa e registro pertencem a outro cadastro. Corrija o cadastro antes de continuar.',true);return}
- if(c.empresa_folha!=null&&c.registro_folha!=null&&(Number(c.empresa_folha)!==item.info.empresa||registroNormalizado(c.registro_folha)!==item.info.registro)){
-  aviso('O cadastro selecionado já tem outro vínculo de folha. Corrija pelo Gestor antes de continuar.',true);return;
- }
- if(itensLote.some((x,j)=>j!==idx&&x.estado!=='bloqueado'&&x.estado!=='erro'&&x.destino?.id===c.id&&x.info.competencia===item.info.competencia)){
-  aviso('Este colaborador já possui documento desta competência no lote.',true);return;
- }
- if(!confirm(`Confirma que ${c.nome} corresponde ao arquivo ${item.file.name}?\nEmpresa: ${item.info.empresa} / Registro: ${item.info.registro}`))return;
- try{
-  const {data,error}=await db.from('colaboradores').update({empresa_folha:item.info.empresa,registro_folha:item.info.registro}).eq('id',c.id).eq('condominio_id',c.condominio_id).eq('auth_user_id',c.auth_user_id).select('id,empresa_folha,registro_folha');
-  if(error)throw error;
-  if(!data||data.length!==1)throw Error('O banco não confirmou a alteração. Verifique as permissões.');
-  c.empresa_folha=item.info.empresa;c.registro_folha=item.info.registro;
-  item.destino=c;item.estado='pronto';item.motivo='Nome, empresa e registro conferidos';
-  aviso('Vínculo confirmado. Revise antes de publicar.');desenharLote();
- }catch(e){aviso('Não foi possível salvar o vínculo: '+e.message,true)}
-}
-$('tabelaLote').addEventListener('click',e=>{const b=e.target.closest('[data-confirmar]');if(b)confirmarVinculo(Number(b.dataset.confirmar))});
 async function publicarLote(){
  if(publicandoLote)return;
- const pendentes=itensLote.filter(i=>i.estado==='pronto'&&i.destino?.auth_user_id&&normalizarNome(i.destino.nome)===normalizarNome(i.info.nomePessoa));if(!pendentes.length){aviso('Nenhum documento com identidade validada para publicar.',true);return;}
- if(!confirm(`Publicar ${pendentes.length} documento(s) identificado(s)? Os itens com divergência não serão enviados.`))return;
+ const pendentes=itensLote.filter(i=>i.estado==='pronto'&&i.destino?.auth_user_id);if(!pendentes.length){aviso('Nenhum documento com empresa e registro válidos para publicar.',true);return;}
+ const divergentes=pendentes.filter(i=>normalizarNome(i.destino.nome)!==normalizarNome(i.info.nomePessoa));
+ if(!confirm(`Publicar ${pendentes.length} documento(s) por EMPRESA + REGISTRO?\n\n${divergentes.length} arquivo(s) possuem nome diferente do cadastro.\n\nConfira especialmente os usuários de teste: um vínculo numérico incorreto enviará o holerite à conta errada.\n\nConfirma a publicação?`))return;
  publicandoLote=true;desenharLote();
  try{
   const {data:{user},error:ue}=await db.auth.getUser();if(ue||!user)throw Error('Faça login novamente.');
   const exigir=$('cienciaLote').checked;
   for(let n=0;n<pendentes.length;n++){
-   const i=pendentes[n];if(normalizarNome(i.destino.nome)!==normalizarNome(i.info.nomePessoa)){i.estado='bloqueado';i.motivo='Nome divergente';continue;}i.estado='enviando';i.motivo='Publicando...';desenharLote();
+   const i=pendentes[n];i.estado='enviando';i.motivo='Publicando...';desenharLote();
    const cid=i.destino.condominio_id,id=crypto.randomUUID(),path=`${cid}/${i.destino.id}/${id}.pdf`;
    try{
     const {error:up}=await db.storage.from(BUCKET).upload(path,i.file,{contentType:'application/pdf',upsert:false});if(up)throw up;
