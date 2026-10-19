@@ -5,15 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Gestão — ORAQUI</title>
 <meta name="theme-color" content="#342a67">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
-document.addEventListener('click',e=>{
-  const b=e.target.closest('.demand-before-photo');
-  if(!b)return;
-  e.preventDefault();e.stopPropagation();
-  const d=demandasOcorrencias.find(x=>Number(x.id)===Number(b.dataset.demand));
-  if(d?.foto_antes_path)abrirFotoStorage(d.foto_antes_path,'atividade');
-});
-</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{--primary:#7667b9;--primary-light:#eeeafd;--blue:#5d88a5;--blue-light:#eaf4f8;--green:#69a17f;--green-light:#eaf5ee;--yellow:#c4974d;--yellow-light:#fff5df;--red:#c96565;--red-light:#fdecec;--text:#2d3742;--muted:#75808c;--background:#f4f6f8;--card:#fff;--border:#e4e9ee;--shadow:0 10px 30px rgba(35,48,65,.06)}
 *{box-sizing:border-box;margin:0;padding:0}body{min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--background);color:var(--text)}button,input,select,textarea{font-family:inherit}button{cursor:pointer}.hidden{display:none!important}
@@ -72,6 +64,10 @@ main{max-width:980px;margin:-18px auto 80px;padding:0 16px}.manager-card,.tower-
 .oraqui-profile-photo{width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block}
 .oraqui-photo-button{border:1px solid #d9d3f5;background:#f5f2ff;color:#6254a6;border-radius:11px;padding:9px 11px;font-size:11px;font-weight:800;cursor:pointer}
 @media(max-width:350px){.oraqui-quick a{font-size:10px;min-height:85px}}
+</style>
+<style>
+.exec-fotos{display:flex;gap:7px;align-items:flex-start;flex-shrink:0}.exec-foto-item{display:flex;flex-direction:column;gap:4px;align-items:center}.exec-foto-item>span{font-size:8px;font-weight:850;color:var(--muted);letter-spacing:.35px}.exec-foto-item button{border:0;cursor:pointer}.sem-foto{font-size:9px;color:var(--muted)}.activity-row{padding:9px 0}.record{grid-template-columns:auto minmax(0,1fr)}.record-body{min-width:0}.activity-info{min-width:0}
+@media(max-width:400px){.exec-fotos{gap:4px}.activity-photo{width:39px;height:39px}.activity-row{gap:7px}}
 </style>
 </head>
 <body>
@@ -285,8 +281,10 @@ async function carregarDados(){
     montarLocais(registros);montarUltimos(registros);
   }catch(e){if(versaoConsulta!==versaoCondominio)return;console.error(e);erro("Não foi possível carregar a operação V2: "+e.message);locationList.innerHTML=vazio("⚠️","Dados indisponíveis","Falha ao consultar execuções.");activityContainer.innerHTML=vazio("⚠️","Dados indisponíveis","Falha ao consultar execuções.")}
 }
-function montarLocais(r){if(!r.length){locationList.innerHTML=vazio("📍","Nenhum registro hoje","As atividades aparecerão aqui.");return}const g={};r.forEach(x=>(g[x.local_nome]??=[]).push(x));locationList.innerHTML=Object.entries(g).map(([local,itens],i)=>`<div class="location-card ${i===0?"open":""}"><div class="location-header"><div class="location-icon">📍</div><div class="location-info"><strong>${esc(local)}</strong><span>${esc([...new Set(itens.map(x=>x.colaborador_nome))].join(", "))}</span></div><span class="location-count">${itens.length} ${itens.length===1?"ITEM":"ITENS"}</span><span>⌄</span></div><div class="location-content">${itens.map(x=>`<div class="record">${foto(x.foto_path,"record-photo")}<div class="record-body"><strong>✓ ${esc(x.item_nome)}</strong><div class="record-meta">${esc(x.colaborador_nome)} • ${hora(x.concluida_em||x.created_at)}</div>${x.observacao?`<div class="record-observation">💬 ${esc(x.observacao)}</div>`:""}</div></div>`).join("")}</div></div>`).join("");locationList.querySelectorAll(".location-card").forEach(c=>c.querySelector(".location-header").onclick=()=>c.classList.toggle("open"))}
-function montarUltimos(r){if(!r.length){activityContainer.innerHTML=vazio("🕘","Sem atividades","Nenhuma atividade foi recebida hoje.");return}activityContainer.innerHTML=`<div class="activity-list">${r.slice(0,20).map(x=>`<div class="activity-row">${foto(x.foto_path,"activity-photo")}<div class="activity-info"><strong>${esc(x.item_nome)}</strong><span>${esc(x.local_nome)} • ${esc(x.colaborador_nome)}</span></div><div class="activity-time">${hora(x.concluida_em||x.created_at)}</div></div>`).join("")}</div>`}
+document.addEventListener('click',e=>{const b=e.target.closest('.demand-before-photo');if(!b)return;e.preventDefault();e.stopPropagation();const d=demandasOcorrencias.find(x=>Number(x.id)===Number(b.dataset.demand));if(d?.foto_antes_path)abrirFotoStorage(d.foto_antes_path,'atividade')});
+function fotosExecucao(x,classe){return `<div class="exec-fotos">${x.foto_antes_path?`<div class="exec-foto-item"><span>ANTES</span>${foto(x.foto_antes_path,classe)}</div>`:""}${x.foto_path?`<div class="exec-foto-item"><span>DEPOIS</span>${foto(x.foto_path,classe)}</div>`:""}${!x.foto_antes_path&&!x.foto_path?`<span class="sem-foto">Sem foto</span>`:""}</div>`}
+function montarLocais(r){if(!r.length){locationList.innerHTML=vazio("📍","Nenhum registro hoje","As atividades aparecerão aqui.");return}const g={};r.forEach(x=>(g[x.local_nome]??=[]).push(x));locationList.innerHTML=Object.entries(g).map(([local,itens],i)=>`<div class="location-card ${i===0?"open":""}"><div class="location-header"><div class="location-icon">📍</div><div class="location-info"><strong>${esc(local)}</strong><span>${esc([...new Set(itens.map(x=>x.colaborador_nome))].join(", "))}</span></div><span class="location-count">${itens.length} ${itens.length===1?"ITEM":"ITENS"}</span><span>⌄</span></div><div class="location-content">${itens.map(x=>`<div class="record">${fotosExecucao(x,"record-photo")}<div class="record-body"><strong>✓ ${esc(x.item_nome)}</strong><div class="record-meta">${esc(x.colaborador_nome)} • ${hora(x.concluida_em||x.created_at)}</div>${x.observacao?`<div class="record-observation">💬 ${esc(x.observacao)}</div>`:""}</div></div>`).join("")}</div></div>`).join("");locationList.querySelectorAll(".location-card").forEach(c=>c.querySelector(".location-header").onclick=()=>c.classList.toggle("open"))}
+function montarUltimos(r){if(!r.length){activityContainer.innerHTML=vazio("🕘","Sem atividades","Nenhuma atividade foi recebida hoje.");return}activityContainer.innerHTML=`<div class="activity-list">${r.slice(0,20).map(x=>`<div class="activity-row">${fotosExecucao(x,"activity-photo")}<div class="activity-info"><strong>${esc(x.item_nome)}</strong><span>${esc(x.local_nome)} • ${esc(x.colaborador_nome)}</span></div><div class="activity-time">${hora(x.concluida_em||x.created_at)}</div></div>`).join("")}</div>`}
 
 function normalizarReferenciaFoto(valor){
   let raw=String(valor||"").trim();
@@ -396,7 +394,7 @@ function renderDemandasDiretasGestor(){
       const foto=(d.foto_antes_path?`<button class="photo-action execution" type="button" data-foto-antes-demanda="${d.id}">📸 ANTES</button>`:"")+(d.foto_execucao_path?`<button class="photo-action execution" type="button" data-foto-demanda="${d.id}">📸 DEPOIS</button>`:"");
       return `<article class="occurrence-card" style="${!concluida&&d.prioridade==='urgente'?'border:2px solid #dc2626;':''}"><div class="occurrence-top"><div><strong>#${d.id} • ${esc(d.titulo||'Demanda')}</strong><div class="occurrence-date">${esc(nomeResponsavelDemanda(d))} • ${esc(d.tipo||'tarefa')}</div></div><span class="status-badge ${concluida?'status-resolvida':'status-aberta'}">${statusDemandaLabel(d.status)}</span></div>${d.descricao?`<div class="occurrence-description">${esc(d.descricao)}</div>`:''}${d.observacao_execucao?`<div class="record-observation">Execução: ${esc(d.observacao_execucao)}</div>`:''}${foto}</article>`;
     }).join(''):vazio('✓','Nenhuma demanda direta','Demandas criadas pelo gestor aparecerão aqui.'));
-    box.querySelectorAll('[data-foto-antes-demanda]').forEach(b=>{
+    box.querySelectorAll('[data-foto-antes-demanda]').forEach(b=>b.onclick=()=>{
     const d=demandasDiretasGestor.find(x=>Number(x.id)===Number(b.dataset.fotoAntesDemanda));
     if(d?.foto_antes_path)abrirFotoStorage(d.foto_antes_path,'atividade');
   });
