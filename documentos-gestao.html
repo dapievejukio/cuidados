@@ -35,7 +35,7 @@ function gerarComprovante(doc,colab){
 // Importador: mantém o vínculo de condomínio em cada documento e respeita o acesso do gestor.
 // A seleção não exige separar arquivos por condomínio; o destino é encontrado pela conta cadastrada.
 const EMPRESAS_FOLHA=new Set([1,2,3,4,6]);
-let condominiosAutorizados=[],itensLote=[],publicandoLote=false;
+let condominiosAutorizados=[],itensLote=[],publicandoLote=false,cadastradosLote=[];
 function normalizarNome(v){return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/[^A-Z0-9]/g,'')}
 function registroNormalizado(v){const t=String(v??'').trim();return /^\d+$/.test(t)?t.replace(/^0+(?=\d)/,''):''}
 function extrairFolha(nome){
@@ -49,10 +49,15 @@ function extrairFolha(nome){
  if(!normalizarNome(nomePessoa))return {erro:'Nome do colaborador ausente'};
  return {empresa,registro,competencia:m[3]+'-'+m[2],nomePessoa};
 }
-function linhaLote(i){const estado=i.estado==='pronto'?'✅ Pronto':i.estado==='enviado'?'✅ Publicado':i.estado==='enviando'?'⏳ Enviando':i.estado==='erro'?'❌ Erro':'⚠️ Revisar';return `<div style="border-bottom:1px solid #e2e6eb;padding:10px 0;font-size:13px"><strong>${esc(i.file.name)}</strong><div class="muted">${esc(i.destino?.nome||'Sem destinatário')} · ${esc(i.destino?'Empresa '+i.info.empresa+' / registro '+i.info.registro:'')}</div><div>${estado} — ${esc(i.motivo||'Correspondência confirmada')}</div></div>`}
+function linhaLote(i,idx){
+ const estado=i.estado==='pronto'?'✅ Pronto':i.estado==='enviado'?'✅ Publicado':i.estado==='enviando'?'⏳ Enviando':i.estado==='erro'?'❌ Erro':'⚠️ Revisar';
+ const pendente=i.estado==='bloqueado'&&!i.info.erro;
+ const opcoes=cadastradosLote.filter(c=>c.auth_user_id).map(c=>`<option value="${esc(c.id)}" ${String(i.candidato?.id||'')===String(c.id)?'selected':''}>${esc(c.nome)} — ${esc(c.empresa_folha||'sem empresa')}/${esc(c.registro_folha||'sem registro')}</option>`).join('');
+ return `<div style="border-bottom:1px solid #e2e6eb;padding:12px 0;font-size:13px"><strong>${esc(i.file.name)}</strong><div class="muted">${esc(i.destino?.nome||i.candidato?.nome||'Sem destinatário')} · ${esc(i.info.empresa?'Empresa '+i.info.empresa+' / registro '+i.info.registro:'')}</div><div>${estado} — ${esc(i.motivo||'Correspondência confirmada')}</div>${pendente?`<div style="margin-top:8px"><label for="vinculo_${idx}">VINCULAR A UM USUÁRIO CADASTRADO</label><select id="vinculo_${idx}" data-vinculo="${idx}"><option value="">Selecione para conferir</option>${opcoes}</select><button class="btn secondary" data-confirmar="${idx}" type="button">CONFIRMAR VÍNCULO E SALVAR CADASTRO</button></div>`:''}</div>`
+}
 function desenharLote(){const pronto=itensLote.filter(i=>i.estado==='pronto').length,erro=itensLote.filter(i=>i.estado==='erro').length,enviado=itensLote.filter(i=>i.estado==='enviado').length,pendente=itensLote.length-pronto-erro-enviado;
  $('resumoLote').textContent=`${itensLote.length} arquivos | ${pronto} prontos | ${enviado} publicados | ${pendente} para revisar | ${erro} erros`;
- $('tabelaLote').innerHTML=itensLote.map(linhaLote).join('');$('publicarLote').disabled=publicandoLote||!pronto;
+ $('tabelaLote').innerHTML=itensLote.map((i,idx)=>linhaLote(i,idx)).join('');$('publicarLote').disabled=publicandoLote||!pronto;
 }
 async function consultarCadastrados(){
  if(!condominiosAutorizados.length)throw Error('Sem condomínios autorizados para publicar documentos.');
@@ -75,7 +80,7 @@ async function selecionarLote(files){
  try{
   const lista=Array.from(files||[]).filter(f=>/\.pdf$/i.test(f.name));
   if(!lista.length)throw Error('Selecione uma pasta com arquivos PDF.');
-  const cadastrados=await consultarCadastrados();
+  const cadastrados=await consultarCadastrados();cadastradosLote=cadastrados;
   const mapa=new Map();
   for(const c of cadastrados){const r=registroNormalizado(c.registro_folha);if(!r||!EMPRESAS_FOLHA.has(Number(c.empresa_folha)))continue;const chave=`${c.empresa_folha}:${r}`;if(!mapa.has(chave))mapa.set(chave,[]);mapa.get(chave).push(c)}
   const vistos=new Set();
@@ -88,7 +93,7 @@ async function selecionarLote(files){
    const c=destinos[0];
    if(!c.auth_user_id){item.motivo='Colaborador ainda não possui conta autenticada vinculada';return item}
    const arquivoNome=normalizarNome(info.nomePessoa),cadNome=normalizarNome(c.nome);
-   if(arquivoNome!==cadNome){item.motivo='Nome diferente do cadastro: '+c.nome;return item}
+   if(arquivoNome!==cadNome){item.candidato=c;item.motivo='Nome diferente do cadastro: '+c.nome+' — confirme manualmente';return item}
    if(vistos.has(chave+':'+info.competencia)){item.motivo='Documento repetido neste lote';return item}
    vistos.add(chave+':'+info.competencia);
    item.destino=c;item.estado='pronto';item.motivo='Destino validado';return item;
@@ -97,6 +102,27 @@ async function selecionarLote(files){
  }catch(e){$('progressoLote').textContent='Erro na análise: '+e.message}
  desenharLote();
 }
+async function confirmarVinculo(idx){
+ const item=itensLote[idx];if(!item||item.estado!=='bloqueado'||item.info.erro)return;
+ const sel=$('vinculo_'+idx),id=sel?.value;
+ const c=cadastradosLote.find(x=>String(x.id)===String(id));
+ if(!c||!c.auth_user_id){aviso('Selecione um usuário com conta autenticada.',true);return}
+ const outros=cadastradosLote.filter(x=>String(x.id)!==String(c.id)&&Number(x.empresa_folha)===item.info.empresa&&registroNormalizado(x.registro_folha)===item.info.registro);
+ if(outros.length){aviso('Empresa e registro já vinculados a outro cadastro. Corrija antes de continuar.',true);return}
+ const duplicado=itensLote.some((x,j)=>j!==idx&&x.estado!=='erro'&&x.estado!=='bloqueado'&&x.destino?.id===c.id&&x.info.competencia===item.info.competencia);
+ if(duplicado){aviso('Este colaborador já tem documento desta competência no lote.',true);return}
+ const texto=`Arquivo: ${item.file.name}\n\nUsuário escolhido: ${c.nome}\nEmpresa: ${item.info.empresa}\nRegistro: ${item.info.registro}\n\nConfirma que este PDF pertence a essa pessoa? O vínculo empresa/registro será salvo no cadastro.`;
+ if(!confirm(texto))return;
+ try{
+  const {error}=await db.from('colaboradores').update({empresa_folha:item.info.empresa,registro_folha:item.info.registro}).eq('id',c.id).eq('condominio_id',c.condominio_id);
+  if(error)throw error;
+  c.empresa_folha=item.info.empresa;c.registro_folha=item.info.registro;
+  // Revalidar outros arquivos, evitando que divergências de nome sejam aprovadas sem confirmação.
+  item.destino=c;item.candidato=c;item.estado='pronto';item.motivo='Vínculo confirmado manualmente e salvo';
+  aviso('Vínculo salvo. Documento pronto para publicação.');desenharLote();
+ }catch(e){aviso('Não foi possível salvar o vínculo: '+e.message,true)}
+}
+$('tabelaLote').addEventListener('click',e=>{const b=e.target.closest('[data-confirmar]');if(b)confirmarVinculo(Number(b.dataset.confirmar))});
 async function publicarLote(){
  if(publicandoLote)return;
  const pendentes=itensLote.filter(i=>i.estado==='pronto');if(!pendentes.length)return;
