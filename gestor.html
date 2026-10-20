@@ -239,7 +239,11 @@ function mostrarEscolhaCondominio(){
 async function selecionarCondominioGestao({p,c}){
   versaoCondominio++;
   sessionStorage.setItem("oraqui_gestao_condominio_id",String(c.id));
-  document.body.classList.toggle("oraqui-gestora-ellen",[3,8,10].includes(Number(p.id))&&p.nome?.trim().toLowerCase()==="ellen");
+  const temaEllen=String(p.nome||"").trim().toLocaleLowerCase("pt-BR")==="ellen"&&p.perfil==="gestor";
+  document.body.classList.toggle("oraqui-gestora-ellen",temaEllen);
+  const cabecalhoGestao=document.querySelector("#app > header");
+  if(cabecalhoGestao)cabecalhoGestao.style.setProperty("background",temaEllen?"linear-gradient(135deg,#9f1029 0%,#c81931 55%,#ef4444 100%)":"","important");
+  document.querySelector('meta[name="theme-color"]')?.setAttribute("content",temaEllen?"#9f1029":"#342a67");
   perfilGestor=p;CONDOMINIO_ID=c.id;CONDOMINIO=c.nome;document.getElementById("oraquiChatGestao")?.setAttribute("href",`chat.html?condominio_id=${c.id}&voltar=gestor.html`);document.getElementById("oraquiChatConfig")?.setAttribute("href",`chat-config.html?condominio_id=${c.id}`);document.getElementById("oraquiQuickChatGestor")?.setAttribute("href",`chat.html?condominio_id=${c.id}&voltar=gestor.html`);document.getElementById("oraquiQuickChatConfig")?.setAttribute("href",`chat-config.html?condominio_id=${c.id}`);
   AMBIENTE_DEMO=!!c.ambiente_demo&&Number(c.demo_origem_id)===4&&!!p.acesso_temporario;
   $("headerCondominio").textContent=CONDOMINIO.toUpperCase();
