@@ -672,7 +672,7 @@ function fecharConclusaoDemanda(){$('demandaConclusaoModal').classList.remove('v
 async function salvarConclusaoDemanda(){
   const d=demandaEmConclusao;if(!d||!colaborador||!authUser)return;
   const obs=$('demandaConclusaoObs').value.trim(),foto=$('demandaConclusaoFoto').files?.[0],fotoAntes=$('demandaFotoAntes').files?.[0];
-  const inicio=await obterInicio('demanda',d.id).catch(e=>{alert('Erro ao consultar início: '+e.message);return undefined});
+  const inicio=await obterInicioDisponivel('demanda',d.id);
   if(!inicio)return alert('Inicie a demanda antes de concluir.');
   if(d.exige_foto_antes&&!inicio.foto_antes_path)return alert('Esta demanda exige foto ANTES no início.');
   if(d.exige_foto&&!foto)return alert('Esta demanda exige fotografia.');
@@ -859,9 +859,9 @@ async function obterAvulsaAberta(){
   return data?.[0]||null;
 }
 async function carregarAvulsaPendente(){
-  if(!colaborador||!navigator.onLine)return;
+  if(!colaborador)return;
   try{
-    const a=await obterAvulsaAberta();
+    const a=await obterAvulsaAbertaDisponivel();
     const btn=$('avulso');
     if(btn)btn.textContent=a?'▶ CONTINUAR ATIVIDADE INICIADA':'＋ REGISTRAR ATIVIDADE';
   }catch(e){console.warn('Atividade avulsa pendente:',e.message)}
@@ -879,57 +879,76 @@ async function obterInicio(tipo, id){
 async function iniciarComFoto(tipo){
   if(!colaborador||!authUser)return;
   const demanda=tipo==='demanda'?demandaEmConclusao:null;
-  const id=tipo==='demanda'?demanda?.id:tipo==='avulsa'?avulsaAtualId:execAtual?.id;
-  if(!id&&tipo==='programacao')return alert('Escolha uma atividade programada.');
+  const refId=tipo==='demanda'?demanda?.id:tipo==='avulsa'?avulsaAtualId:execAtual?.id;
+  if(!refId&&tipo==='programacao')return alert('Escolha uma atividade programada.');
   if(tipo==='avulsa'&&!Number($('areaSelect').value))return alert('Selecione uma área antes de iniciar.');
-  if(!id&&tipo==='demanda')return;
-  if(!navigator.onLine)return alert('Para registrar o início e preservar a foto, conecte-se à internet. A conclusão offline continua disponível para atividades.');
+  if(!refId&&tipo==='demanda')return;
+
   const input=$(tipo==='demanda'?'demandaFotoAntes':'fotoAntesExec');
   const arquivo=input.files?.[0]||null;
   const at=execAtual?atividades.find(a=>mesmoId(a.id,execAtual.atividade_id)):null;
   const obrigatoria=tipo==='demanda'?!!demanda.exige_foto_antes:!!(execAtual?.exige_foto_antes??at?.exige_foto_antes);
   if(obrigatoria&&!arquivo)return alert('Esta atividade exige uma fotografia ANTES.');
-  const btn=$(tipo==='demanda'?'iniciarDemanda':'iniciarExec');btn.disabled=true;btn.textContent='SALVANDO INÍCIO...';
+
+  const btn=$(tipo==='demanda'?'iniciarDemanda':'iniciarExec');
+  btn.disabled=true;btn.textContent='SALVANDO INÍCIO...';
   try{
-    const existente=tipo==='avulsa'?(avulsaAtualId?await obterInicioAvulsa(avulsaAtualId):await obterAvulsaAberta()):await obterInicio(tipo,id);
-    if(existente){inicioAtual=existente;toast('Atividade já iniciada.');return}
-    const agora=new Date().toISOString();let path=null;
-    if(arquivo){
-      const blob=await fotoComCarimbo(arquivo,agora,tipo==='demanda'?contextoFoto(demanda?.area_id,demanda?.ponto_id):tipo==='avulsa'?contextoFoto(Number($('areaSelect').value),Number($('pontoSelect').value)||null):contextoFoto(execAtual?.area_id,execAtual?.ponto_id));
-      path=`inicios/${colaborador.condominio_id}/${colaborador.id}/${tipo}/${id||crypto.randomUUID()}/${crypto.randomUUID()}.jpg`;
-      const {error}=await db.storage.from(BUCKET).upload(path,blob,{contentType:'image/jpeg'});
-      if(error)throw new Error('Falha no envio da foto ANTES: '+error.message);
+    let existente=null;
+    if(tipo==='avulsa')existente=refId?await obterInicioDisponivel('avulsa',refId):await obterAvulsaAbertaDisponivel();
+    else existente=await obterInicioDisponivel(tipo,refId);
+    if(existente){
+      inicioAtual=existente;
+      if(tipo==='avulsa')avulsaAtualId=existente.id;
+      toast('Atividade já iniciada.');
+      await atualizarBlocoInicio(tipo,tipo==='avulsa'?existente.id:refId);
+      return;
     }
+
+    const agora=new Date().toISOString();
+    const inicioId=crypto.randomUUID();
+    let areaId=null,pontoId=null;
     if(tipo==='avulsa'){
-      const areaId=Number($('areaSelect').value),pontoId=Number($('pontoSelect').value)||null;
+      areaId=Number($('areaSelect').value);
+      pontoId=Number($('pontoSelect').value)||null;
       const disponiveis=pontos.filter(p=>mesmoId(p.area_id,areaId));
       if(disponiveis.length&&!pontoId)throw new Error('Selecione o ponto/local antes de iniciar.');
       if(pontoId&&!disponiveis.some(p=>mesmoId(p.id,pontoId)))throw new Error('Ponto não pertence à área.');
-      const {data,error}=await db.from('inicios_avulsos').insert({
-        condominio_id:colaborador.condominio_id,colaborador_id:colaborador.id,
-        area_id:areaId,ponto_id:pontoId,foto_antes_path:path,iniciada_em:agora
-      }).select('*').single();
-      if(error)throw error;
-      avulsaAtualId=data.id;inicioAtual=data;
-      toast('✓ Atividade avulsa iniciada. Você pode fechar o aplicativo.');
-      await abrirExecucao(null,true);
-      return;
+    }else{
+      areaId=tipo==='demanda'?demanda?.area_id:execAtual?.area_id;
+      pontoId=tipo==='demanda'?demanda?.ponto_id:execAtual?.ponto_id;
     }
-    const registro={condominio_id:colaborador.condominio_id,colaborador_id:colaborador.id,
-      programacao_id:tipo==='programacao'?id:null,demanda_id:tipo==='demanda'?id:null,
-      foto_antes_path:path,iniciada_em:agora};
-    const {data,error}=await db.from('inicios_execucao').insert(registro).select('*').single();
-    if(error)throw error;
-    inicioAtual=data;
-    if(tipo==='demanda'){
-      const {error:e}=await db.from('demandas').update({status:'em_andamento',iniciada_em:agora,updated_at:agora})
-        .eq('id',id).eq('condominio_id',colaborador.condominio_id).neq('status','concluida');
-      if(e)console.warn('Demanda iniciada; status não atualizado:',e.message);
+
+    let fotoAntes=null,fotoAntesPath=null;
+    if(arquivo){
+      fotoAntes=await fotoComCarimbo(arquivo,agora,contextoFoto(areaId,pontoId));
+      fotoAntesPath=`inicios/${colaborador.condominio_id}/${colaborador.id}/${tipo}/${inicioId}/${crypto.randomUUID()}.jpg`;
     }
-    toast('✓ Início registrado. Você pode fechar o aplicativo.');
-    if(tipo==='demanda')abrirConclusaoDemanda(id);else abrirExecucao(id);
-  }catch(e){console.error(e);alert('Não foi possível registrar o início: '+(e.message||e))}
-  finally{btn.disabled=false;btn.textContent=tipo==='demanda'?'▶ INICIAR DEMANDA':'▶ INICIAR ATIVIDADE'}
+
+    const registro=tipo==='avulsa'
+      ?{id:inicioId,condominio_id:colaborador.condominio_id,colaborador_id:colaborador.id,area_id:areaId,ponto_id:pontoId,foto_antes_path:fotoAntesPath,iniciada_em:agora}
+      :{id:inicioId,condominio_id:colaborador.condominio_id,colaborador_id:colaborador.id,programacao_id:tipo==='programacao'?refId:null,demanda_id:tipo==='demanda'?refId:null,foto_antes_path:fotoAntesPath,iniciada_em:agora};
+
+    await filaSalvar({
+      id:'inicio-'+inicioId,kind:'inicio',inicio_tipo:tipo,inicio_uuid:inicioId,ref_id:tipo==='avulsa'?inicioId:refId,
+      auth_user_id:authUser.id,condominio_id:colaborador.condominio_id,colaborador_id:colaborador.id,
+      criado_em:agora,registro,foto_antes:fotoAntes,foto_antes_path:fotoAntesPath
+    });
+
+    inicioAtual=registro;
+    if(tipo==='avulsa'){
+      avulsaAtualId=inicioId;
+      $('areaSelect').disabled=true;$('pontoSelect').disabled=true;
+    }
+    toast(navigator.onLine?'✓ Início salvo. Sincronizando...':'📴 Início e foto salvos no aparelho.');
+    await atualizarEstadoOffline();
+    await atualizarBlocoInicio(tipo,tipo==='avulsa'?inicioId:refId);
+    if(navigator.onLine)sincronizarFilaOffline().catch(e=>console.warn('Sincronização do início:',e));
+  }catch(e){
+    console.error(e);
+    alert('Não foi possível salvar o início neste aparelho: '+(e.message||e));
+  }finally{
+    btn.disabled=false;btn.textContent=tipo==='demanda'?'▶ INICIAR DEMANDA':'▶ INICIAR ATIVIDADE';
+  }
 }
 async function obterInicioAvulsa(id){
   if(!id)return null;
@@ -939,22 +958,71 @@ async function obterInicioAvulsa(id){
   if(error)throw error;
   return data;
 }
+function inicioMemoriaServe(tipo,id){
+  if(!inicioAtual)return false;
+  if(tipo==='avulsa')return !id||String(inicioAtual.id)===String(id);
+  if(tipo==='demanda')return String(inicioAtual.demanda_id||'')===String(id||'');
+  return String(inicioAtual.programacao_id||'')===String(id||'');
+}
+async function obterInicioFilaLocal(tipo,id=null){
+  const fila=await filaTodos();
+  const minhas=fila.filter(x=>x.kind==='inicio'&&x.auth_user_id===authUser?.id&&Number(x.condominio_id)===Number(colaborador?.condominio_id)&&x.inicio_tipo===tipo);
+  const concluidos=new Set(fila.filter(x=>x.kind!=='inicio').flatMap(x=>[x.inicio_id,x.avulsa_inicio_id].filter(Boolean)).map(String));
+  let candidatos=minhas.filter(x=>!concluidos.has(String(x.registro?.id||x.inicio_uuid||'')));
+  if(id){
+    candidatos=candidatos.filter(x=>tipo==='avulsa'?String(x.registro?.id||x.inicio_uuid)===String(id):String(x.ref_id)===String(id));
+  }
+  candidatos.sort((a,b)=>String(b.criado_em||'').localeCompare(String(a.criado_em||'')));
+  return candidatos[0]?.registro||null;
+}
+async function obterInicioDisponivel(tipo,id){
+  const local=await obterInicioFilaLocal(tipo,id);
+  const memoria=inicioMemoriaServe(tipo,id)?inicioAtual:null;
+  if(!navigator.onLine)return local||memoria||null;
+  try{
+    const remoto=tipo==='avulsa'?await obterInicioAvulsa(id):await obterInicio(tipo,id);
+    return remoto||local||memoria||null;
+  }catch(e){
+    console.warn('Consulta de início indisponível; usando cópia local.',e);
+    return local||memoria||null;
+  }
+}
+async function obterAvulsaAbertaDisponivel(){
+  const local=await obterInicioFilaLocal('avulsa',null);
+  const memoria=inicioMemoriaServe('avulsa',avulsaAtualId)?inicioAtual:null;
+  if(!navigator.onLine)return local||memoria||null;
+  try{
+    const remoto=avulsaAtualId?await obterInicioAvulsa(avulsaAtualId):await obterAvulsaAberta();
+    return remoto||local||memoria||null;
+  }catch(e){
+    console.warn('Consulta de atividade avulsa indisponível; usando cópia local.',e);
+    return local||memoria||null;
+  }
+}
 async function atualizarBlocoInicio(tipo,id){
   const info=$(tipo==='demanda'?'inicioDemandaInfo':'inicioExecInfo');
   const btn=$(tipo==='demanda'?'iniciarDemanda':'iniciarExec');
   const input=$(tipo==='demanda'?'demandaFotoAntes':'fotoAntesExec');
   const concluir=$(tipo==='demanda'?'salvarDemandaConclusao':'confirmExec');
   concluir.disabled=true;
-  info.textContent='Consultando registro de início...';
+  info.textContent=navigator.onLine?'Consultando registro de início...':'Verificando início salvo neste aparelho...';
   try{
-    inicioAtual=tipo==='avulsa'?(id?await obterInicioAvulsa(id):null):(id?await obterInicio(tipo,id):null);
+    inicioAtual=id?await obterInicioDisponivel(tipo,id):null;
     const iniciada=!!inicioAtual;
-    info.textContent=iniciada?`✓ Iniciada às ${hora(inicioAtual.iniciada_em)}${inicioAtual.foto_antes_path?' • Foto ANTES salva no ORAQUI':''}. Agora registre o DEPOIS.`:'Registre a situação ANTES e toque em INICIAR. O início ficará salvo no ORAQUI.';
-    btn.style.display=iniciada?'none':'';input.style.display='none';
-     $(tipo==='demanda'?'demandaFotoAntesBtn':'fotoAntesExecBtn').style.display=iniciada?'none':'';
-     $(tipo==='demanda'?'depoisDemandaArea':'depoisExecArea').classList.toggle('bloqueada',!iniciada);
+    info.textContent=iniciada
+      ?`✓ Iniciada às ${hora(inicioAtual.iniciada_em)}${inicioAtual.foto_antes_path?' • Foto ANTES preservada':''}. Agora registre o DEPOIS.`
+      :(navigator.onLine?'Registre a situação ANTES e toque em INICIAR. O início ficará salvo no ORAQUI.':'📴 Sem internet. Você pode registrar o início: a foto ficará salva neste aparelho até sincronizar.');
+    btn.style.display=iniciada?'none':'';
+    input.style.display='none';
+    $(tipo==='demanda'?'demandaFotoAntesBtn':'fotoAntesExecBtn').style.display=iniciada?'none':'';
+    $(tipo==='demanda'?'depoisDemandaArea':'depoisExecArea').classList.toggle('bloqueada',!iniciada);
     concluir.disabled=!iniciada;
-  }catch(e){info.textContent='Erro ao consultar início: '+(e.message||e);btn.style.display='none';concluir.disabled=true}
+  }catch(e){
+    console.warn('Estado de início:',e);
+    info.textContent='Conexão instável. O registro pode ser salvo neste aparelho e sincronizado depois.';
+    btn.style.display='';
+    concluir.disabled=true;
+  }
 }
 async function abrirExecucao(id=null,manterAvulsa=false){
   execAtual=id?programacoes.find(p=>mesmoId(p.id,id)):null;
@@ -979,7 +1047,7 @@ async function abrirExecucao(id=null,manterAvulsa=false){
     $("pontoField").classList.remove("hidden");
     popularAreas();
     try{
-      const aberta=manterAvulsa&&avulsaAtualId?await obterInicioAvulsa(avulsaAtualId):await obterAvulsaAberta();
+      const aberta=manterAvulsa&&avulsaAtualId?await obterInicioDisponivel('avulsa',avulsaAtualId):await obterAvulsaAbertaDisponivel();
       avulsaAtualId=aberta?.id||null;
       if(aberta){
         $('areaSelect').value=String(aberta.area_id);popularPontos();
@@ -987,7 +1055,7 @@ async function abrirExecucao(id=null,manterAvulsa=false){
         $('areaSelect').disabled=true;$('pontoSelect').disabled=true;
         $('modalSelection').textContent=nomeLocal(aberta.area_id,aberta.ponto_id)||'Atividade avulsa iniciada';
       }else{$('areaSelect').disabled=false;$('pontoSelect').disabled=false}
-    }catch(e){alert('Não foi possível consultar a atividade avulsa: '+e.message);return}
+    }catch(e){console.warn('Atividade avulsa:',e);avulsaAtualId=null;$('modalSelection').textContent='Conexão instável. Você ainda pode iniciar e salvar o registro neste aparelho.'}
   }
   $("execModal").classList.add("visible");
   atualizarBlocoInicio(execAtual?'programacao':'avulsa',execAtual?.id||avulsaAtualId);
@@ -1106,6 +1174,25 @@ async function enviarFotoPendente(path,arquivo,rotulo){
   }
   throw new Error('Falha no envio da foto '+rotulo+': '+error.message);
 }
+async function enviarInicioPendente(item){
+  if(!navigator.onLine)throw new Error('Sem conexão.');
+  const r=item.registro;
+  if(!r||item.auth_user_id!==authUser?.id||Number(item.condominio_id)!==Number(colaborador?.condominio_id)||Number(item.colaborador_id)!==Number(colaborador?.id))throw new Error('Início offline pertence a outra conta ou condomínio.');
+  const tabela=item.inicio_tipo==='avulsa'?'inicios_avulsos':'inicios_execucao';
+  const {data:existente,error:consultaErro}=await db.from(tabela).select('id').eq('id',r.id).maybeSingle();
+  if(consultaErro)throw consultaErro;
+  if(!existente){
+    if(item.foto_antes)await enviarFotoPendente(item.foto_antes_path,item.foto_antes,'ANTES');
+    const {error:insertErro}=await db.from(tabela).insert(r);
+    if(insertErro)throw insertErro;
+  }
+  if(item.inicio_tipo==='demanda'&&item.ref_id){
+    const {error:e}=await db.from('demandas').update({status:'em_andamento',iniciada_em:r.iniciada_em,updated_at:new Date().toISOString()})
+      .eq('id',item.ref_id).eq('condominio_id',item.condominio_id).neq('status','concluida');
+    if(e)console.warn('Início da demanda sincronizado; status não atualizado:',e.message);
+  }
+  await filaExcluir(item.id);
+}
 async function enviarRegistroPendente(item){
   if(!navigator.onLine)throw new Error('Sem conexão.');
   if(!colaborador||item.auth_user_id!==authUser?.id||Number(item.condominio_id)!==Number(colaborador.condominio_id)||Number(item.colaborador_id)!==Number(colaborador.id)||Number(item.payload?.colaborador_id)!==Number(colaborador.id)||Number(item.payload?.condominio_id)!==Number(colaborador.condominio_id))throw new Error('Este registro pertence a outra conta ou condomínio.');
@@ -1143,7 +1230,7 @@ async function sincronizarFilaOffline(){
   try{
     const todos=await filaTodos();
     for(const item of todos.filter(x=>x.auth_user_id===authUser.id&&Number(x.condominio_id)===Number(colaborador.condominio_id)).sort((a,b)=>a.criado_em.localeCompare(b.criado_em))){
-      try{await enviarRegistroPendente(item);sucesso++}catch(e){errosSync.push({id:item.id,motivo:e.message||String(e)});console.error('ORAQUI: registro pendente não sincronizado',item.id,e);continue}
+      try{if(item.kind==='inicio')await enviarInicioPendente(item);else await enviarRegistroPendente(item);sucesso++}catch(e){errosSync.push({id:item.id,motivo:e.message||String(e)});console.error('ORAQUI: registro pendente não sincronizado',item.id,e);continue}
     }
     if(sucesso){toast(`✓ ${sucesso} registro(s) sincronizado(s).`);await carregarTudo()}
     if(errosSync.length&&navigator.onLine)erro('Sincronização: '+sucesso+' enviado(s), '+errosSync.length+' pendente(s) com erro. Primeiro erro: '+errosSync[0].motivo+'. Os registros permanecem salvos neste aparelho.');
@@ -1159,7 +1246,7 @@ async function confirmarExecucao(){
   const obs=$('observacao').value.trim();
   const fotoAntesArquivo=$('fotoAntesExec').files?.[0]||null;
   const exigeAntes=!!(execAtual?.exige_foto_antes??at?.exige_foto_antes);
-  const inicio=await (execAtual?obterInicio('programacao',execAtual.id):obterInicioAvulsa(avulsaAtualId)).catch(e=>{alert(e.message);return undefined});
+  const inicio=await (execAtual?obterInicioDisponivel('programacao',execAtual.id):obterInicioDisponivel('avulsa',avulsaAtualId));
   if(!inicio){alert('Primeiro registre o início da atividade.');return}
   if(exigeAntes&&!inicio?.foto_antes_path){alert('Esta atividade exige foto ANTES.');return}
   if(exigeFoto&&!fotoArquivo){alert('Esta atividade exige foto DEPOIS.');return}
