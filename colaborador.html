@@ -729,19 +729,20 @@ function proximaDataProgramacao(p){
   }
   return null;
 }
+function ordemProgramacao(a,b){
+  const pa=pesoProgramacao(a),pb=pesoProgramacao(b);
+  if(pa!==pb)return pa-pb;
+  const ha=minutosHorario(a.horario_limite),hb=minutosHorario(b.horario_limite);
+  if(ha===null&&hb!==null)return 1;
+  if(ha!==null&&hb===null)return -1;
+  if(ha!==null&&hb!==null&&ha!==hb)return ha-hb;
+  return Number(a.id)-Number(b.id);
+}
 function renderProgramacoes(){
   const hojeItens=programacoes.filter(programacaoValeHoje);
-  const futuros=programacoes.map(p=>({p,data:proximaDataProgramacao(p)})).filter(x=>x.data).sort((a,b)=>a.data-b.data);
-  const ordenadas=[...hojeItens].sort((a,b)=>{
-    const pa=pesoProgramacao(a),pb=pesoProgramacao(b);
-    if(pa!==pb)return pa-pb;
-    const ha=minutosHorario(a.horario_limite),hb=minutosHorario(b.horario_limite);
-    if(ha===null&&hb!==null)return 1;
-    if(ha!==null&&hb===null)return -1;
-    if(ha!==null&&hb!==null&&ha!==hb)return ha-hb;
-    return Number(a.id)-Number(b.id);
-  });
-  const cartao=p=>{
+  const futuros=programacoes.map(p=>({p,data:proximaDataProgramacao(p)})).filter(x=>x.data).sort((a,b)=>a.data-b.data||ordemProgramacao(a.p,b.p));
+  const ordenadas=[...hojeItens].sort(ordemProgramacao);
+  const cartao=(p,indice)=>{
     const at=atividades.find(a=>mesmoId(a.id,p.atividade_id));
     const feito=execucoesHoje.some(e=>mesmoId(e.programacao_id,p.id)&&e.status==="concluida");
     const atrasada=estaAtrasada(p,feito);
@@ -752,13 +753,13 @@ function renderProgramacoes(){
     else if(atrasada){classe="programada-atrasada";icone="⏰";badge="ATRASADA";badgeClass="red";faixa="⚠ PRAZO ULTRAPASSADO — ATENÇÃO";faixaClass="urgent"}
     else if(urgente){classe="programada-urgente";icone="⚠️";badge="URGENTE";badgeClass="red";faixa="⚠ ATIVIDADE URGENTE";faixaClass="urgent"}
     const prazo=p.horario_limite?`<div class="deadline ${atrasada?"late":""}">${atrasada?"⏰ ATRASADA — ERA ATÉ":"🕒 CONCLUIR ATÉ"} ${esc(String(p.horario_limite).slice(0,5))}</div>`:"";
-    return `<div class="item-card ${classe}"><div class="alert-strip ${faixaClass}"><span>${faixa}</span><span>${feito?"✓":"●"}</span></div><div class="item-top"><div class="item-icon">${icone}</div><div class="item-info"><strong>${esc(at?.nome||"Atividade")}</strong><span>${esc(local)}</span>${prazo}</div><span class="badge ${badgeClass}">${badge}</span></div>${p.instrucoes?`<div class="item-description">${esc(p.instrucoes)}</div>`:""}${!feito?`<div class="item-actions"><button class="action" onclick="abrirExecucao(${p.id})">▶ INICIAR / CONCLUIR</button></div>`:""}</div>`;
+    return `<div class="item-card ${classe}"><div class="alert-strip ${faixaClass}"><span>${faixa}</span><span>${feito?"✓":"●"}</span></div><div class="item-top"><div class="item-icon">${icone}</div><div class="item-info"><strong>${indice+1}. ${esc(at?.nome||"Atividade")}</strong><span>${esc(local)}</span>${prazo}</div><span class="badge ${badgeClass}">${badge}</span></div>${p.instrucoes?`<div class="item-description">${esc(p.instrucoes)}</div>`:""}${!feito?`<div class="item-actions"><button class="action" onclick="abrirExecucao(${p.id})">▶ INICIAR / CONCLUIR</button></div>`:""}</div>`;
   };
-  const futurosHtml=futuros.map(({p,data})=>{
+  const futurosHtml=futuros.map(({p,data},indice)=>{
     const at=atividades.find(a=>mesmoId(a.id,p.atividade_id));
     const dia=data.toLocaleDateString("pt-BR",{weekday:"short",day:"2-digit",month:"2-digit"});
     const prazo=p.horario_limite?` • até ${esc(String(p.horario_limite).slice(0,5))}`:"";
-    return `<div class="item-card" style="border:1px solid var(--border);padding:12px"><div class="item-top"><div class="item-icon">📅</div><div class="item-info"><strong>${esc(at?.nome||"Atividade")}</strong><span>${esc(dia)}${prazo} • ${esc(nomeLocal(p.area_id,p.ponto_id)||"Local definido pela gestão")}</span></div><span class="badge purple">AGENDADA</span></div></div>`;
+    return `<div class="item-card" style="border:1px solid var(--border);padding:12px"><div class="item-top"><div class="item-icon">📅</div><div class="item-info"><strong>${indice+1}. ${esc(at?.nome||"Atividade")}</strong><span>${esc(dia)}${prazo} • ${esc(nomeLocal(p.area_id,p.ponto_id)||"Local definido pela gestão")}</span></div><span class="badge purple">AGENDADA</span></div></div>`;
   }).join("");
   $("programacoes").className="list";
   $("programacoes").innerHTML=(ordenadas.length?ordenadas.map(cartao).join(""):vazio("Nenhuma atividade para hoje","Consulte abaixo as próximas atividades agendadas."))+(futuros.length?`<details style="margin-top:12px" open><summary style="padding:14px;border-radius:14px;background:#eeeafd;color:#55468f;font-weight:800;cursor:pointer">📅 Próximas atividades (${futuros.length})</summary><div class="list" style="margin-top:10px">${futurosHtml}</div></details>`:"");
