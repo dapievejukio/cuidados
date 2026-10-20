@@ -173,9 +173,22 @@ body:has(.modal.visible) .oraqui-bottom-nav{display:none}
 .oraqui-summary-hint{font-size:9px;font-weight:500;color:var(--muted);margin-left:auto}
 .oraqui-posterior-recolhivel .card{box-shadow:none}
 .oraqui-posterior-info{font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:12px}
-.oraqui-nav-item.oraqui-tem-urgencia{background:#fee2e2!important;color:#b91c1c!important;animation:oraquiUrgenciaPulso 1.8s ease-in-out infinite}
-.oraqui-nav-item.oraqui-tem-urgencia .nav-icon{filter:drop-shadow(0 0 3px #ef4444)}
-@keyframes oraquiUrgenciaPulso{50%{box-shadow:inset 0 0 0 2px #ef4444}}
+/* Alerta crítico no menu fixo: somente enquanto houver demanda urgente não concluída. */
+.oraqui-nav-item.oraqui-tem-urgencia{
+  background:#b91c1c!important;color:#fff!important;
+  border:2px solid #7f1d1d!important;border-radius:15px!important;
+  animation:oraquiUrgenciaPulso 1.05s ease-in-out infinite!important;
+  box-shadow:0 0 0 3px #fecaca,0 0 15px rgba(185,28,28,.6)!important;
+}
+.oraqui-nav-item.oraqui-tem-urgencia .nav-icon{filter:drop-shadow(0 0 5px #fff);animation:oraquiUrgenciaIcone 1.05s ease-in-out infinite}
+.oraqui-nav-item.oraqui-tem-urgencia .oraqui-nav-badge{background:#fff!important;color:#b91c1c!important;border:1px solid #fff!important;font-weight:900!important}
+@keyframes oraquiUrgenciaPulso{
+  0%,100%{background:#b91c1c;filter:brightness(1);transform:scale(1)}
+  50%{background:#ef4444;filter:brightness(1.2);transform:scale(1.055)}
+}
+@keyframes oraquiUrgenciaIcone{50%{transform:scale(1.24)}}
+@media(prefers-reduced-motion:reduce){.oraqui-nav-item.oraqui-tem-urgencia,.oraqui-nav-item.oraqui-tem-urgencia .nav-icon{animation:none!important}}
+
 </style>
 </head>
 <body>
