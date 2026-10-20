@@ -2,6 +2,12 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
+<script>
+  // Rota legada: mantém links/atalhos antigos funcionando, mas usa o app atual.
+  if (location.pathname.includes('/reservaigara/colaborador.html')) {
+    location.replace('../colaborador.html' + location.search + location.hash);
+  }
+</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <title>Colaborador — ORAQUI</title>
 <meta name="theme-color" content="#6d80a8">
