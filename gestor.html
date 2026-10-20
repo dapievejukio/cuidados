@@ -121,7 +121,7 @@ body{padding-bottom:88px!important}.oraqui-bottom{position:fixed;bottom:0;left:0
  <div class="section-title"><div><h2>📍 Relatório de ponto</h2><p>Entradas, intervalos e saídas • fotos privadas e localização GPS</p></div></div>
  <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin-bottom:15px">
   <label style="font-size:13px;font-weight:700">Data<br><input id="oraquiPontoData" type="date" style="padding:11px;border:1px solid #d7dce8;border-radius:12px;margin-top:6px"></label>
-  <button type="button" id="oraquiPontoConsultar" class="add-button">CONSULTAR PONTO</button>
+  <button type="button" id="oraquiPontoConsultar" class="add-button">CONSULTAR PONTO</button><label style="font-size:13px;font-weight:700">Mês do espelho<br><input id="oraquiPontoMes" type="month" style="padding:11px;border:1px solid #d7dce8;border-radius:12px;margin-top:6px"></label><button type="button" id="oraquiPontoPdf" class="add-button">📄 PDF MENSAL</button>
  </div>
  <div id="oraquiPontoResultado" style="color:#637086;font-size:14px">Escolha uma data e consulte os registros.</div>
 </section><section class="section"><div class="section-title"><div><h2>Últimos registros</h2></div></div><div id="activityContainer"></div></section></div>
@@ -1347,6 +1347,64 @@ async function consultarPontoGestor(){
 }
 document.getElementById("oraquiPontoData").value=new Date().toLocaleDateString("en-CA",{timeZone:"America/Sao_Paulo"});
 document.getElementById("oraquiPontoConsultar").addEventListener("click",consultarPontoGestor);
+document.getElementById("oraquiPontoMes").value=new Date().toLocaleDateString("en-CA",{timeZone:"America/Sao_Paulo"}).slice(0,7);
+document.getElementById("oraquiPontoPdf").addEventListener("click",gerarEspelhoPontoMensal);
+async function gerarEspelhoPontoMensal(){
+ const btn=$("oraquiPontoPdf"),mes=$("oraquiPontoMes").value;
+ if(!CONDOMINIO_ID||!/^\\d{4}-\\d{2}$/.test(mes)){alert("Selecione o mês.");return}
+ const condo=Number(CONDOMINIO_ID);
+ const [ano,numeroMes]=mes.split("-").map(Number);
+ const totalDias=new Date(ano,numeroMes,0).getDate();
+ const inicio=mes+"-01T00:00:00-03:00";
+ const proximo=numeroMes===12?(ano+1)+"-01":ano+"-"+String(numeroMes+1).padStart(2,"0");
+ const fim=proximo+"-01T00:00:00-03:00";
+ btn.disabled=true;btn.textContent="Preparando relatório...";
+ try{
+  const [reg,col]=await Promise.all([
+   db.from("registros_ponto").select("id,colaborador_id,tipo,registrado_em,latitude,longitude,precisao_metros,selfie_path").eq("condominio_id",condo).gte("registrado_em",inicio).lt("registrado_em",fim).order("registrado_em",{ascending:true}).limit(10000),
+   db.from("colaboradores").select("id,nome,matricula,funcao").eq("condominio_id",condo).order("nome")
+  ]);
+  if(reg.error)throw reg.error;if(col.error)throw col.error;
+  if(Number(CONDOMINIO_ID)!==condo)throw Error("O condomínio foi alterado durante a consulta.");
+  const registros=reg.data||[],pessoas=col.data||[];
+  if(registros.length===10000)throw Error("Limite de registros atingido. Divida a consulta.");
+  if(!pessoas.length)throw Error("Não há colaboradores cadastrados neste condomínio.");
+  const nomeCondo=CONDOMINIO||"Condomínio #"+condo;
+  const tz="America/Sao_Paulo";
+  const formatDia=new Intl.DateTimeFormat("en-CA",{timeZone:tz,year:"numeric",month:"2-digit",day:"2-digit"});
+  const formatHora=new Intl.DateTimeFormat("pt-BR",{timeZone:tz,hour:"2-digit",minute:"2-digit",hour12:false});
+  const escapeHtml=s=>String(s??"").replace(/[&<>"']/g,x=>({"&":"&amp","<":"&lt",">":"&gt",'"':"&quot","'":"&#39;"}[x]));
+  const porPessoa=new Map();
+  for(const v of registros){const id=Number(v.colaborador_id);if(!porPessoa.has(id))porPessoa.set(id,[]);porPessoa.get(id).push(v)}
+  const meses=["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
+  const folhas=pessoas.map(p=>{
+   const marcacoes=porPessoa.get(Number(p.id))||[];
+   const porDia=new Map();
+   for(const m of marcacoes){const d=formatDia.format(new Date(m.registrado_em));if(!porDia.has(d))porDia.set(d,[]);porDia.get(d).push(m)}
+   let linhas="",anexos="";
+   for(let dia=1;dia<=totalDias;dia++){
+    const chave=mes+"-"+String(dia).padStart(2,"0");
+    const diaSemana=["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"][new Date(ano,numeroMes-1,dia).getDay()];
+    const arr=porDia.get(chave)||[];
+    const tipoMap={entrada:"Entrada",inicio_intervalo:"Início intervalo",fim_intervalo:"Fim intervalo",saida:"Saída",intervalo_inicio:"Início intervalo",intervalo_fim:"Fim intervalo",retorno:"Retorno"};
+    const marc=arr.map(x=>escapeHtml(formatHora.format(new Date(x.registrado_em)))+" "+escapeHtml(tipoMap[x.tipo]||x.tipo)).join("<br>");
+    const situacao=arr.length?(arr.some(x=>x.selfie_path==null||x.latitude==null||x.longitude==null)?"Verificar foto/GPS":"Com marcação"):"Sem marcação";
+    linhas+='<tr><td>'+String(dia).padStart(2,"0")+'/'+String(numeroMes).padStart(2,"0")+'</td><td>'+diaSemana+'</td><td>'+ (marc||"—")+'</td><td>'+situacao+'</td></tr>';
+    for(const x of arr){
+     anexos+='<tr><td>'+escapeHtml(chave)+'</td><td>'+escapeHtml(formatHora.format(new Date(x.registrado_em)))+'</td><td>'+escapeHtml(tipoMap[x.tipo]||x.tipo)+'</td><td>'+(x.selfie_path?"Registrada":"Não registrada")+'</td><td>'+(x.latitude!=null&&x.longitude!=null?escapeHtml(x.latitude+", "+x.longitude+" (±"+(x.precisao_metros??"?")+" m)"):"Não registrada")+'</td></tr>';
+    }
+   }
+   return '<article class="folha"><div class="brand">ORAQUI <span>CONTROLE DE JORNADA</span></div><h1>Espelho mensal de ponto</h1><p class="sub">Relatório operacional de teste — NÃO é comprovante de REP-P homologado ou AFD</p><div class="meta"><div><b>Condomínio</b><br>'+escapeHtml(nomeCondo)+'</div><div><b>Competência</b><br>'+meses[numeroMes-1]+' / '+ano+'</div><div><b>Colaborador</b><br>'+escapeHtml(p.nome)+'</div><div><b>Matrícula / função</b><br>'+escapeHtml(p.matricula)+' · '+escapeHtml(p.funcao)+'</div></div><table><thead><tr><th>Data</th><th>Dia</th><th>Marcações (horário de Brasília)</th><th>Situação</th></tr></thead><tbody>'+linhas+'</tbody></table><p class="nota">“Sem marcação” indica ausência de registro no sistema, não comprova falta, folga ou feriado. Horas trabalhadas, adicionais e ajustes não foram apurados.</p><div class="assinatura"><span>Ciência do colaborador</span><span>Responsável pela conferência</span></div><div class="rodape">Emitido em '+escapeHtml(new Date().toLocaleString("pt-BR",{timeZone:tz}))+' • ORAQUI • Uso operacional</div></article><article class="folha anexo"><div class="brand">ORAQUI <span>ANEXO DE EVIDÊNCIAS</span></div><h2>'+escapeHtml(p.nome)+' — '+meses[numeroMes-1]+'/'+ano+'</h2><p>Referências das marcações, fotografias privadas e coordenadas GPS. As selfies são consultadas exclusivamente no painel autenticado do gestor.</p><table><thead><tr><th>Data</th><th>Hora</th><th>Tipo</th><th>Selfie</th><th>Localização</th></tr></thead><tbody>'+(anexos||'<tr><td colspan="5">Nenhuma marcação no período</td></tr>')+'</tbody></table></article>';
+  }).join("");
+  const html='<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Espelho de ponto — '+escapeHtml(nomeCondo)+' — '+mes+'</title><style>@page{size:A4;margin:13mm}*{box-sizing:border-box}body{font-family:Arial,sans-serif;color:#17233b;font-size:10px;margin:0}.folha{break-after:page;page-break-after:always}.brand{font-weight:900;color:#554a9b;font-size:18px;border-bottom:3px solid #6b60ac;padding-bottom:9px}.brand span{float:right;font-size:9px;letter-spacing:1px;margin-top:8px;color:#657189}h1{font-size:21px;margin:18px 0 5px}h2{font-size:17px}.sub{color:#9a4b36;font-weight:bold;font-size:10px}.meta{display:grid;grid-template-columns:1fr 1fr;gap:9px;background:#f0f2f8;padding:12px;border-radius:9px;margin:15px 0}.meta b{color:#66728a;font-size:9px}table{border-collapse:collapse;width:100%;margin:12px 0}th{background:#e9eaf4;text-align:left;font-size:9px}th,td{border:1px solid #dce1ea;padding:5px 7px;vertical-align:top}tbody tr:nth-child(even){background:#fafbfe}.nota{font-size:9px;color:#6b7383;line-height:1.5}.assinatura{display:flex;gap:30px;margin-top:38px}.assinatura span{flex:1;text-align:center;border-top:1px solid #9aa4b5;padding-top:7px}.rodape{margin-top:20px;color:#6b7383;font-size:9px}.anexo{break-before:page}.anexo td{font-size:9px;overflow-wrap:anywhere}@media screen{body{background:#e9edf3;padding:20px}.folha{max-width:794px;margin:0 auto 20px;background:white;padding:35px;box-shadow:0 3px 15px #0002}}@media print{.folha:last-child{break-after:auto}}</style></head><body>'+folhas+'</body></html>';
+  const janela=window.open("","_blank");
+  if(!janela)throw Error("O navegador bloqueou a janela do relatório. Autorize pop-ups e tente novamente.");
+  janela.document.open();janela.document.write(html);janela.document.close();
+  janela.focus();setTimeout(()=>janela.print(),700);
+ }catch(e){alert("Não foi possível gerar o espelho mensal: "+e.message)}
+ finally{btn.disabled=false;btn.textContent="📄 PDF MENSAL"}
+}
+
 
 async function iniciar(){eventos();configurarNavegacaoGestor();painel("operacao");$("todayDate").textContent=new Date().toLocaleDateString("pt-BR");const {data:{session}}=await db.auth.getSession();if(session){try{await validarGestor(session.user)}catch(e){console.error(e);$("authError").textContent=e.message;$("authError").style.display="block"}}}
 iniciar();
