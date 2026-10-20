@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <title>Comunicar ocorrência — ORAQUI</title>
 <meta name="theme-color" content="#557a95">
-<link rel="icon" href="/favicon-48.png">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="icon" href="favicon-48.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{
@@ -116,7 +116,7 @@ select,input[type=email],textarea{background:#fbfdff;border-color:#cfdee9;font-s
 <header class="hero">
  <div class="top">
   <div class="brand-compact">
-   <img src="/icon-192.png" alt="">
+   <img src="icon-192.png" alt="">
    <div><strong>ORAQUI</strong><span>Agora. Aqui. Registrado.</span></div>
   </div>
   <div class="secure">● <span>CANAL SEGURO</span></div>
@@ -135,11 +135,11 @@ select,input[type=email],textarea{background:#fbfdff;border-color:#cfdee9;font-s
 
  <section class="card">
   <div class="step"><div class="num">01</div><div><h2><span class="step-icon">📍</span>Onde aconteceu?</h2><p>Escolha o local para direcionarmos corretamente.</p></div></div>
-  <div class="place"><div class="place-icon"><img src="/oraqui-icons/condominios-128.png" alt=""></div><div><small>CONDOMÍNIO</small><strong>Reserva Igara</strong></div></div>
+  <div class="place"><div class="place-icon"><img src="oraqui-icons/condominios-128.png" alt=""></div><div><small>CONDOMÍNIO</small><strong>Reserva Igara</strong></div></div>
   <div class="field"><label for="area">ÁREA</label><select id="area" onchange="alterarArea()" disabled><option value="">Carregando locais...</option></select><div class="loading-local" id="localStatus"></div></div>
   <div class="field" id="detalheContainer"><label for="detalhe">LOCAL / PONTO</label><select id="detalhe" onchange="carregarHistoricoLocal()"><option value="">Selecione o local</option></select></div>
   <div class="ops-card" id="opsCard">
-   <div class="ops-top"><div class="ops-check"><img src="/oraqui-icons/historico-128.png" alt=""></div><div><strong>Este local é acompanhado pelo ORAQUI</strong><span>Registros operacionais do espaço selecionado</span></div></div>
+   <div class="ops-top"><div class="ops-check"><img src="oraqui-icons/historico-128.png" alt=""></div><div><strong>Este local é acompanhado pelo ORAQUI</strong><span>Registros operacionais do espaço selecionado</span></div></div>
    <div class="ops-grid">
     <div class="ops-item"><small>ÚLTIMA ATIVIDADE REGISTRADA</small><b id="ultimaAtividade">Consultando...</b><em id="ultimaQuando"></em><button class="ops-photo" id="ultimaFoto" type="button">VER REGISTRO</button></div>
     <div class="ops-item"><small>PRÓXIMA ATIVIDADE PREVISTA</small><b id="proximaAtividade">Consultando...</b><em id="proximaQuando"></em></div>
@@ -150,7 +150,7 @@ select,input[type=email],textarea{background:#fbfdff;border-color:#cfdee9;font-s
 
  <section class="card">
   <div class="step"><div class="num">02</div><div><h2><span class="step-icon">📸</span>Mostre o problema</h2><p>Foto, descrição ou os dois. Seja simples.</p></div></div>
-  <label class="photo-box" id="photoBox" for="photoInput"><div class="photo-icon"><img src="/oraqui-icons/registro-foto-128.png" alt=""></div><div><strong>Tirar ou adicionar foto</strong><span>A foto ajuda a equipe a entender mais rápido.</span></div></label>
+  <label class="photo-box" id="photoBox" for="photoInput"><div class="photo-icon"><img src="oraqui-icons/registro-foto-128.png" alt=""></div><div><strong>Tirar ou adicionar foto</strong><span>A foto ajuda a equipe a entender mais rápido.</span></div></label>
   <input type="file" id="photoInput" accept="image/jpeg,image/png,image/webp,image/heic,image/heif" capture="environment">
   <div class="preview" id="preview"><img id="photoPreview" alt="Foto da ocorrência"><button type="button" class="remove" onclick="removerFoto()" aria-label="Remover foto">×</button></div>
   <div class="or"><span>OU ESCREVA</span></div>
@@ -160,7 +160,7 @@ select,input[type=email],textarea{background:#fbfdff;border-color:#cfdee9;font-s
 
  <section class="card">
   <div class="return-row">
-   <div class="return-icon"><img src="/oraqui-icons/notificacoes-128.png" alt=""></div>
+   <div class="return-icon"><img src="oraqui-icons/notificacoes-128.png" alt=""></div>
    <div class="return-copy"><strong>✉️ Quer saber quando for resolvido?</strong><span>Ative para receber a atualização por e-mail.</span></div>
    <label class="switch"><input id="retornoToggle" type="checkbox" onchange="toggleRetorno()"><span class="slider"></span></label>
   </div>
@@ -177,7 +177,7 @@ select,input[type=email],textarea{background:#fbfdff;border-color:#cfdee9;font-s
 <div class="privacy-modal" id="privacyModal" role="dialog" aria-modal="true" aria-labelledby="privacyTitle">
  <div class="privacy-sheet">
   <div class="privacy-head">
-   <div class="privacy-head-brand"><img src="/icon-192.png" alt=""><div><strong>ORAQUI</strong><span>PRIVACIDADE • AVISO RESUMIDO</span></div></div>
+   <div class="privacy-head-brand"><img src="icon-192.png" alt=""><div><strong>ORAQUI</strong><span>PRIVACIDADE • AVISO RESUMIDO</span></div></div>
    <button class="privacy-close" type="button" onclick="fecharPrivacidade()" aria-label="Fechar">×</button>
   </div>
   <h2 id="privacyTitle">Seus dados nesta ocorrência</h2>
@@ -192,7 +192,7 @@ select,input[type=email],textarea{background:#fbfdff;border-color:#cfdee9;font-s
   <div class="privacy-block"><h3>SEUS DIREITOS</h3><p>Você pode solicitar informações sobre o tratamento, acesso, correção e, quando aplicável, anonimização, bloqueio, eliminação, oposição ou outras providências previstas na LGPD. Para solicitações de privacidade: <a href="mailto:atendimento@oraqui.app">atendimento@oraqui.app</a>.</p></div>
   <div class="privacy-block"><h3>PAPÉIS DE PRIVACIDADE</h3><p>O ORAQUI fornece a plataforma tecnológica. A definição de controlador e operador depende de quem determina as finalidades e os elementos essenciais do tratamento em cada contratação. A identificação aplicável ao condomínio/cliente deve constar do aviso completo e dos instrumentos contratuais.</p></div>
 
-  <div class="privacy-actions"><button type="button" onclick="fecharPrivacidade()">ENTENDI</button><a href="/privacidade.html">AVISO COMPLETO</a></div>
+  <div class="privacy-actions"><button type="button" onclick="fecharPrivacidade()">ENTENDI</button><a href="privacidade.html">AVISO COMPLETO</a></div>
  </div>
 </div>
 
@@ -203,9 +203,9 @@ select,input[type=email],textarea{background:#fbfdff;border-color:#cfdee9;font-s
   <p>Sua solicitação foi encaminhada e já pode ser visualizada pela equipe responsável.</p>
   <div class="protocol" id="protocol"></div>
   <div class="success-commercial">
-   <div class="mini-brand"><img src="/icon-192.png" alt=""><div><strong>Atendimento com ORAQUI</strong><span>Agora. Aqui. Registrado.</span></div></div>
+   <div class="mini-brand"><img src="icon-192.png" alt=""><div><strong>Atendimento com ORAQUI</strong><span>Agora. Aqui. Registrado.</span></div></div>
    <p>A empresa responsável pela limpeza do <b>Reserva Igara</b> utiliza o ORAQUI para registrar e acompanhar os serviços do condomínio.</p>
-   <a href="/" target="_blank" rel="noopener">CONHECER O ORAQUI →</a>
+   <a href="./" target="_blank" rel="noopener">CONHECER O ORAQUI →</a>
   </div>
   <button type="button" onclick="inicio()">CONCLUIR</button>
  </div>
