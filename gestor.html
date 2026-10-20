@@ -1164,7 +1164,31 @@ async function revisarRegistroPosterior(id,status){
 
 function painel(p){["Operacao","Ocorrencias","RegistrosPosteriores","Colaboradores","Config"].forEach(n=>{$("panel"+n).classList.toggle("active",n.toLowerCase()===p);$("tab"+n).classList.toggle("active",n.toLowerCase()===p)});if(p==="ocorrencias")carregarOcorrencias();if(p==="registrosposteriores")carregarRegistrosPosteriores();if(p==="colaboradores"){carregarColaboradores();carregarGestores()}if(p==="config")carregarConfig()}
 function configurarNavegacaoGestor(){
-  document.getElementById('navOcorrencias').onclick=()=>{painel('ocorrencias');window.scrollTo({top:0,behavior:'smooth'})};
+  document.getElementById('navOcorrencias').onclick=()=>{
+    // Toque no alerta vermelho: abrir diretamente a primeira ocorrência
+    // enviada pelo morador que ainda precisa de encaminhamento.
+    const pendentes=ocorrenciasCarregadas.filter(o=>
+      norm(o.status)!=='resolvida'&&
+      (norm(o.origem).includes('morador')||norm(o.origem).includes('visitante')||norm(o.origem).includes('reportar'))&&
+      !demandasOcorrencias.some(d=>String(d.ocorrencia_id)===String(o.id)&&d.status!=='cancelada')
+    );
+    const alvo=pendentes.sort((a,b)=>new Date(b.created_at||0)-new Date(a.created_at||0))[0];
+    filtroOcorrencias='todas';
+    document.querySelectorAll('.filter').forEach(b=>b.classList.toggle('active',b.dataset.filter==='todas'));
+    painel('ocorrencias');
+    renderOcorrencias();
+    if(alvo){
+      const card=occurrenceList.querySelector('[data-occ="'+alvo.id+'"]');
+      if(card){
+        card.scrollIntoView({behavior:'smooth',block:'center'});
+        card.style.outline='3px solid #dc2626';
+        card.style.outlineOffset='4px';
+        setTimeout(()=>{if(card.isConnected){card.style.outline='';card.style.outlineOffset='';}},6500);
+        return;
+      }
+    }
+    window.scrollTo({top:0,behavior:'smooth'});
+  };
   document.getElementById('navCriarDemanda').onclick=()=>{painel('ocorrencias');abrirUrgente()};
   document.getElementById('navCronograma').onclick=()=>{painel('config');subConfig('p');window.scrollTo({top:0,behavior:'smooth'})};
   const partesCalendario=new Intl.DateTimeFormat('pt-BR',{timeZone:'America/Sao_Paulo',day:'2-digit',month:'short'}).formatToParts(new Date());const diaCalendario=partesCalendario.find(p=>p.type==='day')?.value;const mesCalendario=partesCalendario.find(p=>p.type==='month')?.value?.replace('.','').toUpperCase();const elDiaCalendario=document.getElementById('navCalendarDay');const elMesCalendario=document.getElementById('navCalendarMonth');if(elDiaCalendario&&diaCalendario)elDiaCalendario.textContent=String(Number(diaCalendario));if(elMesCalendario&&mesCalendario)elMesCalendario.textContent=mesCalendario;
