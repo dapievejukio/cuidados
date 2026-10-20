@@ -149,8 +149,8 @@ select,input[type=email],textarea{background:#fbfdff;border-color:#cfdee9;font-s
  <section class="card">
   <div class="step"><div class="num">01</div><div><h2><span class="step-icon">📍</span>Onde aconteceu?</h2><p>Escolha o local para direcionarmos corretamente.</p></div></div>
   <div class="place"><div class="place-icon"><img src="../oraqui-icons/condominios-128.png" alt=""></div><div><small>CONDOMÍNIO</small><strong>Reserva Igara</strong></div></div>
-  <div class="field"><label for="area">ÁREA</label><select id="area" onchange="alterarArea()" disabled><option value="">Carregando locais...</option></select><div class="loading-local" id="localStatus"></div></div>
-  <div class="field" id="detalheContainer"><label for="detalhe">LOCAL / PONTO</label><select id="detalhe" onchange="carregarHistoricoLocal()"><option value="">Selecione o local</option></select></div>
+  <div class="field"><label for="area">LOCAL PRINCIPAL</label><select id="area" onchange="alterarArea()" disabled><option value="">Carregando locais...</option></select><div class="loading-local" id="localStatus"></div></div>
+  <div class="field" id="detalheContainer"><label for="detalhe">LOCAL ESPECÍFICO</label><select id="detalhe" onchange="carregarHistoricoLocal()"><option value="">Selecione o local</option></select></div>
   <div class="ops-card" id="opsCard">
    <div class="ops-top"><div class="ops-check"><img src="../oraqui-icons/historico-128.png" alt=""></div><div><strong>Este local é acompanhado pelo ORAQUI</strong><span>Registros operacionais do espaço selecionado</span></div></div>
    <div class="ops-grid">
@@ -258,7 +258,12 @@ async function carregarLocais(){
      db.from("pontos").select("id,area_id,nome,ordem,ativo,visivel_ocorrencia").eq("condominio_id",CONDOMINIO_ID).eq("ativo",true).eq("visivel_ocorrencia",true).order("ordem").order("nome")
    ]);
    if(a.error)throw a.error;if(p.error)throw p.error;
-   areas=a.data||[];pontos=p.data||[];
+   // Ordem exclusiva do formulário público Reserva Igara; não altera a organização operacional.
+   const ordemPublica=[1,3,4,5,6,34,10,17,7,26,24,12,13,14,19,20,15,16,23,28];
+   areas=(a.data||[]).filter(x=>ordemPublica.includes(Number(x.id))).sort((x,y)=>ordemPublica.indexOf(Number(x.id))-ordemPublica.indexOf(Number(y.id)));
+   pontos=(p.data||[]).filter(x=>!([1,3,4,5,6].includes(Number(x.area_id))&&/portas? corta.fogo|shafts?/i.test(x.nome)));
+   const nomesPublicos={14:"Área infantil",24:"Chimarródromo",28:"Outro"};
+   areas=areas.map(x=>({...x,nome:nomesPublicos[x.id]||x.nome}));
    areaEl.innerHTML='<option value="">Selecione a área</option>'+areas.map(x=>`<option value="${x.id}">${esc(x.nome)}</option>`).join("");
    areaEl.disabled=false;status.textContent=areas.length?"":"Nenhuma área disponível para ocorrências.";
  }catch(e){
