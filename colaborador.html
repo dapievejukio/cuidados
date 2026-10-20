@@ -454,12 +454,7 @@ async function iniciar(){
       if(vinculos.length===1){c=vinculos[0];}
       else if(vinculoSalvo){c=vinculoSalvo;}
       else{
-        const opcoes=vinculos.map((v,i)=>`${i+1} — ${v.condominio||"Condomínio #"+v.condominio_id} (${v.nome})`).join("\n");
-        const escolha=window.prompt("Você possui mais de um vínculo. Escolha o número do condomínio:\n"+opcoes,"1");
-        if(escolha===null)throw new Error("Seleção de condomínio cancelada.");
-        const indice=Number(escolha)-1;
-        if(!Number.isInteger(indice)||indice<0||indice>=vinculos.length)throw new Error("Condomínio inválido. Recarregue e selecione uma opção.");
-        c=vinculos[indice];
+        c=await escolherCondominioVisual(vinculos);
       }
       localStorage.setItem(chaveCondominio,String(c.id));
     }
@@ -625,6 +620,33 @@ function capturarSelfiePonto(){
   });
 }
 let pontoEmRegistro=false;
+function escolherCondominioVisual(vinculos){
+  return new Promise((resolve,reject)=>{
+    const overlay=document.createElement("div");
+    overlay.id="oraquiEscolhaCondominio";
+    overlay.style.cssText="position:fixed;inset:0;z-index:999999;background:rgba(18,25,46,.66);backdrop-filter:blur(9px);display:flex;align-items:center;justify-content:center;padding:20px";
+    const card=document.createElement("div");
+    card.style.cssText="background:#fff;border-radius:26px;padding:27px 22px;width:min(100%,430px);max-height:85vh;overflow:auto;box-shadow:0 30px 85px #1118;font-family:inherit";
+    const titulo=document.createElement("div");
+    titulo.innerHTML='<div style="font-size:13px;font-weight:800;color:#7165b7;letter-spacing:1.5px">ORAQUI • ACESSO</div><h2 style="font-size:25px;color:#18233c;margin:10px 0 6px">Escolha seu condomínio</h2><p style="color:#64748b;margin:0 0 20px;line-height:1.5">Selecione onde você vai trabalhar agora.</p>';
+    card.appendChild(titulo);
+    vinculos.forEach(v=>{
+      const btn=document.createElement("button");btn.type="button";
+      btn.style.cssText="width:100%;display:flex;align-items:center;gap:13px;text-align:left;background:#f7f8fc;border:1px solid #e1e5f1;border-radius:17px;padding:16px;margin:10px 0;cursor:pointer;color:#1b2843;font-family:inherit";
+      const ico=document.createElement("span");ico.textContent="🏢";ico.style.cssText="font-size:27px;background:#eae9fa;padding:11px;border-radius:14px";
+      const label=document.createElement("span");label.style.cssText="flex:1;min-width:0";
+      const strong=document.createElement("strong");strong.textContent=v.condominio||"Condomínio #"+v.condominio_id;strong.style.cssText="display:block;font-size:17px";
+      const sub=document.createElement("small");sub.textContent=v.nome+" • "+v.funcao;sub.style.cssText="color:#6a758a;font-size:12px";
+      label.append(strong,sub);
+      const arrow=document.createElement("span");arrow.textContent="›";arrow.style.cssText="font-size:28px;color:#7467b9";
+      btn.append(ico,label,arrow);btn.onclick=()=>{overlay.remove();resolve(v)};
+      card.appendChild(btn);
+    });
+    const cancelar=document.createElement("button");cancelar.textContent="Cancelar";cancelar.style.cssText="border:0;background:none;color:#64748b;width:100%;padding:14px;font-size:14px;cursor:pointer";
+    cancelar.onclick=()=>{overlay.remove();reject(new Error("Seleção de condomínio cancelada."))};
+    card.appendChild(cancelar);overlay.appendChild(card);document.body.appendChild(overlay);
+  });
+}
 async function registrarPonto(tipo){
   if(pontoEmRegistro)return;
   pontoEmRegistro=true;
