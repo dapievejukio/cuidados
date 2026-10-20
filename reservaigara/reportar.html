@@ -294,38 +294,19 @@ async function carregarHistoricoLocal(){
  const areaId=Number(document.getElementById("area").value)||null;
  const pontoId=Number(document.getElementById("detalhe").value)||null;
  const ps=pontos.filter(x=>Number(x.area_id)===areaId);
- if(!areaId||(ps.length&&!pontoId)){document.getElementById("opsCard").style.display="none";return}
- const card=document.getElementById("opsCard"),ua=document.getElementById("ultimaAtividade"),uw=document.getElementById("ultimaQuando"),uf=document.getElementById("ultimaFoto"),pa=document.getElementById("proximaAtividade"),pw=document.getElementById("proximaQuando");
- card.style.display="block";document.getElementById("stillProblem").style.display="none";
- ua.textContent="Consultando...";uw.textContent="";uf.style.display="none";pa.textContent="Consultando...";pw.textContent="";
+ const card=document.getElementById("opsCard");
+ if(!areaId||(ps.length&&!pontoId)){card.style.display="none";return}
+ const ua=document.getElementById("ultimaAtividade"),uw=document.getElementById("ultimaQuando"),uf=document.getElementById("ultimaFoto"),pa=document.getElementById("proximaAtividade"),pw=document.getElementById("proximaQuando");
+ card.style.display="block";ua.textContent="Consultando...";uw.textContent="";uf.style.display="none";
+ pa.textContent="Nenhuma atividade futura informada";pw.textContent="";
  try{
-  let q=db.from("execucoes").select("id,atividade_id,executada_em,created_at,foto_path,atividades_v2(nome)").eq("condominio_id",CONDOMINIO_ID).eq("area_id",areaId).order("executada_em",{ascending:false}).limit(1);
-  if(pontoId)q=q.eq("ponto_id",pontoId);else q=q.is("ponto_id",null);
-  const {data:exec,error:e1}=await q;if(e1)throw e1;
-  const ultima=exec?.[0];
-  if(ultima){
-   ua.textContent=ultima.atividades_v2?.nome||"Atividade concluída";
-   uw.textContent=fmtDataHora(ultima.executada_em||ultima.created_at);
-   if(ultima.foto_path){
-    uf.style.display="block";
-    uf.onclick=async()=>{
-     const {data,error}=await db.storage.from("fotos-atividades").createSignedUrl(ultima.foto_path,120);
-     if(error||!data?.signedUrl){mostrarErro("Não foi possível abrir a foto deste registro.");return}
-     window.open(data.signedUrl,"_blank","noopener");
-    };
-   }
-  }else{ua.textContent="Ainda não há atividade registrada";uw.textContent="";}
- }catch(e){console.warn("Histórico público indisponível",e);ua.textContent="Histórico ainda não disponível";uw.textContent="";}
-
- try{
-  const agora=new Date().toISOString();
-  let q2=db.from("programacoes").select("id,atividade_id,inicio_previsto,atividades_v2(nome)").eq("condominio_id",CONDOMINIO_ID).eq("area_id",areaId).gte("inicio_previsto",agora).order("inicio_previsto",{ascending:true}).limit(1);
-  if(pontoId)q2=q2.eq("ponto_id",pontoId);else q2=q2.is("ponto_id",null);
-  const {data:prog,error:e2}=await q2;if(e2)throw e2;
-  const prox=prog?.[0];
-  if(prox){pa.textContent=prox.atividades_v2?.nome||"Atividade programada";pw.textContent=fmtDataHora(prox.inicio_previsto)}
-  else{pa.textContent="Nenhuma atividade programada";pw.textContent=""}
- }catch(e){console.warn("Programação pública indisponível",e);pa.textContent="Programação ainda não disponível";pw.textContent=""}
+  const {data,error}=await db.rpc("resumo_local_ocorrencia",{p_condominio_id:CONDOMINIO_ID,p_area_id:areaId,p_ponto_id:pontoId});
+  if(error)throw error;
+  const resumo=data?.[0];
+  if(resumo?.ultima_quando){ua.textContent=resumo.ultima_atividade||"Atividade concluída";uw.textContent=fmtDataHora(resumo.ultima_quando)}
+  else{ua.textContent="Nenhuma atividade concluída neste local";uw.textContent=""}
+  if(resumo?.proxima_quando){pa.textContent=resumo.proxima_atividade||"Atividade prevista";pw.textContent=fmtDataHora(resumo.proxima_quando)}
+ }catch(e){console.warn("Resumo público indisponível",e);ua.textContent="Histórico temporariamente indisponível";pa.textContent="Programação não disponível"}
  document.getElementById("stillProblem").style.display="block";
 }
 
