@@ -695,8 +695,17 @@ function detalheDemanda(d){
     '<div><strong>📍 LOCAL:</strong> '+esc(local)+'</div>'+
     '<div style="margin-top:8px"><strong>📝 O QUE FAZER:</strong> '+esc(instrucao)+'</div>'+
     (d.ocorrencia_descricao&&d.ocorrencia_descricao!==instrucao?'<div style="margin-top:8px"><strong>Relato do morador:</strong> '+esc(d.ocorrencia_descricao)+'</div>':'')+
+    (d.foto_gestor_path?'<div style="margin-top:10px"><button type="button" onclick="abrirFotoGestorDemanda('+Number(d.id)+')" style="background:#e5defb;color:#493c93;padding:10px 14px;border:0;border-radius:10px;font-weight:800">📷 VER FOTO ENVIADA PELO GESTOR</button></div>':'')+
     (d.ocorrencia_id?'<div style="margin-top:8px"><strong>📷 Foto original:</strong> <span id="demandaFotoStatus'+Number(d.id)+'">ver detalhes ao iniciar</span></div>':'')+
     '</div>';
+}
+async function abrirFotoGestorDemanda(id){
+ const d=demandas.find(x=>Number(x.id)===Number(id));if(!d?.foto_gestor_path)return;
+ try{
+  const {data,error}=await db.storage.from("fotos-demandas-gestor").createSignedUrl(d.foto_gestor_path,300);
+  if(error)throw error;
+  window.open(data.signedUrl,"_blank","noopener,noreferrer");
+ }catch(e){alert("Não foi possível abrir a foto do gestor: "+e.message)}
 }
 async function enriquecerDemandasComOcorrencias(){
   const ids=[...new Set(demandas.map(d=>d.ocorrencia_id).filter(Boolean))];
