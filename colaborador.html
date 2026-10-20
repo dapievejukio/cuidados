@@ -178,17 +178,15 @@ body:has(.modal.visible) .oraqui-bottom-nav{display:none}
 <body>
 <header><div class="header-content"><div class="topbar"><div class="brand"><div class="brand-icon">✓</div><div><strong>ORAQUI</strong><small>AGORA. AQUI. REGISTRADO.</small></div></div><button class="logout" id="logout">SAIR</button></div><div class="header-title"><small id="condominioNome">CONDOMÍNIO</small><h1>Minha operação</h1><p>Escala, ponto, demandas e atividades do dia.</p></div></div></header>
 <main>
-<div class="user-card"><a class="user-icon oraqui-avatar-link" id="userIcon" href="perfil-foto.html" aria-label="Toque para escolher ou alterar sua foto" title="Alterar foto">👤<span class="oraqui-avatar-edit">✎</span></a><div class="user-info"><strong id="userName">Carregando...</strong><span id="userDescription">Validando acesso</span></div><span class="user-tag">ATIVO</span></div>
+<div class="user-card"><a class="user-icon oraqui-avatar-link" id="userIcon" href="perfil-foto.html" aria-label="Toque para escolher ou alterar sua foto" title="Alterar foto">👤<span class="oraqui-avatar-edit">✎</span></a><div class="user-info"><div style="display:flex;align-items:center;gap:8px"><strong id="userName">Carregando...</strong><button type="button" id="notificationBell" aria-label="Configurar notificações" title="Notificações" style="border:0;background:transparent;font-size:21px;cursor:pointer;padding:4px">🔔</button></div><span id="userDescription">Validando acesso</span></div><span class="user-tag">ATIVO</span></div>
 <div id="oraquiQuickCounts" hidden aria-hidden="true"><span id="oraquiChatCount" hidden></span><span id="oraquiDocsCount" hidden></span></div>
 <div class="demo-mode-banner" id="demoModeBanner"><div class="demo-mode-icon">🧪</div><div class="demo-mode-info"><strong>MODO DEMONSTRAÇÃO</strong><span id="demoModeText">Você está testando a visão operacional de um colaborador.</span></div><button class="demo-back" id="demoBack" type="button">VOLTAR À GESTÃO</button></div>
 <div class="message error" id="error"></div><div class="offline-card" id="offlineCard" role="status"><strong id="offlineTitle">📶 Verificando conexão...</strong><span id="offlineDescription">Os registros pendentes permanecem neste aparelho até a sincronização.</span><br><button type="button" id="syncBtn">SINCRONIZAR AGORA</button></div>
-<div class="notification-card" id="notificationCard">
-  <div class="notification-icon">🔔</div>
-  <div class="notification-info">
-    <strong id="notificationTitle">Notificações do ORAQUI</strong>
-    <span id="notificationText">Verificando este aparelho...</span>
-  </div>
-  <button class="notification-btn" id="notificationBtn">ATIVAR</button>
+<div class="notification-card hidden" id="notificationCard" style="display:none"><strong id="notificationTitle"></strong><span id="notificationText"></span><button id="notificationBtn" type="button">ATIVAR</button></div>
+<div id="oraquiInstallCard" hidden style="margin:12px 0;padding:14px 16px;background:#edf5ff;border:1px solid #c7ddf5;border-radius:15px;color:#193c5e">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><strong>📲 Adicionar ORAQUI ao celular</strong><button id="oraquiInstallClose" type="button" aria-label="Fechar" style="border:0;background:transparent;font-size:21px;cursor:pointer">×</button></div>
+  <p id="oraquiInstallText" style="font-size:13px;line-height:1.5;margin:8px 0">Abra o ORAQUI diretamente pela tela inicial.</p>
+  <button id="oraquiInstallAction" type="button" style="border:0;border-radius:10px;background:#173f68;color:white;font-weight:800;padding:11px 15px;cursor:pointer">ADICIONAR À TELA INICIAL</button>
 </div>
 
 <section class="section" id="escalaSection"><div class="section-title"><div><h2>Hoje</h2><p>Sua escala publicada para hoje.</p></div></div><div id="escalaBox" class="loading">Carregando escala...</div></section>
@@ -1388,17 +1386,17 @@ window.oraquiAtualizarIndicadores = async function oraquiAtualizarIndicadores(){
  if(!authUser||!colaborador||MODO_DEMO)return;
  try{
   const {count,error}=await db.from('oraqui_chat_mensagens').select('id',{count:'exact',head:true}).eq('condominio_id',colaborador.condominio_id).eq('destinatario',authUser.id).is('lida_em',null);
-  if(!error){oraquiBadge('oraquiChatCount',count||0);document.getElementById('oraquiChatCaption').textContent=count?`${count} não lida${count===1?'':'s'}`:'Mensagens';}
+  if(!error){oraquiBadge('oraquiChatCount',count||0);const legenda=document.getElementById('oraquiChatCaption');if(legenda)legenda.textContent=count?`${count} não lida${count===1?'':'s'}`:'Mensagens';}
  }catch(e){console.warn('Indicador chat',e)}
  try{
   const key=ORAQUI_DOCS_LAST_PREFIX+authUser.id;
   const last=localStorage.getItem(key);
   const q=db.from('documentos_colaborador').select('id',{count:'exact',head:true});
   const {count,error}=await (last?q.gt('created_at',last):q);
-  if(!error){oraquiBadge('oraquiDocsCount',count||0);document.getElementById('oraquiDocsCaption').textContent=count?`${count} novo${count===1?'':'s'}`:'Meus arquivos';}
+  if(!error){oraquiBadge('oraquiDocsCount',count||0);const legenda=document.getElementById('oraquiDocsCaption');if(legenda)legenda.textContent=count?`${count} novo${count===1?'':'s'}`:'Meus arquivos';}
  }catch(e){console.warn('Indicador documentos',e)}
 }
-document.getElementById('oraquiQuickDocs')?.addEventListener('click',()=>{if(authUser)localStorage.setItem(ORAQUI_DOCS_LAST_PREFIX+authUser.id,new Date().toISOString())});
+document.getElementById('navDocumentos')?.addEventListener('click',()=>{if(authUser)localStorage.setItem(ORAQUI_DOCS_LAST_PREFIX+authUser.id,new Date().toISOString())});
 window.addEventListener('pageshow',()=>setTimeout(()=>window.oraquiAtualizarIndicadores?.(),350));
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)window.oraquiAtualizarIndicadores?.()});
 setInterval(()=>{if(!document.hidden)window.oraquiAtualizarIndicadores?.()},30000);
@@ -1406,6 +1404,26 @@ setInterval(()=>{if(!document.hidden)window.oraquiAtualizarIndicadores?.()},3000
 </script>
 <!-- ORAQUI_INDICADORES_FIX_20261009_V2 -->
 <script>
+/* Instalação do atalho: Android oferece prompt nativo quando disponível; iOS exige ação no menu Compartilhar. */
+(function(){
+ const card=document.getElementById('oraquiInstallCard'),texto=document.getElementById('oraquiInstallText'),acao=document.getElementById('oraquiInstallAction');
+ let instalacaoPendente=null;
+ const instalado=()=>window.matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+ const ios=/iPhone|iPad|iPod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+ const chave='oraqui_install_oculto_v1';
+ function mostrar(){
+  if(instalado()||sessionStorage.getItem(chave)==='1'){card.hidden=true;return}
+  card.hidden=false;
+  if(ios){texto.textContent='No iPhone: abra no Safari, toque em Compartilhar (quadrado com seta) e escolha Adicionar à Tela de Início. Depois abra pelo novo ícone.';acao.textContent='VER COMO ADICIONAR';}
+  else if(instalacaoPendente){texto.textContent='Instale o atalho para abrir o ORAQUI direto da tela inicial.';acao.textContent='INSTALAR ORAQUI';}
+  else{texto.textContent='No Android: abra o menu ⋮ do navegador e escolha Instalar app ou Adicionar à tela inicial. Em outros navegadores, procure opção equivalente no menu.';acao.textContent='COMO ADICIONAR';}
+ }
+ window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();instalacaoPendente=e;mostrar()});
+ window.addEventListener('appinstalled',()=>{instalacaoPendente=null;card.hidden=true});
+ document.getElementById('oraquiInstallClose').onclick=()=>{sessionStorage.setItem(chave,'1');card.hidden=true};
+ acao.onclick=async()=>{if(instalacaoPendente){const ev=instalacaoPendente;instalacaoPendente=null;await ev.prompt();await ev.userChoice;mostrar();return}alert(texto.textContent)};
+ mostrar();
+})();
 /* Data atual no ícone Cronograma, conforme horário de Brasília */
 (function(){
  function atualizarCalendarioMenu(){
