@@ -193,7 +193,7 @@ body:has(.modal.visible) .oraqui-bottom-nav{display:none}
 
 <section class="section" id="escalaSection"><div class="section-title"><div><h2>Hoje</h2><p>Sua escala publicada para hoje.</p></div></div><div id="escalaBox" class="loading">Carregando escala...</div></section>
 <section class="section hidden" id="pontoSection"><div class="section-title"><div><h2>Ponto</h2><p>Registre os eventos da sua jornada.</p></div></div><div class="card"><div class="status-card"><div class="status-icon">🕒</div><div class="status-info"><strong id="pontoStatus">Carregando...</strong><span id="pontoDetalhe"></span></div><span class="badge purple" id="pontoBadge">PONTO</span></div><div class="point-actions"><button class="point-btn primary" id="btnEntrada">ENTRADA</button><button class="point-btn" id="btnIniIntervalo">INICIAR INTERVALO</button><button class="point-btn" id="btnFimIntervalo">RETORNAR</button><button class="point-btn" id="btnSaida">SAÍDA</button></div><div class="geo-note" id="geoNote"></div></div></section>
-<section class="section" id="atividadesProgramadasSection"><div class="section-title"><div><h2>Atividades programadas</h2><p>Atividades de hoje e próximos agendamentos.</p></div></div><div id="programacoes" class="loading">Carregando...</div></section>
+<section class="section" id="atividadesProgramadasSection"><div class="section-title"><div><h2>Atividades programadas</h2><p>Seu roteiro de trabalho e próximas execuções.</p></div></div><div id="programacoes" class="loading">Carregando...</div></section>
 <section class="section" id="registroAvulsoSection"><div class="section-title"><div><h2>Registrar atividade</h2><p>Registre uma atividade que não esteja na programação.</p></div></div><div class="card"><button class="action" id="avulso" style="min-height:56px;font-size:12px;width:100%">＋ REGISTRAR ATIVIDADE</button></div></section>
 
 
@@ -635,8 +635,12 @@ function renderDemandas(){
   $("secaoDemandas").style.border=urgentes.length?"3px solid #dc2626":"";
   $("secaoDemandas").style.borderRadius=urgentes.length?"18px":"";
   $("secaoDemandas").style.background=urgentes.length?"#fff1f2":"";
+  // Demandas da gestão ficam acima do roteiro. Urgências recebem destaque máximo.
+  const secao=$('secaoDemandas'),roteiro=$('atividadesProgramadasSection');
+  if(secao&&roteiro&&roteiro.parentElement===secao.parentElement){roteiro.parentElement.insertBefore(secao,roteiro);}
+  if(secao)secao.classList.toggle('hidden',!abertas.length&&!concluidasHoje.length);
   box.className="list";
-  const alerta=urgentes.length?`<div role="alert" style="padding:14px;background:#b91c1c;color:white;border-radius:12px;font-weight:900;font-size:16px">🚨 ${urgentes.length} DEMANDA(S) URGENTE(S) — ATENÇÃO IMEDIATA</div>`:"";
+  const alerta=urgentes.length?`<div role="alert" style="padding:22px 16px;background:#b91c1c;color:white;border-radius:16px;font-weight:900;font-size:20px;box-shadow:0 8px 24px #b91c1c44">🚨 ${urgentes.length} DEMANDA(S) URGENTE(S) — ATENÇÃO IMEDIATA</div>`:"";
   const ativas=lista.map(d=>htmlDemanda(d)).join("");
   const hojeHtml=concluidasHoje.length?`<div class="demandas-grupo-titulo">✓ Concluídas hoje (${concluidasHoje.length})</div>${concluidasHoje.map(d=>htmlDemanda(d,true)).join("")}`:"";
   const anteriores=antigas.length?`<details class="demandas-anteriores"><summary>▸ Dias anteriores (${antigas.length})</summary><div class="demandas-anteriores-lista">${antigas.map(d=>htmlDemanda(d,true)).join("")}</div></details>`:"";
@@ -815,8 +819,18 @@ function renderProgramacoes(){
     const prazo=p.horario_limite?` • até ${esc(String(p.horario_limite).slice(0,5))}`:"";
     return `<div class="item-card" style="border:1px solid var(--border);padding:12px"><div class="item-top"><div class="item-icon">📅</div><div class="item-info"><strong>${indice+1}. ${esc(at?.nome||"Atividade")}</strong><span>${esc(dia)}${prazo} • ${esc(nomeLocal(p.area_id,p.ponto_id)||"Local definido pela gestão")}</span></div><span class="badge purple">AGENDADA</span></div></div>`;
   },true);
-  $("programacoes").className="list";
-  $("programacoes").innerHTML=(ordenadas.length?agruparCronograma(ordenadas,cartao):vazio("Nenhuma atividade para hoje","Consulte abaixo as próximas atividades agendadas."))+(futuros.length?`<details style="margin-top:12px" open><summary style="padding:14px;border-radius:14px;background:#eeeafd;color:#55468f;font-weight:800;cursor:pointer">📅 Próximas atividades (${futuros.length})</summary><div class="list" style="margin-top:10px">${futurosHtml}</div></details>`:"");
+  // Um único roteiro: o que vence hoje e os próximos grupos, sem cartões vazios ou repetidos.
+  const hojeIds=new Set(ordenadas.map(p=>Number(p.id)));
+  const proximos=futuros.filter(x=>!hojeIds.has(Number(x.p.id)));
+  const gruposHoje=ordenadas.length?agruparCronograma(ordenadas,cartao):'';
+  const gruposFuturos=proximos.length?agruparCronograma(proximos,({p,data},indice)=>{
+    const at=atividades.find(a=>mesmoId(a.id,p.atividade_id));
+    const dia=data.toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'2-digit'});
+    return `<div class="item-card" style="border:1px solid var(--border);padding:12px"><div class="item-top"><div class="item-icon">📅</div><div class="item-info"><strong>${indice+1}. ${esc(at?.nome||'Atividade')}</strong><span>${esc(dia)} • ${esc(nomeLocal(p.area_id,p.ponto_id)||'Local definido pela gestão')}</span></div><span class="badge purple">AGENDADA</span></div></div>`;
+  },true):'';
+  $('programacoes').className='list';
+  $('programacoes').innerHTML=gruposHoje+gruposFuturos || '<div style="padding:12px;color:var(--muted);font-size:13px">O cronograma será exibido quando a gestão programar atividades.</div>';
+
 }
 
 function renderHistorico(){
