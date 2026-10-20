@@ -1,0 +1,15 @@
+.env
+.env.*
+*.p12
+*.pfx
+*.pem
+*.key
+*.cer
+*.crt
+*.p7m
+*.p7s
+*.cms
+node_modules/
+.DS_Store
+supabase/.temp/
+supabase/.branches/

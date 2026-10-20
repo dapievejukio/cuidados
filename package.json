@@ -1,0 +1,7 @@
+{
+  "name": "oraqui-security-checks",
+  "private": true,
+  "type": "module",
+  "scripts": { "test": "node security/tests/run.mjs && node security/tests/source.mjs" },
+  "devDependencies": { "@electric-sql/pglite": "0.5.10" }
+}
