@@ -771,12 +771,12 @@ function agruparCronograma(lista,renderItem,futura=false){
     const ordenados=grupo.itens.sort((x,y)=>ordemLixo(futura?x.p:x)-ordemLixo(futura?y.p:y));
     const feitos=futura?0:ordenados.filter(p=>execucoesHoje.some(e=>mesmoId(e.programacao_id,p.id)&&e.status==='concluida')).length;
     const total=ordenados.length;
-    const subtitulo=futura?'Toque para visualizar os '+total+' locais':feitos+' de '+total+' concluídos • toque para visualizar';
+    const subtitulo=futura?'Toque para abrir os '+total+' locais e registrar fotos':feitos+' de '+total+' concluídos • toque para visualizar';
     const cards=ordenados.map((item,i)=>{
       const p=futura?item.p:item;
       const feito=!futura&&execucoesHoje.some(e=>mesmoId(e.programacao_id,p.id)&&e.status==='concluida');
       const fotos='<span style="font-size:12px;color:#657285">📸 Foto ANTES e DEPOIS obrigatória</span>';
-      const botao=futura?'':feito?'<span class="badge green">CONCLUÍDA</span>':`<button class="action" onclick="abrirExecucao(${Number(p.id)})">▶ INICIAR / CONCLUIR</button>`;
+      const botao=feito?'<span class="badge green">CONCLUÍDA</span>':`<button class="action" onclick="abrirExecucao(${Number(p.id)})">▶ INICIAR / CONCLUIR</button>`;
       return `<div class="item-card" style="margin-top:9px;padding:13px;border:1px solid var(--border)"><div class="item-info"><strong>${i+1}. LIXO</strong><div style="margin:6px 0;color:#364458">${esc(localLixo(p))}</div>${fotos}</div>${botao?'<div class="item-actions" style="margin-top:10px">'+botao+'</div>':''}</div>`;
     }).join('');
     const data=futura?' • '+grupo.dia.split('-').reverse().join('/') : '';
@@ -805,7 +805,7 @@ function renderProgramacoes(){
     const dia=data.toLocaleDateString("pt-BR",{weekday:"short",day:"2-digit",month:"2-digit"});
     const prazo=p.horario_limite?` • até ${esc(String(p.horario_limite).slice(0,5))}`:"";
     return `<div class="item-card" style="border:1px solid var(--border);padding:12px"><div class="item-top"><div class="item-icon">📅</div><div class="item-info"><strong>${indice+1}. ${esc(at?.nome||"Atividade")}</strong><span>${esc(dia)}${prazo} • ${esc(nomeLocal(p.area_id,p.ponto_id)||"Local definido pela gestão")}</span></div><span class="badge purple">AGENDADA</span></div></div>`;
-  });
+  },true);
   $("programacoes").className="list";
   $("programacoes").innerHTML=(ordenadas.length?agruparCronograma(ordenadas,cartao):vazio("Nenhuma atividade para hoje","Consulte abaixo as próximas atividades agendadas."))+(futuros.length?`<details style="margin-top:12px" open><summary style="padding:14px;border-radius:14px;background:#eeeafd;color:#55468f;font-weight:800;cursor:pointer">📅 Próximas atividades (${futuros.length})</summary><div class="list" style="margin-top:10px">${futurosHtml}</div></details>`:"");
 }
