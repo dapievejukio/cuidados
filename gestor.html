@@ -1351,7 +1351,7 @@ const oraquiPontoHoje=new Date();document.getElementById("oraquiPontoMesNumero")
 document.getElementById("oraquiPontoPdf").addEventListener("click",gerarEspelhoPontoMensal);
 async function gerarEspelhoPontoMensal(){
  const btn=$("oraquiPontoPdf"),mes=$("oraquiPontoMesAno").value+"-"+$("oraquiPontoMesNumero").value;
- if(!CONDOMINIO_ID||!/^\\d{4}-\\d{2}$/.test(mes)){alert("Selecione o mês.");return}
+ if(!CONDOMINIO_ID||!/^\d{4}-\d{2}$/.test(mes)){alert("Selecione o mês.");return}
  const condo=Number(CONDOMINIO_ID);
  const [ano,numeroMes]=mes.split("-").map(Number);
  const totalDias=new Date(ano,numeroMes,0).getDate();
