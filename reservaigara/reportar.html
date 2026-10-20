@@ -3,43 +3,252 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
-<title>Reportar problema — ORAQUI</title>
+<title>Comunicar ocorrência — ORAQUI</title>
 <meta name="theme-color" content="#557a95">
+<link rel="icon" href="../favicon-48.png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{--primary:#557a95;--primary-dark:#3f617a;--primary-light:#edf4f8;--blue-soft:#eaf3f8;--green:#5f9478;--green-light:#edf7f1;--red:#c96c6c;--red-light:#fbeeee;--yellow:#d2a75c;--yellow-light:#fff7e8;--text:#26333d;--muted:#75828c;--background:#f7f8f7;--card:#fff;--border:#e5e9eb;--shadow:0 12px 32px rgba(57,76,90,.07)}
-*{box-sizing:border-box;margin:0;padding:0}body{min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--background);color:var(--text)}button,textarea,select,input{font-family:inherit}
-header{background:linear-gradient(135deg,#557a95,#7194aa);color:#fff;padding:calc(18px + env(safe-area-inset-top)) 18px 42px}.header-content{max-width:620px;margin:auto}.topbar{display:flex;align-items:center;justify-content:space-between}.back{width:42px;height:42px;border:0;border-radius:14px;background:rgba(255,255,255,.18);color:#fff;font-size:23px;cursor:pointer}.brand{text-align:center}.brand strong{display:block;font-size:15px;letter-spacing:1px}.brand small{display:block;margin-top:3px;opacity:.78;font-size:9px;letter-spacing:.5px}.public-icon{width:42px;height:42px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.18);font-size:18px}.intro{margin-top:29px}.intro small{opacity:.78;font-size:10px;font-weight:700;letter-spacing:.4px}.intro h1{margin-top:5px;font-size:27px;line-height:1.15}.intro p{margin-top:8px;max-width:470px;opacity:.82;font-size:11px;line-height:1.55}
-main{max-width:620px;margin:-18px auto 55px;padding:0 15px}.card{margin-bottom:14px;padding:20px;border:1px solid rgba(229,233,235,.8);border-radius:22px;background:#fff;box-shadow:var(--shadow)}.title{font-size:15px;font-weight:750}.description{margin-top:5px;margin-bottom:15px;color:var(--muted);font-size:10px;line-height:1.55}.field{margin-top:13px}.field label{display:block;margin-bottom:6px;color:var(--muted);font-size:9px;font-weight:750;letter-spacing:.3px}
-select,input[type=email]{width:100%;height:52px;padding:0 14px;border:1px solid var(--border);border-radius:14px;outline:none;background:#fafcfc;color:var(--text);font-size:13px}select:focus,input[type=email]:focus,textarea:focus{border-color:#9bb7c7;background:#fff}select:disabled{opacity:.65}
-.location-highlight{display:flex;align-items:center;gap:12px;margin-bottom:15px;padding:13px;border-radius:15px;background:var(--blue-soft)}.location-icon{width:42px;height:42px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border-radius:13px;background:#fff;font-size:19px}.location-highlight small{display:block;color:var(--muted);font-size:8px;font-weight:700}.location-highlight strong{display:block;margin-top:3px;font-size:13px}
-#detalheContainer{display:none}.photo-box{display:block;padding:25px 15px;border:2px dashed #cfdadd;border-radius:18px;background:#fbfcfc;text-align:center;cursor:pointer}.photo-icon{width:55px;height:55px;margin:auto;display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--blue-soft);font-size:24px}.photo-box strong{display:block;margin-top:10px;font-size:13px}.photo-box span{display:block;margin-top:4px;color:var(--muted);font-size:10px}#photoInput{display:none}.preview{display:none;position:relative;margin-top:13px}.preview img{display:block;width:100%;max-height:390px;object-fit:cover;border-radius:17px}.remove{position:absolute;top:10px;right:10px;width:37px;height:37px;border:0;border-radius:50%;background:rgba(25,35,40,.72);color:#fff;font-size:18px;cursor:pointer}
-.or{display:flex;align-items:center;gap:10px;margin:20px 0}.or:before,.or:after{content:"";height:1px;flex:1;background:var(--border)}.or span{color:var(--muted);font-size:9px;font-weight:700}textarea{width:100%;min-height:120px;padding:14px;resize:vertical;border:1px solid var(--border);border-radius:14px;outline:none;background:#fafcfc;color:var(--text);font-size:12px;line-height:1.5}.counter{margin-top:6px;color:var(--muted);text-align:right;font-size:9px}
-.email-card{background:#fffdf9}.email-header{display:flex;align-items:center;gap:12px}.email-icon{width:44px;height:44px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border-radius:14px;background:var(--yellow-light);font-size:19px}.email-header strong{display:block;font-size:13px}.email-header span{display:block;margin-top:3px;color:var(--muted);font-size:9px;line-height:1.4}.info{padding:13px;border-radius:14px;background:var(--blue-soft);color:var(--primary-dark);font-size:10px;line-height:1.55}.error{display:none;margin-bottom:13px;padding:13px;border-radius:14px;background:var(--red-light);color:#a94e4e;font-size:10px;line-height:1.5}.send{width:100%;min-height:54px;padding:15px;border:0;border-radius:16px;background:var(--primary);color:#fff;font-size:11px;font-weight:800;letter-spacing:.3px;cursor:pointer;box-shadow:0 9px 22px rgba(85,122,149,.19)}.send:disabled{opacity:.65;cursor:not-allowed}
-.overlay{display:none;position:fixed;inset:0;z-index:999;padding:20px;align-items:center;justify-content:center;background:rgba(38,51,61,.68)}.success{width:100%;max-width:390px;padding:29px 22px;border-radius:25px;background:#fff;text-align:center}.success-icon{width:72px;height:72px;margin:auto;display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--green-light);color:var(--green);font-size:31px;font-weight:800}.success h2{margin-top:15px;font-size:20px}.success p{margin-top:8px;color:var(--muted);font-size:11px;line-height:1.55}.protocol{margin-top:17px;padding:15px;border-radius:15px;background:#f5f8f8;font-size:11px;line-height:1.65}.protocol strong{font-size:17px;color:var(--primary-dark)}.access-code{margin-top:10px;padding-top:10px;border-top:1px solid var(--border);color:var(--muted);font-size:9px}.success button{width:100%;margin-top:18px;padding:14px;border:0;border-radius:14px;background:var(--primary);color:#fff;font-weight:750;cursor:pointer}.loading-local{font-size:10px;color:var(--muted);margin-top:8px}
-@media(max-width:480px){.intro h1{font-size:25px}.card{padding:18px}}
+:root{
+ --ink:#1d2d3a;--muted:#71808b;--brand:#557a95;--brand2:#3f617a;--mint:#edf4f8;
+ --paper:#fff;--bg:#f5f7f9;--line:#e1e8ec;--ok:#5f9478;--danger:#a54e4e;
+ --shadow:0 18px 48px rgba(57,76,90,.10)
+}
+*{box-sizing:border-box}html{background:var(--bg)}body{margin:0;min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+button,input,select,textarea{font:inherit}.shell{max-width:680px;margin:auto;min-height:100vh}
+
+
+
+
+.hero{position:relative;overflow:hidden;background:linear-gradient(145deg,#3f617a 0%,#557a95 62%,#7194aa 100%);color:#fff;padding:calc(18px + env(safe-area-inset-top)) 20px 58px}
+.hero:after{content:"";position:absolute;width:220px;height:220px;border:1px solid rgba(255,255,255,.09);border-radius:50%;right:-90px;top:-80px;box-shadow:0 0 0 35px rgba(255,255,255,.025),0 0 0 75px rgba(255,255,255,.018)}
+.top{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:14px}.brand-compact{display:flex;align-items:center;gap:11px}.brand-compact img{display:block;width:46px;height:46px;border-radius:14px;box-shadow:0 6px 16px rgba(20,42,58,.16)}.brand-compact strong{display:block;color:#fff;font-size:17px;line-height:1;font-weight:900;letter-spacing:.6px}.brand-compact span{display:block;margin-top:5px;color:rgba(255,255,255,.72);font-size:8px;text-transform:uppercase;letter-spacing:1.4px}.brand{display:flex;align-items:center;gap:11px}.mark{display:none}.brand-icon{width:50px;height:50px;border-radius:15px;display:block;box-shadow:0 7px 18px rgba(20,42,58,.18)}.brand-word{display:flex;align-items:baseline;gap:0;font-size:22px;font-weight:950;letter-spacing:.3px;line-height:1}.brand-word .o{color:#fff}.brand-word .rest{color:#fff}.brand-tag{display:block;margin-top:4px;font-size:9px;letter-spacing:.15px;opacity:.78}.brand-domain{display:block;margin-top:2px;font-size:8px;font-weight:850;letter-spacing:.35px;opacity:.92}
+.secure{display:flex;align-items:center;gap:6px;padding:8px 10px;border:1px solid rgba(255,255,255,.16);border-radius:999px;background:rgba(255,255,255,.08);font-size:9px;font-weight:700;letter-spacing:.3px}
+.hero-copy{position:relative;z-index:1;margin-top:35px;max-width:520px}.eyebrow{font-size:16px;font-weight:900;letter-spacing:.7px;opacity:.94}.hero h1{font-size:30px;line-height:1.08;letter-spacing:-.8px;margin:8px 0 10px}.hero p{max-width:450px;margin:0;color:rgba(255,255,255,.76);font-size:13px;line-height:1.55}
+main{position:relative;margin-top:-28px;padding:0 14px 44px}.progress{display:flex;align-items:center;gap:8px;margin:0 6px 13px;color:#fff;font-size:9px;font-weight:750}.progress i{display:block;width:22px;height:4px;border-radius:99px;background:rgba(255,255,255,.35)}.progress i.on{width:38px;background:#fff}
+.card{background:var(--paper);border:1px solid rgba(223,231,228,.9);border-radius:24px;padding:20px;margin-bottom:12px;box-shadow:var(--shadow)}
+.step{display:flex;align-items:flex-start;gap:12px;margin-bottom:17px}.num{width:30px;height:30px;flex:0 0 30px;display:grid;place-items:center;border-radius:10px;background:var(--mint);color:var(--brand);font-size:11px;font-weight:900}.step h2{margin:1px 0 3px;font-size:16px;letter-spacing:-.2px}.step p{margin:0;color:var(--muted);font-size:10px;line-height:1.45}
+.place{display:flex;align-items:center;gap:11px;padding:12px 13px;margin-bottom:14px;border-radius:16px;background:#edf4f8}.place-icon{width:39px;height:39px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:17px}.place-icon img{width:29px;height:29px;border-radius:9px}.place small{display:block;color:var(--muted);font-size:8px;font-weight:800;letter-spacing:.5px}.place strong{display:block;margin-top:2px;font-size:13px}
+.field{margin-top:11px}.field label{display:block;margin:0 0 6px 2px;color:#586965;font-size:9px;font-weight:850;letter-spacing:.65px}
+select,input[type=email],textarea{width:100%;border:1px solid var(--line);outline:none;background:#fafcfb;color:var(--ink);transition:.18s}
+select,input[type=email]{height:54px;border-radius:15px;padding:0 14px;font-size:13px}textarea{min-height:105px;border-radius:16px;padding:14px;resize:vertical;font-size:13px;line-height:1.5}
+select:focus,input:focus,textarea:focus{border-color:#91adbd;background:#fff;box-shadow:0 0 0 3px rgba(85,122,149,.09)}select:disabled{opacity:.6}
+#detalheContainer{display:none}.loading-local{margin:7px 2px 0;color:var(--muted);font-size:9px}
+.ops-card{display:none;margin-top:14px;padding:15px;border:1px solid #dbe7ed;border-radius:18px;background:linear-gradient(135deg,#f4f8fa,#edf4f8)}
+.ops-top{display:flex;align-items:center;gap:9px;margin-bottom:12px}.ops-check{width:32px;height:32px;display:grid;place-items:center;border-radius:10px;background:#fff}.ops-check img{width:28px;height:28px;border-radius:9px}.ops-top strong{font-size:12px}.ops-top span{display:block;margin-top:2px;color:var(--muted);font-size:9px}
+.ops-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.ops-item{padding:11px;border-radius:13px;background:#fff;border:1px solid #e3eaee}.ops-item small{display:block;color:#71808b;font-size:8px;font-weight:850;letter-spacing:.45px}.ops-item b{display:block;margin-top:5px;font-size:11px;line-height:1.35}.ops-item em{display:block;margin-top:3px;color:#71808b;font-size:8px;font-style:normal}.ops-photo{display:none;margin-top:7px;border:0;background:none;padding:0;color:var(--brand2);font-size:9px;font-weight:850;cursor:pointer}
+.still{display:none;margin-top:11px;padding:11px 12px;border-radius:13px;background:#fff;color:#536b7b;font-size:10px;line-height:1.45}.still strong{color:var(--brand)}
+@media(max-width:430px){.ops-grid{grid-template-columns:1fr}}
+.photo-box{display:flex;align-items:center;gap:13px;padding:15px;border:1.5px dashed #b8cbd6;border-radius:18px;background:#f8fbfc;cursor:pointer}.photo-icon{width:49px;height:49px;flex:0 0 49px;display:grid;place-items:center;border-radius:15px;background:var(--mint);font-size:22px}.photo-icon img{width:37px;height:37px;border-radius:11px}.photo-box strong{display:block;font-size:13px}.photo-box span{display:block;margin-top:3px;color:var(--muted);font-size:9px;line-height:1.4}#photoInput{display:none}
+.preview{display:none;position:relative}.preview img{display:block;width:100%;max-height:400px;object-fit:cover;border-radius:18px}.remove{position:absolute;right:10px;top:10px;width:38px;height:38px;border:0;border-radius:50%;background:rgba(13,30,27,.76);color:#fff;font-size:20px}
+.or{display:flex;align-items:center;gap:10px;margin:15px 0}.or:before,.or:after{content:"";height:1px;flex:1;background:var(--line)}.or span{font-size:8px;font-weight:800;color:#93a1aa}.counter{text-align:right;color:#98a5ad;font-size:8px;margin-top:5px}
+.return-row{display:flex;align-items:center;justify-content:space-between;gap:15px}.return-icon{width:43px;height:43px;flex:0 0 43px;display:grid;place-items:center;border-radius:14px;background:#edf4f8;font-size:18px}.return-icon img{width:33px;height:33px;border-radius:10px}.return-copy{flex:1}.return-copy strong{font-size:13px}.return-copy span{display:block;margin-top:3px;color:var(--muted);font-size:9px;line-height:1.4}
+.switch{position:relative;width:48px;height:28px;flex:0 0 48px}.switch input{opacity:0;width:0;height:0}.slider{position:absolute;inset:0;border-radius:30px;background:#d7e0e5;cursor:pointer;transition:.2s}.slider:before{content:"";position:absolute;width:22px;height:22px;left:3px;top:3px;border-radius:50%;background:#fff;box-shadow:0 2px 7px rgba(0,0,0,.14);transition:.2s}.switch input:checked+.slider{background:var(--brand2)}.switch input:checked+.slider:before{transform:translateX(20px)}
+#emailWrap{display:none;margin-top:14px}.privacy{display:flex;gap:10px;margin:3px 4px 15px;padding:11px 12px;border-radius:14px;background:#edf4f8;color:#536b7b;font-size:9px;line-height:1.5}.privacy b{color:var(--brand)}
+.error{display:none;margin:0 0 12px;padding:13px 14px;border:1px solid #f0d6d6;border-radius:15px;background:#fff1f1;color:var(--danger);font-size:10px;line-height:1.5}
+.send{position:relative;width:100%;min-height:58px;border:0;border-radius:18px;background:var(--brand);color:#fff;font-size:12px;font-weight:900;letter-spacing:.45px;box-shadow:0 13px 26px rgba(85,122,149,.23);cursor:pointer}.send:after{content:"→";position:absolute;right:20px;font-size:20px;top:17px}.send:disabled{opacity:.6}
+.footer{text-align:center;margin-top:17px;color:#83919b;font-size:8px;line-height:1.6}.footer strong{color:#536b7b;letter-spacing:.7px}
+.oraqui-about{margin-top:18px;padding:20px;border:1px solid #e0e7eb;border-radius:22px;background:#fff;box-shadow:0 10px 30px rgba(57,76,90,.06)}
+.about-brand{display:flex;align-items:center;gap:11px}.about-brand img{width:43px;height:43px;border-radius:13px}.about-brand strong{display:block;color:#2d3e4b;font-size:17px;letter-spacing:.8px}.about-brand span{display:block;margin-top:2px;color:#7b8992;font-size:9px}
+.oraqui-about p{margin:14px 0;color:#667985;font-size:10px;line-height:1.65}.oraqui-about p b{color:#3f617a}.about-links{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.about-main{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:0 14px;border-radius:12px;background:#557a95;color:#fff;text-decoration:none;font-size:9px;font-weight:900;letter-spacing:.4px}.about-mail{color:#557a95;text-decoration:none;font-size:9px;font-weight:750}.about-site{margin-top:13px;padding-top:11px;border-top:1px solid #edf1f3;color:#6555b6;font-size:10px;font-weight:850;letter-spacing:.35px}
+.privacy-lock{color:#557a95;font-size:10px}
+
+.privacy{align-items:flex-start}.privacy a{color:var(--brand2);font-weight:850;text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+.data-note{margin-top:9px;padding:10px 11px;border-radius:12px;background:#f7f9fa;color:#71808b;font-size:8.5px;line-height:1.5}
+.data-note strong{color:#536b7b}
+.privacy-modal{display:none;position:fixed;inset:0;z-index:1200;background:rgba(31,48,60,.72);backdrop-filter:blur(7px);padding:14px;align-items:flex-end;justify-content:center}
+.privacy-sheet{width:100%;max-width:620px;max-height:88vh;overflow:auto;background:#fff;border-radius:26px 26px 18px 18px;padding:21px 19px 18px;box-shadow:0 28px 80px rgba(0,0,0,.28)}
+.privacy-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:13px;border-bottom:1px solid #e7ecef}
+.privacy-head-brand{display:flex;align-items:center;gap:10px}.privacy-head-brand img{width:38px;height:38px;border-radius:12px}.privacy-head-brand strong{display:block;font-size:15px}.privacy-head-brand span{display:block;color:#7d8b94;font-size:8px;margin-top:2px}
+.privacy-close{width:38px;height:38px;border:0;border-radius:12px;background:#f0f4f6;color:#536b7b;font-size:22px;cursor:pointer}
+.privacy-sheet h2{margin:17px 0 5px;font-size:19px;letter-spacing:-.35px}.privacy-sheet .lead{margin:0 0 14px;color:#6d7d87;font-size:10px;line-height:1.6}
+.privacy-block{padding:12px 0;border-top:1px solid #edf1f3}.privacy-block:first-of-type{border-top:0}.privacy-block h3{margin:0 0 5px;font-size:10px;color:#3f617a;letter-spacing:.25px}.privacy-block p,.privacy-block li{color:#667985;font-size:9px;line-height:1.62}.privacy-block p{margin:0}.privacy-block ul{margin:5px 0 0;padding-left:17px}.privacy-block a{color:#557a95;font-weight:800}
+.privacy-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}.privacy-actions button,.privacy-actions a{min-height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:9px;font-weight:900}
+.privacy-actions button{border:0;background:#557a95;color:#fff}.privacy-actions a{border:1px solid #dce5ea;background:#fff;color:#3f617a}
+@media(min-width:620px){.privacy-modal{align-items:center}.privacy-sheet{border-radius:26px}}
+
+
+.success-commercial{margin-top:18px;padding:16px;border-radius:18px;background:#f6f8fa;border:1px solid #e4eaee;text-align:left}
+.success-commercial .mini-brand{display:flex;align-items:center;gap:10px}.success-commercial .mini-brand img{width:38px;height:38px;border-radius:11px}.success-commercial .mini-brand strong{display:block;color:#263b49;font-size:13px;letter-spacing:.5px}.success-commercial .mini-brand span{display:block;color:#7c8a93;font-size:8px;margin-top:2px}
+.success-commercial p{margin:11px 0;color:#687b87;font-size:9px;line-height:1.55}.success-commercial p b{color:#3f617a}
+.success-commercial a{display:inline-flex;align-items:center;min-height:36px;padding:0 11px;border-radius:11px;background:#fff;border:1px solid #dce5ea;color:#557a95;text-decoration:none;font-size:8px;font-weight:900}
+
+.overlay{display:none;position:fixed;inset:0;z-index:999;padding:18px;align-items:center;justify-content:center;background:rgba(31,48,60,.72);backdrop-filter:blur(7px)}.success{width:100%;max-width:390px;padding:30px 22px 23px;border-radius:27px;background:#fff;text-align:center;box-shadow:0 25px 70px rgba(0,0,0,.25)}.success-icon{width:68px;height:68px;margin:auto;display:grid;place-items:center;border-radius:22px;background:#edf7f1;color:var(--ok);font-size:30px;font-weight:900}.success h2{margin:17px 0 7px;font-size:21px;letter-spacing:-.4px}.success p{margin:0;color:var(--muted);font-size:11px;line-height:1.5}.protocol{margin-top:17px;padding:15px;border-radius:16px;background:#f3f7f9;font-size:10px;line-height:1.65}.protocol strong{font-size:16px;color:var(--brand)}.access-code{margin-top:9px;padding-top:9px;border-top:1px solid var(--line);color:var(--muted);font-size:9px}.success button{width:100%;margin-top:17px;padding:14px;border:0;border-radius:15px;background:var(--brand);color:#fff;font-weight:850}
+
+
+@media(max-width:480px){.secure{padding:7px 9px}}
+
+@media(max-width:480px){.hero h1{font-size:28px}.card{padding:18px}.secure span{display:none}.brand-icon{width:46px;height:46px}.brand-word{font-size:20px}.brand-tag{font-size:8px}.brand-domain{font-size:7px}}
+
+/* ORAQUI — identidade visual do portal de ocorrências */
+:root{--ink:#103450;--muted:#61778b;--brand:#118b73;--brand2:#087b68;--mint:#e5f8ef;--paper:#fff;--bg:#f2f7fa;--line:#d9e5ec;--ok:#0d9b65;--shadow:0 10px 30px rgba(25,64,94,.075)}
+body{background:linear-gradient(180deg,#e8f4fa 0,#f5f9fc 460px,#f4f8fa 100%)}
+.shell{max-width:820px}
+.hero{background:linear-gradient(125deg,#073b58 0%,#0a756e 65%,#16a27a 100%);padding-bottom:54px}
+.hero:after{border-color:rgba(255,255,255,.19);box-shadow:0 0 0 35px rgba(255,255,255,.04),0 0 0 75px rgba(255,255,255,.03)}
+.hero-copy{margin-top:26px}.hero h1{font-size:clamp(27px,5vw,38px)}.hero p{font-size:14px;color:#e5fff7}
+main{padding-left:16px;padding-right:16px}
+.card{border-radius:23px;border:1px solid #e3eef2;box-shadow:var(--shadow);padding:23px}
+.step{align-items:center}.num{width:42px;height:42px;flex-basis:42px;border-radius:13px;background:linear-gradient(145deg,#16b36d,#058b68);color:#fff;font-size:18px;box-shadow:0 5px 12px #0d9b6526}
+.step h2{font-size:19px;color:#123c5a}.step p{font-size:12px}
+.field label{font-size:11px;color:#294e66}
+select,input[type=email],textarea{background:#fbfdff;border-color:#cfdee9;font-size:15px}
+.place{background:#e9f7f4}.place small{font-size:10px}.place strong{font-size:15px}
+.photo-box{background:linear-gradient(135deg,#edf9ff,#eefbf5);border-color:#95cfc2;min-height:108px}
+.photo-box strong{font-size:15px}.photo-box span{font-size:12px}
+.photo-icon{background:#d8f5ed}
+.return-copy strong{font-size:15px}.return-copy span{font-size:12px}
+.send{background:linear-gradient(110deg,#0c9670,#087a78);font-size:16px;min-height:64px;box-shadow:0 10px 20px #0b8c6b35}
+.privacy{background:#e8f4ff;font-size:11px;border:1px solid #d8e9f8}.privacy-lock{color:#087b68}
+.intro-panel{position:relative;z-index:2;margin:0 0 13px;padding:19px;border:1px solid #dbeaf0;border-radius:22px;background:linear-gradient(110deg,#eff9ff,#f0fcf6);box-shadow:var(--shadow);display:flex;align-items:center;gap:16px}
+.intro-symbol{font-size:42px;display:grid;place-items:center;width:75px;height:75px;flex:0 0 75px;background:#d9f5ea;border-radius:20px}
+.intro-panel h2{font-size:20px;margin:0 0 7px;color:#0b3b59}.intro-panel p{font-size:13px;line-height:1.55;margin:0;color:#365c70}
+.steps-ribbon{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:0 0 14px}
+.steps-ribbon div{border-radius:15px;background:#fff;padding:11px 7px;text-align:center;font-size:11px;font-weight:750;color:#31546b;box-shadow:0 5px 15px #244f6b0b}
+.steps-ribbon span{display:block;font-size:25px;margin-bottom:5px}
+.step-icon{font-size:24px;display:inline-block;margin-right:8px;vertical-align:middle}
+.important-note{padding:16px;border-radius:18px;background:#e4f1ff;border:1px solid #cce2f6;color:#234e70;font-size:12px;line-height:1.55;margin-top:15px}
+@media(max-width:480px){.intro-panel{padding:14px;gap:10px}.intro-symbol{width:55px;height:55px;flex-basis:55px;font-size:30px}.intro-panel h2{font-size:17px}.intro-panel p{font-size:12px}.steps-ribbon div{font-size:9px;padding:10px 4px}.steps-ribbon span{font-size:22px}.card{padding:17px}.step h2{font-size:17px}}
+
+/* Identidade azul — Portal de Ocorrências */
+:root{--brand:#1765b3;--brand2:#124e91;--mint:#eaf3ff;--ok:#2876b7}
+.hero{background:linear-gradient(130deg,#102f59 0%,#195b9d 65%,#3585cf 100%)}
+.num{background:linear-gradient(145deg,#388bda,#1755a4);box-shadow:0 5px 12px #1d5baf25}
+.intro-panel{background:linear-gradient(110deg,#eef5ff,#e6f1ff);border-color:#d2e3f8}
+.intro-symbol{background:#d9e9ff}
+.place{background:#edf4ff}
+.photo-box{background:linear-gradient(135deg,#edf5ff,#f5f9ff);border-color:#a9c7e8}
+.photo-icon{background:#dceaff}
+.send{background:linear-gradient(110deg,#1d6cbe,#174e98);box-shadow:0 10px 20px #1d5baf30}
+.privacy-lock{color:#1765b3}
+.switch input:checked+.slider{background:#1765b3}
 </style>
 </head>
 <body>
-<header><div class="header-content"><div class="topbar"><button class="back" type="button" onclick="voltar()" aria-label="Voltar">‹</button><div class="brand"><strong>ORAQUI</strong><small>RESERVA IGARA</small></div><div class="public-icon">⚠️</div></div><div class="intro"><small>COMUNICAÇÃO COM A EQUIPE</small><h1>Reportar problema</h1><p>Encontrou algo que precisa de atenção? Informe o local e descreva o problema ou envie uma foto.</p></div></div></header>
+<div class="shell">
+<header class="hero">
+ <div class="top">
+  <div class="brand-compact">
+   <img src="../icon-192.png" alt="">
+   <div><strong>ORAQUI</strong><span>Agora. Aqui. Registrado.</span></div>
+  </div>
+  <div class="secure">● <span>CANAL SEGURO</span></div>
+ </div>
+ <div class="hero-copy">
+  <div class="eyebrow">RESERVA IGARA</div>
+  <h1>Algo precisa de atenção?</h1>
+  <p>Mostre onde está o problema. Uma foto ou uma breve descrição já é suficiente para avisar a equipe.</p>
+ </div>
+</header>
+
 <main>
-<div class="error" id="error"></div>
-<section class="card"><div class="title">Onde está o problema?</div><div class="description">Selecione a área e o local. A lista é administrada pelo ORAQUI e permanece igual à utilizada pela operação.</div><div class="location-highlight"><div class="location-icon">📍</div><div><small>CONDOMÍNIO</small><strong>Reserva Igara</strong></div></div>
-<div class="field"><label for="area">ÁREA</label><select id="area" onchange="alterarArea()" disabled><option value="">Carregando áreas...</option></select><div class="loading-local" id="localStatus"></div></div>
-<div class="field" id="detalheContainer"><label for="detalhe">LOCAL / PONTO</label><select id="detalhe"><option value="">Selecione o local</option></select></div></section>
-<section class="card"><div class="title">O que aconteceu?</div><div class="description">Envie uma foto, escreva uma descrição ou faça os dois.</div><label class="photo-box" id="photoBox" for="photoInput"><div class="photo-icon">📷</div><strong>Adicionar foto</strong><span>Tire uma foto ou escolha uma imagem do aparelho</span></label><input type="file" id="photoInput" accept="image/jpeg,image/png,image/webp,image/heic,image/heif" capture="environment"><div class="preview" id="preview"><img id="photoPreview" alt="Foto da ocorrência"><button type="button" class="remove" onclick="removerFoto()" aria-label="Remover foto">×</button></div><div class="or"><span>OU</span></div><textarea id="descricao" maxlength="500" placeholder="Descreva o problema. Ex.: lâmpada apagada próxima ao elevador..." oninput="contador()"></textarea><div class="counter"><span id="count">0</span>/500</div></section>
-<section class="card email-card"><div class="email-header"><div class="email-icon">✉️</div><div><strong>Quer acompanhar esta ocorrência?</strong><span>Informe seu e-mail para receber atualizações de status e respostas da equipe.</span></div></div><div class="field"><label for="email">E-MAIL — OPCIONAL</label><input id="email" type="email" inputmode="email" autocomplete="email" maxlength="180" placeholder="seuemail@exemplo.com"></div></section>
-<section class="card"><div class="info">🔒 Você não precisa informar nome, apartamento ou telefone.<br><br>O e-mail também é opcional e será utilizado somente para acompanhamento desta ocorrência.</div></section>
-<button class="send" id="sendButton" type="button" onclick="enviar()">ENVIAR OCORRÊNCIA</button>
+ <div class="intro-panel"><div class="intro-symbol" aria-hidden="true">📲</div><div><h2>Comunique uma ocorrência</h2><p>A empresa responsável pela <strong>limpeza e zeladoria do Reserva Igara</strong> utiliza o ORAQUI para registrar, organizar e acompanhar as solicitações dos moradores, facilitando o encaminhamento à equipe e o controle dos serviços.</p></div></div>
+ <div class="steps-ribbon" aria-label="Etapas do atendimento"><div><span>📝</span>Registro</div><div><span>🔎</span>Análise</div><div><span>🛠️</span>Atendimento</div><div><span>✅</span>Conclusão</div></div>
+ <div class="error" id="error"></div>
+
+ <section class="card">
+  <div class="step"><div class="num">01</div><div><h2><span class="step-icon">📍</span>Onde aconteceu?</h2><p>Escolha o local para direcionarmos corretamente.</p></div></div>
+  <div class="place"><div class="place-icon"><img src="../oraqui-icons/condominios-128.png" alt=""></div><div><small>CONDOMÍNIO</small><strong>Reserva Igara</strong></div></div>
+  <div class="field"><label for="area">ÁREA</label><select id="area" onchange="alterarArea()" disabled><option value="">Carregando locais...</option></select><div class="loading-local" id="localStatus"></div></div>
+  <div class="field" id="detalheContainer"><label for="detalhe">LOCAL / PONTO</label><select id="detalhe" onchange="carregarHistoricoLocal()"><option value="">Selecione o local</option></select></div>
+  <div class="ops-card" id="opsCard">
+   <div class="ops-top"><div class="ops-check"><img src="../oraqui-icons/historico-128.png" alt=""></div><div><strong>Este local é acompanhado pelo ORAQUI</strong><span>Registros operacionais do espaço selecionado</span></div></div>
+   <div class="ops-grid">
+    <div class="ops-item"><small>ÚLTIMA ATIVIDADE REGISTRADA</small><b id="ultimaAtividade">Consultando...</b><em id="ultimaQuando"></em><button class="ops-photo" id="ultimaFoto" type="button">VER REGISTRO</button></div>
+    <div class="ops-item"><small>PRÓXIMA ATIVIDADE PREVISTA</small><b id="proximaAtividade">Consultando...</b><em id="proximaQuando"></em></div>
+   </div>
+   <div class="still" id="stillProblem"><strong>Ainda encontrou algo que precisa de atenção?</strong><br>Avise a equipe abaixo.</div>
+  </div>
+ </section>
+
+ <section class="card">
+  <div class="step"><div class="num">02</div><div><h2><span class="step-icon">📸</span>Mostre o problema</h2><p>Foto, descrição ou os dois. Seja simples.</p></div></div>
+  <label class="photo-box" id="photoBox" for="photoInput"><div class="photo-icon"><img src="../oraqui-icons/registro-foto-128.png" alt=""></div><div><strong>Tirar ou adicionar foto</strong><span>A foto ajuda a equipe a entender mais rápido.</span></div></label>
+  <input type="file" id="photoInput" accept="image/jpeg,image/png,image/webp,image/heic,image/heif" capture="environment">
+  <div class="preview" id="preview"><img id="photoPreview" alt="Foto da ocorrência"><button type="button" class="remove" onclick="removerFoto()" aria-label="Remover foto">×</button></div>
+  <div class="or"><span>OU ESCREVA</span></div>
+  <textarea id="descricao" maxlength="500" placeholder="Ex.: há água no piso próximo ao elevador..." oninput="contador()"></textarea>
+  <div class="counter"><span id="count">0</span>/500</div>
+ </section>
+
+ <section class="card">
+  <div class="return-row">
+   <div class="return-icon"><img src="../oraqui-icons/notificacoes-128.png" alt=""></div>
+   <div class="return-copy"><strong>✉️ Quer saber quando for resolvido?</strong><span>Ative para receber a atualização por e-mail.</span></div>
+   <label class="switch"><input id="retornoToggle" type="checkbox" onchange="toggleRetorno()"><span class="slider"></span></label>
+  </div>
+  <div id="emailWrap" class="field"><label for="email">SEU E-MAIL</label><input id="email" type="email" inputmode="email" autocomplete="email" maxlength="180" placeholder="seuemail@exemplo.com"><div class="data-note"><strong>Uso do e-mail:</strong> somente para enviar atualizações relacionadas a esta ocorrência. O ORAQUI não usará este endereço para publicidade ou campanhas de marketing.</div></div>
+ </section>
+
+ <div class="privacy"><span class="privacy-lock">●</span><span><b>Privacidade:</b> não pedimos nome, apartamento ou telefone. O e-mail é opcional e usado apenas para acompanhar esta ocorrência. Fotos e descrições podem conter dados pessoais; evite registrar rostos, documentos, placas ou outras informações de terceiros quando não forem necessários. <a href="#" onclick="abrirPrivacidade();return false">Como tratamos seus dados</a>.</span></div>
+ <button class="send" id="sendButton" type="button" onclick="enviar()">📨 ENVIAR OCORRÊNCIA</button>
+ <div class="important-note"><strong>🛡️ Importante:</strong> Este canal é destinado a ocorrências relacionadas à limpeza, zeladoria e conservação das áreas comuns. Em situações de emergência, utilize os canais oficiais do condomínio.</div>
 </main>
-<div class="overlay" id="successOverlay"><div class="success"><div class="success-icon">✓</div><h2>Ocorrência enviada</h2><p>O registro foi encaminhado para a equipe responsável.</p><div class="protocol" id="protocol"></div><button type="button" onclick="inicio()">CONCLUIR</button></div></div>
+</div>
+
+
+<div class="privacy-modal" id="privacyModal" role="dialog" aria-modal="true" aria-labelledby="privacyTitle">
+ <div class="privacy-sheet">
+  <div class="privacy-head">
+   <div class="privacy-head-brand"><img src="../icon-192.png" alt=""><div><strong>ORAQUI</strong><span>PRIVACIDADE • AVISO RESUMIDO</span></div></div>
+   <button class="privacy-close" type="button" onclick="fecharPrivacidade()" aria-label="Fechar">×</button>
+  </div>
+  <h2 id="privacyTitle">Seus dados nesta ocorrência</h2>
+  <p class="lead">Este aviso explica, de forma resumida, o tratamento de dados quando você usa este canal público do ORAQUI.</p>
+
+  <div class="privacy-block"><h3>O QUE PODEMOS RECEBER</h3><p>Local selecionado, descrição da ocorrência, foto enviada, data e hora do registro e, somente se você escolher receber retorno, seu endereço de e-mail. Não solicitamos nome, telefone ou número do apartamento neste formulário.</p></div>
+  <div class="privacy-block"><h3>PARA QUE USAMOS</h3><p>Para registrar, encaminhar, acompanhar e resolver a ocorrência; manter o histórico operacional necessário; prevenir abuso e falhas; e enviar atualizações sobre esta ocorrência quando você fornecer e-mail.</p></div>
+  <div class="privacy-block"><h3>E-MAIL SEM MARKETING</h3><p>O e-mail informado neste formulário é destinado ao acompanhamento desta ocorrência. Ele não deve ser reutilizado pelo ORAQUI para publicidade ou campanhas de marketing sem uma finalidade e fundamento próprios.</p></div>
+  <div class="privacy-block"><h3>FOTOS E DADOS DE TERCEIROS</h3><p>Envie apenas o necessário para demonstrar o problema. Sempre que possível, evite fotografar rostos, crianças, documentos, placas de veículos, telas, correspondências ou outros elementos que identifiquem terceiros.</p></div>
+  <div class="privacy-block"><h3>QUEM ACESSA</h3><p>Os dados ficam disponíveis somente aos usuários autorizados necessários ao atendimento da ocorrência e aos fornecedores de tecnologia indispensáveis à operação do serviço, conforme suas funções e obrigações de proteção de dados.</p></div>
+  <div class="privacy-block"><h3>POR QUANTO TEMPO</h3><p>Os dados são mantidos pelo período necessário às finalidades operacionais, contratuais e legais aplicáveis. Encerrada a necessidade, devem ser eliminados ou anonimizados quando cabível, ressalvadas as hipóteses legais de conservação.</p></div>
+  <div class="privacy-block"><h3>SEUS DIREITOS</h3><p>Você pode solicitar informações sobre o tratamento, acesso, correção e, quando aplicável, anonimização, bloqueio, eliminação, oposição ou outras providências previstas na LGPD. Para solicitações de privacidade: <a href="mailto:atendimento@oraqui.app">atendimento@oraqui.app</a>.</p></div>
+  <div class="privacy-block"><h3>PAPÉIS DE PRIVACIDADE</h3><p>O ORAQUI fornece a plataforma tecnológica. A definição de controlador e operador depende de quem determina as finalidades e os elementos essenciais do tratamento em cada contratação. A identificação aplicável ao condomínio/cliente deve constar do aviso completo e dos instrumentos contratuais.</p></div>
+
+  <div class="privacy-actions"><button type="button" onclick="fecharPrivacidade()">ENTENDI</button><a href="../privacidade.html">AVISO COMPLETO</a></div>
+ </div>
+</div>
+
+<div class="overlay" id="successOverlay">
+ <div class="success">
+  <div class="success-icon">✓</div>
+  <h2>Ocorrência enviada.</h2>
+  <p>Sua solicitação foi encaminhada e já pode ser visualizada pela equipe responsável.</p>
+  <div class="protocol" id="protocol"></div>
+  <div id="spamNotice" style="display:none;margin-top:12px;padding:12px 14px;border-radius:13px;background:#eaf3ff;border:1px solid #c8ddf6;color:#194e85;text-align:left;font-size:12px;line-height:1.5"><strong>📩 Atenção ao e-mail:</strong> a mensagem de confirmação ou resposta pode chegar à pasta <strong>Spam</strong> ou <strong>Lixo eletrônico</strong>. Confira essas pastas caso não encontre a mensagem na caixa de entrada.</div>
+  <div class="success-commercial">
+   <div class="mini-brand"><img src="../icon-192.png" alt=""><div><strong>Atendimento com ORAQUI</strong><span>Agora. Aqui. Registrado.</span></div></div>
+   <p>A empresa responsável pela limpeza do <b>Reserva Igara</b> utiliza o ORAQUI para registrar e acompanhar os serviços do condomínio.</p>
+   <a href="../" target="_blank" rel="noopener">CONHECER O ORAQUI →</a>
+  </div>
+  <button type="button" onclick="inicio()">CONCLUIR</button>
+ </div>
+</div>
+
 <script>
 const SUPABASE_URL="https://rhiosvsohvqqrxzwohqu.supabase.co";
 const SUPABASE_KEY="sb_publishable_vcjiMMCTxQJ7ArTGsQ-PuQ_5gaAfoIt";
 const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-const CONDOMINIO="Reserva Igara",CONDOMINIO_ID=1;
+const CONDOMINIO="Reserva Igara",CONDOMINIO_ID=1; // V1 pública: Igara. Próxima etapa: resolver condomínio/local pelo QR.
 const photoInput=document.getElementById("photoInput");
 let fotoSelecionada=null,previewUrl=null,enviando=false,areas=[],pontos=[];
+function toggleRetorno(){
+ const ligado=document.getElementById("retornoToggle").checked;
+ document.getElementById("emailWrap").style.display=ligado?"block":"none";
+ if(!ligado)document.getElementById("email").value="";
+}
+
+function abrirPrivacidade(){
+ const m=document.getElementById("privacyModal");
+ m.style.display="flex";
+ document.body.style.overflow="hidden";
+}
+function fecharPrivacidade(){
+ const m=document.getElementById("privacyModal");
+ m.style.display="none";
+ document.body.style.overflow="";
+}
+document.addEventListener("keydown",e=>{if(e.key==="Escape")fecharPrivacidade()});
 
 async function carregarLocais(){
  const areaEl=document.getElementById("area"),status=document.getElementById("localStatus");
@@ -62,8 +271,59 @@ function alterarArea(){
  const areaId=Number(document.getElementById("area").value)||null,container=document.getElementById("detalheContainer"),det=document.getElementById("detalhe");
  const ps=pontos.filter(x=>Number(x.area_id)===areaId);
  det.innerHTML='<option value="">Selecione o local</option>'+ps.map(x=>`<option value="${x.id}">${esc(x.nome)}</option>`).join("");
- container.style.display=ps.length?"block":"none";det.value="";esconderErro();
+ container.style.display=ps.length?"block":"none";det.value="";
+ const ops=document.getElementById("opsCard");if(ops)ops.style.display="none";
+ esconderErro();
+ if(!ps.length&&areaId)carregarHistoricoLocal();
 }
+function fmtDataHora(v){
+ if(!v)return "";
+ const d=new Date(v);
+ if(Number.isNaN(d.getTime()))return "";
+ const hoje=new Date(),amanha=new Date();amanha.setDate(hoje.getDate()+1);
+ const mesma=(a,b)=>a.toDateString()===b.toDateString();
+ const dia=mesma(d,hoje)?"Hoje":mesma(d,amanha)?"Amanhã":d.toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit"});
+ return `${dia}, ${d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}`;
+}
+async function carregarHistoricoLocal(){
+ const areaId=Number(document.getElementById("area").value)||null;
+ const pontoId=Number(document.getElementById("detalhe").value)||null;
+ const ps=pontos.filter(x=>Number(x.area_id)===areaId);
+ if(!areaId||(ps.length&&!pontoId)){document.getElementById("opsCard").style.display="none";return}
+ const card=document.getElementById("opsCard"),ua=document.getElementById("ultimaAtividade"),uw=document.getElementById("ultimaQuando"),uf=document.getElementById("ultimaFoto"),pa=document.getElementById("proximaAtividade"),pw=document.getElementById("proximaQuando");
+ card.style.display="block";document.getElementById("stillProblem").style.display="none";
+ ua.textContent="Consultando...";uw.textContent="";uf.style.display="none";pa.textContent="Consultando...";pw.textContent="";
+ try{
+  let q=db.from("execucoes").select("id,atividade_id,executada_em,created_at,foto_path,atividades_v2(nome)").eq("condominio_id",CONDOMINIO_ID).eq("area_id",areaId).order("executada_em",{ascending:false}).limit(1);
+  if(pontoId)q=q.eq("ponto_id",pontoId);else q=q.is("ponto_id",null);
+  const {data:exec,error:e1}=await q;if(e1)throw e1;
+  const ultima=exec?.[0];
+  if(ultima){
+   ua.textContent=ultima.atividades_v2?.nome||"Atividade concluída";
+   uw.textContent=fmtDataHora(ultima.executada_em||ultima.created_at);
+   if(ultima.foto_path){
+    uf.style.display="block";
+    uf.onclick=async()=>{
+     const {data,error}=await db.storage.from("fotos-atividades").createSignedUrl(ultima.foto_path,120);
+     if(error||!data?.signedUrl){mostrarErro("Não foi possível abrir a foto deste registro.");return}
+     window.open(data.signedUrl,"_blank","noopener");
+    };
+   }
+  }else{ua.textContent="Ainda não há atividade registrada";uw.textContent="";}
+ }catch(e){console.warn("Histórico público indisponível",e);ua.textContent="Histórico ainda não disponível";uw.textContent="";}
+
+ try{
+  const agora=new Date().toISOString();
+  let q2=db.from("programacoes").select("id,atividade_id,inicio_previsto,atividades_v2(nome)").eq("condominio_id",CONDOMINIO_ID).eq("area_id",areaId).gte("inicio_previsto",agora).order("inicio_previsto",{ascending:true}).limit(1);
+  if(pontoId)q2=q2.eq("ponto_id",pontoId);else q2=q2.is("ponto_id",null);
+  const {data:prog,error:e2}=await q2;if(e2)throw e2;
+  const prox=prog?.[0];
+  if(prox){pa.textContent=prox.atividades_v2?.nome||"Atividade programada";pw.textContent=fmtDataHora(prox.inicio_previsto)}
+  else{pa.textContent="Nenhuma atividade programada";pw.textContent=""}
+ }catch(e){console.warn("Programação pública indisponível",e);pa.textContent="Programação ainda não disponível";pw.textContent=""}
+ document.getElementById("stillProblem").style.display="block";
+}
+
 photoInput.addEventListener("change",function(){const file=this.files[0];if(!file)return;const limite=10*1024*1024;if(file.size>limite){mostrarErro("A foto deve ter no máximo 10 MB.");this.value="";return}if(!file.type.startsWith("image/")){mostrarErro("Selecione um arquivo de imagem.");this.value="";return}fotoSelecionada=file;if(previewUrl)URL.revokeObjectURL(previewUrl);previewUrl=URL.createObjectURL(file);document.getElementById("photoPreview").src=previewUrl;document.getElementById("photoBox").style.display="none";document.getElementById("preview").style.display="block";esconderErro()});
 function removerFoto(){photoInput.value="";fotoSelecionada=null;if(previewUrl){URL.revokeObjectURL(previewUrl);previewUrl=null}document.getElementById("photoPreview").src="";document.getElementById("preview").style.display="none";document.getElementById("photoBox").style.display="block"}
 function contador(){document.getElementById("count").textContent=document.getElementById("descricao").value.length}
@@ -124,15 +384,16 @@ async function enviar(){
 
    const dataBR=agora.toLocaleDateString("pt-BR"),horaBR=agora.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
    document.getElementById("protocol").innerHTML=`<strong>${esc(protocolo)}</strong><br>${esc(localCompleto)}<br>${dataBR} às ${horaBR}${email?`<div class="access-code">✉️ Atualizações serão enviadas para <strong style="font-size:9px">${esc(email)}</strong></div>`:`<div class="access-code">Ocorrência registrada sem e-mail de acompanhamento.</div>`}`;
-   document.getElementById("successOverlay").style.display="flex";
+   document.getElementById("spamNotice").style.display=(document.getElementById("retornoToggle").checked&&email)?"block":"none";document.getElementById("successOverlay").style.display="flex";
  }catch(err){
    console.error(err);
    if(fotoPath){try{await db.storage.from("fotos-ocorrencias").remove([fotoPath])}catch(e){console.warn("Não foi possível remover a foto órfã.",e)}}
    mostrarErro(err.message||"Não foi possível enviar a ocorrência. Tente novamente.");
  }finally{enviando=false;botao.disabled=false;botao.textContent="ENVIAR OCORRÊNCIA"}
 }
-function voltar(){location.href="index.html"}function inicio(){location.href="index.html"}
+function voltar(){location.href="/"}function inicio(){location.href="/"}
 carregarLocais();
 </script>
+
 </body>
 </html>
