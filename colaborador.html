@@ -602,24 +602,55 @@ async function obterLocalizacao(){
   ));
 }
 
+function capturarSelfiePonto(){
+  return new Promise((resolve,reject)=>{
+    const input=document.createElement("input");
+    input.type="file";input.accept="image/*";input.capture="user";
+    input.style.display="none";
+    document.body.appendChild(input);
+    let concluido=false;
+    const finalizar=(arquivo,erro)=>{
+      if(concluido)return;
+      concluido=true;input.remove();
+      if(erro)reject(erro);else resolve(arquivo);
+    };
+    input.addEventListener("change",()=>{
+      const arquivo=input.files?.[0];
+      if(!arquivo)return finalizar(null,new Error("Selfie não capturada. O ponto não foi registrado."));
+      if(!arquivo.type.startsWith("image/"))return finalizar(null,new Error("Selecione uma fotografia válida."));
+      if(arquivo.size>5*1024*1024)return finalizar(null,new Error("Foto acima de 5 MB. Tire outra selfie."));
+      finalizar(arquivo);
+    },{once:true});
+    input.click();
+  });
+}
+let pontoEmRegistro=false;
 async function registrarPonto(tipo){
-  if(colaborador.selfie_ponto_obrigatoria){
-    alert("A selfie de ponto está configurada como obrigatória, mas o armazenamento privado de selfies ainda não foi ativado. Desative temporariamente essa exigência na gestão até concluirmos essa etapa.");
-    return;
-  }
+  if(pontoEmRegistro)return;
+  pontoEmRegistro=true;
+  let selfiePath=null;
   try{
+    const arquivo=colaborador.selfie_ponto_obrigatoria?await capturarSelfiePonto():null;
     const geo=await obterLocalizacao();
+    if(arquivo){
+      const extensao=arquivo.type==="image/png"?"png":arquivo.type==="image/webp"?"webp":"jpg";
+      selfiePath=`${colaborador.condominio_id}/${colaborador.id}/${crypto.randomUUID()}.${extensao}`;
+      const {error:erroFoto}=await db.storage.from("selfies-ponto-privadas").upload(selfiePath,arquivo,{contentType:arquivo.type,upsert:false});
+      if(erroFoto)throw new Error("Não foi possível salvar a selfie de forma privada. Ponto não registrado: "+erroFoto.message);
+    }
     const {error}=await db.from("registros_ponto").insert({
       condominio_id:colaborador.condominio_id,
       colaborador_id:colaborador.id,
       escala_id:escalaHoje?.id||null,
       tipo,
-      ...geo
+      ...geo,
+      selfie_path:selfiePath
     });
     if(error)throw error;
-    toast("✓ Ponto registrado.");
+    toast("✓ Ponto registrado com "+(arquivo?"selfie e ":"")+"localização.");
     await carregarTudo();
-  }catch(e){alert(e.message||"Não foi possível registrar o ponto.")}
+  }catch(e){alert(e.message||"Não foi possível registrar o ponto.");}
+  finally{pontoEmRegistro=false;}
 }
 
 function dataLocalRegistro(valor){
