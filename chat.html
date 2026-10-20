@@ -33,4 +33,38 @@ async function carregar(){const outro=$('contato').value;if(!uid||!outro)return;
 el.querySelectorAll(".ouvirAudio").forEach(btn=>btn.onclick=async()=>{try{btn.disabled=true;const {data,error}=await db.storage.from("oraqui-chat-audios").createSignedUrl(btn.dataset.path,120);if(error)throw error;const player=document.createElement("audio");player.controls=true;player.src=data.signedUrl;btn.replaceWith(player);await player.play().catch(()=>{});}catch(e){falha(e);btn.disabled=false}});const pendentes=(data||[]).filter(m=>m.destinatario===uid&&!m.lida_em).map(m=>m.id);if(pendentes.length)await db.from('oraqui_chat_mensagens').update({lida_em:new Date().toISOString()}).in('id',pendentes);
 }
 $('enviar').onclick=async()=>{const texto=$('texto').value.trim(),outro=$('contato').value;if(!texto||!outro)return; $('enviar').disabled=true;try{const {error}=await db.from('oraqui_chat_mensagens').insert({condominio_id:cid,remetente:uid,destinatario:outro,mensagem:texto});if(error)throw error;$('texto').value='';$('status').textContent='';await carregar()}catch(e){falha(e)}finally{$('enviar').disabled=false}};
+let gravador=null,fluxo=null,partes=[],arquivoAudio=null,tempoAudio=0,contadorAudio=null,urlAudio=null;
+function cancelarAudio(){if(contadorAudio)clearInterval(contadorAudio);contadorAudio=null;if(gravador?.state==="recording")gravador.stop();fluxo?.getTracks().forEach(t=>t.stop());gravador=null;fluxo=null;arquivoAudio=null;if(urlAudio)URL.revokeObjectURL(urlAudio);urlAudio=null;$("audioPreview").style.display="none";$("gravarAudio").textContent="🎙️ GRAVAR ÁUDIO"}
+$("audioCancelar").onclick=cancelarAudio;
+$("gravarAudio").onclick=async()=>{
+ if(gravador?.state==="recording"){gravador.stop();return}
+ if(!$("contato").value){falha(Error("Selecione um destinatário."));return}
+ if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){falha(Error("Gravação não disponível neste navegador."));return}
+ try{
+  cancelarAudio();fluxo=await navigator.mediaDevices.getUserMedia({audio:true});
+  const mime=["audio/mp4","audio/webm;codecs=opus","audio/webm"].find(t=>MediaRecorder.isTypeSupported(t));
+  gravador=new MediaRecorder(fluxo,mime?{mimeType:mime}:undefined);partes=[];tempoAudio=0;
+  $("audioPreview").style.display="block";$("audioTempo").textContent="Gravando... 0s";$("audioEnviar").disabled=true;
+  gravador.ondataavailable=e=>{if(e.data.size)partes.push(e.data)};
+  gravador.onstop=()=>{
+   clearInterval(contadorAudio);fluxo?.getTracks().forEach(t=>t.stop());
+   arquivoAudio=new Blob(partes,{type:gravador.mimeType||"audio/webm"});
+   $("gravarAudio").textContent="🎙️ GRAVAR ÁUDIO";
+   if(arquivoAudio.size){urlAudio=URL.createObjectURL(arquivoAudio);$("audioOuvir").src=urlAudio;$("audioEnviar").disabled=false;$("audioTempo").textContent="Pronto: "+tempoAudio+"s. Ouça antes de enviar."}
+  };
+  gravador.start();$("gravarAudio").textContent="⏹ PARAR";
+  contadorAudio=setInterval(()=>{tempoAudio++;$("audioTempo").textContent="Gravando... "+tempoAudio+"s / 120s";if(tempoAudio>=120&&gravador?.state==="recording")gravador.stop()},1000);
+ }catch(e){cancelarAudio();falha(e)}
+};
+$("audioEnviar").onclick=async()=>{
+ const destino=$("contato").value;if(!arquivoAudio||!destino)return;
+ const btn=$("audioEnviar");btn.disabled=true;
+ try{
+  const ext=arquivoAudio.type.includes("mp4")?"m4a":"webm";
+  const caminho=cid+"/"+uid+"/"+crypto.randomUUID()+"."+ext;
+  const {error:up}=await db.storage.from("oraqui-chat-audios").upload(caminho,arquivoAudio,{contentType:arquivoAudio.type,upsert:false});if(up)throw up;
+  const {error}=await db.from("oraqui_chat_mensagens").insert({condominio_id:cid,remetente:uid,destinatario:destino,mensagem:"🎙️ Mensagem de voz",audio_path:caminho});if(error)throw error;
+  cancelarAudio();$("status").textContent="✓ Áudio enviado.";await carregar();
+ }catch(e){falha(e);btn.disabled=false}
+};
 init();</script></body></html>
