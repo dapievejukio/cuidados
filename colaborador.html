@@ -1041,6 +1041,7 @@ async function obterInicioFilaLocal(tipo,id=null){
 async function obterInicioDisponivel(tipo,id){
   const local=await obterInicioFilaLocal(tipo,id);
   const memoria=inicioMemoriaServe(tipo,id)?inicioAtual:null;
+  if(tipo==='avulsa'&&await inicioComConclusaoPendente(id))return null;
   if(!navigator.onLine)return local||memoria||null;
   try{
     const remoto=tipo==='avulsa'?await obterInicioAvulsa(id):await obterInicio(tipo,id);
@@ -1050,16 +1051,28 @@ async function obterInicioDisponivel(tipo,id){
     return local||memoria||null;
   }
 }
+async function inicioComConclusaoPendente(id){
+  if(!id)return false;
+  const fila=await filaTodos();
+  return fila.some(x=>x.kind!=='inicio'&&x.auth_user_id===authUser?.id&&Number(x.condominio_id)===Number(colaborador?.condominio_id)&&String(x.avulsa_inicio_id||'')===String(id));
+}
 async function obterAvulsaAbertaDisponivel(){
   const local=await obterInicioFilaLocal('avulsa',null);
   const memoria=inicioMemoriaServe('avulsa',avulsaAtualId)?inicioAtual:null;
-  if(!navigator.onLine)return local||memoria||null;
+  if(!navigator.onLine){
+    if(local)return local;
+    return memoria&&!await inicioComConclusaoPendente(memoria.id)?memoria:null;
+  }
   try{
-    const remoto=avulsaAtualId?await obterInicioAvulsa(avulsaAtualId):await obterAvulsaAberta();
-    return remoto||local||memoria||null;
+    // Consulta qualquer início remoto aberto: não reutiliza UUID já concluído em memória.
+    const remoto=await obterAvulsaAberta();
+    for(const candidato of [local,remoto,memoria]){
+      if(candidato&&!await inicioComConclusaoPendente(candidato.id))return candidato;
+    }
+    return null;
   }catch(e){
     console.warn('Consulta de atividade avulsa indisponível; usando cópia local.',e);
-    return local||memoria||null;
+    return local||(memoria&&!await inicioComConclusaoPendente(memoria.id)?memoria:null);
   }
 }
 async function atualizarBlocoInicio(tipo,id){
@@ -1339,7 +1352,9 @@ async function confirmarExecucao(){
       iniciada_em:inicio?.iniciada_em||agora,concluida_em:agora,updated_at:agora
     };
     await filaSalvar({id,auth_user_id:authUser.id,condominio_id:colaborador.condominio_id,colaborador_id:colaborador.id,criado_em:agora,payload,foto,foto_path:fotoPath,foto_antes:fotoAntes,foto_antes_path:fotoAntesPath,inicio_id:(execAtual?inicio?.id:null)||null,avulsa_inicio_id:(execAtual?null:inicio?.id)||null});
-    fecharModal();avulsaAtualId=null;await atualizarEstadoOffline();
+    // A conclusão já está preservada na fila local. Não manter o início
+    // anterior na memória, mesmo se a sincronização falhar.
+    fecharModal();inicioAtual=null;avulsaAtualId=null;await atualizarEstadoOffline();
     if(navigator.onLine){
       toast('Registro salvo. Sincronizando...');await sincronizarFilaOffline();
     }else{
