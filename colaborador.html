@@ -738,6 +738,51 @@ function ordemProgramacao(a,b){
   if(ha!==null&&hb!==null&&ha!==hb)return ha-hb;
   return Number(a.id)-Number(b.id);
 }
+function ordemLixo(p){
+  const ordem=[100,99,96,95,97,98];
+  const pos=ordem.indexOf(Number(p.ponto_id));
+  return pos<0?999:pos;
+}
+function grupoLixo(p){
+  return Number(colaborador?.condominio_id)===1&&[100,99,96,95,97,98].includes(Number(p.ponto_id))&&
+    String(atividades.find(a=>mesmoId(a.id,p.atividade_id))?.nome||'').trim().toUpperCase()==='LIXO';
+}
+function localLixo(p){
+  const nomes={100:'Central do Lixo',99:'Torre E — Central de Resíduos',96:'Torre B — Central de Resíduos',95:'Torre A — Central de Resíduos',97:'Torre C — Central de Resíduos',98:'Torre D — Central de Resíduos'};
+  return nomes[Number(p.ponto_id)]||nomeLocal(p.area_id,p.ponto_id);
+}
+function agruparCronograma(lista,renderItem,futura=false){
+  const grupos=new Map();
+  const itens=[];
+  for(const item of lista){
+    const p=futura?item.p:item;
+    if(!grupoLixo(p)){itens.push({tipo:'item',item});continue}
+    const dia=futura?dataLocalISO(item.data):'hoje';
+    const chave='lixo:'+dia;
+    if(!grupos.has(chave)){
+      const grupo={tipo:'lixo',chave,dia,itens:[]};
+      grupos.set(chave,grupo);itens.push(grupo);
+    }
+    grupos.get(chave).itens.push(item);
+  }
+  let numero=0;
+  return itens.map(grupo=>{
+    if(grupo.tipo==='item')return renderItem(grupo.item,numero++);
+    const ordenados=grupo.itens.sort((x,y)=>ordemLixo(futura?x.p:x)-ordemLixo(futura?y.p:y));
+    const feitos=futura?0:ordenados.filter(p=>execucoesHoje.some(e=>mesmoId(e.programacao_id,p.id)&&e.status==='concluida')).length;
+    const total=ordenados.length;
+    const subtitulo=futura?'Toque para visualizar os '+total+' locais':feitos+' de '+total+' concluídos • toque para visualizar';
+    const cards=ordenados.map((item,i)=>{
+      const p=futura?item.p:item;
+      const feito=!futura&&execucoesHoje.some(e=>mesmoId(e.programacao_id,p.id)&&e.status==='concluida');
+      const fotos='<span style="font-size:12px;color:#657285">📸 Foto ANTES e DEPOIS obrigatória</span>';
+      const botao=futura?'':feito?'<span class="badge green">CONCLUÍDA</span>':`<button class="action" onclick="abrirExecucao(${Number(p.id)})">▶ INICIAR / CONCLUIR</button>`;
+      return `<div class="item-card" style="margin-top:9px;padding:13px;border:1px solid var(--border)"><div class="item-info"><strong>${i+1}. LIXO</strong><div style="margin:6px 0;color:#364458">${esc(localLixo(p))}</div>${fotos}</div>${botao?'<div class="item-actions" style="margin-top:10px">'+botao+'</div>':''}</div>`;
+    }).join('');
+    const data=futura?' • '+grupo.dia.split('-').reverse().join('/') : '';
+    return `<details class="oraqui-grupo-lixo" style="margin:10px 0;border:1px solid var(--border);border-radius:18px;background:white;overflow:hidden"><summary style="cursor:pointer;list-style:none;padding:18px;font-weight:800;color:#263b51"><div style="display:flex;align-items:center;justify-content:space-between;gap:12px"><span>🗑️ LIXO${data}</span><span class="badge purple">${futura?total+' LOCAIS':feitos+'/'+total}</span></div><div style="font-size:13px;font-weight:500;color:#738092;margin-top:6px">${subtitulo} ▾</div></summary><div style="padding:0 10px 12px">${cards}</div></details>`;
+  }).join('');
+}
 function renderProgramacoes(){
   const hojeItens=programacoes.filter(programacaoValeHoje);
   const futuros=programacoes.map(p=>({p,data:proximaDataProgramacao(p)})).filter(x=>x.data).sort((a,b)=>a.data-b.data||ordemProgramacao(a.p,b.p));
@@ -755,14 +800,14 @@ function renderProgramacoes(){
     const prazo=p.horario_limite?`<div class="deadline ${atrasada?"late":""}">${atrasada?"⏰ ATRASADA — ERA ATÉ":"🕒 CONCLUIR ATÉ"} ${esc(String(p.horario_limite).slice(0,5))}</div>`:"";
     return `<div class="item-card ${classe}"><div class="alert-strip ${faixaClass}"><span>${faixa}</span><span>${feito?"✓":"●"}</span></div><div class="item-top"><div class="item-icon">${icone}</div><div class="item-info"><strong>${indice+1}. ${esc(at?.nome||"Atividade")}</strong><span>${esc(local)}</span>${prazo}</div><span class="badge ${badgeClass}">${badge}</span></div>${p.instrucoes?`<div class="item-description">${esc(p.instrucoes)}</div>`:""}${!feito?`<div class="item-actions"><button class="action" onclick="abrirExecucao(${p.id})">▶ INICIAR / CONCLUIR</button></div>`:""}</div>`;
   };
-  const futurosHtml=futuros.map(({p,data},indice)=>{
+  const futurosHtml=agruparCronograma(futuros,({p,data},indice)=>{
     const at=atividades.find(a=>mesmoId(a.id,p.atividade_id));
     const dia=data.toLocaleDateString("pt-BR",{weekday:"short",day:"2-digit",month:"2-digit"});
     const prazo=p.horario_limite?` • até ${esc(String(p.horario_limite).slice(0,5))}`:"";
     return `<div class="item-card" style="border:1px solid var(--border);padding:12px"><div class="item-top"><div class="item-icon">📅</div><div class="item-info"><strong>${indice+1}. ${esc(at?.nome||"Atividade")}</strong><span>${esc(dia)}${prazo} • ${esc(nomeLocal(p.area_id,p.ponto_id)||"Local definido pela gestão")}</span></div><span class="badge purple">AGENDADA</span></div></div>`;
-  }).join("");
+  });
   $("programacoes").className="list";
-  $("programacoes").innerHTML=(ordenadas.length?ordenadas.map(cartao).join(""):vazio("Nenhuma atividade para hoje","Consulte abaixo as próximas atividades agendadas."))+(futuros.length?`<details style="margin-top:12px" open><summary style="padding:14px;border-radius:14px;background:#eeeafd;color:#55468f;font-weight:800;cursor:pointer">📅 Próximas atividades (${futuros.length})</summary><div class="list" style="margin-top:10px">${futurosHtml}</div></details>`:"");
+  $("programacoes").innerHTML=(ordenadas.length?agruparCronograma(ordenadas,cartao):vazio("Nenhuma atividade para hoje","Consulte abaixo as próximas atividades agendadas."))+(futuros.length?`<details style="margin-top:12px" open><summary style="padding:14px;border-radius:14px;background:#eeeafd;color:#55468f;font-weight:800;cursor:pointer">📅 Próximas atividades (${futuros.length})</summary><div class="list" style="margin-top:10px">${futurosHtml}</div></details>`:"");
 }
 
 function renderHistorico(){
