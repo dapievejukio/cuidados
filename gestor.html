@@ -116,7 +116,15 @@ body{padding-bottom:88px!important}.oraqui-bottom{position:fixed;bottom:0;left:0
  <div class="oraqui-registros-tabs"><button type="button" class="oraqui-reg-tab active" data-reg-view="colaborador">👤 Colaboradores</button><button type="button" class="oraqui-reg-tab" data-reg-view="local">📍 Locais</button><button type="button" class="oraqui-reg-tab" data-reg-view="historico">📅 Histórico</button></div>
  <div class="oraqui-reg-filtros"><label>Data <input type="date" id="oraquiRegData"></label><label>Colaborador <select id="oraquiRegColaborador"><option value="">Todos</option></select></label><button type="button" id="oraquiRegHoje">Hoje</button><button type="button" id="oraquiRegImprimir">🖨️ Relatório</button></div>
  <div id="oraquiRegResumo" class="oraqui-reg-resumo"></div>
-</div><div id="locationList" class="location-list"></div></section><section class="section"><div class="section-title"><div><h2>Últimos registros</h2></div></div><div id="activityContainer"></div></section></div>
+</div><div id="locationList" class="location-list"></div></section>
+<section class="section" id="oraquiPontoRelatorio">
+ <div class="section-title"><div><h2>📍 Relatório de ponto</h2><p>Entradas, intervalos e saídas • fotos privadas e localização GPS</p></div></div>
+ <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin-bottom:15px">
+  <label style="font-size:13px;font-weight:700">Data<br><input id="oraquiPontoData" type="date" style="padding:11px;border:1px solid #d7dce8;border-radius:12px;margin-top:6px"></label>
+  <button type="button" id="oraquiPontoConsultar" class="add-button">CONSULTAR PONTO</button>
+ </div>
+ <div id="oraquiPontoResultado" style="color:#637086;font-size:14px">Escolha uma data e consulte os registros.</div>
+</section><section class="section"><div class="section-title"><div><h2>Últimos registros</h2></div></div><div id="activityContainer"></div></section></div>
 <div class="panel" id="panelOcorrencias"><section class="section"><div class="section-title"><div><h2>🚨 Demandas diretas da gestão</h2><p>Pendentes, em execução e concluídas, sem ocorrência de morador.</p></div></div><div id="demandasDiretasGestor" class="occurrence-list">Carregando demandas...</div></section><section class="section"><div class="section-title"><div><h2>Ocorrências</h2><p>Acompanhamento dos registros enviados.</p></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="confirm-button" id="novaOcorrencia">＋ NOVA OCORRÊNCIA</button><button class="confirm-button" id="novaDemandaUrgente">🚨 NOVA DEMANDA URGENTE</button><button class="refresh" id="refreshOcorrencias">↻ ATUALIZAR</button></div></div><div class="kpis"><div class="kpi"><strong id="occOpen">0</strong><span>ABERTAS</span></div><div class="kpi"><strong id="occProgress">0</strong><span>EM ATENDIMENTO</span></div><div class="kpi"><strong id="occResolved">0</strong><span>RESOLVIDAS</span></div><div class="kpi"><strong id="occReturn">0</strong><span>SOLICITAM RETORNO</span></div></div></section><section class="section"><div class="filters"><button class="filter active" data-filter="todas">TODAS</button><button class="filter" data-filter="aberta">ABERTAS</button><button class="filter" data-filter="em atendimento">EM ATENDIMENTO</button><button class="filter" data-filter="resolvida">RESOLVIDAS</button></div><div id="occurrenceList" class="occurrence-list"></div></section></div>
 <div class="panel" id="panelRegistrosPosteriores"><section class="section"><div class="section-title"><div><h2>📝 Registros posteriores</h2><p>Serviços declarados sem fotografia. Aprovação obrigatória pelo gestor; horários declarados não são comprovados pelo aplicativo.</p></div><button class="refresh" id="rpAtualizar" type="button">↻ ATUALIZAR</button></div><div class="kpis"><div class="kpi"><strong id="rpPendentes">0</strong><span>AGUARDANDO</span></div><div class="kpi"><strong id="rpAprovados">0</strong><span>APROVADOS</span></div><div class="kpi"><strong id="rpRejeitados">0</strong><span>REJEITADOS</span></div><div class="kpi"><strong id="rpCorrecoes">0</strong><span>CORREÇÕES</span></div></div><div class="filters" id="rpFiltros"><button class="filter active" data-rp-filter="pendente">PENDENTES</button><button class="filter" data-rp-filter="todos">TODOS</button><button class="filter" data-rp-filter="aprovado">APROVADOS</button><button class="filter" data-rp-filter="rejeitado">REJEITADOS</button><button class="filter" data-rp-filter="correcao_solicitada">CORREÇÕES</button></div><div id="rpLista" class="occurrence-list">Carregando registros...</div></section></div>
 <div class="panel" id="panelColaboradores"><section class="section"><div class="section-title"><div><h2>Equipe operacional</h2><p>Cadastro, convite e configurações dos colaboradores.</p></div><button class="add-button" id="addCollaborator">＋ CADASTRAR</button></div><div class="kpis"><div class="kpi"><strong id="colActive">0</strong><span>ATIVOS</span></div><div class="kpi"><strong id="colInactive">0</strong><span>INATIVOS</span></div></div><div id="collaboratorList" class="collaborator-list"></div></section><section class="section"><div class="section-title"><div><h2>Equipe de gestão</h2><p>Administradores e gestores vinculados ao condomínio.</p></div><button class="add-button hidden" id="addManager">＋ CONVIDAR GESTOR</button></div><div id="managementList" class="management-list"></div><section class="section"><div class="section-title"><div><h2>📁 Documentos dos colaboradores</h2><p>Envie holerites e outros PDFs com acesso individual.</p></div></div><a href="documentos-gestao.html" class="add-button" style="display:inline-block;text-decoration:none;padding:14px">📄 GERENCIAR DOCUMENTOS</a></section><section class="section"><div class="section-title"><div><h2>💬 Chat interno</h2><p>Mensagens entre gestão e colaboradores, com permissões configuráveis.</p></div></div><a class="add-button" id="oraquiChatGestao" href="chat.html" style="display:inline-block;text-decoration:none;padding:14px;margin-right:8px">💬 ABRIR CHAT</a><a class="add-button" id="oraquiChatConfig" href="chat-config.html" style="display:inline-block;text-decoration:none;padding:14px">⚙️ CONFIGURAR CHAT</a></section><div id="managementPermissionNote" class="management-note hidden">Somente o administrador do cliente pode convidar ou alterar gestores.</div></section></div>
@@ -1286,6 +1294,60 @@ $("addArea").onclick=novaArea;$("closeArea").onclick=$("cancelArea").onclick=()=
 $("closePoint").onclick=$("cancelPoint").onclick=()=>$("pointModal").classList.remove("visible");$("savePoint").onclick=salvarPonto;
 $("subAreas").onclick=()=>subConfig("a");$("subAtividades").onclick=()=>subConfig("t");$("subProgramacoes").onclick=()=>subConfig("p");$("addAtividade").onclick=openAt;$("closeAtividade").onclick=$("cancelAtividade").onclick=closeAt;$("saveAtividade").onclick=saveAt;$("addProgramacao").onclick=openPr;$("closeProgramacao").onclick=$("cancelProgramacao").onclick=closePr;$("saveProgramacao").onclick=savePr;$("progArea").onchange=()=>fillPoints();$("progDestino").onchange=dest;document.querySelectorAll(".filter").forEach(b=>b.onclick=()=>{filtroOcorrencias=b.dataset.filter;document.querySelectorAll(".filter").forEach(x=>x.classList.remove("active"));b.classList.add("active");renderOcorrencias()});
 }
+async function consultarPontoGestor(){
+ const box=$("oraquiPontoResultado");if(!box||!CONDOMINIO_ID)return;
+ const idConsulta=Number(CONDOMINIO_ID),dia=$("oraquiPontoData").value;
+ if(!dia){box.textContent="Escolha uma data.";return}
+ box.textContent="Carregando marcações...";
+ try{
+  const inicio=dia+"T00:00:00-03:00";
+  const fim=new Date(new Date(inicio).getTime()+86400000).toISOString();
+  const [reg,col]=await Promise.all([
+   db.from("registros_ponto").select("id,colaborador_id,tipo,registrado_em,latitude,longitude,precisao_metros,selfie_path").eq("condominio_id",idConsulta).gte("registrado_em",inicio).lt("registrado_em",fim).order("registrado_em",{ascending:false}),
+   db.from("colaboradores").select("id,nome,matricula").eq("condominio_id",idConsulta)
+  ]);
+  if(reg.error)throw reg.error;if(col.error)throw col.error;
+  if(Number(CONDOMINIO_ID)!==idConsulta)return;
+  const pessoas=new Map((col.data||[]).map(v=>[Number(v.id),v]));
+  const linhas=reg.data||[];
+  if(!linhas.length){box.textContent="Nenhuma marcação encontrada nesta data.";return}
+  box.innerHTML='<p style="font-weight:700;margin-bottom:12px">'+linhas.length+' marcação(ões) encontrada(s).</p>';
+  for(const item of linhas){
+   const pessoa=pessoas.get(Number(item.colaborador_id));
+   const div=document.createElement("div");
+   div.style.cssText="border:1px solid #e0e5ef;border-radius:15px;padding:14px;margin:10px 0;background:#fafbfe";
+   const data=new Date(item.registrado_em).toLocaleString("pt-BR",{timeZone:"America/Sao_Paulo",dateStyle:"short",timeStyle:"medium"});
+   div.innerHTML='<strong>'+esc(pessoa?.nome||"Colaborador #"+item.colaborador_id)+'</strong> <span style="color:#6c7283">• '+esc(pessoa?.matricula||"")+'</span><br><b>'+esc(item.tipo)+'</b> — '+esc(data);
+   const botoes=document.createElement("div");botoes.style.cssText="display:flex;flex-wrap:wrap;gap:9px;margin-top:10px";
+   if(item.latitude!=null&&item.longitude!=null){
+    const link=document.createElement("a");link.textContent="📍 Ver localização";
+    link.href="https://www.google.com/maps?q="+encodeURIComponent(item.latitude+","+item.longitude);
+    link.target="_blank";link.rel="noopener noreferrer";
+    link.style.cssText="padding:9px 12px;border-radius:10px;background:#eaf2ff;color:#1c5ba5;text-decoration:none;font-weight:700";
+    botoes.appendChild(link);
+    const prec=document.createElement("small");prec.textContent="Precisão: "+(item.precisao_metros??"—")+" m";prec.style.alignSelf="center";botoes.appendChild(prec);
+   }else{const sem=document.createElement("small");sem.textContent="GPS não registrado";botoes.appendChild(sem)}
+   if(item.selfie_path){
+    const btn=document.createElement("button");btn.type="button";btn.textContent="📷 Ver selfie";
+    btn.style.cssText="padding:9px 12px;border:0;border-radius:10px;background:#ede9fc;color:#493c93;font-weight:700;cursor:pointer";
+    btn.onclick=async()=>{
+     btn.disabled=true;btn.textContent="Abrindo...";
+     try{
+      const {data,error}=await db.storage.from("selfies-ponto-privadas").createSignedUrl(item.selfie_path,60);
+      if(error)throw error;
+      window.open(data.signedUrl,"_blank","noopener,noreferrer");
+     }catch(e){alert("Não foi possível abrir a selfie: "+e.message)}
+     finally{btn.disabled=false;btn.textContent="📷 Ver selfie"}
+    };
+    botoes.appendChild(btn);
+   }else{const sem=document.createElement("small");sem.textContent="Selfie não registrada";botoes.appendChild(sem)}
+   div.appendChild(botoes);box.appendChild(div);
+  }
+ }catch(e){box.textContent="Erro ao consultar ponto: "+(e.message||e)}
+}
+document.getElementById("oraquiPontoData").value=new Date().toLocaleDateString("en-CA",{timeZone:"America/Sao_Paulo"});
+document.getElementById("oraquiPontoConsultar").addEventListener("click",consultarPontoGestor);
+
 async function iniciar(){eventos();configurarNavegacaoGestor();painel("operacao");$("todayDate").textContent=new Date().toLocaleDateString("pt-BR");const {data:{session}}=await db.auth.getSession();if(session){try{await validarGestor(session.user)}catch(e){console.error(e);$("authError").textContent=e.message;$("authError").style.display="block"}}}
 iniciar();
 let atualizacaoAutomaticaEmAndamento=false;
