@@ -121,7 +121,7 @@ body{padding-bottom:88px!important}.oraqui-bottom{position:fixed;bottom:0;left:0
  <div class="section-title"><div><h2>📍 Relatório de ponto</h2><p>Entradas, intervalos e saídas • fotos privadas e localização GPS</p></div></div>
  <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin-bottom:15px">
   <label style="font-size:13px;font-weight:700">Data<br><input id="oraquiPontoData" type="date" style="padding:11px;border:1px solid #d7dce8;border-radius:12px;margin-top:6px"></label>
-  <button type="button" id="oraquiPontoConsultar" class="add-button">CONSULTAR PONTO</button><label style="font-size:13px;font-weight:700">Mês do espelho<br><input id="oraquiPontoMes" type="month" style="padding:11px;border:1px solid #d7dce8;border-radius:12px;margin-top:6px"></label><button type="button" id="oraquiPontoPdf" class="add-button">📄 PDF MENSAL</button>
+  <button type="button" id="oraquiPontoConsultar" class="add-button">CONSULTAR PONTO</button><label style="font-size:13px;font-weight:700">Mês do espelho<br><select id="oraquiPontoMesNumero" style="padding:11px;border:1px solid #d7dce8;border-radius:12px;margin-top:6px;min-width:145px;background:#fff"><option value="01">Janeiro</option><option value="02">Fevereiro</option><option value="03">Março</option><option value="04">Abril</option><option value="05">Maio</option><option value="06">Junho</option><option value="07">Julho</option><option value="08">Agosto</option><option value="09">Setembro</option><option value="10">Outubro</option><option value="11">Novembro</option><option value="12">Dezembro</option></select></label><label style="font-size:13px;font-weight:700">Ano<br><select id="oraquiPontoMesAno" style="padding:11px;border:1px solid #d7dce8;border-radius:12px;margin-top:6px;min-width:90px;background:#fff"></select></label><button type="button" id="oraquiPontoPdf" class="add-button">📄 PDF MENSAL</button>
  </div>
  <div id="oraquiPontoResultado" style="color:#637086;font-size:14px">Escolha uma data e consulte os registros.</div>
 </section><section class="section"><div class="section-title"><div><h2>Últimos registros</h2></div></div><div id="activityContainer"></div></section></div>
@@ -1347,10 +1347,10 @@ async function consultarPontoGestor(){
 }
 document.getElementById("oraquiPontoData").value=new Date().toLocaleDateString("en-CA",{timeZone:"America/Sao_Paulo"});
 document.getElementById("oraquiPontoConsultar").addEventListener("click",consultarPontoGestor);
-document.getElementById("oraquiPontoMes").value=new Date().toLocaleDateString("en-CA",{timeZone:"America/Sao_Paulo"}).slice(0,7);
+const oraquiPontoHoje=new Date();document.getElementById("oraquiPontoMesNumero").value=String(oraquiPontoHoje.getMonth()+1).padStart(2,"0");document.getElementById("oraquiPontoMesAno").innerHTML=Array.from({length:8},(_,i)=>oraquiPontoHoje.getFullYear()+1-i).map(ano=>`<option value="${ano}">${ano}</option>`).join("");document.getElementById("oraquiPontoMesAno").value=String(oraquiPontoHoje.getFullYear());
 document.getElementById("oraquiPontoPdf").addEventListener("click",gerarEspelhoPontoMensal);
 async function gerarEspelhoPontoMensal(){
- const btn=$("oraquiPontoPdf"),mes=$("oraquiPontoMes").value;
+ const btn=$("oraquiPontoPdf"),mes=$("oraquiPontoMesAno").value+"-"+$("oraquiPontoMesNumero").value;
  if(!CONDOMINIO_ID||!/^\\d{4}-\\d{2}$/.test(mes)){alert("Selecione o mês.");return}
  const condo=Number(CONDOMINIO_ID);
  const [ano,numeroMes]=mes.split("-").map(Number);
