@@ -79,6 +79,36 @@ select:focus,input:focus,textarea:focus{border-color:#91adbd;background:#fff;box
 @media(max-width:480px){.secure{padding:7px 9px}}
 
 @media(max-width:480px){.hero h1{font-size:28px}.card{padding:18px}.secure span{display:none}.brand-icon{width:46px;height:46px}.brand-word{font-size:20px}.brand-tag{font-size:8px}.brand-domain{font-size:7px}}
+
+/* ORAQUI — identidade visual do portal de ocorrências */
+:root{--ink:#103450;--muted:#61778b;--brand:#118b73;--brand2:#087b68;--mint:#e5f8ef;--paper:#fff;--bg:#f2f7fa;--line:#d9e5ec;--ok:#0d9b65;--shadow:0 10px 30px rgba(25,64,94,.075)}
+body{background:linear-gradient(180deg,#e8f4fa 0,#f5f9fc 460px,#f4f8fa 100%)}
+.shell{max-width:820px}
+.hero{background:linear-gradient(125deg,#073b58 0%,#0a756e 65%,#16a27a 100%);padding-bottom:54px}
+.hero:after{border-color:rgba(255,255,255,.19);box-shadow:0 0 0 35px rgba(255,255,255,.04),0 0 0 75px rgba(255,255,255,.03)}
+.hero-copy{margin-top:26px}.hero h1{font-size:clamp(27px,5vw,38px)}.hero p{font-size:14px;color:#e5fff7}
+main{padding-left:16px;padding-right:16px}
+.card{border-radius:23px;border:1px solid #e3eef2;box-shadow:var(--shadow);padding:23px}
+.step{align-items:center}.num{width:42px;height:42px;flex-basis:42px;border-radius:13px;background:linear-gradient(145deg,#16b36d,#058b68);color:#fff;font-size:18px;box-shadow:0 5px 12px #0d9b6526}
+.step h2{font-size:19px;color:#123c5a}.step p{font-size:12px}
+.field label{font-size:11px;color:#294e66}
+select,input[type=email],textarea{background:#fbfdff;border-color:#cfdee9;font-size:15px}
+.place{background:#e9f7f4}.place small{font-size:10px}.place strong{font-size:15px}
+.photo-box{background:linear-gradient(135deg,#edf9ff,#eefbf5);border-color:#95cfc2;min-height:108px}
+.photo-box strong{font-size:15px}.photo-box span{font-size:12px}
+.photo-icon{background:#d8f5ed}
+.return-copy strong{font-size:15px}.return-copy span{font-size:12px}
+.send{background:linear-gradient(110deg,#0c9670,#087a78);font-size:16px;min-height:64px;box-shadow:0 10px 20px #0b8c6b35}
+.privacy{background:#e8f4ff;font-size:11px;border:1px solid #d8e9f8}.privacy-lock{color:#087b68}
+.intro-panel{position:relative;z-index:2;margin:0 0 13px;padding:19px;border:1px solid #dbeaf0;border-radius:22px;background:linear-gradient(110deg,#eff9ff,#f0fcf6);box-shadow:var(--shadow);display:flex;align-items:center;gap:16px}
+.intro-symbol{font-size:42px;display:grid;place-items:center;width:75px;height:75px;flex:0 0 75px;background:#d9f5ea;border-radius:20px}
+.intro-panel h2{font-size:20px;margin:0 0 7px;color:#0b3b59}.intro-panel p{font-size:13px;line-height:1.55;margin:0;color:#365c70}
+.steps-ribbon{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:0 0 14px}
+.steps-ribbon div{border-radius:15px;background:#fff;padding:11px 7px;text-align:center;font-size:11px;font-weight:750;color:#31546b;box-shadow:0 5px 15px #244f6b0b}
+.steps-ribbon span{display:block;font-size:25px;margin-bottom:5px}
+.step-icon{font-size:24px;display:inline-block;margin-right:8px;vertical-align:middle}
+.important-note{padding:16px;border-radius:18px;background:#e4f1ff;border:1px solid #cce2f6;color:#234e70;font-size:12px;line-height:1.55;margin-top:15px}
+@media(max-width:480px){.intro-panel{padding:14px;gap:10px}.intro-symbol{width:55px;height:55px;flex-basis:55px;font-size:30px}.intro-panel h2{font-size:17px}.intro-panel p{font-size:12px}.steps-ribbon div{font-size:9px;padding:10px 4px}.steps-ribbon span{font-size:22px}.card{padding:17px}.step h2{font-size:17px}}
 </style>
 </head>
 <body>
@@ -99,11 +129,12 @@ select:focus,input:focus,textarea:focus{border-color:#91adbd;background:#fff;box
 </header>
 
 <main>
- <div class="progress"><i class="on"></i><i></i><i></i><span>leva menos de 1 minuto</span></div>
+ <div class="intro-panel"><div class="intro-symbol" aria-hidden="true">📲</div><div><h2>Comunique uma ocorrência</h2><p>A empresa responsável pela <strong>limpeza e zeladoria do Reserva Igara</strong> utiliza o ORAQUI para registrar, organizar e acompanhar as solicitações dos moradores, facilitando o encaminhamento à equipe e o controle dos serviços.</p></div></div>
+ <div class="steps-ribbon" aria-label="Etapas do atendimento"><div><span>📝</span>Registro</div><div><span>🔎</span>Análise</div><div><span>🛠️</span>Atendimento</div><div><span>✅</span>Conclusão</div></div>
  <div class="error" id="error"></div>
 
  <section class="card">
-  <div class="step"><div class="num">01</div><div><h2>Onde aconteceu?</h2><p>Escolha o local para direcionarmos corretamente.</p></div></div>
+  <div class="step"><div class="num">01</div><div><h2><span class="step-icon">📍</span>Onde aconteceu?</h2><p>Escolha o local para direcionarmos corretamente.</p></div></div>
   <div class="place"><div class="place-icon"><img src="/oraqui-icons/condominios-128.png" alt=""></div><div><small>CONDOMÍNIO</small><strong>Reserva Igara</strong></div></div>
   <div class="field"><label for="area">ÁREA</label><select id="area" onchange="alterarArea()" disabled><option value="">Carregando locais...</option></select><div class="loading-local" id="localStatus"></div></div>
   <div class="field" id="detalheContainer"><label for="detalhe">LOCAL / PONTO</label><select id="detalhe" onchange="carregarHistoricoLocal()"><option value="">Selecione o local</option></select></div>
@@ -118,7 +149,7 @@ select:focus,input:focus,textarea:focus{border-color:#91adbd;background:#fff;box
  </section>
 
  <section class="card">
-  <div class="step"><div class="num">02</div><div><h2>Mostre o problema</h2><p>Foto, descrição ou os dois. Seja simples.</p></div></div>
+  <div class="step"><div class="num">02</div><div><h2><span class="step-icon">📸</span>Mostre o problema</h2><p>Foto, descrição ou os dois. Seja simples.</p></div></div>
   <label class="photo-box" id="photoBox" for="photoInput"><div class="photo-icon"><img src="/oraqui-icons/registro-foto-128.png" alt=""></div><div><strong>Tirar ou adicionar foto</strong><span>A foto ajuda a equipe a entender mais rápido.</span></div></label>
   <input type="file" id="photoInput" accept="image/jpeg,image/png,image/webp,image/heic,image/heif" capture="environment">
   <div class="preview" id="preview"><img id="photoPreview" alt="Foto da ocorrência"><button type="button" class="remove" onclick="removerFoto()" aria-label="Remover foto">×</button></div>
@@ -130,14 +161,15 @@ select:focus,input:focus,textarea:focus{border-color:#91adbd;background:#fff;box
  <section class="card">
   <div class="return-row">
    <div class="return-icon"><img src="/oraqui-icons/notificacoes-128.png" alt=""></div>
-   <div class="return-copy"><strong>Quer saber quando for resolvido?</strong><span>Ative para receber a atualização por e-mail.</span></div>
+   <div class="return-copy"><strong>✉️ Quer saber quando for resolvido?</strong><span>Ative para receber a atualização por e-mail.</span></div>
    <label class="switch"><input id="retornoToggle" type="checkbox" onchange="toggleRetorno()"><span class="slider"></span></label>
   </div>
   <div id="emailWrap" class="field"><label for="email">SEU E-MAIL</label><input id="email" type="email" inputmode="email" autocomplete="email" maxlength="180" placeholder="seuemail@exemplo.com"><div class="data-note"><strong>Uso do e-mail:</strong> somente para enviar atualizações relacionadas a esta ocorrência. O ORAQUI não usará este endereço para publicidade ou campanhas de marketing.</div></div>
  </section>
 
  <div class="privacy"><span class="privacy-lock">●</span><span><b>Privacidade:</b> não pedimos nome, apartamento ou telefone. O e-mail é opcional e usado apenas para acompanhar esta ocorrência. Fotos e descrições podem conter dados pessoais; evite registrar rostos, documentos, placas ou outras informações de terceiros quando não forem necessários. <a href="#" onclick="abrirPrivacidade();return false">Como tratamos seus dados</a>.</span></div>
- <button class="send" id="sendButton" type="button" onclick="enviar()">ENVIAR PARA A EQUIPE</button>
+ <button class="send" id="sendButton" type="button" onclick="enviar()">📨 ENVIAR OCORRÊNCIA</button>
+ <div class="important-note"><strong>🛡️ Importante:</strong> Este canal é destinado a ocorrências relacionadas à limpeza, zeladoria e conservação das áreas comuns. Em situações de emergência, utilize os canais oficiais do condomínio.</div>
 </main>
 </div>
 
