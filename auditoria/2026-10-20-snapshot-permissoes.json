@@ -1,0 +1,1574 @@
+{
+  "date": "2026-10-20",
+  "project_ref": "rhiosvsohvqqrxzwohqu",
+  "scope": "Snapshot de leitura: políticas RLS, tabelas e buckets. Não é backup de dados nem DDL completo.",
+  "repo_branch": "auditoria-seguranca-preparacao-20261020",
+  "policies": [
+    {
+      "schemaname": "public",
+      "tablename": "areas",
+      "policyname": "colaborador_v2_select_areas",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "((ativo = true) AND (visivel_colaborador = true) AND (EXISTS ( SELECT 1\n   FROM colaboradores c\n  WHERE ((c.auth_user_id = auth.uid()) AND (c.ativo = true) AND (c.condominio_id = areas.condominio_id)))))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "areas",
+      "policyname": "gestao_insert_areas",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "usuario_gestao_do_condominio(condominio_id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "areas",
+      "policyname": "gestao_select_areas",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "usuario_gestao_do_condominio(condominio_id)",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "areas",
+      "policyname": "gestao_update_areas",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "UPDATE",
+      "qual": "usuario_gestao_do_condominio(condominio_id)",
+      "with_check": "usuario_gestao_do_condominio(condominio_id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "areas",
+      "policyname": "portal_sindico_select_areas",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "oraqui_portal_autorizado(condominio_id)",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "areas",
+      "policyname": "public_select_areas_ocorrencia",
+      "permissive": "PERMISSIVE",
+      "roles": "{anon}",
+      "cmd": "SELECT",
+      "qual": "((ativo = true) AND (visivel_ocorrencia = true))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "atividades",
+      "policyname": "permitir inserir atividades",
+      "permissive": "PERMISSIVE",
+      "roles": "{anon}",
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "true"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "atividades",
+      "policyname": "permitir visualizar atividades",
+      "permissive": "PERMISSIVE",
+      "roles": "{anon}",
+      "cmd": "SELECT",
+      "qual": "true",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "atividades_v2",
+      "policyname": "colaborador_v2_select_atividades",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "((ativo = true) AND (EXISTS ( SELECT 1\n   FROM colaboradores c\n  WHERE ((c.auth_user_id = auth.uid()) AND (c.ativo = true) AND (c.condominio_id = atividades_v2.condominio_id)))))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "atividades_v2",
+      "policyname": "gestao_insert_atividades_v2",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "usuario_gestao_do_condominio(condominio_id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "atividades_v2",
+      "policyname": "gestao_select_atividades_v2",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "usuario_gestao_do_condominio(condominio_id)",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "atividades_v2",
+      "policyname": "gestao_update_atividades_v2",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "UPDATE",
+      "qual": "usuario_gestao_do_condominio(condominio_id)",
+      "with_check": "usuario_gestao_do_condominio(condominio_id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "atividades_v2",
+      "policyname": "portal_sindico_select_atividades",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "oraqui_portal_autorizado(condominio_id)",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "colaborador_pontos",
+      "policyname": "colaborador_select_proprios_pontos",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "(EXISTS ( SELECT 1\n   FROM colaboradores c\n  WHERE ((c.id = colaborador_pontos.colaborador_id) AND (c.condominio_id = colaborador_pontos.condominio_id) AND (c.auth_user_id = auth.uid()) AND (c.ativo = true))))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "colaborador_pontos",
+      "policyname": "gestao_delete_colaborador_pontos",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "DELETE",
+      "qual": "usuario_gestao_do_condominio(condominio_id)",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "colaborador_pontos",
+      "policyname": "gestao_insert_colaborador_pontos",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "usuario_gestao_do_condominio(condominio_id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "colaborador_pontos",
+      "policyname": "gestao_select_colaborador_pontos",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "usuario_gestao_do_condominio(condominio_id)",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "colaboradores",
+      "policyname": "colaborador_v2_select_proprio_perfil",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "(auth_user_id = auth.uid())",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "colaboradores",
+      "policyname": "gestao_v2_insert_colaboradores",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "usuario_gestao_do_condominio(condominio_id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "colaboradores",
+      "policyname": "gestao_v2_select_colaboradores",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "usuario_gestao_do_condominio(condominio_id)",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "colaboradores",
+      "policyname": "gestao_v2_update_colaboradores",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "UPDATE",
+      "qual": "usuario_gestao_do_condominio(condominio_id)",
+      "with_check": "usuario_gestao_do_condominio(condominio_id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "condominios",
+      "policyname": "colaborador_v2_select_condominios_vinculados",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "((ativo = true) AND (EXISTS ( SELECT 1\n   FROM colaboradores c\n  WHERE ((c.auth_user_id = auth.uid()) AND (c.condominio_id = condominios.id) AND (c.ativo = true)))))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "condominios",
+      "policyname": "portal_sindico_select_condominios",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "oraqui_portal_autorizado(id)",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "condominios",
+      "policyname": "usuario consulta proprio condominio",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "((ativo = true) AND (usuario_gestao_do_condominio(id) OR (EXISTS ( SELECT 1\n   FROM colaboradores c\n  WHERE ((c.auth_user_id = auth.uid()) AND (c.ativo = true) AND (c.condominio_id = condominios.id))))))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "demandas",
+      "policyname": "colaborador_v2_select_demandas",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "((status <> 'cancelada'::text) AND (EXISTS ( SELECT 1\n   FROM colaboradores c\n  WHERE ((c.auth_user_id = auth.uid()) AND (c.ativo = true) AND (c.condominio_id = demandas.condominio_id) AND ((demandas.colaborador_id = c.id) OR ((demandas.colaborador_id IS NULL) AND (demandas.funcao IS NOT NULL) AND (lower(TRIM(BOTH FROM demandas.funcao)) = lower(TRIM(BOTH FROM c.funcao)))) OR ((demandas.colaborador_id IS NULL) AND (demandas.funcao IS NULL)))))))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "demandas",
+      "policyname": "colaborador_v2_update_demandas",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "UPDATE",
+      "qual": "((status <> 'cancelada'::text) AND (EXISTS ( SELECT 1\n   FROM colaboradores c\n  WHERE ((c.auth_user_id = auth.uid()) AND (c.ativo = true) AND (c.condominio_id = demandas.condominio_id) AND ((demandas.colaborador_id = c.id) OR ((demandas.colaborador_id IS NULL) AND (demandas.funcao IS NOT NULL) AND (lower(TRIM(BOTH FROM demandas.funcao)) = lower(TRIM(BOTH FROM c.funcao)))) OR ((demandas.colaborador_id IS NULL) AND (demandas.funcao IS NULL)))))))",
+      "with_check": "(EXISTS ( SELECT 1\n   FROM colaboradores c\n  WHERE ((c.auth_user_id = auth.uid()) AND (c.ativo = true) AND (c.condominio_id = demandas.condominio_id) AND ((demandas.colaborador_id = c.id) OR ((demandas.colaborador_id IS NULL) AND (demandas.funcao IS NOT NULL) AND (lower(TRIM(BOTH FROM demandas.funcao)) = lower(TRIM(BOTH FROM c.funcao)))) OR ((demandas.colaborador_id IS NULL) AND (demandas.funcao IS NULL))))))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "demandas",
+      "policyname": "demo_select_demandas",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "((status <> 'cancelada'::text) AND (EXISTS ( SELECT 1\n   FROM colaboradores c\n  WHERE ((c.condominio_id = demandas.condominio_id) AND (c.ativo = true) AND oraqui_demo_pode_operar_colaborador(demandas.condominio_id, c.id) AND ((demandas.colaborador_id = c.id) OR ((demandas.colaborador_id IS NULL) AND (demandas.funcao IS NOT NULL) AND (lower(TRIM(BOTH FROM demandas.funcao)) = lower(TRIM(BOTH FROM c.funcao)))) OR ((demandas.colaborador_id IS NULL) AND (demandas.funcao IS NULL)))))))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "demandas",
+      "policyname": "demo_update_demandas",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "UPDATE",
+      "qual": "((status <> 'cancelada'::text) AND (EXISTS ( SELECT 1\n   FROM colaboradores c\n  WHERE ((c.condominio_id = demandas.condominio_id) AND (c.ativo = true) AND oraqui_demo_pode_operar_colaborador(demandas.condominio_id, c.id) AND ((demandas.colaborador_id = c.id) OR ((demandas.colaborador_id IS NULL) AND (demandas.funcao IS NOT NULL) AND (lower(TRIM(BOTH FROM demandas.funcao)) = lower(TRIM(BOTH FROM c.funcao)))) OR ((demandas.colaborador_id IS NULL) AND (demandas.funcao IS NULL)))))))",
+      "with_check": "(EXISTS ( SELECT 1\n   FROM colaboradores c\n  WHERE ((c.condominio_id = demandas.condominio_id) AND (c.ativo = true) AND oraqui_demo_pode_operar_colaborador(demandas.condominio_id, c.id) AND ((demandas.colaborador_id = c.id) OR ((demandas.colaborador_id IS NULL) AND (demandas.funcao IS NOT NULL) AND (lower(TRIM(BOTH FROM demandas.funcao)) = lower(TRIM(BOTH FROM c.funcao)))) OR ((demandas.colaborador_id IS NULL) AND (demandas.funcao IS NULL))))))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "demandas",
+      "policyname": "gestao_insert_demandas",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "usuario_gestao_do_condominio(condominio_id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "demandas",
+      "policyname": "gestao_select_demandas",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "usuario_gestao_do_condominio(condominio_id)",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "demandas",
+      "policyname": "gestao_update_demandas",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "UPDATE",
+      "qual": "usuario_gestao_do_condominio(condominio_id)",
+      "with_check": "usuario_gestao_do_condominio(condominio_id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "documentos_colaborador",
+      "policyname": "documentos_insert",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "(oraqui_documento_eh_gestor(condominio_id) AND (criado_por = ( SELECT auth.uid() AS uid)) AND (EXISTS ( SELECT 1\n   FROM colaboradores c\n  WHERE ((c.id = documentos_colaborador.colaborador_id) AND (c.condominio_id = c.condominio_id)))) AND (storage_path ~~ ((((condominio_id)::text || '/'::text) || (colaborador_id)::text) || '/%'::text)))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "documentos_colaborador",
+      "policyname": "documentos_select",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "(oraqui_documento_eh_gestor(condominio_id) OR oraqui_documento_eh_colaborador(colaborador_id, condominio_id))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "escalas",
+      "policyname": "colaborador_v2_select_escalas",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "((status_publicacao = ANY (ARRAY['publicada'::text, 'alterada'::text])) AND (EXISTS ( SELECT 1\n   FROM colaboradores c\n  WHERE ((c.auth_user_id = auth.uid()) AND (c.ativo = true) AND (c.id = escalas.colaborador_id) AND (c.condominio_id = escalas.condominio_id)))))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "escalas",
+      "policyname": "gestao_insert_escalas",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "usuario_gestao_do_condominio(condominio_id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "escalas",
+      "policyname": "gestao_select_escalas",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "usuario_gestao_do_condominio(condominio_id)",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "escalas",
+      "policyname": "gestao_update_escalas",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "UPDATE",
+      "qual": "usuario_gestao_do_condominio(condominio_id)",
+      "with_check": "usuario_gestao_do_condominio(condominio_id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "execucoes",
+      "policyname": "colaborador_v2_insert_execucoes",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "(EXISTS ( SELECT 1\n   FROM colaboradores c\n  WHERE ((c.auth_user_id = auth.uid()) AND (c.ativo = true) AND (c.id = execucoes.colaborador_id) AND (c.condominio_id = execucoes.condominio_id))))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "execucoes",
+      "policyname": "colaborador_v2_select_execucoes",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "(EXISTS ( SELECT 1\n   FROM colaboradores c\n  WHERE ((c.auth_user_id = auth.uid()) AND (c.ativo = true) AND (c.id = execucoes.colaborador_id) AND (c.condominio_id = execucoes.condominio_id))))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "execucoes",
+      "policyname": "colaborador_v2_update_execucoes",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "UPDATE",
+      "qual": "(EXISTS ( SELECT 1\n   FROM colaboradores c\n  WHERE ((c.auth_user_id = auth.uid()) AND (c.ativo = true) AND (c.id = execucoes.colaborador_id) AND (c.condominio_id = execucoes.condominio_id))))",
+      "with_check": "(EXISTS ( SELECT 1\n   FROM colaboradores c\n  WHERE ((c.auth_user_id = auth.uid()) AND (c.ativo = true) AND (c.id = execucoes.colaborador_id) AND (c.condominio_id = execucoes.condominio_id))))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "execucoes",
+      "policyname": "demo_insert_execucoes",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "oraqui_demo_pode_operar_colaborador(condominio_id, colaborador_id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "execucoes",
+      "policyname": "demo_select_execucoes",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "oraqui_demo_pode_operar_colaborador(condominio_id, colaborador_id)",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "execucoes",
+      "policyname": "demo_update_execucoes",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "UPDATE",
+      "qual": "oraqui_demo_pode_operar_colaborador(condominio_id, colaborador_id)",
+      "with_check": "oraqui_demo_pode_operar_colaborador(condominio_id, colaborador_id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "execucoes",
+      "policyname": "gestao_v2_insert_execucoes",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "usuario_gestao_do_condominio(condominio_id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "execucoes",
+      "policyname": "gestao_v2_select_execucoes",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "usuario_gestao_do_condominio(condominio_id)",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "execucoes",
+      "policyname": "gestao_v2_update_execucoes",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "UPDATE",
+      "qual": "usuario_gestao_do_condominio(condominio_id)",
+      "with_check": "usuario_gestao_do_condominio(condominio_id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "execucoes",
+      "policyname": "portal_sindico_select_execucoes",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "oraqui_portal_autorizado(condominio_id)",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "inicios_avulsos",
+      "policyname": "colaborador_insert_inicios_avulsos",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "((EXISTS ( SELECT 1\n   FROM colaboradores c\n  WHERE ((c.id = inicios_avulsos.colaborador_id) AND (c.condominio_id = inicios_avulsos.condominio_id) AND (c.auth_user_id = auth.uid()) AND (c.ativo = true)))) AND (EXISTS ( SELECT 1\n   FROM areas a\n  WHERE ((a.id = inicios_avulsos.area_id) AND (a.condominio_id = inicios_avulsos.condominio_id)))) AND ((ponto_id IS NULL) OR (EXISTS ( SELECT 1\n   FROM pontos p\n  WHERE ((p.id = inicios_avulsos.ponto_id) AND (p.condominio_id = inicios_avulsos.condominio_id) AND (p.area_id = p.area_id))))))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "inicios_avulsos",
+      "policyname": "colaborador_select_inicios_avulsos",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "(EXISTS ( SELECT 1\n   FROM colaboradores c\n  WHERE ((c.id = inicios_avulsos.colaborador_id) AND (c.condominio_id = inicios_avulsos.condominio_id) AND (c.auth_user_id = auth.uid()) AND (c.ativo = true))))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "inicios_avulsos",
+      "policyname": "colaborador_update_inicios_avulsos",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "UPDATE",
+      "qual": "(EXISTS ( SELECT 1\n   FROM colaboradores c\n  WHERE ((c.id = inicios_avulsos.colaborador_id) AND (c.condominio_id = inicios_avulsos.condominio_id) AND (c.auth_user_id = auth.uid()) AND (c.ativo = true))))",
+      "with_check": "((EXISTS ( SELECT 1\n   FROM colaboradores c\n  WHERE ((c.id = inicios_avulsos.colaborador_id) AND (c.condominio_id = inicios_avulsos.condominio_id) AND (c.auth_user_id = auth.uid()) AND (c.ativo = true)))) AND (EXISTS ( SELECT 1\n   FROM areas a\n  WHERE ((a.id = inicios_avulsos.area_id) AND (a.condominio_id = inicios_avulsos.condominio_id)))) AND ((ponto_id IS NULL) OR (EXISTS ( SELECT 1\n   FROM pontos p\n  WHERE ((p.id = inicios_avulsos.ponto_id) AND (p.condominio_id = inicios_avulsos.condominio_id) AND (p.area_id = p.area_id))))))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "inicios_execucao",
+      "policyname": "colaborador_cria_proprio_inicio",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "((EXISTS ( SELECT 1\n   FROM colaboradores c\n  WHERE ((c.id = inicios_execucao.colaborador_id) AND (c.condominio_id = inicios_execucao.condominio_id) AND (c.auth_user_id = auth.uid()) AND (c.ativo = true)))) AND ((programacao_id IS NULL) OR (EXISTS ( SELECT 1\n   FROM programacoes p\n  WHERE ((p.id = inicios_execucao.programacao_id) AND (p.condominio_id = inicios_execucao.condominio_id))))) AND ((demanda_id IS NULL) OR (EXISTS ( SELECT 1\n   FROM (demandas d\n     JOIN colaboradores c2 ON ((c2.id = inicios_execucao.colaborador_id)))\n  WHERE ((d.id = inicios_execucao.demanda_id) AND (d.condominio_id = inicios_execucao.condominio_id) AND ((d.colaborador_id = inicios_execucao.colaborador_id) OR ((d.colaborador_id IS NULL) AND ((d.funcao IS NULL) OR (lower(TRIM(BOTH FROM c2.funcao)) = lower(TRIM(BOTH FROM d.funcao)))))))))))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "inicios_execucao",
+      "policyname": "colaborador_remove_proprio_inicio",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "DELETE",
+      "qual": "(EXISTS ( SELECT 1\n   FROM colaboradores c\n  WHERE ((c.id = inicios_execucao.colaborador_id) AND (c.condominio_id = inicios_execucao.condominio_id) AND (c.auth_user_id = auth.uid()) AND (c.ativo = true))))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "inicios_execucao",
+      "policyname": "colaborador_ve_proprio_inicio",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "(EXISTS ( SELECT 1\n   FROM colaboradores c\n  WHERE ((c.id = inicios_execucao.colaborador_id) AND (c.condominio_id = inicios_execucao.condominio_id) AND (c.auth_user_id = auth.uid()) AND (c.ativo = true))))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "inicios_execucao",
+      "policyname": "gestao_ve_inicio_condominio",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "usuario_gestao_do_condominio(condominio_id)",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ocorrencias",
+      "policyname": "colaborador visualiza ocorrencia encaminhada",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "colaborador_pode_ver_ocorrencia(id)",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ocorrencias",
+      "policyname": "gestao autenticada atualiza ocorrencias",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "UPDATE",
+      "qual": "gestao_pode_ver_ocorrencia(condominio)",
+      "with_check": "gestao_pode_ver_ocorrencia(condominio)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ocorrencias",
+      "policyname": "gestao autenticada visualiza ocorrencias",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "gestao_pode_ver_ocorrencia(condominio)",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ocorrencias",
+      "policyname": "gestao visualiza ocorrencias do condominio",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "(EXISTS ( SELECT 1\n   FROM (usuarios_gestao ug\n     JOIN condominios c ON ((c.id = ug.condominio_id)))\n  WHERE ((ug.auth_user_id = auth.uid()) AND (ug.ativo = true) AND (ug.perfil = ANY (ARRAY['gestor'::text, 'supervisor'::text, 'admin_cliente'::text, 'admin_oraqui'::text])) AND (c.ativo = true) AND (((ug.acesso_temporario = false) AND (ug.acesso_expira_em IS NULL)) OR ((ug.acesso_temporario = true) AND (ug.acesso_ativado_em IS NOT NULL) AND (ug.acesso_expira_em > now()))) AND (c.nome = ocorrencias.condominio))))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ocorrencias",
+      "policyname": "gestao_insert_ocorrencias_por_id",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "((condominio_id IS NOT NULL) AND usuario_gestao_do_condominio(condominio_id))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ocorrencias",
+      "policyname": "gestao_select_ocorrencias_por_id",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "((condominio_id IS NOT NULL) AND usuario_gestao_do_condominio(condominio_id))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ocorrencias",
+      "policyname": "gestao_update_ocorrencias_por_id",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "UPDATE",
+      "qual": "((condominio_id IS NOT NULL) AND usuario_gestao_do_condominio(condominio_id))",
+      "with_check": "((condominio_id IS NOT NULL) AND usuario_gestao_do_condominio(condominio_id))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "ocorrencias",
+      "policyname": "publico pode criar ocorrencia",
+      "permissive": "PERMISSIVE",
+      "roles": "{anon}",
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "((condominio = 'Reserva Igara'::text) AND (status = 'Aberta'::text))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "oraqui_admins",
+      "policyname": "admin global consulta proprio acesso",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "((auth_user_id = auth.uid()) AND (ativo = true))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "oraqui_chat_config",
+      "policyname": "chat_config_editar",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "UPDATE",
+      "qual": "oraqui_chat_eh_gestor(condominio_id, ( SELECT auth.uid() AS uid))",
+      "with_check": "oraqui_chat_eh_gestor(condominio_id, ( SELECT auth.uid() AS uid))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "oraqui_chat_config",
+      "policyname": "chat_config_inserir",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "oraqui_chat_eh_gestor(condominio_id, ( SELECT auth.uid() AS uid))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "oraqui_chat_config",
+      "policyname": "chat_config_ler",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "(oraqui_chat_eh_gestor(condominio_id, ( SELECT auth.uid() AS uid)) OR oraqui_chat_eh_colaborador(condominio_id, ( SELECT auth.uid() AS uid)))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "oraqui_chat_mensagens",
+      "policyname": "chat_msg_enviar",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "((remetente = ( SELECT auth.uid() AS uid)) AND (lida_em IS NULL) AND oraqui_chat_pode_enviar(condominio_id, remetente, destinatario))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "oraqui_chat_mensagens",
+      "policyname": "chat_msg_ler",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "(((( SELECT auth.uid() AS uid) = remetente) OR (( SELECT auth.uid() AS uid) = destinatario)) AND (oraqui_chat_eh_gestor(condominio_id, ( SELECT auth.uid() AS uid)) OR oraqui_chat_eh_colaborador(condominio_id, ( SELECT auth.uid() AS uid))))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "oraqui_chat_mensagens",
+      "policyname": "chat_msg_lida",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "UPDATE",
+      "qual": "((destinatario = ( SELECT auth.uid() AS uid)) AND (oraqui_chat_eh_gestor(condominio_id, ( SELECT auth.uid() AS uid)) OR oraqui_chat_eh_colaborador(condominio_id, ( SELECT auth.uid() AS uid))))",
+      "with_check": "(destinatario = ( SELECT auth.uid() AS uid))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "oraqui_chat_permissoes",
+      "policyname": "chat_permissoes_editar",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "UPDATE",
+      "qual": "oraqui_chat_eh_gestor(condominio_id, ( SELECT auth.uid() AS uid))",
+      "with_check": "oraqui_chat_eh_gestor(condominio_id, ( SELECT auth.uid() AS uid))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "oraqui_chat_permissoes",
+      "policyname": "chat_permissoes_inserir",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "(oraqui_chat_eh_gestor(condominio_id, ( SELECT auth.uid() AS uid)) AND (EXISTS ( SELECT 1\n   FROM colaboradores c\n  WHERE ((c.id = oraqui_chat_permissoes.colaborador_id) AND (c.condominio_id = oraqui_chat_permissoes.condominio_id)))))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "oraqui_chat_permissoes",
+      "policyname": "chat_permissoes_ler",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "(oraqui_chat_eh_gestor(condominio_id, ( SELECT auth.uid() AS uid)) OR oraqui_chat_eh_colaborador(condominio_id, ( SELECT auth.uid() AS uid)))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "oraqui_chat_rede_mensagens",
+      "policyname": "oraqui_rede_chat_insert",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "((remetente = ( SELECT auth.uid() AS uid)) AND (lida_em IS NULL) AND oraqui_chat_rede_e_gestao(remetente) AND oraqui_chat_rede_e_gestao(destinatario))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "oraqui_chat_rede_mensagens",
+      "policyname": "oraqui_rede_chat_select",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "(((remetente = ( SELECT auth.uid() AS uid)) OR (destinatario = ( SELECT auth.uid() AS uid))) AND oraqui_chat_rede_e_gestao(( SELECT auth.uid() AS uid)))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "oraqui_chat_rede_mensagens",
+      "policyname": "oraqui_rede_chat_update",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "UPDATE",
+      "qual": "((destinatario = ( SELECT auth.uid() AS uid)) AND oraqui_chat_rede_e_gestao(( SELECT auth.uid() AS uid)))",
+      "with_check": "(destinatario = ( SELECT auth.uid() AS uid))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "oraqui_portal_condominios",
+      "policyname": "portal_flags_admin_all",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "ALL",
+      "qual": "oraqui_e_superadmin()",
+      "with_check": "oraqui_e_superadmin()"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "oraqui_portal_condominios",
+      "policyname": "portal_flags_sindico_select",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "oraqui_portal_autorizado(condominio_id)",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "oraqui_portal_mensagens",
+      "policyname": "portal_msgs_insert_sindico",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "((autor_auth_id = auth.uid()) AND oraqui_portal_autorizado(condominio_id) AND (status = 'recebida'::text) AND (resposta_cliente IS NULL) AND (nota_interna IS NULL) AND (demanda_id IS NULL) AND (respondido_em IS NULL) AND (respondido_por IS NULL) AND ((area_id IS NULL) OR (EXISTS ( SELECT 1\n   FROM areas a\n  WHERE ((a.id = oraqui_portal_mensagens.area_id) AND (a.condominio_id = oraqui_portal_mensagens.condominio_id))))) AND ((ponto_id IS NULL) OR (EXISTS ( SELECT 1\n   FROM pontos p\n  WHERE ((p.id = oraqui_portal_mensagens.ponto_id) AND (p.condominio_id = oraqui_portal_mensagens.condominio_id))))))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "oraqui_portal_mensagens",
+      "policyname": "portal_msgs_select",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "(oraqui_e_superadmin() OR usuario_gestao_do_condominio(condominio_id) OR ((autor_auth_id = auth.uid()) AND oraqui_portal_autorizado(condominio_id)))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "oraqui_portal_mensagens",
+      "policyname": "portal_msgs_update_gestao",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "UPDATE",
+      "qual": "(oraqui_e_superadmin() OR usuario_gestao_do_condominio(condominio_id))",
+      "with_check": "(oraqui_e_superadmin() OR usuario_gestao_do_condominio(condominio_id))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "oraqui_portal_usuarios",
+      "policyname": "portal_users_admin_all",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "ALL",
+      "qual": "oraqui_e_superadmin()",
+      "with_check": "oraqui_e_superadmin()"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "oraqui_portal_usuarios",
+      "policyname": "portal_users_own_select",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "(auth_user_id = auth.uid())",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "pontos",
+      "policyname": "colaborador_v2_select_pontos",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "((ativo = true) AND (visivel_colaborador = true) AND (EXISTS ( SELECT 1\n   FROM colaboradores c\n  WHERE ((c.auth_user_id = auth.uid()) AND (c.ativo = true) AND (c.condominio_id = pontos.condominio_id)))))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "pontos",
+      "policyname": "gestao_insert_pontos",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "usuario_gestao_do_condominio(condominio_id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "pontos",
+      "policyname": "gestao_select_pontos",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "usuario_gestao_do_condominio(condominio_id)",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "pontos",
+      "policyname": "gestao_update_pontos",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "UPDATE",
+      "qual": "usuario_gestao_do_condominio(condominio_id)",
+      "with_check": "usuario_gestao_do_condominio(condominio_id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "pontos",
+      "policyname": "portal_sindico_select_pontos",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "oraqui_portal_autorizado(condominio_id)",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "pontos",
+      "policyname": "public_select_pontos_ocorrencia",
+      "permissive": "PERMISSIVE",
+      "roles": "{anon}",
+      "cmd": "SELECT",
+      "qual": "((ativo = true) AND (visivel_ocorrencia = true))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "programacoes",
+      "policyname": "colaborador_v2_select_programacoes",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "((ativo = true) AND (EXISTS ( SELECT 1\n   FROM colaboradores c\n  WHERE ((c.auth_user_id = auth.uid()) AND (c.ativo = true) AND (c.condominio_id = programacoes.condominio_id) AND ((programacoes.colaborador_id = c.id) OR ((programacoes.colaborador_id IS NULL) AND (programacoes.funcao IS NOT NULL) AND (lower(TRIM(BOTH FROM programacoes.funcao)) = lower(TRIM(BOTH FROM c.funcao)))) OR ((programacoes.colaborador_id IS NULL) AND (programacoes.funcao IS NULL)))))))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "programacoes",
+      "policyname": "gestao_insert_programacoes",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "usuario_gestao_do_condominio(condominio_id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "programacoes",
+      "policyname": "gestao_select_programacoes",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "usuario_gestao_do_condominio(condominio_id)",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "programacoes",
+      "policyname": "gestao_update_programacoes",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "UPDATE",
+      "qual": "usuario_gestao_do_condominio(condominio_id)",
+      "with_check": "usuario_gestao_do_condominio(condominio_id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "programacoes",
+      "policyname": "portal_sindico_select_programacoes",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "oraqui_portal_autorizado(condominio_id)",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "push_subscriptions",
+      "policyname": "push_insert_proprio",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "((auth_user_id = auth.uid()) AND (EXISTS ( SELECT 1\n   FROM colaboradores c\n  WHERE ((c.id = push_subscriptions.colaborador_id) AND (c.condominio_id = push_subscriptions.condominio_id) AND (c.auth_user_id = auth.uid()) AND (c.ativo = true)))))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "push_subscriptions",
+      "policyname": "push_select_proprio",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "(auth_user_id = auth.uid())",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "push_subscriptions",
+      "policyname": "push_update_proprio",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "UPDATE",
+      "qual": "(auth_user_id = auth.uid())",
+      "with_check": "(auth_user_id = auth.uid())"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "registros_atividade",
+      "policyname": "ORAQUI atualizar atividades colaborador",
+      "permissive": "PERMISSIVE",
+      "roles": "{anon}",
+      "cmd": "UPDATE",
+      "qual": "true",
+      "with_check": "true"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "registros_atividade",
+      "policyname": "ORAQUI consultar atividades colaborador",
+      "permissive": "PERMISSIVE",
+      "roles": "{anon}",
+      "cmd": "SELECT",
+      "qual": "true",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "registros_atividade",
+      "policyname": "ORAQUI criar atividades colaborador",
+      "permissive": "PERMISSIVE",
+      "roles": "{anon}",
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "true"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "registros_atividade",
+      "policyname": "permitir inserir registros atividade",
+      "permissive": "PERMISSIVE",
+      "roles": "{anon}",
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "true"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "registros_atividade",
+      "policyname": "permitir visualizar registros atividade",
+      "permissive": "PERMISSIVE",
+      "roles": "{anon}",
+      "cmd": "SELECT",
+      "qual": "true",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "registros_atividade",
+      "policyname": "publico pode visualizar registros atividade",
+      "permissive": "PERMISSIVE",
+      "roles": "{anon}",
+      "cmd": "SELECT",
+      "qual": "true",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "registros_ponto",
+      "policyname": "colaborador_v2_insert_proprio_ponto",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "(EXISTS ( SELECT 1\n   FROM colaboradores c\n  WHERE ((c.auth_user_id = auth.uid()) AND (c.ativo = true) AND (c.id = registros_ponto.colaborador_id) AND (c.condominio_id = registros_ponto.condominio_id))))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "registros_ponto",
+      "policyname": "colaborador_v2_select_proprio_ponto",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "(EXISTS ( SELECT 1\n   FROM colaboradores c\n  WHERE ((c.auth_user_id = auth.uid()) AND (c.ativo = true) AND (c.id = registros_ponto.colaborador_id) AND (c.condominio_id = registros_ponto.condominio_id))))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "registros_ponto",
+      "policyname": "demo_insert_registros_ponto",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "oraqui_demo_pode_operar_colaborador(condominio_id, colaborador_id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "registros_ponto",
+      "policyname": "demo_select_registros_ponto",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "oraqui_demo_pode_operar_colaborador(condominio_id, colaborador_id)",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "registros_ponto",
+      "policyname": "gestao_select_registros_ponto",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "usuario_gestao_do_condominio(condominio_id)",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "registros_posteriores",
+      "policyname": "rp_colaborador_insert",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "((status = 'pendente'::text) AND (revisado_em IS NULL) AND (revisado_por IS NULL) AND (justificativa_gestor IS NULL) AND (EXISTS ( SELECT 1\n   FROM colaboradores c\n  WHERE ((c.id = registros_posteriores.colaborador_id) AND (c.condominio_id = registros_posteriores.condominio_id) AND (c.auth_user_id = auth.uid()) AND (c.ativo = true)))) AND ((area_id IS NULL) OR (EXISTS ( SELECT 1\n   FROM areas a\n  WHERE ((a.id = registros_posteriores.area_id) AND (a.condominio_id = registros_posteriores.condominio_id))))) AND ((ponto_id IS NULL) OR (EXISTS ( SELECT 1\n   FROM pontos p\n  WHERE ((p.id = registros_posteriores.ponto_id) AND (p.condominio_id = registros_posteriores.condominio_id))))) AND ((atividade_id IS NULL) OR (EXISTS ( SELECT 1\n   FROM atividades_v2 a\n  WHERE ((a.id = registros_posteriores.atividade_id) AND (a.condominio_id = registros_posteriores.condominio_id))))))"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "registros_posteriores",
+      "policyname": "rp_colaborador_select",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "(EXISTS ( SELECT 1\n   FROM colaboradores c\n  WHERE ((c.id = registros_posteriores.colaborador_id) AND (c.condominio_id = registros_posteriores.condominio_id) AND (c.auth_user_id = auth.uid()) AND (c.ativo = true))))",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "registros_posteriores",
+      "policyname": "rp_gestao_select",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "usuario_gestao_do_condominio(condominio_id)",
+      "with_check": null
+    },
+    {
+      "schemaname": "public",
+      "tablename": "registros_posteriores",
+      "policyname": "rp_gestao_update",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "UPDATE",
+      "qual": "usuario_gestao_do_condominio(condominio_id)",
+      "with_check": "usuario_gestao_do_condominio(condominio_id)"
+    },
+    {
+      "schemaname": "public",
+      "tablename": "usuarios_gestao",
+      "policyname": "gestao consulta vinculos permitidos",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "((auth_user_id = auth.uid()) OR usuario_gestao_do_condominio(condominio_id))",
+      "with_check": null
+    },
+    {
+      "schemaname": "storage",
+      "tablename": "objects",
+      "policyname": "ORAQUI atualizar selfies",
+      "permissive": "PERMISSIVE",
+      "roles": "{anon}",
+      "cmd": "UPDATE",
+      "qual": "(bucket_id = 'selfies-colaboradores'::text)",
+      "with_check": "(bucket_id = 'selfies-colaboradores'::text)"
+    },
+    {
+      "schemaname": "storage",
+      "tablename": "objects",
+      "policyname": "ORAQUI upload selfies",
+      "permissive": "PERMISSIVE",
+      "roles": "{anon}",
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "(bucket_id = 'selfies-colaboradores'::text)"
+    },
+    {
+      "schemaname": "storage",
+      "tablename": "objects",
+      "policyname": "enviar fotos atividades",
+      "permissive": "PERMISSIVE",
+      "roles": "{anon}",
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "(bucket_id = 'fotos-atividades'::text)"
+    },
+    {
+      "schemaname": "storage",
+      "tablename": "objects",
+      "policyname": "enviar fotos atividades authenticated",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "(bucket_id = 'fotos-atividades'::text)"
+    },
+    {
+      "schemaname": "storage",
+      "tablename": "objects",
+      "policyname": "gestao autenticada visualiza fotos oraqui",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "(bucket_id = ANY (ARRAY['fotos-atividades'::text, 'fotos-ocorrencias'::text, 'ocorrencias'::text, 'ocorrencias-fotos'::text, 'fotos'::text]))",
+      "with_check": null
+    },
+    {
+      "schemaname": "storage",
+      "tablename": "objects",
+      "policyname": "oraqui_chat_audio_read",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "((bucket_id = 'oraqui-chat-audios'::text) AND (EXISTS ( SELECT 1\n   FROM oraqui_chat_mensagens m\n  WHERE ((m.audio_path = objects.name) AND ((m.remetente = auth.uid()) OR (m.destinatario = auth.uid())) AND ((m.condominio_id)::text = (storage.foldername(objects.name))[1])))))",
+      "with_check": null
+    },
+    {
+      "schemaname": "storage",
+      "tablename": "objects",
+      "policyname": "oraqui_chat_audio_upload",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "((bucket_id = 'oraqui-chat-audios'::text) AND ((storage.foldername(name))[2] = (auth.uid())::text) AND (EXISTS ( SELECT 1\n   FROM usuarios_gestao g\n  WHERE ((g.auth_user_id = auth.uid()) AND ((g.condominio_id)::text = (storage.foldername(objects.name))[1]) AND (g.ativo = true)))))"
+    },
+    {
+      "schemaname": "storage",
+      "tablename": "objects",
+      "policyname": "oraqui_demanda_gestor_read",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "((bucket_id = 'fotos-demandas-gestor'::text) AND (EXISTS ( SELECT 1\n   FROM demandas d\n  WHERE ((d.foto_gestor_path = objects.name) AND ((EXISTS ( SELECT 1\n           FROM usuarios_gestao g\n          WHERE ((g.auth_user_id = auth.uid()) AND (g.ativo = true) AND (g.condominio_id = d.condominio_id)))) OR (EXISTS ( SELECT 1\n           FROM colaboradores c\n          WHERE ((c.auth_user_id = auth.uid()) AND (c.id = d.colaborador_id) AND (c.condominio_id = d.condominio_id)))))))))",
+      "with_check": null
+    },
+    {
+      "schemaname": "storage",
+      "tablename": "objects",
+      "policyname": "oraqui_demanda_gestor_upload",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "((bucket_id = 'fotos-demandas-gestor'::text) AND (EXISTS ( SELECT 1\n   FROM usuarios_gestao g\n  WHERE ((g.auth_user_id = auth.uid()) AND (g.ativo = true) AND ((g.condominio_id)::text = (storage.foldername(objects.name))[1])))))"
+    },
+    {
+      "schemaname": "storage",
+      "tablename": "objects",
+      "policyname": "oraqui_documentos_leitura",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "((bucket_id = 'documentos-privados'::text) AND (EXISTS ( SELECT 1\n   FROM documentos_colaborador d\n  WHERE ((d.storage_path = objects.name) AND (oraqui_documento_eh_gestor(d.condominio_id) OR oraqui_documento_eh_colaborador(d.colaborador_id, d.condominio_id))))))",
+      "with_check": null
+    },
+    {
+      "schemaname": "storage",
+      "tablename": "objects",
+      "policyname": "oraqui_documentos_limpar_upload",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "DELETE",
+      "qual": "((bucket_id = 'documentos-privados'::text) AND oraqui_documento_eh_gestor(\nCASE\n    WHEN (split_part(name, '/'::text, 1) ~ '^[0-9]+$'::text) THEN (split_part(name, '/'::text, 1))::bigint\n    ELSE ('-1'::integer)::bigint\nEND) AND (NOT (EXISTS ( SELECT 1\n   FROM documentos_colaborador d\n  WHERE (d.storage_path = objects.name)))))",
+      "with_check": null
+    },
+    {
+      "schemaname": "storage",
+      "tablename": "objects",
+      "policyname": "oraqui_documentos_upload",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "((bucket_id = 'documentos-privados'::text) AND (storage.extension(name) = 'pdf'::text) AND oraqui_documento_eh_gestor(\nCASE\n    WHEN (split_part(name, '/'::text, 1) ~ '^[0-9]+$'::text) THEN (split_part(name, '/'::text, 1))::bigint\n    ELSE ('-1'::integer)::bigint\nEND) AND (EXISTS ( SELECT 1\n   FROM colaboradores c\n  WHERE ((c.condominio_id =\n        CASE\n            WHEN (split_part(objects.name, '/'::text, 1) ~ '^[0-9]+$'::text) THEN (split_part(objects.name, '/'::text, 1))::bigint\n            ELSE ('-1'::integer)::bigint\n        END) AND (c.id =\n        CASE\n            WHEN (split_part(objects.name, '/'::text, 2) ~ '^[0-9]+$'::text) THEN (split_part(objects.name, '/'::text, 2))::bigint\n            ELSE ('-1'::integer)::bigint\n        END)))))"
+    },
+    {
+      "schemaname": "storage",
+      "tablename": "objects",
+      "policyname": "oraqui_foto_insert",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "((bucket_id = 'fotos-perfil-privadas'::text) AND (EXISTS ( SELECT 1\n   FROM colaboradores c\n  WHERE (((c.id)::text = (storage.foldername(objects.name))[1]) AND (c.auth_user_id = auth.uid()) AND (c.ativo = true)))))"
+    },
+    {
+      "schemaname": "storage",
+      "tablename": "objects",
+      "policyname": "oraqui_foto_select",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "((bucket_id = 'fotos-perfil-privadas'::text) AND (EXISTS ( SELECT 1\n   FROM colaboradores c\n  WHERE (((c.id)::text = (storage.foldername(objects.name))[1]) AND ((c.auth_user_id = auth.uid()) OR (EXISTS ( SELECT 1\n           FROM usuarios_gestao g\n          WHERE ((g.auth_user_id = auth.uid()) AND (g.condominio_id = c.condominio_id) AND (g.ativo = true)))))))))",
+      "with_check": null
+    },
+    {
+      "schemaname": "storage",
+      "tablename": "objects",
+      "policyname": "oraqui_ponto_selfie_insert",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "((bucket_id = 'selfies-ponto-privadas'::text) AND (EXISTS ( SELECT 1\n   FROM colaboradores c\n  WHERE (((c.id)::text = (storage.foldername(objects.name))[2]) AND ((c.condominio_id)::text = (storage.foldername(objects.name))[1]) AND (c.auth_user_id = auth.uid()) AND (c.ativo = true)))))"
+    },
+    {
+      "schemaname": "storage",
+      "tablename": "objects",
+      "policyname": "oraqui_ponto_selfie_select",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "((bucket_id = 'selfies-ponto-privadas'::text) AND (EXISTS ( SELECT 1\n   FROM colaboradores c\n  WHERE (((c.id)::text = (storage.foldername(objects.name))[2]) AND ((c.condominio_id)::text = (storage.foldername(objects.name))[1]) AND ((c.auth_user_id = auth.uid()) OR (EXISTS ( SELECT 1\n           FROM usuarios_gestao g\n          WHERE ((g.auth_user_id = auth.uid()) AND (g.condominio_id = c.condominio_id) AND (g.ativo = true)))))))))",
+      "with_check": null
+    },
+    {
+      "schemaname": "storage",
+      "tablename": "objects",
+      "policyname": "publico pode enviar foto ocorrencia",
+      "permissive": "PERMISSIVE",
+      "roles": "{anon}",
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "(bucket_id = 'fotos-ocorrencias'::text)"
+    },
+    {
+      "schemaname": "storage",
+      "tablename": "objects",
+      "policyname": "read_foto_demanda_gestor",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "((bucket_id = 'fotos-demandas-gestor'::text) AND (EXISTS ( SELECT 1\n   FROM demandas d\n  WHERE ((d.foto_gestor_path = objects.name) AND ((EXISTS ( SELECT 1\n           FROM usuarios_gestao g\n          WHERE ((g.auth_user_id = auth.uid()) AND (g.condominio_id = d.condominio_id) AND (g.ativo = true)))) OR (EXISTS ( SELECT 1\n           FROM colaboradores c\n          WHERE ((c.auth_user_id = auth.uid()) AND (c.id = d.colaborador_id) AND (c.condominio_id = d.condominio_id)))))))))",
+      "with_check": null
+    },
+    {
+      "schemaname": "storage",
+      "tablename": "objects",
+      "policyname": "upload_foto_demanda_gestor",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "INSERT",
+      "qual": null,
+      "with_check": "((bucket_id = 'fotos-demandas-gestor'::text) AND (EXISTS ( SELECT 1\n   FROM usuarios_gestao g\n  WHERE ((g.auth_user_id = auth.uid()) AND (g.ativo = true) AND ((g.condominio_id)::text = (storage.foldername(objects.name))[1])))))"
+    },
+    {
+      "schemaname": "storage",
+      "tablename": "objects",
+      "policyname": "visualizar fotos atividades",
+      "permissive": "PERMISSIVE",
+      "roles": "{anon}",
+      "cmd": "SELECT",
+      "qual": "(bucket_id = 'fotos-atividades'::text)",
+      "with_check": null
+    },
+    {
+      "schemaname": "storage",
+      "tablename": "objects",
+      "policyname": "visualizar fotos atividades authenticated",
+      "permissive": "PERMISSIVE",
+      "roles": "{authenticated}",
+      "cmd": "SELECT",
+      "qual": "(bucket_id = 'fotos-atividades'::text)",
+      "with_check": null
+    }
+  ],
+  "tables": [
+    {
+      "schema": "public",
+      "table_name": "areas",
+      "rls": true,
+      "force_rls": false
+    },
+    {
+      "schema": "public",
+      "table_name": "atividades",
+      "rls": true,
+      "force_rls": false
+    },
+    {
+      "schema": "public",
+      "table_name": "atividades_v2",
+      "rls": true,
+      "force_rls": false
+    },
+    {
+      "schema": "public",
+      "table_name": "colaborador_pontos",
+      "rls": true,
+      "force_rls": false
+    },
+    {
+      "schema": "public",
+      "table_name": "colaboradores",
+      "rls": true,
+      "force_rls": false
+    },
+    {
+      "schema": "public",
+      "table_name": "condominios",
+      "rls": true,
+      "force_rls": false
+    },
+    {
+      "schema": "public",
+      "table_name": "demandas",
+      "rls": true,
+      "force_rls": false
+    },
+    {
+      "schema": "public",
+      "table_name": "documentos_colaborador",
+      "rls": true,
+      "force_rls": false
+    },
+    {
+      "schema": "public",
+      "table_name": "escalas",
+      "rls": true,
+      "force_rls": false
+    },
+    {
+      "schema": "public",
+      "table_name": "execucoes",
+      "rls": true,
+      "force_rls": false
+    },
+    {
+      "schema": "public",
+      "table_name": "inicios_avulsos",
+      "rls": true,
+      "force_rls": false
+    },
+    {
+      "schema": "public",
+      "table_name": "inicios_execucao",
+      "rls": true,
+      "force_rls": false
+    },
+    {
+      "schema": "public",
+      "table_name": "jornadas",
+      "rls": true,
+      "force_rls": false
+    },
+    {
+      "schema": "public",
+      "table_name": "ocorrencias",
+      "rls": true,
+      "force_rls": false
+    },
+    {
+      "schema": "public",
+      "table_name": "ocorrencias_historico",
+      "rls": true,
+      "force_rls": false
+    },
+    {
+      "schema": "public",
+      "table_name": "oraqui_admins",
+      "rls": true,
+      "force_rls": false
+    },
+    {
+      "schema": "public",
+      "table_name": "oraqui_chat_config",
+      "rls": true,
+      "force_rls": false
+    },
+    {
+      "schema": "public",
+      "table_name": "oraqui_chat_mensagens",
+      "rls": true,
+      "force_rls": false
+    },
+    {
+      "schema": "public",
+      "table_name": "oraqui_chat_permissoes",
+      "rls": true,
+      "force_rls": false
+    },
+    {
+      "schema": "public",
+      "table_name": "oraqui_chat_rede_mensagens",
+      "rls": true,
+      "force_rls": false
+    },
+    {
+      "schema": "public",
+      "table_name": "oraqui_portal_condominios",
+      "rls": true,
+      "force_rls": false
+    },
+    {
+      "schema": "public",
+      "table_name": "oraqui_portal_mensagens",
+      "rls": true,
+      "force_rls": false
+    },
+    {
+      "schema": "public",
+      "table_name": "oraqui_portal_usuarios",
+      "rls": true,
+      "force_rls": false
+    },
+    {
+      "schema": "public",
+      "table_name": "oraqui_superadmins",
+      "rls": true,
+      "force_rls": false
+    },
+    {
+      "schema": "public",
+      "table_name": "pontos",
+      "rls": true,
+      "force_rls": false
+    },
+    {
+      "schema": "public",
+      "table_name": "programacoes",
+      "rls": true,
+      "force_rls": false
+    },
+    {
+      "schema": "public",
+      "table_name": "push_subscriptions",
+      "rls": true,
+      "force_rls": false
+    },
+    {
+      "schema": "public",
+      "table_name": "registros_atividade",
+      "rls": true,
+      "force_rls": false
+    },
+    {
+      "schema": "public",
+      "table_name": "registros_ponto",
+      "rls": true,
+      "force_rls": false
+    },
+    {
+      "schema": "public",
+      "table_name": "registros_posteriores",
+      "rls": true,
+      "force_rls": false
+    },
+    {
+      "schema": "public",
+      "table_name": "usuarios_gestao",
+      "rls": true,
+      "force_rls": false
+    },
+    {
+      "schema": "public",
+      "table_name": "v_gestor",
+      "rls": true,
+      "force_rls": false
+    }
+  ],
+  "buckets": [
+    {
+      "id": "documentos-privados",
+      "name": "documentos-privados",
+      "public": false
+    },
+    {
+      "id": "fotos-atividades",
+      "name": "fotos-atividades",
+      "public": true
+    },
+    {
+      "id": "fotos-demandas-gestor",
+      "name": "fotos-demandas-gestor",
+      "public": false
+    },
+    {
+      "id": "fotos-ocorrencias",
+      "name": "fotos-ocorrencias",
+      "public": false
+    },
+    {
+      "id": "fotos-perfil-privadas",
+      "name": "fotos-perfil-privadas",
+      "public": false
+    },
+    {
+      "id": "oraqui-chat-audios",
+      "name": "oraqui-chat-audios",
+      "public": false
+    },
+    {
+      "id": "selfies-colaboradores",
+      "name": "selfies-colaboradores",
+      "public": false
+    },
+    {
+      "id": "selfies-ponto-privadas",
+      "name": "selfies-ponto-privadas",
+      "public": false
+    }
+  ]
+}
