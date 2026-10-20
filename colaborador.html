@@ -211,7 +211,7 @@ body:has(.modal.visible) .oraqui-bottom-nav{display:none}
  <button type="button" class="oraqui-nav-item" id="navChat" aria-label="Abrir chat"><span class="nav-icon">💬</span><span>Chat</span><span class="oraqui-nav-badge" id="navChatBadge" hidden></span></button>
  <button type="button" class="oraqui-nav-item oraqui-nav-plus" id="navRegistrar" aria-label="Registrar atividade"><span class="nav-icon">＋</span><span>Registrar</span></button>
  <button type="button" class="oraqui-nav-item" id="navDocumentos" aria-label="Abrir documentos"><span class="nav-icon">📄</span><span>Documentos</span><span class="oraqui-nav-badge" id="navDocsBadge" hidden></span></button>
- <button type="button" class="oraqui-nav-item" id="navCronograma" aria-label="Ver cronograma"><span class="oraqui-calendar-icon" aria-hidden="true"><span class="oraqui-calendar-month" id="navCalendarMonth">OUT</span><span class="oraqui-calendar-day" id="navCalendarDay">18</span></span><span>Cronograma</span></button>
+ <button type="button" class="oraqui-nav-item" id="navCronograma" aria-label="Ver cronograma"><span class="oraqui-calendar-icon" aria-hidden="true"><span class="oraqui-calendar-month" id="navCalendarMonth">OUT</span><span class="oraqui-calendar-day" id="navCalendarDay">18</span></span><span>Cronograma</span><span class="oraqui-nav-badge" id="navCronogramaBadge" hidden></span></button>
 </nav>
 
 <div class="modal" id="execModal"><div class="modal-card"><div class="modal-head"><h2 id="modalTitle">Registrar execução</h2><button class="close" id="closeModal">×</button></div><div class="selection" id="modalSelection"></div><div class="field hidden" id="areaField"><label>ÁREA</label><select id="areaSelect"></select></div><div class="field hidden" id="pontoField"><label>PONTO / LOCAL</label><select id="pontoSelect"></select></div><div class="field" id="blocoInicioExec"><label>📷 ANTES — REGISTRE A SITUAÇÃO</label><input id="fotoAntesExec" type="file" accept="image/*" capture="environment"><button type="button" class="oraqui-antes-botao" id="fotoAntesExecBtn">📷 TIRAR FOTO DO ANTES</button><img id="fotoAntesExecPreview" class="oraqui-antes-previa" alt="Prévia da foto antes"><small id="inicioExecInfo">Fotografe o local antes de começar. Depois, toque em INICIAR.</small><button class="photo-button" type="button" id="iniciarExec">▶ INICIAR ATIVIDADE</button></div><div id="depoisExecArea" class="oraqui-depois-area bloqueada"><div class="oraqui-etapa-label">📷 DEPOIS — REGISTRE O RESULTADO</div><button class="photo-button" id="photoButton">📷 TIRAR FOTO DO DEPOIS</button><small class="oraqui-etapa-ajuda">Fotografe o serviço concluído.</small></div><input class="photo-input" id="photoInput" type="file" accept="image/*" capture="environment"><img class="preview" id="preview" alt="Prévia"><div class="field"><label>OBSERVAÇÃO</label><textarea id="observacao" maxlength="600" placeholder="Observação sobre a execução..."></textarea></div><button class="confirm" id="confirmExec">✓ REGISTRAR CONCLUSÃO</button></div></div>
@@ -787,6 +787,15 @@ function renderProgramacoes(){
   const hojeItens=programacoes.filter(programacaoValeHoje);
   const futuros=programacoes.map(p=>({p,data:proximaDataProgramacao(p)})).filter(x=>x.data).sort((a,b)=>a.data-b.data||ordemProgramacao(a.p,b.p));
   const ordenadas=[...hojeItens].sort(ordemProgramacao);
+  // Sinal vermelho no Cronograma para atividades ainda não concluídas,
+  // inclusive as já agendadas para os próximos dias.
+  const badgeCronograma=$('navCronogramaBadge');
+  if(badgeCronograma){
+    const pendentes=programacoes.filter(p=>!execucoesHoje.some(e=>mesmoId(e.programacao_id,p.id)&&e.status==='concluida')&&(programacaoValeHoje(p)||!!proximaDataProgramacao(p)));
+    badgeCronograma.hidden=pendentes.length===0;
+    badgeCronograma.textContent=pendentes.length>99?'99+':String(pendentes.length);
+    $('navCronograma').setAttribute('aria-label',pendentes.length?'Ver cronograma: '+pendentes.length+' atividades pendentes':'Ver cronograma');
+  }
   const cartao=(p,indice)=>{
     const at=atividades.find(a=>mesmoId(a.id,p.atividade_id));
     const feito=execucoesHoje.some(e=>mesmoId(e.programacao_id,p.id)&&e.status==="concluida");
