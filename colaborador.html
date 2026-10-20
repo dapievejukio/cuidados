@@ -216,7 +216,7 @@ body:has(.modal.visible) .oraqui-bottom-nav{display:none}
 </nav>
 
 <div class="modal" id="execModal"><div class="modal-card"><div class="modal-head"><h2 id="modalTitle">Registrar execução</h2><button class="close" id="closeModal">×</button></div><div class="selection" id="modalSelection"></div><div class="field hidden" id="areaField"><label>ÁREA</label><select id="areaSelect"></select></div><div class="field hidden" id="pontoField"><label>PONTO / LOCAL</label><select id="pontoSelect"></select></div><div class="field" id="blocoInicioExec"><label>📷 ANTES — REGISTRE A SITUAÇÃO</label><input id="fotoAntesExec" type="file" accept="image/*" capture="environment"><button type="button" class="oraqui-antes-botao" id="fotoAntesExecBtn">📷 TIRAR FOTO DO ANTES</button><img id="fotoAntesExecPreview" class="oraqui-antes-previa" alt="Prévia da foto antes"><small id="inicioExecInfo">Fotografe o local antes de começar. Depois, toque em INICIAR.</small><button class="photo-button" type="button" id="iniciarExec">▶ INICIAR ATIVIDADE</button></div><div id="depoisExecArea" class="oraqui-depois-area bloqueada"><div class="oraqui-etapa-label">📷 DEPOIS — REGISTRE O RESULTADO</div><button class="photo-button" id="photoButton">📷 TIRAR FOTO DO DEPOIS</button><small class="oraqui-etapa-ajuda">Fotografe o serviço concluído.</small></div><input class="photo-input" id="photoInput" type="file" accept="image/*" capture="environment"><img class="preview" id="preview" alt="Prévia"><div class="field"><label>OBSERVAÇÃO</label><textarea id="observacao" maxlength="600" placeholder="Observação sobre a execução..."></textarea></div><button class="confirm" id="confirmExec">✓ REGISTRAR CONCLUSÃO</button></div></div>
-<div class="modal" id="demandaConclusaoModal"><div class="modal-card"><div class="modal-head"><h2>Concluir demanda</h2><button class="close" id="fecharDemandaConclusao" type="button">×</button></div><div class="selection" id="demandaConclusaoTitulo"></div><div class="field"><label>OBSERVAÇÃO DA EXECUÇÃO</label><textarea id="demandaConclusaoObs" maxlength="600" placeholder="Descreva o serviço realizado..."></textarea></div><div class="field" id="blocoInicioDemanda"><label>📷 ANTES — REGISTRE A SITUAÇÃO</label><input id="demandaFotoAntes" type="file" accept="image/*" capture="environment"><button type="button" class="oraqui-antes-botao" id="demandaFotoAntesBtn">📷 TIRAR FOTO DO ANTES</button><img id="demandaFotoAntesPreview" class="oraqui-antes-previa" alt="Prévia da foto antes"><small id="inicioDemandaInfo">Fotografe o local antes de iniciar a demanda.</small><button class="photo-button" type="button" id="iniciarDemanda">▶ INICIAR DEMANDA</button></div><div id="depoisDemandaArea" class="oraqui-depois-area bloqueada"><div class="oraqui-etapa-label">📷 DEPOIS — REGISTRE O RESULTADO</div><button class="photo-button" id="demandaConclusaoFotoBtn" type="button">📷 TIRAR FOTO DO DEPOIS</button><small class="oraqui-etapa-ajuda">Fotografe o serviço concluído.</small></div><input class="photo-input" id="demandaConclusaoFoto" type="file" accept="image/*" capture="environment"><img class="preview" id="demandaConclusaoPreview" alt="Foto da execução"><button class="confirm" id="salvarDemandaConclusao" type="button">✓ CONFIRMAR CONCLUSÃO</button></div></div><div class="toast" id="toast"></div>
+<div class="modal" id="demandaConclusaoModal"><div class="modal-card"><div class="modal-head"><h2>Concluir demanda</h2><button class="close" id="fecharDemandaConclusao" type="button">×</button></div><div class="selection" id="demandaConclusaoTitulo"></div><div id="demandaDetalhesModal" style="padding:14px;margin:10px 0;background:#f0f7fb;border-radius:14px;font-size:14px;line-height:1.6"></div><div class="field"><label>OBSERVAÇÃO DA EXECUÇÃO</label><textarea id="demandaConclusaoObs" maxlength="600" placeholder="Descreva o serviço realizado..."></textarea></div><div class="field" id="blocoInicioDemanda"><label>📷 ANTES — REGISTRE A SITUAÇÃO</label><input id="demandaFotoAntes" type="file" accept="image/*" capture="environment"><button type="button" class="oraqui-antes-botao" id="demandaFotoAntesBtn">📷 TIRAR FOTO DO ANTES</button><img id="demandaFotoAntesPreview" class="oraqui-antes-previa" alt="Prévia da foto antes"><small id="inicioDemandaInfo">Fotografe o local antes de iniciar a demanda.</small><button class="photo-button" type="button" id="iniciarDemanda">▶ INICIAR DEMANDA</button></div><div id="depoisDemandaArea" class="oraqui-depois-area bloqueada"><div class="oraqui-etapa-label">📷 DEPOIS — REGISTRE O RESULTADO</div><button class="photo-button" id="demandaConclusaoFotoBtn" type="button">📷 TIRAR FOTO DO DEPOIS</button><small class="oraqui-etapa-ajuda">Fotografe o serviço concluído.</small></div><input class="photo-input" id="demandaConclusaoFoto" type="file" accept="image/*" capture="environment"><img class="preview" id="demandaConclusaoPreview" alt="Foto da execução"><button class="confirm" id="salvarDemandaConclusao" type="button">✓ CONFIRMAR CONCLUSÃO</button></div></div><div class="toast" id="toast"></div>
 
 
 <div class="modal" id="posteriorModal"><div class="modal-card">
@@ -495,6 +495,7 @@ async function carregarTudo(){
     programacoes=(pr.data||[]).filter(programacaoParaColaborador);
     escalaHoje=(es.data||[]).find(x=>x.status_publicacao==="publicada"||x.status_publicacao==="alterada")||(es.data||[])[0]||null;
     demandas=(de.data||[]).filter(demandaParaColaborador);
+    await enriquecerDemandasComOcorrencias();
     pontosHoje=rp.data||[];
     execucoesHoje=ex.data||[];
 
@@ -616,13 +617,51 @@ function demandaConcluidaHoje(d){
   return dataLocalRegistro(d.concluida_em||d.updated_at)===hoje();
 }
 
+function detalheDemanda(d){
+  const local=d.ocorrencia_local||nomeLocal(d.area_id,d.ponto_id)||'Local não especificado';
+  const instrucao=d.instrucoes||d.descricao||'Consultar orientação do gestor';
+  return '<div style="margin-top:12px;padding:12px 14px;border-radius:12px;background:#eaf4f8;color:#264b64;line-height:1.55;font-size:14px">'+
+    '<div><strong>📍 LOCAL:</strong> '+esc(local)+'</div>'+
+    '<div style="margin-top:8px"><strong>📝 O QUE FAZER:</strong> '+esc(instrucao)+'</div>'+
+    (d.ocorrencia_descricao&&d.ocorrencia_descricao!==instrucao?'<div style="margin-top:8px"><strong>Relato do morador:</strong> '+esc(d.ocorrencia_descricao)+'</div>':'')+
+    (d.ocorrencia_id?'<div style="margin-top:8px"><strong>📷 Foto original:</strong> <span id="demandaFotoStatus'+Number(d.id)+'">ver detalhes ao iniciar</span></div>':'')+
+    '</div>';
+}
+async function enriquecerDemandasComOcorrencias(){
+  const ids=[...new Set(demandas.map(d=>d.ocorrencia_id).filter(Boolean))];
+  if(!ids.length)return;
+  try{
+    const {data,error}=await db.from('ocorrencias')
+      .select('id,local_completo,descricao,foto_path')
+      .eq('condominio_id',colaborador.condominio_id).in('id',ids);
+    if(error)throw error;
+    const porId=new Map((data||[]).map(o=>[String(o.id),o]));
+    demandas.forEach(d=>{
+      const o=porId.get(String(d.ocorrencia_id));
+      if(!o)return;
+      d.ocorrencia_local=o.local_completo;
+      d.ocorrencia_descricao=o.descricao;
+      d.ocorrencia_foto_path=o.foto_path;
+    });
+  }catch(e){console.warn('Detalhes das ocorrências indisponíveis:',e.message)}
+}
+async function mostrarFotoOriginalDemanda(d){
+  const box=$('demandaFotoOriginal');
+  if(!box||!d.ocorrencia_foto_path)return;
+  try{
+    const {data,error}=await db.storage.from('fotos-ocorrencias').createSignedUrl(d.ocorrencia_foto_path,1800);
+    if(error)throw error;
+    if(demandaEmConclusao?.id!==d.id)return;
+    box.innerHTML='<a href="'+esc(data.signedUrl)+'" target="_blank" rel="noopener noreferrer" style="display:block;margin-top:10px">📷 ABRIR FOTO ORIGINAL DO MORADOR</a><img src="'+esc(data.signedUrl)+'" alt="Foto da ocorrência" style="width:100%;max-height:320px;object-fit:contain;border-radius:12px;margin-top:8px">';
+  }catch(e){box.textContent='Foto original indisponível para esta conta.';console.warn('Foto original:',e.message)}
+}
 function htmlDemanda(d,compacta=false){
   const urgente=d.tipo==="urgente"||d.prioridade==="urgente";
   const pendente=urgente&&d.status!=="concluida";
   if(compacta){
     return `<div class="demanda-antiga"><span class="demanda-antiga-icone">✓</span><div><strong>${esc(d.titulo||"Demanda")}</strong><small>${esc(d.descricao||"Concluída")}</small></div><span class="badge green">CONCLUÍDA</span></div>`;
   }
-  return `<div class="item-card" style="${pendente?'border:3px solid #dc2626;background:#fff7f7;box-shadow:0 0 0 3px #fecaca;':''}"><div class="item-top"><div class="item-icon">${urgente?"🚨":d.tipo==="recado"?"💬":"✓"}</div><div class="item-info"><strong>${esc(d.titulo)}</strong><span>${esc(d.tipo||"tarefa")} • ${esc(d.status)}${d.prazo_em?" • prazo "+hora(d.prazo_em):""}</span></div><span class="badge ${urgente?"red":"purple"}">${urgente?"🚨 URGENTE":esc(String(d.tipo||"tarefa").toUpperCase())}</span></div>${d.descricao?`<div class="item-description">${esc(d.descricao)}</div>`:""}<div class="item-actions">${d.status==="pendente"?`<button class="action secondary" onclick="mudarDemanda(${d.id},'visualizada')">MARCAR COMO LIDA</button>`:""}${d.tipo!=="recado"&&d.status!=="concluida"?`<button class="action" onclick="abrirConclusaoDemanda(${d.id})">INICIAR / CONCLUIR</button>`:""}</div></div>`;
+  return `<div class="item-card" style="${pendente?'border:3px solid #dc2626;background:#fff7f7;box-shadow:0 0 0 3px #fecaca;':''}"><div class="item-top"><div class="item-icon">${urgente?"🚨":d.tipo==="recado"?"💬":"✓"}</div><div class="item-info"><strong>${esc(d.titulo)}</strong><span>${esc(d.tipo||"tarefa")} • ${esc(d.status)}${d.prazo_em?" • prazo "+hora(d.prazo_em):""}</span></div><span class="badge ${urgente?"red":"purple"}">${urgente?"🚨 URGENTE":esc(String(d.tipo||"tarefa").toUpperCase())}</span></div>${detalheDemanda(d)}<div class="item-actions">${d.status==="pendente"?`<button class="action secondary" onclick="mudarDemanda(${d.id},'visualizada')">MARCAR COMO LIDA</button>`:""}${d.tipo!=="recado"&&d.status!=="concluida"?`<button class="action" onclick="abrirConclusaoDemanda(${d.id})">INICIAR / CONCLUIR</button>`:""}</div></div>`;
 }
 
 function renderDemandas(){
@@ -661,6 +700,9 @@ function abrirConclusaoDemanda(id){
   if(!d||d.status==='concluida'||!demandaParaColaborador(d))return;
   demandaEmConclusao=d;
   $('demandaConclusaoTitulo').textContent=`#${d.id} • ${d.titulo||'Demanda'}`;
+  $('demandaDetalhesModal').innerHTML=detalheDemanda(d)+'<div id="demandaFotoOriginal"></div>';
+  mostrarFotoOriginalDemanda(d);
+
   $('demandaConclusaoObs').value='';$('demandaConclusaoFoto').value='';$('demandaFotoAntes').value='';
   $('demandaConclusaoPreview').classList.remove('visible');
   $('demandaConclusaoFotoBtn').textContent='📷 TIRAR FOTO DO DEPOIS';
