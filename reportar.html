@@ -109,6 +109,19 @@ select,input[type=email],textarea{background:#fbfdff;border-color:#cfdee9;font-s
 .step-icon{font-size:24px;display:inline-block;margin-right:8px;vertical-align:middle}
 .important-note{padding:16px;border-radius:18px;background:#e4f1ff;border:1px solid #cce2f6;color:#234e70;font-size:12px;line-height:1.55;margin-top:15px}
 @media(max-width:480px){.intro-panel{padding:14px;gap:10px}.intro-symbol{width:55px;height:55px;flex-basis:55px;font-size:30px}.intro-panel h2{font-size:17px}.intro-panel p{font-size:12px}.steps-ribbon div{font-size:9px;padding:10px 4px}.steps-ribbon span{font-size:22px}.card{padding:17px}.step h2{font-size:17px}}
+
+/* Identidade azul — Portal de Ocorrências */
+:root{--brand:#1765b3;--brand2:#124e91;--mint:#eaf3ff;--ok:#2876b7}
+.hero{background:linear-gradient(130deg,#102f59 0%,#195b9d 65%,#3585cf 100%)}
+.num{background:linear-gradient(145deg,#388bda,#1755a4);box-shadow:0 5px 12px #1d5baf25}
+.intro-panel{background:linear-gradient(110deg,#eef5ff,#e6f1ff);border-color:#d2e3f8}
+.intro-symbol{background:#d9e9ff}
+.place{background:#edf4ff}
+.photo-box{background:linear-gradient(135deg,#edf5ff,#f5f9ff);border-color:#a9c7e8}
+.photo-icon{background:#dceaff}
+.send{background:linear-gradient(110deg,#1d6cbe,#174e98);box-shadow:0 10px 20px #1d5baf30}
+.privacy-lock{color:#1765b3}
+.switch input:checked+.slider{background:#1765b3}
 </style>
 </head>
 <body>
@@ -202,6 +215,7 @@ select,input[type=email],textarea{background:#fbfdff;border-color:#cfdee9;font-s
   <h2>Ocorrência enviada.</h2>
   <p>Sua solicitação foi encaminhada e já pode ser visualizada pela equipe responsável.</p>
   <div class="protocol" id="protocol"></div>
+  <div id="spamNotice" style="display:none;margin-top:12px;padding:12px 14px;border-radius:13px;background:#eaf3ff;border:1px solid #c8ddf6;color:#194e85;text-align:left;font-size:12px;line-height:1.5"><strong>📩 Atenção ao e-mail:</strong> a mensagem de confirmação ou resposta pode chegar à pasta <strong>Spam</strong> ou <strong>Lixo eletrônico</strong>. Confira essas pastas caso não encontre a mensagem na caixa de entrada.</div>
   <div class="success-commercial">
    <div class="mini-brand"><img src="icon-192.png" alt=""><div><strong>Atendimento com ORAQUI</strong><span>Agora. Aqui. Registrado.</span></div></div>
    <p>A empresa responsável pela limpeza do <b>Reserva Igara</b> utiliza o ORAQUI para registrar e acompanhar os serviços do condomínio.</p>
@@ -370,7 +384,7 @@ async function enviar(){
 
    const dataBR=agora.toLocaleDateString("pt-BR"),horaBR=agora.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
    document.getElementById("protocol").innerHTML=`<strong>${esc(protocolo)}</strong><br>${esc(localCompleto)}<br>${dataBR} às ${horaBR}${email?`<div class="access-code">✉️ Atualizações serão enviadas para <strong style="font-size:9px">${esc(email)}</strong></div>`:`<div class="access-code">Ocorrência registrada sem e-mail de acompanhamento.</div>`}`;
-   document.getElementById("successOverlay").style.display="flex";
+   document.getElementById("spamNotice").style.display=(document.getElementById("retornoToggle").checked&&email)?"block":"none";document.getElementById("successOverlay").style.display="flex";
  }catch(err){
    console.error(err);
    if(fotoPath){try{await db.storage.from("fotos-ocorrencias").remove([fotoPath])}catch(e){console.warn("Não foi possível remover a foto órfã.",e)}}
