@@ -306,7 +306,7 @@ async function loginColaborador(){
         limparSessaoOperacional();
         localStorage.setItem("usuarioLogado",JSON.stringify(sessao));
         localStorage.setItem("tipoAtividadeAtual",tipo);
-        window.location.href="colaborador.html";
+        window.location.href="../colaborador.html";
 
     }catch(error){
         console.error("Erro no login do colaborador:",error);
@@ -343,7 +343,7 @@ async function recuperarSenha(){
 }
 
 document.getElementById("reportButton").addEventListener("click",()=>window.location.href="reportar.html");
-document.getElementById("managerLoginButton").addEventListener("click",()=>window.location.href="gestor.html");
+document.getElementById("managerLoginButton").addEventListener("click",()=>window.location.href="../gestor.html");
 document.getElementById("showWorkerPassword").addEventListener("click",alternarSenha);
 document.getElementById("workerLoginButton").addEventListener("click",loginColaborador);
 document.getElementById("forgotPassword").addEventListener("click",recuperarSenha);
