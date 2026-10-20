@@ -189,6 +189,10 @@ body:has(.modal.visible) .oraqui-bottom-nav{display:none}
 @keyframes oraquiUrgenciaIcone{50%{transform:scale(1.24)}}
 @media(prefers-reduced-motion:reduce){.oraqui-nav-item.oraqui-tem-urgencia,.oraqui-nav-item.oraqui-tem-urgencia .nav-icon{animation:none!important}}
 
+#oraquiAlertaUrgente{position:fixed;right:12px;bottom:calc(90px + env(safe-area-inset-bottom,0px));z-index:820;border:3px solid #fff;border-radius:18px;background:#c1121f;color:white;font-weight:950;font-size:14px;letter-spacing:.3px;padding:13px 16px;box-shadow:0 0 0 3px #c1121f,0 6px 22px #b91c1c99;animation:oraquiUrgenciaPulso 1.05s ease-in-out infinite;cursor:pointer;max-width:90vw}
+#oraquiAlertaUrgente[hidden]{display:none!important}
+body:has(.modal.visible) #oraquiAlertaUrgente{bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:1100}
+@media(prefers-reduced-motion:reduce){#oraquiAlertaUrgente{animation:none}}
 </style>
 </head>
 <body>
@@ -220,6 +224,7 @@ body:has(.modal.visible) .oraqui-bottom-nav{display:none}
 
 
 <!-- Navegação persistente do colaborador: não altera consultas ou regras do Supabase -->
+<button type="button" id="oraquiAlertaUrgente" aria-label="Abrir demandas urgentes" hidden>🚨 <span id="oraquiAlertaUrgenteNumero">0</span> URGENTE — ABRIR</button>
 <nav class="oraqui-bottom-nav" aria-label="Menu principal do colaborador">
  <button type="button" class="oraqui-nav-item active" id="navDemandas" aria-label="Ver urgências e demandas"><span class="nav-icon">🚨</span><span>Urgentes</span><span class="oraqui-nav-badge" id="navDemandasBadge" hidden></span></button>
  <button type="button" class="oraqui-nav-item" id="navChat" aria-label="Abrir chat"><span class="nav-icon">💬</span><span>Chat</span><span class="oraqui-nav-badge" id="navChatBadge" hidden></span></button>
@@ -687,6 +692,9 @@ function renderDemandas(){
   const botaoUrgencias=$('navDemandas'),sinalUrgencias=$('navDemandasBadge');
   if(botaoUrgencias){botaoUrgencias.classList.toggle('oraqui-tem-urgencia',urgentes.length>0);botaoUrgencias.setAttribute('aria-label',urgentes.length?'Ver '+urgentes.length+' demandas urgentes':'Ver urgências e demandas');}
   if(sinalUrgencias){sinalUrgencias.hidden=!urgentes.length;sinalUrgencias.textContent=urgentes.length>99?'99+':String(urgentes.length);}
+  const alertaFixo=$('oraquiAlertaUrgente');
+  if(alertaFixo){alertaFixo.hidden=!urgentes.length;$('oraquiAlertaUrgenteNumero').textContent=String(urgentes.length);}
+
   const lista=[...abertas].sort((a,b)=>Number(urgente(b))-Number(urgente(a)));
   $("secaoDemandas").style.border=urgentes.length?"3px solid #dc2626":"";
   $("secaoDemandas").style.borderRadius=urgentes.length?"18px":"";
@@ -1504,7 +1512,12 @@ configurarFotoAntes('demandaFotoAntes');
    if(pendentes.length===1){await abrirExecucao(pendentes[0].id);return;}
    await abrirExecucao();
  });
- const badges=[['oraquiChatCount','navChatBadge'],['oraquiDocsCount','navDocsBadge']];
+ $('oraquiAlertaUrgente')?.addEventListener('click',()=>{
+   document.querySelectorAll('.modal.visible').forEach(m=>m.classList.remove('visible'));
+   document.body.classList.remove('modal-open');
+   $('navDemandas')?.click();
+ });
+  const badges=[['oraquiChatCount','navChatBadge'],['oraquiDocsCount','navDocsBadge']];
  const atualizar=()=>{
    for(const [origem,destino] of badges){const a=$(origem),b=$(destino);if(!a||!b)continue;b.hidden=a.hidden||!a.textContent.trim();b.textContent=a.textContent;}
    const b=$('navDemandasBadge');if(b&&Array.isArray(demandas)){const n=demandas.filter(d=>d.status!=='concluida'&&(d.tipo==='urgente'||d.prioridade==='urgente')).length;b.hidden=!n;b.textContent=n>99?'99+':String(n);$('navDemandas')?.classList.toggle('oraqui-tem-urgencia',n>0);}
