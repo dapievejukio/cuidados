@@ -10,7 +10,7 @@ HTMLElement.prototype.scrollIntoView=function(){};
 // LinkeDOM has no native details.open implementation.
 for(const el of document.querySelectorAll('details'))Object.defineProperty(el,'open',{get(){return this.hasAttribute('open')},set(v){this.toggleAttribute('open',!!v)}});
 const query=new Proxy(function(){},{get:(_,key)=>key==='then'?resolve=>resolve({data:[],error:null}):()=>query,apply:()=>query});
-const ctx={document,console,URLSearchParams,Date,Intl,Event,location:{search:''},navigator:{},sessionStorage:{setItem(){},getItem(){return null}},setInterval(){},setTimeout(){},alert(){},scrollTo(){},supabase:{createClient:()=>({from:()=>query,auth:{getSession:async()=>({data:{session:null}})}})}};
+const ctx={document,console,URLSearchParams,Date,Intl,Event,location:{search:''},navigator:{},sessionStorage:{setItem(){},getItem(){return null}},setInterval(fn){ctx.interval=fn},setTimeout(){},alert(){},scrollTo(){},supabase:{createClient:()=>({from:()=>query,auth:{getSession:async()=>({data:{session:null}})}})}};
 ctx.window=ctx;vm.createContext(ctx);
 for(const m of html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g))if(m[1].trim())vm.runInContext(m[1],ctx);
 await Promise.resolve();
@@ -34,4 +34,20 @@ document.getElementById('gestorRecolherTudo').click();assert.equal(document.quer
 assert.match(html,/aplicarPermissoesGestao\(\);\s*recolherTudoGestor\(\);/);
 assert(document.getElementById('pushGestaoButton').closest('.hub-card'));
 assert(document.getElementById('demoSwitchCard').closest('.hub-card'));
-console.log('PASS: início recolhido, 12 destinos, ponto, configurações, resumo, recolher tudo, notificações e reset por condomínio.');
+// Resident calls highlight the closed Communication card and its own action.
+assert.equal(document.querySelector('[data-oraqui-action="nova-ocorrencia"]'),null);
+assert.equal(document.getElementById('novaOcorrencia').hidden,true);
+assert([...document.querySelectorAll('[data-oraqui-action="operacao"]')].every(el=>el.textContent.includes('Relatório de trabalho')||el.textContent.includes('Operação de hoje')));
+vm.runInContext('ocorrenciasCarregadas=[];demandasOcorrencias=[];renderOcorrencias();',ctx);
+const communication=document.getElementById('gestorComunicacao'),calls=document.getElementById('gestorChamadosMoradores'),badge=document.getElementById('gestorComunicacaoBadge');
+assert.equal(badge.hidden,true);
+vm.runInContext("ocorrenciasCarregadas=[{id:1,status:'Aberta',origem:'morador'}];renderOcorrencias();",ctx);
+assert(communication.classList.contains('oraqui-morador-pendente'));assert(calls.classList.contains('oraqui-morador-pendente'));assert.equal(badge.hidden,false);assert.match(badge.textContent,/1 chamado pendente/);assert.equal(communication.open,false);
+vm.runInContext("demandasOcorrencias=[{ocorrencia_id:1,status:'pendente'}];renderOcorrencias();",ctx);
+assert.equal(badge.hidden,true);assert(!communication.classList.contains('oraqui-morador-pendente'));
+vm.runInContext("demandasOcorrencias=[{ocorrencia_id:1,status:'cancelada'}];renderOcorrencias();",ctx);assert.equal(badge.hidden,false);
+vm.runInContext("ocorrenciasCarregadas[0].status='Resolvida';renderOcorrencias();",ctx);assert.equal(badge.hidden,true);
+ctx.recolherTudoGestor();
+vm.runInContext('perfilGestor={id:1};window.consultasChamados=0;carregarOcorrencias=async()=>{window.consultasChamados++};',ctx);
+await ctx.interval();assert.equal(ctx.consultasChamados,1,'checks calls while home is collapsed');
+console.log('PASS: menus, destinos, novos nomes e alerta dos moradores pendente/encaminhado/cancelado/resolvido.');
