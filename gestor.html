@@ -114,7 +114,7 @@ body{padding-bottom:88px!important}.oraqui-bottom{position:fixed;bottom:0;left:0
 <div class="panel active" id="panelOperacao"><div class="date-row"><h2>Hoje</h2><div class="date-pill" id="todayDate">--</div></div><div class="kpis"><div class="kpi"><strong id="kpiItems">0</strong><span>REGISTROS HOJE</span></div><div class="kpi"><strong id="kpiPhotos">0</strong><span>FOTOS RECEBIDAS</span></div><div class="kpi"><strong id="kpiWorkers">0</strong><span>COLABORADORES HOJE</span></div><div class="kpi"><strong id="kpiLocations">0</strong><span>LOCAIS REGISTRADOS</span></div></div><section class="section"><div class="section-title"><div><h2>Operação de hoje</h2><p>Registros concluídos pela equipe.</p></div><button class="refresh" id="refreshDados">↻ ATUALIZAR</button></div><div class="tower-card"><div class="tower-top"><div class="tower-icon">🏢</div><div class="tower-info"><strong id="towerName">Condomínio</strong><span id="towerStatus">Carregando...</span></div><div class="percent" id="towerPercent">0</div></div><div class="progress"><div class="progress-fill" id="towerProgress"></div></div><div class="progress-info"><span id="towerDone">0 registros</span><span id="towerTotal">hoje</span></div></div></section><section class="section"><div class="section-title"><div><h2>Registros da equipe</h2><p>Consulte por colaborador, local ou histórico.</p></div></div>
 <div class="oraqui-registros-toolbar">
  <div class="oraqui-registros-tabs"><button type="button" class="oraqui-reg-tab active" data-reg-view="colaborador">👤 Colaboradores</button><button type="button" class="oraqui-reg-tab" data-reg-view="local">📍 Locais</button><button type="button" class="oraqui-reg-tab" data-reg-view="historico">📅 Histórico</button></div>
- <div class="oraqui-reg-filtros"><label>Data <input type="date" id="oraquiRegData"></label><label>Local <select id="oraquiRegLocal"><option value="">Todos os locais</option></select></label><label>Colaborador <select id="oraquiRegColaborador"><option value="">Todos</option></select></label><button type="button" id="oraquiRegHoje">Hoje</button><button type="button" id="oraquiRegImprimir">🖨️ Relatório</button></div>
+ <div class="oraqui-reg-filtros"><label>Data inicial <input type="date" id="oraquiRegDataInicio"></label><label>Data final <input type="date" id="oraquiRegDataFim"></label><label>Local <select id="oraquiRegLocal"><option value="">Todos os locais</option></select></label><label>Colaborador <select id="oraquiRegColaborador"><option value="">Todos</option></select></label><button type="button" id="oraquiRegHoje">Hoje</button><button type="button" id="oraquiRegImprimir">🖨️ Relatório</button></div>
  <div id="oraquiRegResumo" class="oraqui-reg-resumo"></div>
 </div><div id="locationList" class="location-list"></div></section>
 <section class="section" id="oraquiPontoRelatorio">
@@ -246,6 +246,9 @@ function mostrarEscolhaCondominio(){
 }
 async function selecionarCondominioGestao({p,c}){
   versaoCondominio++;
+  ++oraquiRegConsulta;
+  oraquiRegDataInicio=hoje();oraquiRegDataFim=hoje();oraquiRegLocal='';oraquiRegColaborador='';
+  sincronizarDatasRelatorio();
   if(typeof fecharRelatorioOraqui==='function')fecharRelatorioOraqui();
   sessionStorage.setItem("oraqui_gestao_condominio_id",String(c.id));
   const temaEllen=String(p.nome||"").trim().toLocaleLowerCase("pt-BR")==="ellen"&&p.perfil==="gestor";
@@ -331,15 +334,21 @@ async function carregarDados(){
     $("towerTotal").textContent="concluídos hoje";
     $("towerStatus").textContent=registros.length?"Atividades registradas pela equipe.":"Nenhuma atividade registrada hoje.";
     $("towerProgress").style.width=registros.length?"100%":"0%";
-    montarLocais(registros);montarUltimos(registros);
+    if(oraquiRegDataInicio===hoje()&&oraquiRegDataFim===hoje()){++oraquiRegConsulta;montarLocais(registros)}
+     else await carregarRegistrosPorData();
+     montarUltimos(registros);
   }catch(e){if(versaoConsulta!==versaoCondominio)return;console.error(e);erro("Não foi possível carregar a operação V2: "+e.message);locationList.innerHTML=vazio("⚠️","Dados indisponíveis","Falha ao consultar execuções.");activityContainer.innerHTML=vazio("⚠️","Dados indisponíveis","Falha ao consultar execuções.")}
 }
 document.addEventListener('click',e=>{const b=e.target.closest('.demand-before-photo');if(!b)return;e.preventDefault();e.stopPropagation();const d=demandasOcorrencias.find(x=>Number(x.id)===Number(b.dataset.demand));if(d?.foto_antes_path)abrirFotoStorage(d.foto_antes_path,'atividade')});
 function fotosExecucao(x,classe){return `<div class="exec-fotos">${x.foto_antes_path?`<div class="exec-foto-item"><span>ANTES</span>${foto(x.foto_antes_path,classe)}</div>`:""}${x.foto_path?`<div class="exec-foto-item"><span>DEPOIS</span>${foto(x.foto_path,classe)}</div>`:""}${!x.foto_antes_path&&!x.foto_path?`<span class="sem-foto">Sem foto</span>`:""}</div>`}
-let oraquiRegistrosCache=[],oraquiRegModo="colaborador",oraquiRegData=null,oraquiRegColaborador="",oraquiRegLocal="";
+let oraquiRegistrosCache=[],oraquiRegModo="colaborador",oraquiRegDataInicio=hoje(),oraquiRegDataFim=hoje(),oraquiRegColaborador="",oraquiRegLocal="";
+function sincronizarDatasRelatorio(){
+ $("oraquiRegDataInicio").value=oraquiRegDataInicio;
+ $("oraquiRegDataFim").value=oraquiRegDataFim;
+}
 function oraquiRegDataLocal(v){if(!v)return"";const d=new Date(v);if(Number.isNaN(d.getTime()))return String(v).slice(0,10);return [d.getFullYear(),String(d.getMonth()+1).padStart(2,"0"),String(d.getDate()).padStart(2,"0")].join("-")}
 function oraquiRegFiltro(){
- return oraquiRegistrosCache.filter(x=>(!oraquiRegData||oraquiRegDataLocal(x.concluida_em||x.created_at)===oraquiRegData)&&(!oraquiRegColaborador||x.colaborador_nome===oraquiRegColaborador)&&(!oraquiRegLocal||x.local_nome===oraquiRegLocal));
+ return oraquiRegistrosCache.filter(x=>{const d=oraquiRegDataLocal(x.concluida_em||x.created_at);return d>=oraquiRegDataInicio&&d<=oraquiRegDataFim&&(!oraquiRegColaborador||x.colaborador_nome===oraquiRegColaborador)&&(!oraquiRegLocal||x.local_nome===oraquiRegLocal)});
 }
 function oraquiRegLinha(x){
  return `<div class="record"><div class="record-body"><div class="oraqui-reg-linha"><span class="oraqui-reg-hora">${hora(x.concluida_em||x.created_at)}</span><strong>✓ ${esc(x.item_nome)}</strong><span class="oraqui-reg-tag">CONCLUÍDA</span></div><div class="record-meta">📍 ${esc(x.local_nome)} • 👤 ${esc(x.colaborador_nome)}</div>${x.observacao?`<div class="record-observation">💬 ${esc(x.observacao)}</div>`:""}${fotosExecucao(x,"record-photo")}</div></div>`;
@@ -383,35 +392,71 @@ function renderOraquiRegistros(){
 document.addEventListener("click",e=>{
  const tab=e.target.closest("[data-reg-view]");
  if(tab){oraquiRegModo=tab.dataset.regView;renderOraquiRegistros()}
- if(e.target.closest("#oraquiRegHoje")){$("oraquiRegData").value=hoje();oraquiRegData=hoje();carregarRegistrosPorData()}
+ if(e.target.closest("#oraquiRegHoje")){oraquiRegDataInicio=hoje();oraquiRegDataFim=hoje();sincronizarDatasRelatorio();carregarRegistrosPorData()}
  if(e.target.closest("#oraquiRegImprimir"))abrirPreviaRelatorioOraqui()
 });
 document.addEventListener("change",e=>{
- if(e.target.id==="oraquiRegData"){oraquiRegData=e.target.value;carregarRegistrosPorData()}
+ if(e.target.id==="oraquiRegDataInicio"){oraquiRegDataInicio=e.target.value;carregarRegistrosPorData()}
+ if(e.target.id==="oraquiRegDataFim"){oraquiRegDataFim=e.target.value;carregarRegistrosPorData()}
  if(e.target.id==="oraquiRegColaborador"){oraquiRegColaborador=e.target.value;renderOraquiRegistros()}
  if(e.target.id==="oraquiRegLocal"){oraquiRegLocal=e.target.value;renderOraquiRegistros()}
 });
-let oraquiRegConsulta=0;
+let oraquiRegConsulta=0,oraquiRegConsultaEmAndamento=false;
 async function carregarRegistrosPorData(){
- const versao=++oraquiRegConsulta,condo=CONDOMINIO_ID;
- const data=oraquiRegData||hoje();
- const inicio=new Date(data+"T00:00:00"),fim=new Date(inicio);fim.setDate(fim.getDate()+1);
- if(Number.isNaN(inicio.getTime()))return;
- locationList.innerHTML=vazio("⏳","Consultando registros","Buscando os serviços da data escolhida.");
+ const versao=++oraquiRegConsulta,condo=CONDOMINIO_ID,btn=$("oraquiRegImprimir");
+ const inicioISO=oraquiRegDataInicio,fimISO=oraquiRegDataFim;
+ oraquiRegConsultaEmAndamento=true;if(btn)btn.disabled=true;
+ const resumo=$("oraquiRegResumo");if(resumo)resumo.innerHTML="";
  try{
+  if(!inicioISO||!fimISO||inicioISO>fimISO){
+   locationList.innerHTML=vazio("📅","Período inválido","A data inicial deve ser anterior ou igual à final.");return;
+  }
+  const inicio=new Date(inicioISO+"T00:00:00"),fimExclusivo=new Date(fimISO+"T00:00:00");
+  fimExclusivo.setDate(fimExclusivo.getDate()+1);
+  if(Number.isNaN(inicio.getTime())||Number.isNaN(fimExclusivo.getTime())){
+   locationList.innerHTML=vazio("📅","Data inválida","Confira a data inicial e a data final.");return;
+  }
+  locationList.innerHTML=vazio("⏳","Buscando o período","Consultando todos os serviços entre as duas datas.");
+  async function buscar(){
+   const todos=[],lote=1000;
+   for(let offset=0;;offset+=lote){
+    const r=await db.from("execucoes").select("*").eq("condominio_id",condo).eq("ambiente","producao").eq("status","concluida")
+      .gte("created_at",inicio.toISOString()).lt("created_at",fimExclusivo.toISOString())
+      .order("created_at",{ascending:false}).order("id",{ascending:false}).range(offset,offset+lote-1);
+    if(r.error)throw r.error;
+    if(versao!==oraquiRegConsulta||Number(CONDOMINIO_ID)!==Number(condo))return null;
+    todos.push(...(r.data||[]));
+    if((r.data||[]).length<lote)break;
+   }
+   return todos;
+  }
   const [ex,ar,po,co,at]=await Promise.all([
-   db.from("execucoes").select("*").eq("condominio_id",condo).eq("ambiente","producao").eq("status","concluida").gte("created_at",inicio.toISOString()).lt("created_at",fim.toISOString()).order("created_at",{ascending:false}),
+   buscar(),
    db.from("areas").select("id,nome").eq("condominio_id",condo),
    db.from("pontos").select("id,area_id,nome").eq("condominio_id",condo),
    db.from("colaboradores").select("id,nome,matricula").eq("condominio_id",condo),
    db.from("atividades_v2").select("id,nome").eq("condominio_id",condo)
   ]);
-  if(versao!==oraquiRegConsulta||Number(CONDOMINIO_ID)!==Number(condo))return;
-  for(const res of [ex,ar,po,co,at])if(res.error)throw res.error;
-  const areas=ar.data||[],pontos=po.data||[],cols=co.data||[],ats=at.data||[];
-  const registros=(ex.data||[]).map(e=>{const pt=pontos.find(x=>Number(x.id)===Number(e.ponto_id));const area=areas.find(x=>Number(x.id)===Number(e.area_id))||areas.find(x=>Number(x.id)===Number(pt?.area_id));const col=cols.find(x=>Number(x.id)===Number(e.colaborador_id));const atividade=ats.find(x=>Number(x.id)===Number(e.atividade_id));return {...e,area_nome:area?.nome||"Sem área",ponto_nome:pt?.nome||"",local_nome:[area?.nome,pt?.nome].filter(Boolean).join(" • ")||"Sem local",colaborador_nome:col?.nome||"Colaborador",matricula:col?.matricula||"",item_nome:atividade?.nome||(e.tipo==="avulsa"?"Atividade avulsa":"Atividade")};});
-  montarLocais(registros);
- }catch(err){if(versao!==oraquiRegConsulta)return;console.error(err);locationList.innerHTML=vazio("⚠️","Falha na consulta",err.message)}
+  if(versao!==oraquiRegConsulta||Number(CONDOMINIO_ID)!==Number(condo)||!ex)return;
+  for(const x of [ar,po,co,at])if(x.error)throw x.error;
+  const areas=new Map((ar.data||[]).map(x=>[Number(x.id),x]));
+  const pontos=new Map((po.data||[]).map(x=>[Number(x.id),x]));
+  const cols=new Map((co.data||[]).map(x=>[Number(x.id),x]));
+  const ats=new Map((at.data||[]).map(x=>[Number(x.id),x]));
+  montarLocais(ex.map(e=>{
+   const pt=pontos.get(Number(e.ponto_id)),a=areas.get(Number(e.area_id))||areas.get(Number(pt?.area_id));
+   const c=cols.get(Number(e.colaborador_id)),atividade=ats.get(Number(e.atividade_id));
+   return {...e,area_nome:a?.nome||"Sem área",ponto_nome:pt?.nome||"",
+    local_nome:[a?.nome,pt?.nome].filter(Boolean).join(" • ")||"Sem local",
+    colaborador_nome:c?.nome||"Colaborador",matricula:c?.matricula||"",
+    item_nome:atividade?.nome||(e.tipo==="avulsa"?"Atividade avulsa":"Atividade")};
+  }));
+ }catch(e){
+  if(versao!==oraquiRegConsulta)return;
+  console.error(e);locationList.innerHTML=vazio("⚠️","Falha na consulta",esc(e.message||String(e)));
+ }finally{
+  if(versao===oraquiRegConsulta){oraquiRegConsultaEmAndamento=false;if(btn)btn.disabled=false;}
+ }
 }
 function montarUltimos(r){if(!r.length){activityContainer.innerHTML=vazio("🕘","Sem atividades","Nenhuma atividade foi recebida hoje.");return}activityContainer.innerHTML=`<div class="activity-list">${r.slice(0,20).map(x=>`<div class="activity-row">${fotosExecucao(x,"activity-photo")}<div class="activity-info"><strong>${esc(x.item_nome)}</strong><span>${esc(x.local_nome)} • ${esc(x.colaborador_nome)}</span></div><div class="activity-time">${hora(x.concluida_em||x.created_at)}</div></div>`).join("")}</div>`}
 
