@@ -247,6 +247,8 @@ function mostrarEscolhaCondominio(){
 async function selecionarCondominioGestao({p,c}){
   versaoCondominio++;
   ++oraquiRegConsulta;
+  oraquiRegConsultaEmAndamento=false;oraquiRegConsultaValida=false;
+  $("oraquiRegImprimir").disabled=false;
   oraquiRegDataInicio=hoje();oraquiRegDataFim=hoje();oraquiRegLocal='';oraquiRegColaborador='';
   sincronizarDatasRelatorio();
   if(typeof fecharRelatorioOraqui==='function')fecharRelatorioOraqui();
@@ -334,7 +336,7 @@ async function carregarDados(){
     $("towerTotal").textContent="concluídos hoje";
     $("towerStatus").textContent=registros.length?"Atividades registradas pela equipe.":"Nenhuma atividade registrada hoje.";
     $("towerProgress").style.width=registros.length?"100%":"0%";
-    if(oraquiRegDataInicio===hoje()&&oraquiRegDataFim===hoje()){++oraquiRegConsulta;montarLocais(registros)}
+    if(oraquiRegDataInicio===hoje()&&oraquiRegDataFim===hoje()){++oraquiRegConsulta;oraquiRegConsultaEmAndamento=false;oraquiRegConsultaValida=true;$("oraquiRegImprimir").disabled=false;montarLocais(registros)}
      else await carregarRegistrosPorData();
      montarUltimos(registros);
   }catch(e){if(versaoConsulta!==versaoCondominio)return;console.error(e);erro("Não foi possível carregar a operação V2: "+e.message);locationList.innerHTML=vazio("⚠️","Dados indisponíveis","Falha ao consultar execuções.");activityContainer.innerHTML=vazio("⚠️","Dados indisponíveis","Falha ao consultar execuções.")}
@@ -401,11 +403,11 @@ document.addEventListener("change",e=>{
  if(e.target.id==="oraquiRegColaborador"){oraquiRegColaborador=e.target.value;renderOraquiRegistros()}
  if(e.target.id==="oraquiRegLocal"){oraquiRegLocal=e.target.value;renderOraquiRegistros()}
 });
-let oraquiRegConsulta=0,oraquiRegConsultaEmAndamento=false;
+let oraquiRegConsulta=0,oraquiRegConsultaEmAndamento=false,oraquiRegConsultaValida=false;
 async function carregarRegistrosPorData(){
  const versao=++oraquiRegConsulta,condo=CONDOMINIO_ID,btn=$("oraquiRegImprimir");
  const inicioISO=oraquiRegDataInicio,fimISO=oraquiRegDataFim;
- oraquiRegConsultaEmAndamento=true;if(btn)btn.disabled=true;
+ oraquiRegConsultaEmAndamento=true;oraquiRegConsultaValida=false;if(btn)btn.disabled=true;
  const resumo=$("oraquiRegResumo");if(resumo)resumo.innerHTML="";
  try{
   if(!inicioISO||!fimISO||inicioISO>fimISO){
@@ -451,11 +453,13 @@ async function carregarRegistrosPorData(){
     colaborador_nome:c?.nome||"Colaborador",matricula:c?.matricula||"",
     item_nome:atividade?.nome||(e.tipo==="avulsa"?"Atividade avulsa":"Atividade")};
   }));
+  oraquiRegConsultaValida=true;
  }catch(e){
   if(versao!==oraquiRegConsulta)return;
-  console.error(e);locationList.innerHTML=vazio("⚠️","Falha na consulta",esc(e.message||String(e)));
+  console.error(e);oraquiRegistrosCache=[];
+  locationList.innerHTML=vazio("⚠️","Falha na consulta",esc(e.message||String(e)));
  }finally{
-  if(versao===oraquiRegConsulta){oraquiRegConsultaEmAndamento=false;if(btn)btn.disabled=false;}
+  if(versao===oraquiRegConsulta){oraquiRegConsultaEmAndamento=false;if(btn)btn.disabled=!oraquiRegConsultaValida;}
  }
 }
 function montarUltimos(r){if(!r.length){activityContainer.innerHTML=vazio("🕘","Sem atividades","Nenhuma atividade foi recebida hoje.");return}activityContainer.innerHTML=`<div class="activity-list">${r.slice(0,20).map(x=>`<div class="activity-row">${fotosExecucao(x,"activity-photo")}<div class="activity-info"><strong>${esc(x.item_nome)}</strong><span>${esc(x.local_nome)} • ${esc(x.colaborador_nome)}</span></div><div class="activity-time">${hora(x.concluida_em||x.created_at)}</div></div>`).join("")}</div>`}
