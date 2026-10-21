@@ -46,6 +46,7 @@ window.fecharRelatorioOraqui=()=>document.getElementById('oraquiPdfModal')?.clas
 window.abrirPreviaRelatorioOraqui=async function(){
  if(ocupado)return;
  if(typeof oraquiRegConsultaEmAndamento!=='undefined'&&oraquiRegConsultaEmAndamento){alert('Aguarde a conclusão da consulta do período.');return}
+ if(typeof oraquiRegConsultaValida!=='undefined'&&!oraquiRegConsultaValida){alert('Consulte um período válido antes de gerar o relatório.');return}
  if(!oraquiRegDataInicio||!oraquiRegDataFim||oraquiRegDataInicio>oraquiRegDataFim){alert('Selecione um período válido.');return}
  const dados=oraquiRegFiltro().slice().sort((a,b)=>new Date(a.concluida_em||a.created_at)-new Date(b.concluida_em||b.created_at));
  if(!dados.length){alert('Nenhum serviço encontrado para os filtros selecionados.');return}
