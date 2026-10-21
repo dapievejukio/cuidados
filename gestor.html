@@ -382,14 +382,36 @@ function renderOraquiRegistros(){
 document.addEventListener("click",e=>{
  const tab=e.target.closest("[data-reg-view]");
  if(tab){oraquiRegModo=tab.dataset.regView;renderOraquiRegistros()}
- if(e.target.closest("#oraquiRegHoje")){$("oraquiRegData").value=hoje();oraquiRegData=hoje();renderOraquiRegistros()}
+ if(e.target.closest("#oraquiRegHoje")){$("oraquiRegData").value=hoje();oraquiRegData=hoje();carregarRegistrosPorData()}
  if(e.target.closest("#oraquiRegImprimir")){locationList.querySelectorAll(".location-card").forEach(c=>c.classList.add("open"));window.print()}
 });
 document.addEventListener("change",e=>{
- if(e.target.id==="oraquiRegData"){oraquiRegData=e.target.value;renderOraquiRegistros()}
+ if(e.target.id==="oraquiRegData"){oraquiRegData=e.target.value;carregarRegistrosPorData()}
  if(e.target.id==="oraquiRegColaborador"){oraquiRegColaborador=e.target.value;renderOraquiRegistros()}
  if(e.target.id==="oraquiRegLocal"){oraquiRegLocal=e.target.value;renderOraquiRegistros()}
 });
+let oraquiRegConsulta=0;
+async function carregarRegistrosPorData(){
+ const versao=++oraquiRegConsulta,condo=CONDOMINIO_ID;
+ const data=oraquiRegData||hoje();
+ const inicio=new Date(data+"T00:00:00"),fim=new Date(inicio);fim.setDate(fim.getDate()+1);
+ if(Number.isNaN(inicio.getTime()))return;
+ locationList.innerHTML=vazio("⏳","Consultando registros","Buscando os serviços da data escolhida.");
+ try{
+  const [ex,ar,po,co,at]=await Promise.all([
+   db.from("execucoes").select("*").eq("condominio_id",condo).eq("ambiente","producao").eq("status","concluida").gte("created_at",inicio.toISOString()).lt("created_at",fim.toISOString()).order("created_at",{ascending:false}),
+   db.from("areas").select("id,nome").eq("condominio_id",condo),
+   db.from("pontos").select("id,area_id,nome").eq("condominio_id",condo),
+   db.from("colaboradores").select("id,nome,matricula").eq("condominio_id",condo),
+   db.from("atividades_v2").select("id,nome").eq("condominio_id",condo)
+  ]);
+  if(versao!==oraquiRegConsulta||Number(CONDOMINIO_ID)!==Number(condo))return;
+  for(const res of [ex,ar,po,co,at])if(res.error)throw res.error;
+  const areas=ar.data||[],pontos=po.data||[],cols=co.data||[],ats=at.data||[];
+  const registros=(ex.data||[]).map(e=>{const pt=pontos.find(x=>Number(x.id)===Number(e.ponto_id));const area=areas.find(x=>Number(x.id)===Number(e.area_id))||areas.find(x=>Number(x.id)===Number(pt?.area_id));const col=cols.find(x=>Number(x.id)===Number(e.colaborador_id));const atividade=ats.find(x=>Number(x.id)===Number(e.atividade_id));return {...e,area_nome:area?.nome||"Sem área",ponto_nome:pt?.nome||"",local_nome:[area?.nome,pt?.nome].filter(Boolean).join(" • ")||"Sem local",colaborador_nome:col?.nome||"Colaborador",matricula:col?.matricula||"",item_nome:atividade?.nome||(e.tipo==="avulsa"?"Atividade avulsa":"Atividade")};});
+  montarLocais(registros);
+ }catch(err){if(versao!==oraquiRegConsulta)return;console.error(err);locationList.innerHTML=vazio("⚠️","Falha na consulta",err.message)}
+}
 function montarUltimos(r){if(!r.length){activityContainer.innerHTML=vazio("🕘","Sem atividades","Nenhuma atividade foi recebida hoje.");return}activityContainer.innerHTML=`<div class="activity-list">${r.slice(0,20).map(x=>`<div class="activity-row">${fotosExecucao(x,"activity-photo")}<div class="activity-info"><strong>${esc(x.item_nome)}</strong><span>${esc(x.local_nome)} • ${esc(x.colaborador_nome)}</span></div><div class="activity-time">${hora(x.concluida_em||x.created_at)}</div></div>`).join("")}</div>`}
 
 function normalizarReferenciaFoto(valor){
