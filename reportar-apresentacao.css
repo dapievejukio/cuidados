@@ -141,3 +141,77 @@
 #oraquiComoModal .odm-ghost-section b{display:block;font-size:11px;color:#2f5946}
 #oraquiComoModal .odm-ghost-section span{display:block;font-size:9px;color:#7f9185;margin-top:4px}
 @media(max-width:650px){#oraquiComoModal .odm-stage-preview{padding:6px}#oraquiComoModal .odm-device{border-radius:15px}#oraquiComoModal .odm-app-head{padding:12px 12px 17px}#oraquiComoModal .odm-app-content{margin:-7px 8px 8px}#oraquiComoModal .odm-work-card{padding:7px 3px}#oraquiComoModal .odm-ghost-section{display:none}}
+
+/* Atualização verde: telas 2 a 5 conforme interface ORAQUI do Reserva Igara */
+#oraquiComoModal .od-tabs{grid-template-columns:repeat(5,minmax(0,1fr))}
+#oraquiComoModal .odm-theme-1,#oraquiComoModal .odm-theme-2,#oraquiComoModal .odm-theme-3,#oraquiComoModal .odm-theme-4{background:#f9faf8;border-color:#dbe7dd;color:#13472d}
+#oraquiComoModal .ora-demo-top{background:#f6f1e8;padding:14px 13px;border-bottom:1px solid #e6e3d9}
+#oraquiComoModal .ora-demo-brand{display:flex;align-items:center;justify-content:space-between;gap:8px}
+#oraquiComoModal .ora-demo-brand img{height:42px;width:128px;object-fit:contain;object-position:left center}
+#oraquiComoModal .ora-demo-brand span{background:white;border:1px solid #dddcd3;border-radius:11px;padding:9px;color:#145438;font-weight:800;font-size:9px}
+#oraquiComoModal .ora-demo-intro{background:#fffdf9;padding:17px 14px;border-bottom:1px solid #e9e4dc}
+#oraquiComoModal .ora-demo-intro small{font-size:9px;letter-spacing:1px;font-weight:850;color:#86998f}
+#oraquiComoModal .ora-demo-intro h4{font-size:18px;line-height:1.18;margin:10px 0;color:#0d5134}
+#oraquiComoModal .ora-demo-intro p{margin:0;font-size:11px;line-height:1.45;color:#6c8274}
+#oraquiComoModal .ora-demo-intro em{display:inline-block;border-radius:30px;background:#eaf3eb;color:#21553b;font-size:9px;font-weight:850;padding:7px 10px;font-style:normal;margin-top:11px}
+#oraquiComoModal .ora-demo-main{background:#fafbf8;padding:12px}
+#oraquiComoModal .ora-demo-person{display:flex;align-items:center;gap:9px;padding:12px;background:white;border:1px solid #dce7de;border-radius:15px;margin-bottom:12px}
+#oraquiComoModal .ora-demo-person i{display:grid;place-items:center;width:37px;height:37px;flex:0 0 37px;border-radius:10px;background:#ebf3ed;color:#175b3d;font-size:20px;font-style:normal}
+#oraquiComoModal .ora-demo-person div{flex:1;min-width:0}
+#oraquiComoModal .ora-demo-person b{font-size:11px;color:#204d39;display:block}
+#oraquiComoModal .ora-demo-person small{font-size:9px;color:#7b9080;display:block;margin-top:4px}
+#oraquiComoModal .ora-demo-person em{font-size:9px;font-style:normal;font-weight:850;padding:7px 8px;background:#e9f5ea;color:#218050;border-radius:25px}
+#oraquiComoModal .ora-demo-actions{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:7px;border:1px solid #dce9dd;border-radius:15px;padding:8px;background:white}
+#oraquiComoModal .ora-demo-actions div{grid-column:span 2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;min-height:86px;padding:9px;border:1px solid #d4e5d5;border-radius:12px;background:#eaf4e9;text-align:center}
+#oraquiComoModal .ora-demo-actions div:nth-child(n+4){grid-column:span 3}
+#oraquiComoModal .ora-demo-actions span{font-size:25px;line-height:1;color:#145a39}
+#oraquiComoModal .ora-demo-actions b{font-size:10px;line-height:1.25;color:#17573b}
+#oraquiComoModal .ora-demo-actions div.green{background:#0e5134}
+#oraquiComoModal .ora-demo-actions div.green>*{color:white}
+#oraquiComoModal .ora-demo-connected{margin-top:11px;background:#eef6ff;border:1px solid #d2e4f3;border-radius:15px;padding:13px;font-size:11px;color:#1b533a}
+#oraquiComoModal .ora-demo-connected p{font-size:10px;margin:7px 0 12px}
+#oraquiComoModal .ora-demo-connected span{display:inline-block;padding:9px 11px;border-radius:10px;background:#a5bfce;color:white;font-size:9px;font-weight:800}
+#oraquiComoModal .ora-demo-heading{margin:11px 2px;font-size:14px;font-weight:850;color:#1b5138}
+#oraquiComoModal .ora-demo-modules{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#oraquiComoModal .ora-demo-modules div{display:flex;align-items:center;flex-direction:column;justify-content:center;gap:10px;min-height:91px;padding:10px;border:1px solid #dfe6de;border-radius:14px;background:white}
+#oraquiComoModal .ora-demo-modules span{display:grid;place-items:center;height:36px;width:36px;background:#edf4ee;border-radius:10px;font-size:21px;color:#16563a}
+#oraquiComoModal .ora-demo-modules b{font-size:10px;text-align:center;color:#1d5136}
+#oraquiComoModal .ora-demo-nav{display:flex;gap:5px;justify-content:space-around;align-items:center;margin-top:12px;background:white;border-radius:12px;padding:10px 5px}
+#oraquiComoModal .ora-demo-nav span,#oraquiComoModal .ora-demo-nav b{font-size:9px;color:#4e7460}
+#oraquiComoModal .ora-demo-nav strong{padding:10px;border-radius:9px;background:#115537;color:white;text-align:center;font-size:9px}
+#oraquiComoModal .ora-demo-operacao>h4{font-size:15px;color:#236648;margin:0 0 13px}
+#oraquiComoModal .ora-demo-daily{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+#oraquiComoModal .ora-demo-daily b{font-size:20px;color:#1c4633}
+#oraquiComoModal .ora-demo-daily span{padding:9px;border-radius:22px;background:white;border:1px solid #dae8dd;font-size:10px;color:#688171}
+#oraquiComoModal .ora-demo-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+#oraquiComoModal .ora-demo-stats div{padding:13px;border:1px solid #dbe6dd;border-radius:14px;min-height:98px;background:white}
+#oraquiComoModal .ora-demo-stats b{display:block;font-size:27px;color:#19533a}
+#oraquiComoModal .ora-demo-stats small{display:block;margin-top:12px;color:#798d80;font-size:9px;font-weight:850}
+#oraquiComoModal .ora-demo-line{padding:13px;background:white;border:1px solid #dbe6dd;border-radius:12px;margin-bottom:8px}
+#oraquiComoModal .ora-demo-line b{display:block;font-size:12px;color:#204f39}
+#oraquiComoModal .ora-demo-line small{display:block;font-size:10px;color:#728778;margin-top:4px}
+#oraquiComoModal .ora-demo-activity{display:flex;align-items:center;gap:9px;padding:12px;border:1px solid #dce7df;border-radius:12px;background:white}
+#oraquiComoModal .ora-demo-activity>span{font-size:9px;background:#eaf2f9;border-radius:9px;padding:10px 4px}
+#oraquiComoModal .ora-demo-activity>div{flex:1}
+#oraquiComoModal .ora-demo-activity b{display:block;font-size:11px}
+#oraquiComoModal .ora-demo-activity small{display:block;margin-top:4px;font-size:9px;color:#6c8474}
+#oraquiComoModal .ora-demo-activity em{font-style:normal;font-size:10px;color:#6a8371}
+#oraquiComoModal .ora-demo-segments{display:grid;grid-template-columns:repeat(3,1fr);background:#e9f0ea;gap:5px;padding:4px;border-radius:11px}
+#oraquiComoModal .ora-demo-segments span,#oraquiComoModal .ora-demo-segments b{background:white;border-radius:7px;font-size:9px;text-align:center;padding:9px 3px;color:#51755e}
+#oraquiComoModal .ora-demo-segments b{background:#116840;color:white}
+#oraquiComoModal .ora-demo-filters{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:11px 0}
+#oraquiComoModal .ora-demo-filters div{padding:10px;border-radius:10px;background:white;border:1px solid #e0e9e2}
+#oraquiComoModal .ora-demo-filters small{display:block;font-size:8px;font-weight:850;color:#7f9684}
+#oraquiComoModal .ora-demo-filters b{display:block;margin-top:5px;color:#22563a;font-size:10px}
+#oraquiComoModal .ora-demo-generate{font-size:10px;color:#fff;font-weight:850;text-align:center;border-radius:10px;background:#115537;padding:11px;margin-bottom:11px}
+#oraquiComoModal .ora-demo-report{background:white;border:1px solid #e0e8e2;border-radius:11px;padding:11px;color:#253d30}
+#oraquiComoModal .ora-demo-report h4{font-size:14px;margin:3px 0 9px}
+#oraquiComoModal .ora-demo-report p{font-size:10px;line-height:1.4;color:#718477;margin:6px 0}
+#oraquiComoModal .ora-demo-report>b{font-size:11px}
+#oraquiComoModal .ora-demo-comparison{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:10px 0}
+#oraquiComoModal .ora-demo-comparison>div{border:1px solid #dbe6de;border-radius:9px;padding:7px;min-width:0}
+#oraquiComoModal .ora-demo-comparison strong{font-size:9px;color:#185638}
+#oraquiComoModal .ora-demo-comparison figure{position:relative;margin:7px 0 0;height:152px;overflow:hidden;background:#eaf0eb;border-radius:7px}
+#oraquiComoModal .ora-demo-comparison img{display:block;width:100%;height:125%;object-fit:cover;object-position:center 23%;font-size:0}
+#oraquiComoModal .ora-demo-privacy{font-size:9px;color:#6d8471}
+@media(max-width:650px){#oraquiComoModal .od-tab{font-size:9px;padding:8px 0}#oraquiComoModal .ora-demo-actions>div{min-height:76px}#oraquiComoModal .ora-demo-intro h4{font-size:16px}}
