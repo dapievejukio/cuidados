@@ -114,7 +114,7 @@ body{padding-bottom:88px!important}.oraqui-bottom{position:fixed;bottom:0;left:0
 <div class="panel active" id="panelOperacao"><div class="date-row"><h2>Hoje</h2><div class="date-pill" id="todayDate">--</div></div><div class="kpis"><div class="kpi"><strong id="kpiItems">0</strong><span>REGISTROS HOJE</span></div><div class="kpi"><strong id="kpiPhotos">0</strong><span>FOTOS RECEBIDAS</span></div><div class="kpi"><strong id="kpiWorkers">0</strong><span>COLABORADORES HOJE</span></div><div class="kpi"><strong id="kpiLocations">0</strong><span>LOCAIS REGISTRADOS</span></div></div><section class="section"><div class="section-title"><div><h2>Operação de hoje</h2><p>Registros concluídos pela equipe.</p></div><button class="refresh" id="refreshDados">↻ ATUALIZAR</button></div><div class="tower-card"><div class="tower-top"><div class="tower-icon">🏢</div><div class="tower-info"><strong id="towerName">Condomínio</strong><span id="towerStatus">Carregando...</span></div><div class="percent" id="towerPercent">0</div></div><div class="progress"><div class="progress-fill" id="towerProgress"></div></div><div class="progress-info"><span id="towerDone">0 registros</span><span id="towerTotal">hoje</span></div></div></section><section class="section"><div class="section-title"><div><h2>Registros da equipe</h2><p>Consulte por colaborador, local ou histórico.</p></div></div>
 <div class="oraqui-registros-toolbar">
  <div class="oraqui-registros-tabs"><button type="button" class="oraqui-reg-tab active" data-reg-view="colaborador">👤 Colaboradores</button><button type="button" class="oraqui-reg-tab" data-reg-view="local">📍 Locais</button><button type="button" class="oraqui-reg-tab" data-reg-view="historico">📅 Histórico</button></div>
- <div class="oraqui-reg-filtros"><label>Data <input type="date" id="oraquiRegData"></label><label>Colaborador <select id="oraquiRegColaborador"><option value="">Todos</option></select></label><button type="button" id="oraquiRegHoje">Hoje</button><button type="button" id="oraquiRegImprimir">🖨️ Relatório</button></div>
+ <div class="oraqui-reg-filtros"><label>Data <input type="date" id="oraquiRegData"></label><label>Local <select id="oraquiRegLocal"><option value="">Todos os locais</option></select></label><label>Colaborador <select id="oraquiRegColaborador"><option value="">Todos</option></select></label><button type="button" id="oraquiRegHoje">Hoje</button><button type="button" id="oraquiRegImprimir">🖨️ Relatório</button></div>
  <div id="oraquiRegResumo" class="oraqui-reg-resumo"></div>
 </div><div id="locationList" class="location-list"></div></section>
 <section class="section" id="oraquiPontoRelatorio">
@@ -335,10 +335,10 @@ async function carregarDados(){
 }
 document.addEventListener('click',e=>{const b=e.target.closest('.demand-before-photo');if(!b)return;e.preventDefault();e.stopPropagation();const d=demandasOcorrencias.find(x=>Number(x.id)===Number(b.dataset.demand));if(d?.foto_antes_path)abrirFotoStorage(d.foto_antes_path,'atividade')});
 function fotosExecucao(x,classe){return `<div class="exec-fotos">${x.foto_antes_path?`<div class="exec-foto-item"><span>ANTES</span>${foto(x.foto_antes_path,classe)}</div>`:""}${x.foto_path?`<div class="exec-foto-item"><span>DEPOIS</span>${foto(x.foto_path,classe)}</div>`:""}${!x.foto_antes_path&&!x.foto_path?`<span class="sem-foto">Sem foto</span>`:""}</div>`}
-let oraquiRegistrosCache=[],oraquiRegModo="colaborador",oraquiRegData=null,oraquiRegColaborador="";
+let oraquiRegistrosCache=[],oraquiRegModo="colaborador",oraquiRegData=null,oraquiRegColaborador="",oraquiRegLocal="";
 function oraquiRegDataLocal(v){if(!v)return"";const d=new Date(v);if(Number.isNaN(d.getTime()))return String(v).slice(0,10);return [d.getFullYear(),String(d.getMonth()+1).padStart(2,"0"),String(d.getDate()).padStart(2,"0")].join("-")}
 function oraquiRegFiltro(){
- return oraquiRegistrosCache.filter(x=>(!oraquiRegData||oraquiRegDataLocal(x.concluida_em||x.created_at)===oraquiRegData)&&(!oraquiRegColaborador||x.colaborador_nome===oraquiRegColaborador));
+ return oraquiRegistrosCache.filter(x=>(!oraquiRegData||oraquiRegDataLocal(x.concluida_em||x.created_at)===oraquiRegData)&&(!oraquiRegColaborador||x.colaborador_nome===oraquiRegColaborador)&&(!oraquiRegLocal||x.local_nome===oraquiRegLocal));
 }
 function oraquiRegLinha(x){
  return `<div class="record"><div class="record-body"><div class="oraqui-reg-linha"><span class="oraqui-reg-hora">${hora(x.concluida_em||x.created_at)}</span><strong>✓ ${esc(x.item_nome)}</strong><span class="oraqui-reg-tag">CONCLUÍDA</span></div><div class="record-meta">📍 ${esc(x.local_nome)} • 👤 ${esc(x.colaborador_nome)}</div>${x.observacao?`<div class="record-observation">💬 ${esc(x.observacao)}</div>`:""}${fotosExecucao(x,"record-photo")}</div></div>`;
@@ -352,6 +352,8 @@ function montarLocais(r){
   select.innerHTML='<option value="">Todos</option>'+nomes.map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join("");
   if(nomes.includes(anterior))select.value=anterior;else oraquiRegColaborador="";
  }
+ const locais=[...new Set(oraquiRegistrosCache.map(x=>x.local_nome).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"pt-BR"));
+ const sl=$("oraquiRegLocal");sl.innerHTML='<option value="">Todos os locais</option>'+locais.map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join("");if(locais.includes(oraquiRegLocal))sl.value=oraquiRegLocal;else oraquiRegLocal="";
  renderOraquiRegistros();
 }
 function renderOraquiRegistros(){
@@ -386,6 +388,7 @@ document.addEventListener("click",e=>{
 document.addEventListener("change",e=>{
  if(e.target.id==="oraquiRegData"){oraquiRegData=e.target.value;renderOraquiRegistros()}
  if(e.target.id==="oraquiRegColaborador"){oraquiRegColaborador=e.target.value;renderOraquiRegistros()}
+ if(e.target.id==="oraquiRegLocal"){oraquiRegLocal=e.target.value;renderOraquiRegistros()}
 });
 function montarUltimos(r){if(!r.length){activityContainer.innerHTML=vazio("🕘","Sem atividades","Nenhuma atividade foi recebida hoje.");return}activityContainer.innerHTML=`<div class="activity-list">${r.slice(0,20).map(x=>`<div class="activity-row">${fotosExecucao(x,"activity-photo")}<div class="activity-info"><strong>${esc(x.item_nome)}</strong><span>${esc(x.local_nome)} • ${esc(x.colaborador_nome)}</span></div><div class="activity-time">${hora(x.concluida_em||x.created_at)}</div></div>`).join("")}</div>`}
 
