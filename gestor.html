@@ -246,7 +246,7 @@ function mostrarEscolhaCondominio(){
 }
 async function selecionarCondominioGestao({p,c}){
   versaoCondominio++;
-  fecharRelatorioOraqui();
+  if(typeof fecharRelatorioOraqui==='function')fecharRelatorioOraqui();
   sessionStorage.setItem("oraqui_gestao_condominio_id",String(c.id));
   const temaEllen=String(p.nome||"").trim().toLocaleLowerCase("pt-BR")==="ellen"&&p.perfil==="gestor";
   document.body.classList.toggle("oraqui-gestora-ellen",temaEllen);
