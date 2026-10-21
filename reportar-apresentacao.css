@@ -215,3 +215,10 @@
 #oraquiComoModal .ora-demo-comparison img{display:block;width:100%;height:125%;object-fit:cover;object-position:center 23%;font-size:0}
 #oraquiComoModal .ora-demo-privacy{font-size:9px;color:#6d8471}
 @media(max-width:650px){#oraquiComoModal .od-tab{font-size:9px;padding:8px 0}#oraquiComoModal .ora-demo-actions>div{min-height:76px}#oraquiComoModal .ora-demo-intro h4{font-size:16px}}
+
+/* Contato institucional na base da apresentação */
+#oraquiComoModal .od-note{display:flex;flex-direction:column;align-items:flex-start;gap:5px;min-width:0}
+#oraquiComoModal .od-note .od-email{font-size:11px;line-height:1.45;color:#27533e;font-weight:700;overflow-wrap:anywhere}
+#oraquiComoModal .od-note .od-email a{color:#126842;text-decoration:underline;text-underline-offset:2px}
+#oraquiComoModal .od-note .od-email a:focus-visible{outline:2px solid #0e7148;outline-offset:3px}
+@media(max-width:520px){#oraquiComoModal .od-bottom{gap:8px}#oraquiComoModal .od-note{font-size:9px}#oraquiComoModal .od-note .od-email{font-size:10px}#oraquiComoModal .od-next{flex-shrink:0}}
