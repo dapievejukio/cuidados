@@ -47,16 +47,27 @@ async function prepararFoto(path){
  throw ultimo||new Error('Foto indisponível');
 }
 // Configuração por ID: nunca reutilizar a marca de outro condomínio.
+const logosCondominios={
+ '1':{nome:'RNI Reserva Igara',logo:'assets/relatorios/rni-reserva-igara.jpg'}
+};
+// Imagens locais usam o carregador nativo: fetch/canvas falham em file://.
+function carregarLogo(caminho){
+ const url=new URL(caminho,document.baseURI).href;
+ return new Promise((resolve,reject)=>{
+  const imagem=new Image();
+  imagem.onload=()=>resolve(url);
+  imagem.onerror=()=>reject(new Error('Logo indisponível: '+caminho));
+  imagem.src=url;
+ });
+}
 async function prepararMarcas(idCondo){
  const avisos=[];
  let logoCondo=null,logoOraqui=null;
- try{logoOraqui=await carregarFoto('assets/relatorios/oraqui-horizontal.jpg')}
+ try{logoOraqui=await carregarLogo('assets/relatorios/oraqui-horizontal.jpg')}
  catch(e){avisos.push('Logo OraQui indisponível.');console.warn(e)}
  try{
-  const resposta=await fetch('assets/relatorios/condominios.json',{cache:'no-cache'});
-  if(!resposta.ok)throw new Error('Configuração de logos indisponível');
-  const configuracao=await resposta.json(),marca=configuracao[String(idCondo)];
-  if(marca?.logo)logoCondo=await carregarFoto(marca.logo);
+  const marca=logosCondominios[String(idCondo)];
+  if(marca?.logo)logoCondo=await carregarLogo(marca.logo);
  }catch(e){avisos.push('Logo do condomínio indisponível.');console.warn(e)}
  return {logoOraqui,logoCondo,avisos};
 }
