@@ -1,0 +1,53 @@
+
+.oraqui-como-trigger{display:inline-flex;align-items:center;justify-content:center;min-height:43px;margin-top:12px;padding:11px 15px;border:1px solid #b8d9c6;border-radius:11px;background:#e6f4eb;color:#0e6847;font-size:12px;font-weight:850;cursor:pointer;text-align:center}
+.intro .oraqui-como-trigger{margin-top:14px}
+.success-commercial .oraqui-como-trigger,.success .oraqui-como-trigger{display:inline-flex;width:auto;min-height:43px;margin:10px 0 0;padding:10px 13px;color:#0e6847;background:#e6f4eb;border:1px solid #b8d9c6;font-size:12px;box-shadow:none}
+#oraquiComoModal[hidden]{display:none!important}
+#oraquiComoModal{position:fixed;inset:0;z-index:3000;display:flex;align-items:center;justify-content:center;padding:13px;background:rgba(9,26,29,.82);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+#oraquiComoModal .od-box{width:min(860px,100%);max-height:95vh;max-height:95dvh;display:flex;flex-direction:column;overflow:hidden;border-radius:22px;background:#f8faf9;color:#213b47;box-shadow:0 22px 70px rgba(0,0,0,.26)}
+#oraquiComoModal .od-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:19px 21px 14px;border-bottom:1px solid #d9e6df;background:#fff}
+#oraquiComoModal .od-brand{display:flex;align-items:center;gap:9px;margin-bottom:7px;color:#155d3e;font-size:16px;font-weight:900}
+#oraquiComoModal .od-brand img{width:36px;height:36px;object-fit:contain}
+#oraquiComoModal .od-head h2{font-size:19px;margin:0 0 6px;line-height:1.22}
+#oraquiComoModal .od-head p{font-size:12px;line-height:1.5;color:#688075;margin:0}
+#oraquiComoModal .od-close{height:43px;width:43px;flex:0 0 43px;border:0;border-radius:12px;background:#edf4ef;color:#23563e;font-size:26px;cursor:pointer}
+#oraquiComoModal .od-scroll{overflow-y:auto;min-height:0;padding:14px 17px;overscroll-behavior:contain}
+#oraquiComoModal .od-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin-bottom:14px}
+#oraquiComoModal .od-tab{border:1px solid #dce8e1;border-radius:10px;padding:11px 5px;font-size:11px;line-height:1.2;color:#667e72;font-weight:800;background:white;cursor:pointer}
+#oraquiComoModal .od-tab[aria-selected=true]{background:#13714d;color:white;border-color:#13714d}
+#oraquiComoModal .od-stage{display:grid;grid-template-columns:.85fr 1.15fr;align-items:center;gap:17px}
+#oraquiComoModal .od-copy{padding:5px 2px}
+#oraquiComoModal .od-eyebrow{font-size:10px;color:#148052;font-weight:850;letter-spacing:.7px}
+#oraquiComoModal .od-copy h3{font-size:22px;letter-spacing:-.35px;line-height:1.16;color:#1c3949;margin:11px 0}
+#oraquiComoModal .od-copy p{font-size:13px;line-height:1.6;color:#536d61;margin:0 0 12px}
+#oraquiComoModal .od-copy ul{padding:0;list-style:none;margin:12px 0 0}
+#oraquiComoModal .od-copy li{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:#38584b;line-height:1.4;margin:9px 0}
+#oraquiComoModal .od-copy li:before{content:"✓";flex:0 0 18px;display:grid;place-items:center;width:18px;height:18px;border-radius:50%;background:#deefe3;color:#16784d;font-weight:900}
+#oraquiComoModal .od-stage-preview{display:flex;justify-content:center;padding:16px;border:1px solid #d5e7dc;border-radius:17px;background:linear-gradient(130deg,#e6f0e9,#f1f6f2);min-width:0}
+#oraquiComoModal .od-app{width:min(100%,390px);overflow:hidden;background:#fff;border:1px solid #d4e1d9;border-radius:17px;box-shadow:0 10px 24px rgba(24,67,45,.1);color:#254137}
+#oraquiComoModal .od-app-header{background:linear-gradient(115deg,#105b3e,#24805a);color:#fff;padding:13px 16px}
+#oraquiComoModal .od-app-header small{display:block;font-size:9px;letter-spacing:.6px;opacity:.83;margin-bottom:4px}
+#oraquiComoModal .od-app-header strong{font-size:15px}
+#oraquiComoModal .od-app-main{background:#f6f9f7;padding:14px}
+#oraquiComoModal .od-app-main h4{font-size:14px;margin:0 0 13px;color:#254535}
+#oraquiComoModal .od-mini{padding:11px;border:1px solid #e1eae5;border-radius:10px;background:#fff;margin-bottom:9px}
+#oraquiComoModal .od-mini small{display:block;color:#7e9186;font-size:9px;letter-spacing:.2px;font-weight:800;margin-bottom:4px}
+#oraquiComoModal .od-mini strong{font-size:12px;color:#254737;display:block;line-height:1.4}
+#oraquiComoModal .od-mini span{display:block;font-size:10px;color:#688073;margin-top:4px}
+#oraquiComoModal .od-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+#oraquiComoModal .od-tag{display:inline-block;border-radius:7px;padding:6px 8px;background:#e1f2e7;color:#19774b;font-size:9px;font-weight:850}
+#oraquiComoModal .od-tag.alt{background:#e8eff7;color:#3e6c92}
+#oraquiComoModal .od-tag.warn{background:#fff2d5;color:#986b21}
+#oraquiComoModal .od-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+#oraquiComoModal .od-card{border:1px solid #e1eae5;background:#fff;border-radius:10px;padding:12px}
+#oraquiComoModal .od-card strong{display:block;font-size:18px;color:#276342}
+#oraquiComoModal .od-card span{display:block;margin-top:5px;font-size:9px;color:#798a82}
+#oraquiComoModal .od-fotos{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+#oraquiComoModal .od-foto{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-height:73px;border:1px dashed #b0cebd;background:#f4faf6;border-radius:9px;font-size:9px;font-weight:800;color:#507a65}
+#oraquiComoModal .od-foto b{font-size:21px;font-weight:500}
+#oraquiComoModal .od-action{background:#13774f;color:#fff;text-align:center;border-radius:10px;padding:12px;font-weight:850;font-size:11px}
+#oraquiComoModal .od-flow{margin-top:13px;border-radius:11px;background:#eaf3ed;color:#567666;text-align:center;padding:11px 8px;font-size:11px;font-weight:800;line-height:1.5}
+#oraquiComoModal .od-bottom{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 18px;background:#fff;border-top:1px solid #d9e6df}
+#oraquiComoModal .od-note{font-size:10px;line-height:1.4;color:#7b9085}
+#oraquiComoModal .od-next{padding:12px 16px;min-height:43px;border:0;border-radius:10px;background:#156b49;color:#fff;font-size:11px;font-weight:850;white-space:nowrap;cursor:pointer}
+@media(max-width:650px){#oraquiComoModal{padding:7px}#oraquiComoModal .od-box{max-height:98dvh;border-radius:16px}#oraquiComoModal .od-head{padding:13px}#oraquiComoModal .od-head h2{font-size:17px}#oraquiComoModal .od-head p{font-size:10px}#oraquiComoModal .od-scroll{padding:10px}#oraquiComoModal .od-tabs{gap:4px;margin-bottom:8px}#oraquiComoModal .od-tab{font-size:10px;padding:8px 2px}#oraquiComoModal .od-stage{grid-template-columns:1fr;gap:8px}#oraquiComoModal .od-copy h3{font-size:18px;margin:6px 0}#oraquiComoModal .od-copy p{font-size:12px;margin-bottom:7px}#oraquiComoModal .od-copy ul{margin-top:5px}#oraquiComoModal .od-copy li{font-size:11px;margin:5px 0}#oraquiComoModal .od-stage-preview{padding:8px}#oraquiComoModal .od-app-main{padding:11px}#oraquiComoModal .od-bottom{padding:10px}#oraquiComoModal .od-next{padding:10px 12px}}
