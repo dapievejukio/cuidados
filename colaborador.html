@@ -194,13 +194,13 @@ body:has(.modal.visible) .oraqui-bottom-nav{display:none}
 body:has(.modal.visible) #oraquiAlertaUrgente{bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:1100}
 @media(prefers-reduced-motion:reduce){#oraquiAlertaUrgente{animation:none}}
 </style>
-<link rel="icon" href="assets/gestor-3/simbolo.svg" type="image/svg+xml"><link rel="stylesheet" href="colaborador-3.css?v=20261021-4">
+<link rel="icon" href="assets/gestor-3/simbolo.svg" type="image/svg+xml"><link rel="stylesheet" href="colaborador-3.css?v=20261021-5">
 </head>
 <body>
 <header><div class="header-content"><div class="topbar"><div class="brand"><img class="colaborador-logo" src="assets/marca/oraqui-transparente.webp" alt="OraQui — Condomínios e equipes em ação."></div><button class="logout" id="logout">SAIR</button></div><div class="header-title"><small id="condominioNome">CONDOMÍNIO</small><h1>Seu trabalho faz a diferença.</h1><p>Escolha um ícone para começar.</p></div></div></header>
 <main>
 <div class="user-card"><a class="user-icon oraqui-avatar-link" id="userIcon" href="perfil-foto.html" aria-label="Toque para escolher ou alterar sua foto" title="Alterar foto">👤<span class="oraqui-avatar-edit">✎</span></a><div class="user-info"><div style="display:flex;align-items:center;gap:8px"><strong id="userName">Carregando...</strong><button type="button" id="notificationBell" aria-label="Configurar notificações" title="Notificações" style="border:0;background:transparent;font-size:21px;cursor:pointer;padding:4px">🔔</button></div><span id="userDescription">Validando acesso</span></div><span class="user-tag">ATIVO</span></div>
-<nav class="oraqui-bottom-nav colaborador-menu" aria-label="Acessos do colaborador"><button type="button" class="oraqui-nav-item" id="navDemandas" aria-label="Minhas tarefas" title="Minhas tarefas" ><span class="nav-icon"><svg class="colaborador-icone" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="18" rx="2"/><rect x="9" y="2" width="6" height="4" rx="1"/><path d="m8 13 3 3 5-6"/></svg></span><span class="oraqui-nav-badge" id="navDemandasBadge" hidden></span><span class="colaborador-menu-nome">Minhas tarefas</span></button><button type="button" class="oraqui-nav-item" id="navCronograma" aria-label="Cronograma" title="Cronograma" ><span class="nav-icon"><svg class="colaborador-icone" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 11h18M7 15h2M12 15h2M7 18h2"/></svg></span><span class="oraqui-nav-badge" id="navCronogramaBadge" hidden></span><span class="colaborador-menu-nome">Cronograma</span></button><button type="button" class="oraqui-nav-item" id="navDocumentos" aria-label="Meus documentos" title="Meus documentos" ><span class="nav-icon"><svg class="colaborador-icone" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H5v20h14V7Z M14 2v6h5M8 12h8M8 16h8"/></svg></span><span class="oraqui-nav-badge" id="navDocsBadge" hidden></span><span class="colaborador-menu-nome">Meus documentos</span></button><button type="button" class="oraqui-nav-item" id="navChat" aria-label="Conversas" title="Conversas" ><span class="nav-icon"><svg class="colaborador-icone" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11a8 8 0 0 1-8 9 9 9 0 0 1-4-1l-6 2 2-6a9 9 0 0 1-1-4 8 8 0 0 1 17 0ZM8 11h8M8 15h5"/></svg></span><span class="oraqui-nav-badge" id="navChatBadge" hidden></span><span class="colaborador-menu-nome">Conversas</span></button><button type="button" class="oraqui-nav-item" id="navRegistrar" aria-label="Registrar atividade" title="Registrar atividade" ><span class="nav-icon"><svg class="colaborador-icone" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></span><span class="colaborador-menu-nome">Registrar atividade</span></button><button type="button" class="oraqui-nav-item" id="navPonto" aria-label="Bater ponto" title="Bater ponto" hidden><span class="nav-icon"><svg class="colaborador-icone" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span class="colaborador-menu-nome">Bater ponto</span></button></nav><button type="button" id="colaboradorInicio" class="colaborador-voltar" aria-label="Recolher conteúdo e voltar aos ícones" title="Voltar aos ícones" hidden><svg class="colaborador-icone" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7M5 9v12h14V9M9 21v-6h6v6"/></svg></button><span id="navCalendarMonth" hidden></span><span id="navCalendarDay" hidden></span><div id="oraquiQuickCounts" hidden aria-hidden="true"><span id="oraquiChatCount" hidden></span><span id="oraquiDocsCount" hidden></span></div>
+<nav class="oraqui-bottom-nav colaborador-menu" aria-label="Acessos do colaborador"><button type="button" class="oraqui-nav-item" id="navDemandas" aria-label="Minhas tarefas" title="Minhas tarefas" ><span class="nav-icon"><svg class="colaborador-icone" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="18" rx="2"/><rect x="9" y="2" width="6" height="4" rx="1"/><path d="m8 13 3 3 5-6"/></svg></span><span class="oraqui-nav-badge" id="navDemandasBadge" hidden></span><span class="colaborador-menu-nome">Minhas tarefas</span></button><button type="button" class="oraqui-nav-item" id="navCronograma" aria-label="Cronograma" title="Cronograma" ><span class="nav-icon"><svg class="colaborador-icone" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 11h18M7 15h2M12 15h2M7 18h2"/></svg></span><span class="oraqui-nav-badge" id="navCronogramaBadge" hidden></span><span class="colaborador-menu-nome">Cronograma</span></button><button type="button" class="oraqui-nav-item" id="navDocumentos" aria-label="Meus documentos" title="Meus documentos" ><span class="nav-icon"><svg class="colaborador-icone" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H5v20h14V7Z M14 2v6h5M8 12h8M8 16h8"/></svg></span><span class="oraqui-nav-badge" id="navDocsBadge" hidden></span><span class="colaborador-menu-nome">Meus documentos</span></button><button type="button" class="oraqui-nav-item" id="navChat" aria-label="Conversas" title="Conversas" ><span class="nav-icon"><svg class="colaborador-icone" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11a8 8 0 0 1-8 9 9 9 0 0 1-4-1l-6 2 2-6a9 9 0 0 1-1-4 8 8 0 0 1 17 0ZM8 11h8M8 15h5"/></svg></span><span class="oraqui-nav-badge" id="navChatBadge" hidden></span><span class="colaborador-menu-nome">Conversas</span></button><button type="button" class="oraqui-nav-item" id="navRegistrar" aria-label="Registrar atividade" title="Registrar atividade" ><span class="nav-icon"><svg class="colaborador-icone" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></span><span class="colaborador-menu-nome">Registrar atividade</span></button><button type="button" class="oraqui-nav-item" id="navPonto" aria-label="Bater ponto" title="Bater ponto" hidden><span class="nav-icon"><svg class="colaborador-icone" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span class="colaborador-menu-nome">Bater ponto</span></button></nav><aside id="urgenciasDestaque" class="urgencias-destaque" aria-label="Demandas urgentes para iniciar" aria-live="polite" hidden></aside><button type="button" id="colaboradorInicio" class="colaborador-voltar" aria-label="Recolher conteúdo e voltar aos ícones" title="Voltar aos ícones" hidden><svg class="colaborador-icone" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7M5 9v12h14V9M9 21v-6h6v6"/></svg></button><span id="navCalendarMonth" hidden></span><span id="navCalendarDay" hidden></span><div id="oraquiQuickCounts" hidden aria-hidden="true"><span id="oraquiChatCount" hidden></span><span id="oraquiDocsCount" hidden></span></div>
 <div class="demo-mode-banner" id="demoModeBanner"><div class="demo-mode-icon">🧪</div><div class="demo-mode-info"><strong>MODO DEMONSTRAÇÃO</strong><span id="demoModeText">Você está testando a visão operacional de um colaborador.</span></div><button class="demo-back" id="demoBack" type="button">VOLTAR À GESTÃO</button></div>
 <div class="message error" id="error"></div><div class="offline-card" id="offlineCard" role="status"><strong id="offlineTitle">📶 Verificando conexão...</strong><span id="offlineDescription">Os registros pendentes permanecem neste aparelho até a sincronização.</span><br><button type="button" id="syncBtn">SINCRONIZAR AGORA</button></div>
 <div class="notification-card hidden" id="notificationCard" style="display:none"><strong id="notificationTitle"></strong><span id="notificationText"></span><button id="notificationBtn" type="button">ATIVAR</button></div>
@@ -509,6 +509,8 @@ async function carregarTudo(){
 
     renderEscala();
     renderPonto();
+    await carregarIniciosDemandasLocais();
+    if(versao!==versaoCarregamento)return;
     renderDemandas();
     renderProgramacoes();
     renderHistorico();
@@ -730,13 +732,38 @@ async function mostrarFotoOriginalDemanda(d){
     box.innerHTML='<a href="'+esc(data.signedUrl)+'" target="_blank" rel="noopener noreferrer" style="display:block;margin-top:10px">📷 ABRIR FOTO ORIGINAL DO MORADOR</a><img src="'+esc(data.signedUrl)+'" alt="Foto da ocorrência" style="width:100%;max-height:320px;object-fit:contain;border-radius:12px;margin-top:8px">';
   }catch(e){box.textContent='Foto original indisponível para esta conta.';console.warn('Foto original:',e.message)}
 }
+/* URGENCIAS_INICIO */
+const iniciosDemandasLocais=new Set();
+function chaveInicioDemanda(d){return [authUser?.id,colaborador?.condominio_id,colaborador?.id,d.id].join('|')}
+function demandaUrgentePendente(d){
+ const status=String(d.status||'').toLowerCase();
+ return (d.tipo==='urgente'||d.prioridade==='urgente')&&!['concluida','cancelada','em_andamento','em_execucao','iniciada'].includes(status)&&!d.iniciada_em&&!iniciosDemandasLocais.has(chaveInicioDemanda(d));
+}
+function marcarDemandaIniciada(d,inicio){
+ if(!d||!inicio)return;
+ iniciosDemandasLocais.add(chaveInicioDemanda(d));
+ if(!['concluida','cancelada'].includes(d.status)){d.iniciada_em=inicio.iniciada_em;d.status='em_andamento'}
+ renderDemandas();
+}
+async function carregarIniciosDemandasLocais(){
+ try{
+  const fila=await filaTodos();
+  for(const item of fila){
+   if(item.kind==='inicio'&&item.inicio_tipo==='demanda'&&item.auth_user_id===authUser?.id&&Number(item.condominio_id)===Number(colaborador?.condominio_id)&&Number(item.colaborador_id)===Number(colaborador?.id)){
+    const d=demandas.find(d=>String(d.id)===String(item.ref_id));
+    if(d){iniciosDemandasLocais.add(chaveInicioDemanda(d));if(!['concluida','cancelada'].includes(d.status)){d.iniciada_em=item.registro?.iniciada_em;d.status='em_andamento'}}
+   }
+  }
+ }catch(e){console.warn('Inícios locais de demandas indisponíveis:',e)}
+}
+/* URGENCIAS_FIM */
 function htmlDemanda(d,compacta=false){
   const urgente=d.tipo==="urgente"||d.prioridade==="urgente";
-  const pendente=urgente&&d.status!=="concluida";
+  const pendente=demandaUrgentePendente(d);
   if(compacta){
     return `<div class="demanda-antiga"><span class="demanda-antiga-icone">✓</span><div><strong>${esc(d.titulo||"Demanda")}</strong><small>${esc(d.descricao||"Concluída")}</small></div><span class="badge green">CONCLUÍDA</span></div>`;
   }
-  return `<div class="item-card" style="${pendente?'border:3px solid #dc2626;background:#fff7f7;box-shadow:0 0 0 3px #fecaca;':''}"><div class="item-top"><div class="item-icon">${urgente?"🚨":d.tipo==="recado"?"💬":"✓"}</div><div class="item-info"><strong>${esc(d.titulo)}</strong><span>${esc(d.tipo||"tarefa")} • ${esc(d.status)}${d.prazo_em?" • prazo "+hora(d.prazo_em):""}</span></div><span class="badge ${urgente?"red":"purple"}">${urgente?"🚨 URGENTE":esc(String(d.tipo||"tarefa").toUpperCase())}</span></div>${detalheDemanda(d)}<div class="item-actions">${d.status==="pendente"?`<button class="action secondary" onclick="mudarDemanda(${d.id},'visualizada')">MARCAR COMO LIDA</button>`:""}${d.tipo!=="recado"&&d.status!=="concluida"?`<button class="action" onclick="abrirConclusaoDemanda(${d.id})">INICIAR / CONCLUIR</button>`:""}</div></div>`;
+  return `<div class="item-card" style="${pendente?'border:3px solid #dc2626;background:#fff7f7;box-shadow:0 0 0 3px #fecaca;':''}"><div class="item-top"><div class="item-icon">${urgente?"🚨":d.tipo==="recado"?"💬":"✓"}</div><div class="item-info"><strong>${esc(d.titulo)}</strong><span>${esc(d.tipo||"tarefa")} • ${esc(d.status)}${d.prazo_em?" • prazo "+hora(d.prazo_em):""}</span></div><span class="badge ${pendente?"red":"purple"}">${pendente?"🚨 URGENTE":urgente?"EM ANDAMENTO":esc(String(d.tipo||"tarefa").toUpperCase())}</span></div>${detalheDemanda(d)}<div class="item-actions">${d.status==="pendente"?`<button class="action secondary" onclick="mudarDemanda(${d.id},'visualizada')">MARCAR COMO LIDA</button>`:""}${d.tipo!=="recado"&&d.status!=="concluida"?`<button class="action" onclick="abrirConclusaoDemanda(${d.id})">INICIAR / CONCLUIR</button>`:""}</div></div>`;
 }
 
 function renderDemandas(){
@@ -745,7 +772,12 @@ function renderDemandas(){
   const abertas=demandas.filter(d=>d.status!=="concluida");
   const concluidasHoje=demandas.filter(d=>demandaConcluidaHoje(d));
   const antigas=demandas.filter(d=>d.status==="concluida"&&!demandaConcluidaHoje(d));
-  const urgentes=abertas.filter(urgente);
+  const urgentes=abertas.filter(demandaUrgentePendente);
+  const destaque=$('urgenciasDestaque');
+  if(destaque){
+   destaque.hidden=!urgentes.length;
+   destaque.innerHTML=urgentes.map(d=>'<article class="urgencia-card"><div class="urgencia-titulo"><span aria-hidden="true">!</span><strong>Demanda urgente</strong></div><h2>'+esc(d.titulo||'Tarefa urgente')+'</h2>'+(d.descricao?'<p>'+esc(d.descricao)+'</p>':'')+'<p>'+esc(nomeLocal(d.area_id,d.ponto_id)||'Confira o local na tarefa')+'</p><button type="button" onclick="abrirConclusaoDemanda('+Number(d.id)+')">INICIAR DEMANDA</button></article>').join('');
+  }
   const botaoUrgencias=$('navDemandas'),sinalUrgencias=$('navDemandasBadge');
   if(botaoUrgencias){botaoUrgencias.classList.toggle('oraqui-tem-urgencia',urgentes.length>0);botaoUrgencias.setAttribute('aria-label',urgentes.length?'Ver '+urgentes.length+' demandas urgentes':'Ver urgências e demandas');}
   if(sinalUrgencias){sinalUrgencias.hidden=!urgentes.length;sinalUrgencias.textContent=urgentes.length>99?'99+':String(urgentes.length);}
@@ -1017,6 +1049,7 @@ async function iniciarComFoto(tipo){
     else existente=await obterInicioDisponivel(tipo,refId);
     if(existente){
       inicioAtual=existente;
+      if(tipo==='demanda')marcarDemandaIniciada(demanda,existente);
       if(tipo==='avulsa')avulsaAtualId=existente.id;
       toast('Atividade já iniciada.');
       await atualizarBlocoInicio(tipo,tipo==='avulsa'?existente.id:refId);
@@ -1054,6 +1087,7 @@ async function iniciarComFoto(tipo){
     });
 
     inicioAtual=registro;
+    if(tipo==='demanda')marcarDemandaIniciada(demanda,registro);
     if(tipo==='avulsa'){
       avulsaAtualId=inicioId;
       $('areaSelect').disabled=true;$('pontoSelect').disabled=true;
@@ -1141,6 +1175,7 @@ async function atualizarBlocoInicio(tipo,id){
   try{
     inicioAtual=id?await obterInicioDisponivel(tipo,id):null;
     const iniciada=!!inicioAtual;
+    if(tipo==='demanda'&&inicioAtual)marcarDemandaIniciada(demandas.find(d=>mesmoId(d.id,id)),inicioAtual);
     info.textContent=iniciada
       ?`✓ Iniciada às ${hora(inicioAtual.iniciada_em)}${inicioAtual.foto_antes_path?' • Foto ANTES preservada':''}. Agora registre o DEPOIS.`
       :(navigator.onLine?'Registre a situação ANTES e toque em INICIAR. O início ficará salvo no ORAQUI.':'📴 Sem internet. Você pode registrar o início: a foto ficará salva neste aparelho até sincronizar.');
@@ -1597,7 +1632,7 @@ recolherColaborador();
   const badges=[['oraquiChatCount','navChatBadge'],['oraquiDocsCount','navDocsBadge']];
  const atualizar=()=>{
    for(const [origem,destino] of badges){const a=$(origem),b=$(destino);if(!a||!b)continue;b.hidden=a.hidden||!a.textContent.trim();b.textContent=a.textContent;}
-   const b=$('navDemandasBadge');if(b&&Array.isArray(demandas)){const n=demandas.filter(d=>d.status!=='concluida'&&(d.tipo==='urgente'||d.prioridade==='urgente')).length;b.hidden=!n;b.textContent=n>99?'99+':String(n);$('navDemandas')?.classList.toggle('oraqui-tem-urgencia',n>0);}
+   const b=$('navDemandasBadge');if(b&&Array.isArray(demandas)){const n=demandas.filter(demandaUrgentePendente).length;b.hidden=!n;b.textContent=n>99?'99+':String(n);$('navDemandas')?.classList.toggle('oraqui-tem-urgencia',n>0);}
  };
  const observer=new MutationObserver(atualizar);
  for(const [origem] of badges){const el=$(origem);if(el)observer.observe(el,{attributes:true,attributeFilter:['hidden'],childList:true,characterData:true,subtree:true});}
