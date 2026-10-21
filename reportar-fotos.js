@@ -81,7 +81,7 @@ window.carregarHistoricoLocal=async function(){
   if(document.getElementById('ultimaQuando').textContent!==fmtDataHora(foto.ultima_quando))return;
   if(!urlFoto(foto.foto_path)&&!urlFoto(foto.foto_antes_path))return;
   fotoAtual={...foto,areaId,pontoId};
-  btn.textContent='📷 VER FOTOS DO SERVIÇO';
+  btn.textContent='📷 VER REGISTRO';
   btn.style.display='inline-flex';btn.disabled=false;
   card.classList.add('oraqui-com-foto');
   card.setAttribute('role','button');card.setAttribute('tabindex','0');
