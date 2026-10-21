@@ -1,0 +1,21 @@
+import fs from 'node:fs';import vm from 'node:vm';import assert from 'node:assert/strict';import path from 'node:path';import {fileURLToPath} from 'node:url';
+const {parseHTML}=await import(process.env.LINKEDOM_WORKER||'linkedom/worker');
+const html=fs.readFileSync(path.join(path.dirname(fileURLToPath(import.meta.url)),'../colaborador.html'),'utf8');
+const {document,HTMLElement}=parseHTML(html);HTMLElement.prototype.scrollIntoView=function(){};
+for(const m of html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g))if(m[1].trim())new vm.Script(m[1]);
+const ctx={document,console,location:{href:''},MutationObserver:class{observe(){}},colaborador:{condominio_id:99},programacoes:[],execucoesHoje:[],demandas:[],programacaoValeHoje:()=>false,mesmoId:(a,b)=>a===b,pesoProgramacao:()=>0,minutosHorario:()=>0,demandaConcluidaHoje:()=>false,htmlDemanda:()=>'',vazio:()=>'',setTimeout(){},abrirExecucao:async()=>ctx.registrou=true};ctx.window=ctx;ctx.$=id=>document.getElementById(id);vm.createContext(ctx);
+vm.runInContext(html.split('/* COLABORADOR_MENU_INICIO */')[1].split('/* COLABORADOR_MENU_FIM */')[0],ctx);
+vm.runInContext(html.slice(html.indexOf('(function configurarNavegacaoInferior(){'),html.indexOf('\niniciar();',html.indexOf('(function configurarNavegacaoInferior(){'))),ctx);
+assert.equal(document.querySelectorAll('.colaborador-secao-ativa').length,0);
+for(const id of ['navDemandas','navCronograma','navDocumentos','navChat','navRegistrar']){const el=ctx.$(id);assert(el.getAttribute('aria-label'));assert(el.getAttribute('title'));assert(el.querySelector('svg'));}
+ctx.$('navDemandas').click();assert(ctx.$('secaoDemandas').classList.contains('colaborador-secao-ativa'));
+ctx.$('navCronograma').click();assert(!ctx.$('secaoDemandas').classList.contains('colaborador-secao-ativa'));assert(ctx.$('atividadesProgramadasSection').classList.contains('colaborador-secao-ativa'));
+ctx.mostrarSecaoColaborador('pontoSection');assert(!ctx.$('pontoSection').classList.contains('colaborador-secao-ativa'));
+ctx.$('navPonto').hidden=false;ctx.$('navPonto').click();assert(ctx.$('pontoSection').classList.contains('colaborador-secao-ativa'));
+ctx.$('navChat').click();assert.equal(ctx.location.href,'chat.html?condominio_id=99');ctx.$('navDocumentos').click();assert.equal(ctx.location.href,'documentos-colaborador.html');
+ctx.$('navRegistrar').click();await Promise.resolve();assert(ctx.registrou);
+vm.runInContext(html.slice(html.indexOf('function renderDemandas(){'),html.indexOf('\nfunction abrirConclusaoDemanda',html.indexOf('function renderDemandas(){'))),ctx);
+ctx.demandas=[{id:1,tipo:'urgente',status:'pendente'}];ctx.recolherColaborador();ctx.renderDemandas();assert(ctx.$('navDemandas').classList.contains('oraqui-tem-urgencia'));assert.equal(ctx.$('navDemandasBadge').textContent,'1');assert.equal(document.querySelectorAll('.colaborador-secao-ativa').length,0,'urgent icon does not auto-open content');
+ctx.demandas[0].status='concluida';ctx.renderDemandas();assert(!ctx.$('navDemandas').classList.contains('oraqui-tem-urgencia'));assert.equal(ctx.$('navDemandasBadge').hidden,true);
+ctx.$('colaboradorInicio').click();assert.equal(document.querySelectorAll('.colaborador-secao-ativa').length,0);
+console.log('PASS: ícones acessíveis, início recolhido, navegação, chat/documentos, registro, ponto habilitado e urgência vermelha até conclusão.');
