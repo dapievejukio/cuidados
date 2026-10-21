@@ -246,6 +246,7 @@ function mostrarEscolhaCondominio(){
 }
 async function selecionarCondominioGestao({p,c}){
   versaoCondominio++;
+  fecharRelatorioOraqui();
   sessionStorage.setItem("oraqui_gestao_condominio_id",String(c.id));
   const temaEllen=String(p.nome||"").trim().toLocaleLowerCase("pt-BR")==="ellen"&&p.perfil==="gestor";
   document.body.classList.toggle("oraqui-gestora-ellen",temaEllen);
@@ -383,7 +384,7 @@ document.addEventListener("click",e=>{
  const tab=e.target.closest("[data-reg-view]");
  if(tab){oraquiRegModo=tab.dataset.regView;renderOraquiRegistros()}
  if(e.target.closest("#oraquiRegHoje")){$("oraquiRegData").value=hoje();oraquiRegData=hoje();carregarRegistrosPorData()}
- if(e.target.closest("#oraquiRegImprimir")){locationList.querySelectorAll(".location-card").forEach(c=>c.classList.add("open"));window.print()}
+ if(e.target.closest("#oraquiRegImprimir"))abrirPreviaRelatorioOraqui()
 });
 document.addEventListener("change",e=>{
  if(e.target.id==="oraquiRegData"){oraquiRegData=e.target.value;carregarRegistrosPorData()}
@@ -1486,5 +1487,6 @@ async function carregarFotosEquipe(){for(const c of colaboradoresCarregados){if(
  },true);
 })();
 </script>
+<script src="relatorio-gestor.js"></script>
 </body>
 </html>
