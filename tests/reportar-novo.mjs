@@ -1,0 +1,19 @@
+import fs from 'node:fs';import vm from 'node:vm';import assert from 'node:assert/strict';import path from 'node:path';import {fileURLToPath} from 'node:url';import {webcrypto} from 'node:crypto';
+const {parseHTML}=await import(process.env.LINKEDOM_WORKER||'linkedom/worker');
+const html=fs.readFileSync(path.join(path.dirname(fileURLToPath(import.meta.url)),'../reportar.html'),'utf8');const {document}=parseHTML(html);
+// LinkeDOM does not implement native form value/checked mutation fully.
+for(const el of document.querySelectorAll('select'))Object.defineProperty(el,'value',{get(){return this.querySelector('option[selected]')?.getAttribute('value')||''},set(v){for(const op of this.querySelectorAll('option'))op.toggleAttribute('selected',op.getAttribute('value')===String(v))}});
+for(const el of document.querySelectorAll('input[type=radio]'))Object.defineProperty(el,'checked',{get(){return this.hasAttribute('checked')},set(v){if(v)for(const other of document.querySelectorAll('input[name="'+this.name+'"]'))other.removeAttribute('checked');this.toggleAttribute('checked',!!v)}});
+const dados={areas:[{id:1,nome:'Torre E'},{id:2,nome:'Torre A'}],pontos:[{id:101,area_id:1,nome:'12º andar'},{id:202,area_id:2,nome:'Hall'}]};let payload=null,upload=false;
+const chain=table=>new Proxy(function(){},{get:(_,key)=>key==='then'?resolve=>resolve({data:dados[table]||[],error:null}):()=>chain(table),apply:()=>chain(table)});
+const db={from:chain,rpc:async(name,args)=>{assert.equal(name,'criar_ocorrencia_publica');payload=args;return {data:{ok:true,id:123},error:null}},storage:{from:()=>({upload:async()=>{upload=true;return{error:null}},remove:async()=>({error:null})})},functions:{invoke:async()=>({error:null})}};
+const ctx={document,console,crypto:webcrypto,supabase:{createClient:()=>db},URL:{createObjectURL:()=> 'blob:teste',revokeObjectURL(){}},location:{href:'',reload(){}},setTimeout(){},scrollTo(){}};ctx.window=ctx;vm.createContext(ctx);
+for(const m of html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g))if(m[1].trim())vm.runInContext(m[1].replace(/carregarLocais\(\);\s*$/,''),ctx);
+await ctx.carregarLocais();assert.equal(document.querySelectorAll('[name=areaChoice]').length,2);
+const area=document.querySelector('[name=areaChoice][value="1"]');area.checked=true;area.dispatchEvent(new document.defaultView.Event('change',{bubbles:true}));assert.equal(document.getElementById('area').value,'1');assert.equal(document.querySelectorAll('[name=pointChoice]').length,1);
+const point=document.querySelector('[name=pointChoice][value="101"]');point.checked=true;point.dispatchEvent(new document.defaultView.Event('change',{bubbles:true}));
+await ctx.enviar();assert.equal(payload,null,'category required');
+const category=document.querySelector('[name=categoria][value="Limpeza"]');category.checked=true;document.getElementById('descricao').value='Precisa de limpeza';document.getElementById('email').value='';await ctx.enviar();assert(payload);assert.equal(payload.p_condominio,'Reserva Igara');assert.equal(payload.p_area,'Torre E');assert.equal(payload.p_detalhe,'12º andar');assert.equal(payload.p_descricao,'[Limpeza] Precisa de limpeza');assert.equal(payload.p_deseja_retorno,false);assert.equal(document.getElementById('successOverlay').style.display,'flex');
+payload=null;document.getElementById('detalhe').innerHTML+='<option value="202">Hall de outra torre</option>';document.getElementById('detalhe').value='202';await ctx.enviar();assert.equal(payload,null,'point must belong to selected area');
+assert.equal(upload,false);assert(!html.includes('Envio simulado'));assert(html.includes('assets/marca/oraqui-transparente.webp'));
+console.log('PASS: áreas e locais em botões, categoria, validação de local, payload real e confirmação de protocolo (API simulada, sem envio em produção).');
