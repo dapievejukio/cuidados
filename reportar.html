@@ -330,38 +330,19 @@ async function carregarHistoricoLocal(){
  const areaId=Number(document.getElementById("area").value)||null;
  const pontoId=Number(document.getElementById("detalhe").value)||null;
  const ps=pontos.filter(x=>Number(x.area_id)===areaId);
- if(!areaId||(ps.length&&!pontoId)){document.getElementById("opsCard").style.display="none";return}
- const card=document.getElementById("opsCard"),ua=document.getElementById("ultimaAtividade"),uw=document.getElementById("ultimaQuando"),uf=document.getElementById("ultimaFoto"),pa=document.getElementById("proximaAtividade"),pw=document.getElementById("proximaQuando");
- card.style.display="block";document.getElementById("stillProblem").style.display="none";
- ua.textContent="Consultando...";uw.textContent="";uf.style.display="none";pa.textContent="Consultando...";pw.textContent="";
+ const card=document.getElementById("opsCard");
+ if(!areaId||(ps.length&&!pontoId)){card.style.display="none";return}
+ const ua=document.getElementById("ultimaAtividade"),uw=document.getElementById("ultimaQuando"),uf=document.getElementById("ultimaFoto"),pa=document.getElementById("proximaAtividade"),pw=document.getElementById("proximaQuando");
+ card.style.display="block";ua.textContent="Consultando...";uw.textContent="";uf.style.display="none";
+ pa.textContent="Nenhuma atividade futura informada";pw.textContent="";
  try{
-  let q=db.from("execucoes").select("id,atividade_id,executada_em,created_at,foto_path,atividades_v2(nome)").eq("condominio_id",CONDOMINIO_ID).eq("area_id",areaId).order("executada_em",{ascending:false}).limit(1);
-  if(pontoId)q=q.eq("ponto_id",pontoId);else q=q.is("ponto_id",null);
-  const {data:exec,error:e1}=await q;if(e1)throw e1;
-  const ultima=exec?.[0];
-  if(ultima){
-   ua.textContent=ultima.atividades_v2?.nome||"Atividade concluída";
-   uw.textContent=fmtDataHora(ultima.executada_em||ultima.created_at);
-   if(ultima.foto_path){
-    uf.style.display="block";
-    uf.onclick=async()=>{
-     const {data,error}=await db.storage.from("fotos-atividades").createSignedUrl(ultima.foto_path,120);
-     if(error||!data?.signedUrl){mostrarErro("Não foi possível abrir a foto deste registro.");return}
-     window.open(data.signedUrl,"_blank","noopener");
-    };
-   }
-  }else{ua.textContent="Ainda não há atividade registrada";uw.textContent="";}
- }catch(e){console.warn("Histórico público indisponível",e);ua.textContent="Histórico ainda não disponível";uw.textContent="";}
-
- try{
-  const agora=new Date().toISOString();
-  let q2=db.from("programacoes").select("id,atividade_id,inicio_previsto,atividades_v2(nome)").eq("condominio_id",CONDOMINIO_ID).eq("area_id",areaId).gte("inicio_previsto",agora).order("inicio_previsto",{ascending:true}).limit(1);
-  if(pontoId)q2=q2.eq("ponto_id",pontoId);else q2=q2.is("ponto_id",null);
-  const {data:prog,error:e2}=await q2;if(e2)throw e2;
-  const prox=prog?.[0];
-  if(prox){pa.textContent=prox.atividades_v2?.nome||"Atividade programada";pw.textContent=fmtDataHora(prox.inicio_previsto)}
-  else{pa.textContent="Nenhuma atividade programada";pw.textContent=""}
- }catch(e){console.warn("Programação pública indisponível",e);pa.textContent="Programação ainda não disponível";pw.textContent=""}
+  const {data,error}=await db.rpc("resumo_local_ocorrencia",{p_condominio_id:CONDOMINIO_ID,p_area_id:areaId,p_ponto_id:pontoId});
+  if(error)throw error;
+  const resumo=data?.[0];
+  if(resumo?.ultima_quando){ua.textContent=resumo.ultima_atividade||"Atividade concluída";uw.textContent=fmtDataHora(resumo.ultima_quando)}
+  else{ua.textContent="Nenhuma atividade concluída neste local";uw.textContent=""}
+  if(resumo?.proxima_quando){pa.textContent=resumo.proxima_atividade||"Atividade prevista";pw.textContent=fmtDataHora(resumo.proxima_quando)}
+ }catch(e){console.warn("Resumo público indisponível",e);ua.textContent="Histórico temporariamente indisponível";pa.textContent="Programação não disponível"}
  document.getElementById("stillProblem").style.display="block";
 }
 
@@ -437,7 +418,22 @@ function voltar(){location.reload()}function inicio(){location.href="index.html"
 
 const locationIcons={"Torre A": "<svg aria-hidden=\"true\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"4\" y=\"2\" width=\"16\" height=\"20\" rx=\"2\"/><path d=\"M9 22v-4h6v4M8 6h.01M16 6h.01M12 6h.01M12 10h.01M12 14h.01M16 10h.01M16 14h.01M8 10h.01M8 14h.01\"/></svg>", "Torre B": "<svg aria-hidden=\"true\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"4\" y=\"2\" width=\"16\" height=\"20\" rx=\"2\"/><path d=\"M9 22v-4h6v4M8 6h.01M16 6h.01M12 6h.01M12 10h.01M12 14h.01M16 10h.01M16 14h.01M8 10h.01M8 14h.01\"/></svg>", "Torre C": "<svg aria-hidden=\"true\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"4\" y=\"2\" width=\"16\" height=\"20\" rx=\"2\"/><path d=\"M9 22v-4h6v4M8 6h.01M16 6h.01M12 6h.01M12 10h.01M12 14h.01M16 10h.01M16 14h.01M8 10h.01M8 14h.01\"/></svg>", "Torre D": "<svg aria-hidden=\"true\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"4\" y=\"2\" width=\"16\" height=\"20\" rx=\"2\"/><path d=\"M9 22v-4h6v4M8 6h.01M16 6h.01M12 6h.01M12 10h.01M12 14h.01M16 10h.01M16 14h.01M8 10h.01M8 14h.01\"/></svg>", "Torre E": "<svg aria-hidden=\"true\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"4\" y=\"2\" width=\"16\" height=\"20\" rx=\"2\"/><path d=\"M9 22v-4h6v4M8 6h.01M16 6h.01M12 6h.01M12 10h.01M12 14h.01M16 10h.01M16 14h.01M8 10h.01M8 14h.01\"/></svg>", "Garagens": "<svg aria-hidden=\"true\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m5 17-1 2m15-2 1 2M5 8l2-5h10l2 5M3 8h18v9H3zM7 12h.01M17 12h.01\"/></svg>", "Academia": "<svg aria-hidden=\"true\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m6.5 6.5 11 11m-13-9 4-4m7 15 4-4M2 7l5-5m10 20 5-5M4 4l3 3m10 10 3 3M2 10l8-8m4 20 8-8\"/></svg>", "Academia externa": "<svg aria-hidden=\"true\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"17\" cy=\"4\" r=\"2\"/><path d=\"m14 8-3 4 4 3 1 6m-5-9-4 3-3-1m10-6 3 3h4M3 21h18M7 4v7M4 4h6\"/></svg>", "Salão de festas": "<svg aria-hidden=\"true\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 3h5v5a2.5 2.5 0 0 1-5 0V3Zm11 0h5v5a2.5 2.5 0 0 1-5 0V3ZM6.5 11v10m11-10v10M3 21h7m4 0h7M4 6h5m6 0h5m-4-3 1-2m-6 5 2-1\"/></svg>", "Quiosque 1": "<svg aria-hidden=\"true\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m2 10 10-8 10 8H2Zm3 0v11m14-11v11M3 21h18M8 15h8m-4 0v6M8 10l4-8 4 8\"/></svg>", "Quiosque 2": "<svg aria-hidden=\"true\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m2 10 10-8 10 8H2Zm3 0v11m14-11v11M3 21h18M8 15h8m-4 0v6M8 10l4-8 4 8\"/></svg>", "Central do lixo": "<svg aria-hidden=\"true\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7M14 10v7\"/></svg>", "Área pet": "<svg aria-hidden=\"true\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><ellipse cx=\"5\" cy=\"9\" rx=\"2\" ry=\"2.5\"/><ellipse cx=\"10\" cy=\"5\" rx=\"2\" ry=\"2.5\"/><ellipse cx=\"16\" cy=\"5\" rx=\"2\" ry=\"2.5\"/><ellipse cx=\"21\" cy=\"10\" rx=\"2\" ry=\"2.5\"/><path d=\"M8 14c2-4 6-4 8 0l3 4c2 4-3 5-6 3-3 2-8 1-6-3Z\"/></svg>", "Playground": "<svg aria-hidden=\"true\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3 21V6h7v15M3 10h7m-7 4h7m-7 4h7M1 6l5.5-4L12 6M10 9c5 0 4 10 10 10h2v2h-3c-7 0-6-10-9-10\"/></svg>", "Outros locais": "<svg aria-hidden=\"true\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"5\" cy=\"12\" r=\"1\"/><circle cx=\"12\" cy=\"12\" r=\"1\"/><circle cx=\"19\" cy=\"12\" r=\"1\"/></svg>"};
 function normalizeName(value){return value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()}
-function locationIcon(name){const key=Object.keys(locationIcons).find(k=>normalizeName(k)===normalizeName(name));return locationIcons[key]||locationIcons['Outros locais']}
+function locationIcon(name){
+ const n=normalizeName(name);
+ const svg=body=>`<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${body}</svg>`;
+ if(/corredor|andar|hall/.test(n))return svg('<path d="M3 21V3h18v18M8 21V8h8v13M3 3l5 5m13-5-5 5M8 21l-5 0m13 0h5M12 4h.01"/>');
+ if(/elevador/.test(n))return svg('<rect x="4" y="3" width="16" height="19" rx="2"/><path d="M8 22V10h8v12M12 10v12M8 6l2-2 2 2m1 0 2 2 2-2"/>');
+ if(/escada/.test(n))return svg('<path d="M3 21h5v-5h5v-5h5V6h4M3 15 17 1m-5 0h5v5"/>');
+ if(/porta|shaft/.test(n))return svg('<path d="M4 22h16M6 22V3h12v19M9 22V6l6-2v18M12 13h.01"/>');
+ if(/residuo|lixo|lixeira/.test(n))return locationIcons['Central do lixo'];
+ if(/garag/.test(n))return locationIcons.Garagens;
+ if(/pet/.test(n))return locationIcons['Área pet'];
+ if(/infantil/.test(n))return locationIcons.Playground;
+ if(/quiosque|chimarr/.test(n))return locationIcons['Quiosque 1'];
+ if(/piscina/.test(n))return svg('<path d="M3 21q3-3 6 0t6 0t6 0M3 17q3-3 6 0t6 0t6 0M7 14V4a2 2 0 0 1 4 0m3 10V4a2 2 0 0 1 4 0M7 7h7M7 11h7"/>');
+ const key=Object.keys(locationIcons).find(k=>normalizeName(k)===n);
+ return locationIcons[key]||svg('<path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="3"/>');
+}
 function renderChoices(containerId,items,name,onSelect){const container=document.getElementById(containerId);container.replaceChildren();items.forEach(item=>{const label=document.createElement('label');label.className='choice';label.style.setProperty('--accent','#15865d');const input=document.createElement('input');input.type='radio';input.name=name;input.value=String(item.id);input.setAttribute('aria-label',item.nome);const tile=document.createElement('span');tile.innerHTML=locationIcon(item.nome);const text=document.createElement('span');text.textContent=item.nome;tile.append(text);input.addEventListener('change',()=>onSelect(item.id));label.append(input,tile);container.append(label)})}
 function renderAreas(){renderChoices('areaChoices',areas,'areaChoice',id=>{document.getElementById('area').value=String(id);alterarArea()})}
 function renderPoints(items){renderChoices('pointChoices',items,'pointChoice',id=>{document.getElementById('detalhe').value=String(id);carregarHistoricoLocal()})}
