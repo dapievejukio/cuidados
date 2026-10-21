@@ -14,19 +14,54 @@ document.body.appendChild(root);
 const nav=root.querySelector('#oraquiComoTabs'),area=root.querySelector('#oraquiComoStage'),next=root.querySelector('#oraquiComoNext'),close=root.querySelector('#oraquiComoClose'),scroll=root.querySelector('.od-scroll');
 let step=0,focusBefore=null,overflowBefore='';
 views.forEach((v,i)=>{const b=document.createElement('button');b.type='button';b.className='od-tab';b.id='oraquiDemoTab'+i;b.setAttribute('role','tab');b.textContent=(i+1)+'. '+v[0];b.addEventListener('click',()=>render(i));nav.append(b)});
-function mini(label,info,extra){return '<div class="od-mini"><small>'+label+'</small><strong>'+info+'</strong>'+(extra?'<span>'+extra+'</span>':'')+'</div>'}
+/* Telas demonstrativas alinhadas ao layout do ORAQUI 3.0 em produção.
+ * Não utilizam registros reais nem fingem ser capturas autenticadas. */
+function telaMorador(){
+ return '<div class="odm-public-banner"><div class="odm-public-brand"><img src="assets/marca/oraqui-transparente.webp" alt="OraQui"></div><span>Organiza&nbsp; • &nbsp;Acompanha&nbsp; • &nbsp;Resolve</span></div>'+
+  '<div class="odm-condo-bar"><img src="assets/relatorios/rni-reserva-igara.jpg" alt="Reserva Igara"><span>RESERVA IGARA<br><b>Comunicar ocorrência</b></span></div>'+
+  '<div class="odm-public-content"><h4>Onde está o problema?</h4>'+
+  '<div class="odm-selected"><span>Torre E</span><small>TROCAR ÁREA</small></div>'+
+  '<div class="odm-selected"><span>Corredor 12º andar</span><small>TROCAR PONTO</small></div>'+
+  '<div class="odm-monitored"><div class="odm-monitor-head"><span class="odm-monitor-icon">◷</span><div><b>Este local é acompanhado pelo ORAQUI</b><small>Registros operacionais do espaço selecionado</small></div></div>'+
+  '<div class="odm-last"><small>ÚLTIMA ATIVIDADE REGISTRADA</small><b>Limpeza ou zeladoria realizada</b><span>Hoje, 09:01</span><em>📷 VER REGISTRO</em></div></div>'+
+  '<div class="odm-ghost-section"><b>Qual é o problema?</b><span>Limpeza&nbsp; • &nbsp;Manutenção&nbsp; • &nbsp;Outros</span></div></div>';
+}
+function telaColaborador(){
+ return '<div class="odm-app-head"><div class="odm-app-brand"><img src="assets/marca/oraqui-transparente.webp" alt="OraQui"><span>SAIR</span></div><small>RESERVA IGARA</small><h4>Seu trabalho faz a diferença.</h4><p>Escolha um ícone para começar.</p></div>'+
+ '<div class="odm-app-content"><div class="odm-user-card"><span class="odm-avatar">●</span><div><b>Colaborador</b><small>Equipe operacional</small></div><em>ATIVO</em></div>'+
+ '<div class="odm-app-title">Registrar execução <small>LOCAL → FOTOS → CONCLUSÃO</small></div>'+
+ '<div class="odm-workflow"><div class="odm-work-card"><span class="odm-work-num">1</span><div><b>Torre E • Corredor 12º andar</b><small>Limpeza / Zeladoria</small></div></div>'+
+ '<div class="odm-work-card"><span class="odm-work-num">2</span><div><b>📷 ANTES — Registre a situação</b><small>Fotografe antes de iniciar</small></div><em class="odm-work-badge">FOTO</em></div>'+
+ '<div class="odm-work-card"><span class="odm-work-num">3</span><div><b>▶ Iniciar atividade</b><small>Horário registrado na execução</small></div></div>'+
+ '<div class="odm-work-card"><span class="odm-work-num">4</span><div><b>📷 DEPOIS — Registre o resultado</b><small>Concluir com registro fotográfico</small></div><em class="odm-work-badge done">CONCLUIR</em></div></div>'+
+ '<div class="odm-mini-nav"><span>▤<small>Minhas tarefas</small></span><span>▦<small>Cronograma</small></span><span class="selected">＋<small>Registrar atividade</small></span></div></div>';
+}
+function telaGestor(){
+ return '<div class="odm-app-head"><div class="odm-app-brand"><img src="assets/marca/oraqui-transparente.webp" alt="OraQui"><span>GESTOR 3.0</span></div><small>RESERVA IGARA</small><h4>Seu condomínio em boas mãos.</h4><p>Organize as rotinas e acompanhe a equipe.</p></div>'+
+ '<div class="odm-app-content"><div class="odm-user-card"><span class="odm-avatar">▥</span><div><b>Gestão</b><small>Gestor autenticado</small></div><em>● ONLINE</em></div>'+
+ '<div class="odm-app-title">O que você quer acompanhar?</div>'+
+ '<div class="odm-hub-row"><span>◉</span><b>Comunicação</b><small>⌄</small></div>'+
+ '<div class="odm-hub-row"><span>⚑</span><b>Demandas</b><small>⌄</small></div>'+
+ '<div class="odm-hub-row"><span>▦</span><b>Cronograma</b><small>⌄</small></div>'+
+ '<div class="odm-hub-row chosen"><span>▥</span><b>Operação e relatórios</b><small>⌄</small></div>'+
+ '<div class="odm-app-title">Operação de hoje <small>VISÃO GERAL</small></div>'+
+ '<div class="odm-kpis"><div><b>—</b><small>REGISTROS HOJE</small></div><div><b>—</b><small>FOTOS RECEBIDAS</small></div><div><b>—</b><small>COLABORADORES</small></div><div><b>—</b><small>LOCAIS REGISTRADOS</small></div></div>'+
+ '<div class="odm-mini-nav"><span>◉<small>Chat</small></span><span>⌂<small>Chamados</small></span><span class="selected">＋<small>Criar demanda</small></span></div></div>';
+}
+function telaRelatorio(){
+ return '<div class="odm-app-head"><div class="odm-app-brand"><img src="assets/marca/oraqui-transparente.webp" alt="OraQui"><span>GESTOR 3.0</span></div><small>RESERVA IGARA</small><h4>Relatório de trabalho</h4><p>Consulte por colaborador, local ou histórico.</p></div>'+
+ '<div class="odm-app-content"><div class="odm-report-tabs"><span>Colaboradores</span><span class="chosen">Locais</span><span>Histórico</span></div>'+
+ '<div class="odm-date-grid"><div><small>DATA INICIAL</small><b>01/10/2026</b></div><div><small>DATA FINAL</small><b>21/10/2026</b></div></div>'+
+ '<div class="odm-date-grid"><div><small>LOCAL</small><b>Torre E • 12º andar</b></div><div><small>COLABORADOR</small><b>Todos</b></div></div>'+
+ '<div class="odm-report-button">▤ GERAR RELATÓRIO</div>'+
+ '<div class="odm-report-preview"><div class="odm-report-logos"><img src="assets/marca/oraqui-transparente.webp" alt="OraQui"><img src="assets/relatorios/rni-reserva-igara.jpg" alt="Reserva Igara"></div>'+
+ '<b>Relatório de Serviços</b><small>Período: 01/10/2026 a 21/10/2026</small>'+
+ '<div class="odm-report-line">Torre E • Corredor 12º andar <em>CONCLUÍDA</em></div>'+
+ '<div class="odm-report-pics"><span>▧<small>ANTES</small></span><span>▧<small>DEPOIS</small></span></div></div></div>';
+}
 function fakeScreen(i){
- let inside='';
- if(i===0){
-  inside='<h4>Comunicar ocorrência</h4>'+mini('LOCAL','Torre E • Corredor 12º andar')+mini('TIPO DE PROBLEMA','Limpeza')+mini('DESCRIÇÃO','Solicitação do morador','Descrição do problema encontrado')+mini('FOTO','Adicionar fotografia (opcional)')+'<div class="od-action">ENVIAR OCORRÊNCIA →</div>';
- }else if(i===1){
-  inside='<h4>Registro de execução <span class="od-tag">Em andamento</span></h4>'+mini('LOCAL','Torre E • Corredor 12º andar')+mini('ATIVIDADE','Limpeza e zeladoria')+'<div class="od-fotos"><div class="od-foto"><b>▧</b>FOTO ANTES</div><div class="od-foto"><b>▧</b>FOTO DEPOIS</div></div>'+mini('ETAPAS','Iniciar → Executar → Concluir')+'<div class="od-action">REGISTRAR CONCLUSÃO</div>';
- }else if(i===2){
-  inside='<h4>Operação de hoje <span class="od-tag alt">Gestor</span></h4><div class="od-cards"><div class="od-card"><strong>—</strong><span>REGISTROS</span></div><div class="od-card"><strong>—</strong><span>FOTOGRAFIAS</span></div><div class="od-card"><strong>—</strong><span>COLABORADORES</span></div><div class="od-card"><strong>—</strong><span>LOCAIS</span></div></div><div class="od-mini od-row"><div><small>DEMANDAS</small><strong>Em execução</strong></div><span class="od-tag warn">Acompanhar</span></div><div class="od-mini od-row"><div><small>OCORRÊNCIAS</small><strong>Aguardando confirmação</strong></div><span class="od-tag alt">Gestão</span></div>';
- }else{
-  inside='<h4>Relatório de atividades</h4><div class="od-row">'+mini('DATA INICIAL','01/10/2026')+mini('DATA FINAL','21/10/2026')+'</div>'+mini('LOCAL','Torre E • Corredor 12º andar')+mini('SERVIÇO','Limpeza realizada','Horário e colaborador responsável')+'<div class="od-fotos"><div class="od-foto"><b>▧</b>ANTES</div><div class="od-foto"><b>▧</b>DEPOIS</div></div><div class="od-action">IMPRIMIR / PDF</div>';
- }
- return '<div class="od-app"><div class="od-app-header"><small>ORAQUI • EXEMPLO ILUSTRATIVO</small><strong>'+['Canal do morador','Área do colaborador','Painel de gestão','Relatório do gestor'][i]+'</strong></div><div class="od-app-main">'+inside+'</div></div>';
+ const screens=[telaMorador,telaColaborador,telaGestor,telaRelatorio];
+ return '<div class="odm-wrap"><div class="odm-example">DEMONSTRAÇÃO VISUAL • ORAQUI ATUAL</div><div class="odm-device odm-theme-'+i+'">'+screens[i]()+'</div></div>';
 }
 function render(index){
  step=(index+views.length)%views.length;
