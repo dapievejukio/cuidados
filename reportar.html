@@ -122,6 +122,62 @@ select,input[type=email],textarea{background:#fbfdff;border-color:#cfdee9;font-s
 .send{background:linear-gradient(110deg,#1d6cbe,#174e98);box-shadow:0 10px 20px #1d5baf30}
 .privacy-lock{color:#1765b3}
 .switch input:checked+.slider{background:#1765b3}
+
+/* Atendimento ORAQUI: superfície de conversa, mobile-first. */
+:root{--ink:#203b3b;--muted:#617873;--brand:#167965;--brand2:#0b6152;--mint:#e9f5ef;--bg:#edf2ee;--line:#dbe6df;--ok:#167965;--shadow:0 6px 24px rgba(25,62,48,.045)}
+html{background:#e6ede7}
+body{background:radial-gradient(circle at 1px 1px,#a8bdb320 1px,transparent 0) 0 0/22px 22px,#edf2ee}
+.shell{max-width:760px;min-height:100dvh;background:#f3f6f1;box-shadow:0 0 80px #173b2e0c}
+.hero{padding:calc(20px + env(safe-area-inset-top)) 22px 28px;background:#123f37}
+.hero:after{width:180px;height:180px;right:-115px;top:-90px;opacity:.6}
+.top{gap:10px}.brand-compact{gap:12px}.brand-compact img{width:44px;height:44px;border-radius:14px;box-shadow:none}
+.brand-compact strong{font-size:18px;letter-spacing:1px}.brand-compact span{font-size:8px;letter-spacing:1px;color:#c2dbd0}
+.secure{font-size:9px;padding:8px 10px;color:#d9eee3;border-color:#ffffff20;background:#ffffff08}
+.hero-copy{margin-top:27px}.eyebrow{font-size:10px;letter-spacing:1.7px;color:#b4d6c4;font-weight:700}
+.hero h1{font-size:clamp(27px,6vw,36px);font-weight:650;line-height:1.16;letter-spacing:-1px;margin:9px 0 10px}
+.hero p{font-size:14px;line-height:1.6;color:#d0e2d9;max-width:440px}
+main{margin-top:0;padding:24px 16px calc(28px + env(safe-area-inset-bottom));background:radial-gradient(circle at 1px 1px,#6b938015 1px,transparent 0) 0 0/20px 20px}
+.conversation-date{text-align:center;margin:0 0 20px;color:#75867c;font-size:10px;letter-spacing:1px;text-transform:uppercase}
+.intro-panel{display:block;position:relative;background:#fff;border:1px solid #e0e7df;border-radius:4px 20px 20px 20px;padding:18px 20px;margin:0 28px 22px 0;box-shadow:var(--shadow)}
+.intro-symbol{display:none}.intro-panel h2{font-size:15px;color:#167965;margin-bottom:7px;letter-spacing:-.2px}
+.intro-panel p{font-size:13px;line-height:1.65;color:#526b62}
+.steps-ribbon{gap:0;margin:0 0 24px;padding:0 4px}
+.steps-ribbon div{position:relative;background:none;box-shadow:none;padding:0 3px;font-size:10px;color:#74877b;font-weight:500}
+.steps-ribbon span{font-size:15px;margin:0 auto 8px;width:32px;height:32px;display:grid;place-items:center;background:#e3ebe3;border:1px solid #d5e1d7;border-radius:50%}
+.steps-ribbon div:first-child{color:#126d59;font-weight:750}.steps-ribbon div:first-child span{background:#167965;color:#fff;border-color:#167965}
+.card{position:relative;padding:20px;margin:0 0 16px;border:1px solid #e0e7df;border-radius:20px;box-shadow:var(--shadow);background:#fff}
+.step{gap:11px;margin-bottom:20px;align-items:center}.num{width:32px;height:32px;flex-basis:32px;border-radius:10px;font-size:12px;color:#167965;background:#e9f5ef;box-shadow:none}
+.step h2{font-size:17px;font-weight:650;color:#203b3b;letter-spacing:-.4px;margin:0 0 4px}.step p{font-size:12px;line-height:1.5}
+.step-icon{display:none}.place{padding:11px 12px;background:#f1f6f1;border-radius:12px;margin-bottom:18px}
+.place-icon{width:34px;height:34px;border-radius:10px}.place-icon img{width:26px;height:26px}
+.place small{font-size:9px;letter-spacing:1px}.place strong{font-size:14px;font-weight:600}
+.field{margin-top:16px}.field label{font-size:10px;letter-spacing:1px;color:#527266;margin-bottom:8px}
+select,input[type=email],textarea{font-size:16px;border:1px solid #d7e3da;background:#fafcf9;color:#203b3b}
+select,input[type=email]{height:54px;border-radius:12px;padding:0 13px}
+textarea{min-height:125px;border-radius:14px;padding:14px;line-height:1.65}
+select:focus,input:focus,textarea:focus{border-color:#4d9b80;box-shadow:0 0 0 3px #16796514}
+.photo-box{padding:18px 14px;min-height:100px;border:1px dashed #9bbca7;border-radius:14px;background:#f4f9f3;gap:12px}
+.photo-icon{width:42px;height:42px;flex-basis:42px;border-radius:13px;background:#e2f0e4}.photo-icon img{width:32px;height:32px}
+.photo-box strong{font-size:14px;font-weight:650}.photo-box span{font-size:12px;line-height:1.55}
+.or{margin:19px 0 14px}.or span{font-size:9px;letter-spacing:1px}.counter{font-size:10px;margin-top:8px}
+.preview img{border-radius:14px;object-fit:contain;background:#f1f6f1}.remove{cursor:pointer}
+.return-row{gap:10px}.return-icon{width:36px;height:36px;flex-basis:36px;background:#edf5ee;border-radius:11px}.return-icon img{width:29px;height:29px}
+.return-copy strong{font-size:13px;font-weight:650;line-height:1.5}.return-copy span{font-size:12px;line-height:1.5}
+.switch input:checked+.slider{background:#167965}.switch input:focus-visible+.slider{outline:3px solid #78ad94;outline-offset:3px}
+.data-note{font-size:11px;line-height:1.6;background:#f4f7f2}
+.privacy{margin:20px 2px 18px;padding:0;border:0;background:none;font-size:11px;line-height:1.75;color:#6a7f72}
+.privacy b,.privacy-lock{color:#386b56}.privacy a{color:#236e57}
+.send{min-height:58px;border-radius:16px;background:#167965;font-size:14px;font-weight:700;letter-spacing:.2px;box-shadow:0 8px 18px #16796520;padding:16px 44px 16px 20px}
+.send:after{top:16px;right:20px}.send:hover{background:#106b59}.send:disabled{cursor:wait}
+.important-note{background:none;border:0;padding:0 8px;text-align:center;font-size:11px;line-height:1.7;color:#748479;margin-top:18px}
+.ops-card{background:#f2f7f1;border-color:#dbe7dc}.ops-top strong{font-size:12px}.ops-top span,.ops-item small{font-size:10px}.ops-item b{font-size:13px}.ops-item em,.still{font-size:11px}
+.ops-photo{min-height:44px;font-size:11px}.loading-local{font-size:11px;line-height:1.5}
+.error{font-size:13px;border-radius:14px}.success{max-height:90dvh;overflow:auto}.success p,.protocol,.success-commercial p{font-size:13px}.success-commercial .mini-brand span{font-size:10px}.success-commercial a{font-size:11px}
+.privacy-sheet .lead,.privacy-block p,.privacy-block li{font-size:13px}.privacy-block h3{font-size:11px}.privacy-actions button,.privacy-actions a{font-size:11px}
+button:focus-visible,a:focus-visible,.photo-box:focus-within{outline:3px solid #78ad94;outline-offset:3px}
+@media(min-width:600px){.shell{margin:28px auto;border-radius:28px;overflow:hidden;min-height:calc(100dvh - 56px)}.hero{padding:26px 36px 32px}main{padding:26px 36px 36px}.card{padding:25px}.intro-panel{margin-right:60px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+
 </style>
 </head>
 <body>
@@ -142,9 +198,10 @@ select,input[type=email],textarea{background:#fbfdff;border-color:#cfdee9;font-s
 </header>
 
 <main>
+ <div class="conversation-date">Atendimento · Reserva Igara</div>
  <div class="intro-panel"><div class="intro-symbol" aria-hidden="true">📲</div><div><h2>Comunique uma ocorrência</h2><p>A empresa responsável pela <strong>limpeza e zeladoria do Reserva Igara</strong> utiliza o ORAQUI para registrar, organizar e acompanhar as solicitações dos moradores, facilitando o encaminhamento à equipe e o controle dos serviços.</p></div></div>
  <div class="steps-ribbon" aria-label="Etapas do atendimento"><div><span>📝</span>Registro</div><div><span>🔎</span>Análise</div><div><span>🛠️</span>Atendimento</div><div><span>✅</span>Conclusão</div></div>
- <div class="error" id="error"></div>
+ <div class="error" id="error" role="alert"></div>
 
  <section class="card">
   <div class="step"><div class="num">01</div><div><h2><span class="step-icon">📍</span>Onde aconteceu?</h2><p>Escolha o local para direcionarmos corretamente.</p></div></div>
@@ -167,7 +224,7 @@ select,input[type=email],textarea{background:#fbfdff;border-color:#cfdee9;font-s
   <input type="file" id="photoInput" accept="image/jpeg,image/png,image/webp,image/heic,image/heif" capture="environment">
   <div class="preview" id="preview"><img id="photoPreview" alt="Foto da ocorrência"><button type="button" class="remove" onclick="removerFoto()" aria-label="Remover foto">×</button></div>
   <div class="or"><span>OU ESCREVA</span></div>
-  <textarea id="descricao" maxlength="500" placeholder="Ex.: há água no piso próximo ao elevador..." oninput="contador()"></textarea>
+  <textarea aria-label="Descreva o problema" id="descricao" maxlength="500" placeholder="Ex.: há água no piso próximo ao elevador..." oninput="contador()"></textarea>
   <div class="counter"><span id="count">0</span>/500</div>
  </section>
 
@@ -175,7 +232,7 @@ select,input[type=email],textarea{background:#fbfdff;border-color:#cfdee9;font-s
   <div class="return-row">
    <div class="return-icon"><img src="oraqui-icons/notificacoes-128.png" alt=""></div>
    <div class="return-copy"><strong>✉️ Quer saber quando for resolvido?</strong><span>Ative para receber a atualização por e-mail.</span></div>
-   <label class="switch"><input id="retornoToggle" type="checkbox" onchange="toggleRetorno()"><span class="slider"></span></label>
+   <label class="switch"><input id="retornoToggle" aria-label="Receber atualização por e-mail" type="checkbox" onchange="toggleRetorno()"><span class="slider"></span></label>
   </div>
   <div id="emailWrap" class="field"><label for="email">SEU E-MAIL</label><input id="email" type="email" inputmode="email" autocomplete="email" maxlength="180" placeholder="seuemail@exemplo.com"><div class="data-note"><strong>Uso do e-mail:</strong> somente para enviar atualizações relacionadas a esta ocorrência. O ORAQUI não usará este endereço para publicidade ou campanhas de marketing.</div></div>
  </section>
@@ -209,7 +266,7 @@ select,input[type=email],textarea{background:#fbfdff;border-color:#cfdee9;font-s
  </div>
 </div>
 
-<div class="overlay" id="successOverlay">
+<div class="overlay" id="successOverlay" role="dialog" aria-modal="true" aria-label="Ocorrência enviada">
  <div class="success">
   <div class="success-icon">✓</div>
   <h2>Ocorrência enviada.</h2>
