@@ -1,0 +1,26 @@
+{
+  "id": "/",
+  "name": "ORAQUI — Condomínios e equipes em ação",
+  "short_name": "ORAQUI",
+  "description": "Aplicativo de atividades, operações e comunicação de condomínios.",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f9faf8",
+  "theme_color": "#0F5132",
+  "lang": "pt-BR",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
