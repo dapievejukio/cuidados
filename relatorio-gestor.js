@@ -45,9 +45,11 @@ async function prepararFoto(path){
 window.fecharRelatorioOraqui=()=>document.getElementById('oraquiPdfModal')?.classList.add('hidden');
 window.abrirPreviaRelatorioOraqui=async function(){
  if(ocupado)return;
+ if(typeof oraquiRegConsultaEmAndamento!=='undefined'&&oraquiRegConsultaEmAndamento){alert('Aguarde a conclusão da consulta do período.');return}
+ if(!oraquiRegDataInicio||!oraquiRegDataFim||oraquiRegDataInicio>oraquiRegDataFim){alert('Selecione um período válido.');return}
  const dados=oraquiRegFiltro().slice().sort((a,b)=>new Date(a.concluida_em||a.created_at)-new Date(b.concluida_em||b.created_at));
  if(!dados.length){alert('Nenhum serviço encontrado para os filtros selecionados.');return}
- const idCondo=CONDOMINIO_ID,nomeCondo=CONDOMINIO,dia=oraquiRegData||hoje(),local=oraquiRegLocal||'Todos os locais',colaborador=oraquiRegColaborador||'Todos';
+ const idCondo=CONDOMINIO_ID,nomeCondo=CONDOMINIO,dataInicial=oraquiRegDataInicio,dataFinal=oraquiRegDataFim,local=oraquiRegLocal||'Todos os locais',colaborador=oraquiRegColaborador||'Todos';
  const b=document.getElementById('oraquiRegImprimir'),texto=b.textContent;ocupado=true;b.disabled=true;b.textContent='⏳ Preparando fotos...';
  try{
   const referencias=[...new Set(dados.flatMap(r=>[r.foto_antes_path,r.foto_path]).filter(Boolean))],fotos=new Map();
@@ -61,9 +63,9 @@ window.abrirPreviaRelatorioOraqui=async function(){
   const htmlFoto=(path,titulo)=>!path?'':'<div class="oraqui-pdf-foto"><b>'+esc(titulo)+'</b>'+(fotos.get(path)?'<img alt="Foto '+esc(titulo)+'" src="'+fotos.get(path)+'">':'<div class="oraqui-pdf-erro">Fotografia indisponível.</div>')+'</div>';
   const itens=dados.map((r,i)=>{
    const img=htmlFoto(r.foto_antes_path,'ANTES')+htmlFoto(r.foto_path,'DEPOIS');
-   return '<article class="oraqui-pdf-item"><h3>'+(i+1)+'. '+esc(r.item_nome)+' • '+esc(hora(r.concluida_em||r.created_at))+'</h3><p><b>Local:</b> '+esc(r.local_nome)+'</p><p><b>Colaborador:</b> '+esc(r.colaborador_nome)+'</p>'+(r.observacao?'<p><b>Observação:</b> '+esc(r.observacao)+'</p>':'')+(img?'<div class="oraqui-pdf-fotos">'+img+'</div>':'<p>Sem fotografia registrada.</p>')+'</article>';
+   return '<article class="oraqui-pdf-item"><h3>'+(i+1)+'. '+esc(r.item_nome)+' • '+esc(dataPt(oraquiRegDataLocal(r.concluida_em||r.created_at)))+' às '+esc(hora(r.concluida_em||r.created_at))+'</h3><p><b>Local:</b> '+esc(r.local_nome)+'</p><p><b>Colaborador:</b> '+esc(r.colaborador_nome)+'</p>'+(r.observacao?'<p><b>Observação:</b> '+esc(r.observacao)+'</p>':'')+(img?'<div class="oraqui-pdf-fotos">'+img+'</div>':'<p>Sem fotografia registrada.</p>')+'</article>';
   }).join('');
-  const cab='<header class="oraqui-pdf-cab"><h1>ORAQUI • Relatório de Serviços</h1><h2>'+esc(nomeCondo)+'</h2><div class="oraqui-pdf-filtros"><div><b>DATA</b>'+esc(dataPt(dia))+'</div><div><b>LOCAL</b>'+esc(local)+'</div><div><b>COLABORADOR</b>'+esc(colaborador)+'</div><div><b>REGISTROS E FOTOS</b>'+dados.length+' serviço(s) • '+(referencias.length-falhas)+' fotografia(s)</div></div></header>';
+  const cab='<header class="oraqui-pdf-cab"><h1>ORAQUI • Relatório de Serviços</h1><h2>'+esc(nomeCondo)+'</h2><div class="oraqui-pdf-filtros"><div><b>DATA INICIAL</b>'+esc(dataPt(dataInicial))+'</div><div><b>DATA FINAL</b>'+esc(dataPt(dataFinal))+'</div><div><b>LOCAL</b>'+esc(local)+'</div><div><b>COLABORADOR</b>'+esc(colaborador)+'</div><div><b>REGISTROS E FOTOS</b>'+dados.length+' serviço(s) • '+(referencias.length-falhas)+' fotografia(s)</div></div></header>';
   const aviso=falhas?'<div class="oraqui-pdf-erro">ATENÇÃO: '+falhas+' fotografia(s) não puderam ser incorporadas. Verifique o armazenamento antes de emitir a versão definitiva.</div>':'';
   document.getElementById('oraquiPdfConteudo')?.replaceChildren();
   const previa=modal();document.getElementById('oraquiPdfConteudo').innerHTML=cab+itens+aviso+'<footer class="oraqui-pdf-rodape">'+esc(nomeCondo)+' • Emitido em '+esc(new Date().toLocaleString('pt-BR'))+' • ORAQUI</footer>';
