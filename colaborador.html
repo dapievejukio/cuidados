@@ -737,7 +737,7 @@ const iniciosDemandasLocais=new Set();
 function chaveInicioDemanda(d){return [authUser?.id,colaborador?.condominio_id,colaborador?.id,d.id].join('|')}
 function demandaUrgentePendente(d){
  const status=String(d.status||'').toLowerCase();
- return (d.tipo==='urgente'||d.prioridade==='urgente')&&!['concluida','cancelada','em_andamento','em_execucao','iniciada'].includes(status)&&!d.iniciada_em&&!iniciosDemandasLocais.has(chaveInicioDemanda(d));
+ return d.tipo!=='recado'&&!['concluida','cancelada','em_andamento','em_execucao','iniciada'].includes(status)&&!d.iniciada_em&&!iniciosDemandasLocais.has(chaveInicioDemanda(d));
 }
 function marcarDemandaIniciada(d,inicio){
  if(!d||!inicio)return;
@@ -758,7 +758,7 @@ async function carregarIniciosDemandasLocais(){
 }
 /* URGENCIAS_FIM */
 function htmlDemanda(d,compacta=false){
-  const urgente=d.tipo==="urgente"||d.prioridade==="urgente";
+  const urgente=d.tipo!=="recado";
   const pendente=demandaUrgentePendente(d);
   if(compacta){
     return `<div class="demanda-antiga"><span class="demanda-antiga-icone">✓</span><div><strong>${esc(d.titulo||"Demanda")}</strong><small>${esc(d.descricao||"Concluída")}</small></div><span class="badge green">CONCLUÍDA</span></div>`;
@@ -768,7 +768,7 @@ function htmlDemanda(d,compacta=false){
 
 function renderDemandas(){
   const box=$("demandas");
-  const urgente=d=>d.tipo==="urgente"||d.prioridade==="urgente";
+  const urgente=d=>d.tipo!=="recado";
   const abertas=demandas.filter(d=>d.status!=="concluida");
   const concluidasHoje=demandas.filter(d=>demandaConcluidaHoje(d));
   const antigas=demandas.filter(d=>d.status==="concluida"&&!demandaConcluidaHoje(d));

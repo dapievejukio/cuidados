@@ -291,7 +291,13 @@ function fecharPrivacidade(){
 }
 document.addEventListener("keydown",e=>{if(e.key==="Escape")fecharPrivacidade()});
 
+function condominioReportarValido(){
+ const slug=new URLSearchParams(location.search||'').get('condominio');
+ return !slug||slug==='reserva-igara';
+}
 async function carregarLocais(){
+ if(!condominioReportarValido()){document.getElementById('sendButton').disabled=true;document.getElementById('localStatus').textContent='Condomínio não ativado neste endereço.';mostrarErro('Este canal atende somente o Reserva Igara. Use o link específico do seu condomínio.');return}
+
  const areaEl=document.getElementById("area"),status=document.getElementById("localStatus");
  try{
    const [a,p]=await Promise.all([
@@ -357,6 +363,8 @@ function normalizarArquivo(t){return t.normalize("NFD").replace(/[\u0300-\u036f]
 async function enviarFoto(protocolo){if(!fotoSelecionada)return null;const nome=normalizarArquivo(fotoSelecionada.name||"foto.jpg"),ext=(nome.includes(".")?nome.split(".").pop():"jpg").substring(0,8),caminho=["reserva-igara",new Date().getFullYear(),protocolo+"-"+Date.now()+"."+ext].join("/");const{error}=await db.storage.from("fotos-ocorrencias").upload(caminho,fotoSelecionada,{cacheControl:"3600",upsert:false,contentType:fotoSelecionada.type});if(error)throw new Error("Não foi possível enviar a foto: "+error.message);return caminho}
 
 async function enviar(){
+ if(!condominioReportarValido()){mostrarErro("Condomínio não ativado neste endereço.");return}
+
  if(enviando)return;esconderErro();
  const areaId=Number(document.getElementById("area").value)||null,pontoId=Number(document.getElementById("detalhe").value)||null;
  const areaObj=areas.find(x=>Number(x.id)===areaId),ps=pontos.filter(x=>Number(x.area_id)===areaId),pontoObj=ps.find(x=>Number(x.id)===pontoId);
