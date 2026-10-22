@@ -229,7 +229,7 @@ button:focus-visible,a:focus-visible,.photo-box:focus-within{outline:3px solid #
    </div>
    <div class="still" id="stillProblem"><strong>Ainda encontrou algo que precisa de atenção?</strong><br>Avise a equipe abaixo.</div>
   </div>
- </section><section class="card"><div class="step"><span class="number">2</span><div><h2>Qual é o problema?</h2><p>Todas as categorias estão abaixo. Toque para selecionar.</p></div></div><div id="categoriaSelecionada" hidden class="area-selecionada"><strong id="categoriaSelecionadaNome"></strong><button type="button" onclick="trocarCategoria()">Trocar tipo de problema</button></div><div class="choices categoria" id="categoryChoices"><label class="choice" style="--accent:#0F5132"><input required type="radio" name="categoria" value="Limpeza"><span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6 4-4 4 4-4 4M16 8l-7 7m-5-3 8 8-5 2-5-5Z"/></svg><span>Limpeza</span></span></label><label class="choice" style="--accent:#0F5132"><input required type="radio" name="categoria" value="Lixo"><span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7M14 10v7"/></svg><span>Lixo</span></span></label><label class="choice" style="--accent:#FF8A3D"><input required type="radio" name="categoria" value="Manutenção"><span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a5.5 5.5 0 0 0-7 7L2 19l3 3 5.7-5.7a5.5 5.5 0 0 0 7-7l-4 4-3-3z"/></svg><span>Manutenção</span></span></label><label class="choice" style="--accent:#FF8A3D"><input required type="radio" name="categoria" value="Iluminação"><span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6m-6 4h6m-6-8a6 6 0 1 1 6 0v4H9z"/></svg><span>Iluminação</span></span></label><label class="choice" style="--accent:#0F5132"><input required type="radio" name="categoria" value="Vazamento"><span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-3 5-8 9-8 13a8 8 0 0 0 16 0c0-4-5-8-8-13Z"/></svg><span>Vazamento</span></span></label><label class="choice" style="--accent:#0F5132"><input required type="radio" name="categoria" value="Outros"><span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg><span>Outros</span></span></label></div></section><section class="card"><div class="step"><span class="number">3</span><div><h2>Descreva a ocorrência</h2><p>Conte o que está acontecendo. Quanto mais detalhes, melhor.</p></div></div><div class="description"><textarea id="descricao" aria-label="Descrição da ocorrência" aria-describedby="counter" maxlength="500" oninput="contador()" placeholder="Ex.: local, o que aconteceu, desde quando, se é algo recorrente, etc."></textarea><span class="counter" id="counter"><span id="count">0</span>/<span id="maxCount">500</span></span></div></section><div class="bottom-grid"><section class="card"><div class="step"><span class="number">4</span><div><h2>Adicione uma foto</h2><p>Uma foto ajuda a equipe a entender o problema.</p></div></div><input class="file-input" id="photoInput" type="file" accept="image/jpeg,image/png,image/webp" aria-describedby="photo-hint"><label class="upload" for="photoInput" id="photoBox"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h-4L8 7H3v14h18V7h-5Z"/><circle cx="12" cy="13" r="4"/></svg><strong>Tocar para adicionar fotos</strong><small>Câmera ou galeria do seu celular</small></label><p class="hint" id="photo-hint">Opcional · Uma foto JPG, PNG ou WebP de até 10 MB.</p><p id="photo-error" role="alert" class="hint"></p><div class="preview" id="preview"><img id="photoPreview" alt="Foto da ocorrência"><button type="button" class="remove" onclick="removerFoto()" aria-label="Remover foto">×</button></div></section><section class="card"><div class="step"><span class="number">5</span><div><h2>Receber retorno (opcional)</h2><p>Se quiser ser informado sobre o andamento, coloque seu e-mail.</p></div></div><input id="retornoToggle" type="checkbox" hidden><div id="emailWrap"><label class="email"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg><input type="email" id="email" aria-label="E-mail opcional" placeholder="Seu e-mail (opcional)" autocomplete="email" maxlength="180"></label></div><p class="hint">O preenchimento é opcional. Seu e-mail será utilizado apenas para responder sobre esta ocorrência.</p><p class="hint">Seu e-mail é usado apenas para acompanhar esta ocorrência.</p></section></div><div class="error" id="error" role="alert"></div><button class="send" id="sendButton" type="submit"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z M22 2 11 13"/></svg> Enviar Ocorrência</button><p class="simulation-note">Sua ocorrência será registrada e encaminhada para acompanhamento.</p><p class="hint privacy-link">Não pedimos nome, apartamento ou telefone. <a href="#" onclick="abrirPrivacidade();return false">Como tratamos seus dados</a>.</p></form><aside class="notice"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s9-4 9-11V5l-9-3-9 3v6c0 7 9 11 9 11Z"/><path d="m8 12 3 3 5-6"/></svg><div><strong>Importante</strong><p>Este canal é exclusivo para solicitações de limpeza, zeladoria e manutenção das áreas comuns. Em caso de emergência, utilize os canais oficiais do condomínio.</p></div></aside><aside class="manager-contact" aria-label="Contato do síndico"><div><span class="contact-label">CONTATO DO SÍNDICO</span><strong>Maestra Síndicos Profissionais</strong></div><a href="tel:+5551985770000" aria-label="Ligar para Maestra Síndicos Profissionais: 51 98577-0000">(51) 98577-0000 <span aria-hidden="true">↗</span></a></aside><footer class="footer"><div class="oraqui-identity"><img class="oraqui-reportar-logo" src="assets/marca/oraqui-transparente.webp" alt="OraQui — Condomínios e equipes em ação."></div><p>Atendimento · Reserva Igara</p><p>Contato ORAQUI: <a href="mailto:atendimento@oraqui.app">atendimento@oraqui.app</a></p></footer></main></div><div class="privacy-modal" id="privacyModal" role="dialog" aria-modal="true" aria-labelledby="privacyTitle">
+ </section><section class="card"><div class="step"><span class="number">2</span><div><h2>Qual é o problema?</h2><p>Todas as categorias estão abaixo. Toque para selecionar.</p></div></div><div id="categoriaSelecionada" hidden class="area-selecionada"><strong id="categoriaSelecionadaNome"></strong><button type="button" onclick="trocarCategoria()">Trocar tipo de problema</button></div><div class="choices categoria" id="categoryChoices"><label class="choice" style="--accent:#0F5132"><input required type="radio" name="categoria" value="Limpeza"><span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6 4-4 4 4-4 4M16 8l-7 7m-5-3 8 8-5 2-5-5Z"/></svg><span>Limpeza</span></span></label><label class="choice" style="--accent:#0F5132"><input required type="radio" name="categoria" value="Lixo"><span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7M14 10v7"/></svg><span>Lixo</span></span></label><label class="choice" style="--accent:#FF8A3D"><input required type="radio" name="categoria" value="Manutenção"><span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a5.5 5.5 0 0 0-7 7L2 19l3 3 5.7-5.7a5.5 5.5 0 0 0 7-7l-4 4-3-3z"/></svg><span>Manutenção</span></span></label><label class="choice" style="--accent:#FF8A3D"><input required type="radio" name="categoria" value="Iluminação"><span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6m-6 4h6m-6-8a6 6 0 1 1 6 0v4H9z"/></svg><span>Iluminação</span></span></label><label class="choice" style="--accent:#0F5132"><input required type="radio" name="categoria" value="Vazamento"><span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-3 5-8 9-8 13a8 8 0 0 0 16 0c0-4-5-8-8-13Z"/></svg><span>Vazamento</span></span></label><label class="choice" style="--accent:#0F5132"><input required type="radio" name="categoria" value="Outros"><span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg><span>Outros</span></span></label></div></section><section class="card"><div class="step"><span class="number">3</span><div><h2>Descreva a ocorrência</h2><p>Conte o que está acontecendo. Quanto mais detalhes, melhor.</p></div></div><div class="description"><textarea id="descricao" aria-label="Descrição da ocorrência" aria-describedby="counter" maxlength="500" oninput="contador()" placeholder="Ex.: local, o que aconteceu, desde quando, se é algo recorrente, etc."></textarea><span class="counter" id="counter"><span id="count">0</span>/<span id="maxCount">500</span></span></div></section><div class="bottom-grid"><section class="card"><div class="step"><span class="number">4</span><div><h2>Adicione fotografias</h2><p>Você pode mostrar até oito aspectos do mesmo problema, sem criar ocorrências separadas.</p></div></div><input class="file-input" id="photoInput" type="file" accept="image/jpeg,image/png,image/webp" multiple aria-describedby="photo-hint"><label class="upload" for="photoInput" id="photoBox"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h-4L8 7H3v14h18V7h-5Z"/><circle cx="12" cy="13" r="4"/></svg><strong>Tocar para adicionar fotos</strong><small>Câmera ou galeria do seu celular</small></label><p class="hint" id="photo-hint">Opcional · Até 8 fotos JPG, PNG ou WebP, cada uma com até 10 MB. Você pode acrescentar fotografias em etapas.</p><button type="button" id="photoCameraBtn" style="background:#fff0e5;color:#885125;border:1px solid #f6d2b6;border-radius:10px;padding:11px 13px;margin-top:8px;font-weight:750">📸 Tirar outra foto</button><input class="file-input" id="photoCameraInput" type="file" accept="image/*" capture="environment"><p id="photo-error" role="alert" class="hint"></p><div class="preview" id="preview"></div></section><section class="card"><div class="step"><span class="number">5</span><div><h2>Receber retorno (opcional)</h2><p>Se quiser ser informado sobre o andamento, coloque seu e-mail.</p></div></div><input id="retornoToggle" type="checkbox" hidden><div id="emailWrap"><label class="email"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg><input type="email" id="email" aria-label="E-mail opcional" placeholder="Seu e-mail (opcional)" autocomplete="email" maxlength="180"></label></div><p class="hint">O preenchimento é opcional. Seu e-mail será utilizado apenas para responder sobre esta ocorrência.</p><p class="hint">Seu e-mail é usado apenas para acompanhar esta ocorrência.</p></section></div><div class="error" id="error" role="alert"></div><button class="send" id="sendButton" type="submit"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z M22 2 11 13"/></svg> Enviar Ocorrência</button><p class="simulation-note">Sua ocorrência será registrada e encaminhada para acompanhamento.</p><p class="hint privacy-link">Não pedimos nome, apartamento ou telefone. <a href="#" onclick="abrirPrivacidade();return false">Como tratamos seus dados</a>.</p></form><aside class="notice"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s9-4 9-11V5l-9-3-9 3v6c0 7 9 11 9 11Z"/><path d="m8 12 3 3 5-6"/></svg><div><strong>Importante</strong><p>Este canal é exclusivo para solicitações de limpeza, zeladoria e manutenção das áreas comuns. Em caso de emergência, utilize os canais oficiais do condomínio.</p></div></aside><aside class="manager-contact" aria-label="Contato do síndico"><div><span class="contact-label">CONTATO DO SÍNDICO</span><strong>Maestra Síndicos Profissionais</strong></div><a href="tel:+5551985770000" aria-label="Ligar para Maestra Síndicos Profissionais: 51 98577-0000">(51) 98577-0000 <span aria-hidden="true">↗</span></a></aside><footer class="footer"><div class="oraqui-identity"><img class="oraqui-reportar-logo" src="assets/marca/oraqui-transparente.webp" alt="OraQui — Condomínios e equipes em ação."></div><p>Atendimento · Reserva Igara</p><p>Contato ORAQUI: <a href="mailto:atendimento@oraqui.app">atendimento@oraqui.app</a></p></footer></main></div><div class="privacy-modal" id="privacyModal" role="dialog" aria-modal="true" aria-labelledby="privacyTitle">
  <div class="privacy-sheet">
   <div class="privacy-head">
    <div class="privacy-head-brand"><img src="assets/gestor-3/simbolo.svg" alt=""><div><strong>ORAQUI</strong><span>PRIVACIDADE • AVISO RESUMIDO</span></div></div>
@@ -238,7 +238,7 @@ button:focus-visible,a:focus-visible,.photo-box:focus-within{outline:3px solid #
   <h2 id="privacyTitle">Seus dados nesta ocorrência</h2>
   <p class="lead">Este aviso explica, de forma resumida, o tratamento de dados quando você usa este canal público do ORAQUI.</p>
 
-  <div class="privacy-block"><h3>O QUE PODEMOS RECEBER</h3><p>Local selecionado, descrição da ocorrência, foto enviada, data e hora do registro e, somente se você escolher receber retorno, seu endereço de e-mail. Não solicitamos nome, telefone ou número do apartamento neste formulário.</p></div>
+  <div class="privacy-block"><h3>O QUE PODEMOS RECEBER</h3><p>Local selecionado, descrição da ocorrência, fotografias enviadas, data e hora do registro e, somente se você escolher receber retorno, seu endereço de e-mail. Não solicitamos nome, telefone ou número do apartamento neste formulário.</p></div>
   <div class="privacy-block"><h3>PARA QUE USAMOS</h3><p>Para registrar, encaminhar, acompanhar e resolver a ocorrência; manter o histórico operacional necessário; prevenir abuso e falhas; e enviar atualizações sobre esta ocorrência quando você fornecer e-mail.</p></div>
   <div class="privacy-block"><h3>E-MAIL SEM MARKETING</h3><p>O e-mail informado neste formulário é destinado ao acompanhamento desta ocorrência. Ele não deve ser reutilizado pelo ORAQUI para publicidade ou campanhas de marketing sem uma finalidade e fundamento próprios.</p></div>
   <div class="privacy-block"><h3>FOTOS E DADOS DE TERCEIROS</h3><p>Envie apenas o necessário para demonstrar o problema. Sempre que possível, evite fotografar rostos, crianças, documentos, placas de veículos, telas, correspondências ou outros elementos que identifiquem terceiros.</p></div>
@@ -273,7 +273,7 @@ const SUPABASE_KEY="sb_publishable_vcjiMMCTxQJ7ArTGsQ-PuQ_5gaAfoIt";
 const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const CONDOMINIO="Reserva Igara",CONDOMINIO_ID=1; // V1 pública: Igara. Próxima etapa: resolver condomínio/local pelo QR.
 const photoInput=document.getElementById("photoInput");
-let fotoSelecionada=null,previewUrl=null,enviando=false,areas=[],pontos=[];
+let fotosSelecionadas=[],previewUrls=[],enviando=false,areas=[],pontos=[];
 function toggleRetorno(){
  const ligado=document.getElementById("retornoToggle").checked;
  document.getElementById("emailWrap").style.display=ligado?"block":"none";
@@ -381,15 +381,52 @@ async function carregarHistoricoLocal(){
  document.getElementById("stillProblem").style.display="block";
 }
 
-photoInput.addEventListener("change",function(){const file=this.files[0];if(!file)return;const limite=10*1024*1024;if(file.size>limite){mostrarErro("A foto deve ter no máximo 10 MB.");this.value="";return}if(!file.type.startsWith("image/")){mostrarErro("Selecione um arquivo de imagem.");this.value="";return}fotoSelecionada=file;if(previewUrl)URL.revokeObjectURL(previewUrl);previewUrl=URL.createObjectURL(file);document.getElementById("photoPreview").src=previewUrl;document.getElementById("photoBox").style.display="none";document.getElementById("preview").style.display="block";esconderErro()});
-function removerFoto(){photoInput.value="";fotoSelecionada=null;if(previewUrl){URL.revokeObjectURL(previewUrl);previewUrl=null}document.getElementById("photoPreview").src="";document.getElementById("preview").style.display="none";document.getElementById("photoBox").style.display="block"}
+const MAX_FOTOS_REPORTAR=8;
+function mostrarFotosReportar(){
+ previewUrls.forEach(url=>URL.revokeObjectURL(url));previewUrls=[];
+ const preview=document.getElementById("preview");preview.replaceChildren();
+ fotosSelecionadas.forEach((file,i)=>{
+  const url=URL.createObjectURL(file);previewUrls.push(url);
+  const figure=document.createElement("figure"),img=document.createElement("img"),btn=document.createElement("button");
+  img.src=url;img.alt="Fotografia da ocorrência "+(i+1);img.loading="lazy";
+  btn.type="button";btn.className="remove";btn.textContent="×";btn.setAttribute("aria-label","Remover foto "+(i+1));
+  btn.addEventListener("click",()=>removerFoto(i));
+  figure.append(img,btn);preview.append(figure);
+ });
+ document.getElementById("photoBox").querySelector("strong").textContent=fotosSelecionadas.length?"Adicionar mais fotos ("+fotosSelecionadas.length+"/"+MAX_FOTOS_REPORTAR+")":"Tocar para adicionar fotos";
+}
+function adicionarFotosReportar(files){
+ const novas=[...files];
+ if(fotosSelecionadas.length+novas.length>MAX_FOTOS_REPORTAR){mostrarErro("Você pode enviar no máximo 8 fotos na mesma ocorrência.");return}
+ for(const foto of novas){
+  if(!["image/jpeg","image/png","image/webp"].includes(foto.type)){mostrarErro("Cada foto precisa ser JPG, PNG ou WebP.");return}
+  if(foto.size>10*1024*1024){mostrarErro("Cada foto deve ter até 10 MB.");return}
+ }
+ fotosSelecionadas.push(...novas);mostrarFotosReportar();esconderErro();
+}
+photoInput.addEventListener("change",function(){adicionarFotosReportar(this.files||[]);this.value=""});
+document.getElementById("photoCameraInput").addEventListener("change",function(){adicionarFotosReportar(this.files||[]);this.value=""});
+document.getElementById("photoCameraBtn").addEventListener("click",()=>document.getElementById("photoCameraInput").click());
+function removerFoto(index){
+ if(!Number.isInteger(index))fotosSelecionadas=[];else fotosSelecionadas.splice(index,1);
+ mostrarFotosReportar();
+}
 function contador(){document.getElementById("count").textContent=document.getElementById("descricao").value.length}
 function mostrarErro(texto){const e=document.getElementById("error");e.textContent=texto;e.style.display="block";window.scrollTo({top:0,behavior:"smooth"})}
 function esconderErro(){document.getElementById("error").style.display="none"}
 function gerarProtocolo(){const agora=new Date(),data=agora.toISOString().slice(0,10).replaceAll("-",""),random=Math.floor(100000+Math.random()*900000);return"OC-"+data+"-"+random}
 function gerarCodigoAcesso(){const bytes=new Uint8Array(12);crypto.getRandomValues(bytes);return Array.from(bytes).map(n=>n.toString(16).padStart(2,"0")).join("").toUpperCase()}
 function normalizarArquivo(t){return t.normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-zA-Z0-9.-]/g,"-").replace(/-+/g,"-").toLowerCase()}
-async function enviarFoto(protocolo){if(!fotoSelecionada)return null;const nome=normalizarArquivo(fotoSelecionada.name||"foto.jpg"),ext=(nome.includes(".")?nome.split(".").pop():"jpg").substring(0,8),caminho=["reserva-igara",new Date().getFullYear(),protocolo+"-"+Date.now()+"."+ext].join("/");const{error}=await db.storage.from("fotos-ocorrencias").upload(caminho,fotoSelecionada,{cacheControl:"3600",upsert:false,contentType:fotoSelecionada.type});if(error)throw new Error("Não foi possível enviar a foto: "+error.message);return caminho}
+async function enviarFotos(protocolo,paths){
+ for(const foto of fotosSelecionadas){
+  const ext=foto.type==="image/png"?"png":foto.type==="image/webp"?"webp":"jpg";
+  const caminho=["reserva-igara",new Date().getFullYear(),protocolo+"-"+crypto.randomUUID()+"."+ext].join("/");
+  const {error}=await db.storage.from("fotos-ocorrencias").upload(caminho,foto,{cacheControl:"3600",upsert:false,contentType:foto.type});
+  if(error)throw new Error("Não foi possível enviar fotografia: "+error.message);
+  paths.push(caminho);
+ }
+ return paths;
+}
 
 async function enviar(){
  if(!condominioReportarValido()){mostrarErro("Condomínio não ativado neste endereço.");return}
@@ -401,13 +438,13 @@ async function enviar(){
  if(!areaObj){mostrarErro("Selecione onde está o problema.");return}
  if(ps.length&&!pontoObj){mostrarErro("Selecione o local dentro da área.");return}
  if(!document.querySelector('[name="categoria"]:checked')){mostrarErro("Escolha a categoria da ocorrência.");return}
- if(!fotoSelecionada&&!descricao){mostrarErro("Envie uma foto ou descreva o problema.");return}
+ if(!fotosSelecionadas.length&&!descricao){mostrarErro("Envie uma foto ou descreva o problema.");return}
  if(email&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){mostrarErro("Informe um endereço de e-mail válido.");return}
- enviando=true;const botao=document.getElementById("sendButton");botao.disabled=true;botao.textContent="ENVIANDO...";let fotoPath=null;
+ enviando=true;const botao=document.getElementById("sendButton");botao.disabled=true;botao.textContent="ENVIANDO...";const fotosPaths=[];let registrada=false;
  try{
    const protocolo=gerarProtocolo(),codigoAcesso=gerarCodigoAcesso(),agora=new Date();
    const areaNome=areaObj.nome,detalheNome=pontoObj?.nome||null,localCompleto=[areaNome,detalheNome].filter(Boolean).join(" • ");
-   fotoPath=await enviarFoto(protocolo);
+   await enviarFotos(protocolo,fotosPaths);
    const rpcPayload={
      p_protocolo:protocolo,
      p_codigo_acesso:codigoAcesso,
@@ -416,7 +453,8 @@ async function enviar(){
      p_detalhe:detalheNome,
      p_local_completo:localCompleto,
      p_descricao:"["+document.querySelector('[name="categoria"]:checked').value+"]"+(descricao?" "+descricao:""),
-     p_foto_path:fotoPath,
+     p_foto_path:fotosPaths[0]||null,
+     p_fotos_paths:fotosPaths,
      p_email:email||null,
      p_deseja_retorno:Boolean(email),
      p_origem:"Morador / visitante",
@@ -427,14 +465,7 @@ async function enviar(){
    if(error)throw new Error("Não foi possível registrar a ocorrência: "+error.message);
    if(!oc?.ok||!oc?.id)throw new Error("Não foi possível confirmar o registro da ocorrência.");
 
-    /* Garantia de vínculo da foto com a ocorrência criada. */
-    if(fotoPath){
-      const {error:fotoVinculoError}=await db.from("ocorrencias")
-        .update({foto_path:fotoPath,updated_at:new Date().toISOString()})
-        .eq("id",oc.id)
-        .eq("condominio",CONDOMINIO);
-      if(fotoVinculoError)throw new Error("A ocorrência foi criada, mas não foi possível vincular a foto: "+fotoVinculoError.message);
-    }
+   registrada=true;
 
    /* Push é secundário: a ocorrência continua válida mesmo se a notificação falhar. */
    try{
@@ -447,7 +478,7 @@ async function enviar(){
    document.getElementById("spamNotice").style.display=(document.getElementById("retornoToggle").checked&&email)?"block":"none";document.getElementById("successOverlay").style.display="flex";
  }catch(err){
    console.error(err);
-   if(fotoPath){try{await db.storage.from("fotos-ocorrencias").remove([fotoPath])}catch(e){console.warn("Não foi possível remover a foto órfã.",e)}}
+   if(!registrada&&fotosPaths.length){try{await db.storage.from("fotos-ocorrencias").remove(fotosPaths)}catch(e){console.warn("Não foi possível remover fotografias de uma tentativa incompleta.",e)}}
    mostrarErro(err.message||"Não foi possível enviar a ocorrência. Tente novamente.");
  }finally{enviando=false;botao.disabled=false;botao.textContent="ENVIAR OCORRÊNCIA"}
 }
