@@ -1630,7 +1630,7 @@ async function gerarEspelhoPontoMensal(){
  if(btn.disabled)return;
  const mes=$("oraquiPontoMesAno").value+"-"+$("oraquiPontoMesNumero").value;
  const cid=Number(CONDOMINIO_ID),alvo=Number($("oraquiPontoColaborador").value)||null;
- if(!cid||!/^\\d{4}-(0[1-9]|1[0-2])$/.test(mes)){alert("Selecione um mês e um condomínio válidos.");return;}
+ if(!cid||!/^\d{4}-(0[1-9]|1[0-2])$/.test(mes)){alert("Selecione um mês e um condomínio válidos.");return;}
  const popup=window.open("","_blank");
  if(!popup){alert("Permita a abertura da janela do espelho mensal e tente novamente.");return;}
  popup.document.open();popup.document.write('<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Preparando espelho de ponto</title></head><body style="font:16px Arial;padding:30px">Preparando espelho de ponto...</body></html>');popup.document.close();
