@@ -63,7 +63,7 @@ Deno.serve(async (req: Request) => {
     let novo=false;
     if(!encontrado){
       const {data,error}=await admin.auth.admin.inviteUserByEmail(email,{
-        redirectTo:"https://oraqui.app/definir-senha.html",
+        redirectTo:"https://oraqui.app/definir-senha.html?tipo=sindico",
         data:{nome}
       });
       if(error||!data?.user)throw error||new Error("Não foi possível enviar convite.");
