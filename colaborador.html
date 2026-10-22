@@ -607,10 +607,12 @@ function renderPonto(){
  const estados={entrada:'Em trabalho',inicio_intervalo:'Em intervalo',fim_intervalo:'Em trabalho',saida:'Jornada encerrada'};
  $('pontoStatus').textContent=ultima?(estados[ultima.tipo]||'Ponto registrado'):'Jornada não iniciada';
  $('pontoDetalhe').textContent=ultima?'Última marcação: '+(etiquetasPonto[ultima.tipo]||ultima.tipo)+' • '+horaPontoBrasilia(ultima.registrado_em):'Nenhum registro recente. Horários oficiais de Brasília.';
- $('btnEntrada').disabled=!!ultima&&ultima.tipo!=='saida';
- $('btnIniIntervalo').disabled=!trabalho||!colaborador.intervalo_ativo;
- $('btnFimIntervalo').disabled=!emIntervalo;
- $('btnSaida').disabled=!trabalho;
+ // Marcações não podem ser bloqueadas por sequência, horário ou turno (Portaria 671/2021, art. 74).
+ // O status ajuda a escolher a próxima marcação, mas não impede registrar a realidade.
+ $('btnEntrada').disabled=false;
+ $('btnIniIntervalo').disabled=false;
+ $('btnFimIntervalo').disabled=false;
+ $('btnSaida').disabled=false;
  const req=[];
  if(colaborador.geolocalizacao_ponto_obrigatoria)req.push('localização GPS');
  if(colaborador.selfie_ponto_obrigatoria)req.push('selfie');
@@ -690,8 +692,9 @@ async function registrarPonto(tipo){
  if(pontoEmRegistro)return;
  if(!navigator.onLine)return alert('O registro de ponto necessita de conexão com a internet para obter a hora oficial do servidor. Nenhuma batida foi registrada.');
  const ultima=pontosHoje.at(-1);
- const permitidos=!ultima||ultima.tipo==='saida'?['entrada']:ultima.tipo==='inicio_intervalo'?['fim_intervalo']:colaborador.intervalo_ativo?['inicio_intervalo','saida']:['saida'];
- if(!permitidos.includes(tipo))return alert('A sequência do ponto mudou. Atualize a página antes de registrar uma nova batida.');
+ const esperado=!ultima||ultima.tipo==='saida'?['entrada']:ultima.tipo==='inicio_intervalo'?['fim_intervalo']:colaborador.intervalo_ativo?['inicio_intervalo','saida']:['saida'];
+ // Sinalizar sequência atípica, sem bloquear a marcação real.
+ if(!esperado.includes(tipo)&&!confirm('Esta marcação difere da sequência usual. Se é o evento que realmente ocorreu, confirme para registrar o horário real.'))return;
  pontoEmRegistro=true;let selfiePath=null;
  const botoes=['btnEntrada','btnIniIntervalo','btnFimIntervalo','btnSaida'].map(id=>$(id));
  botoes.forEach(b=>b.disabled=true);
