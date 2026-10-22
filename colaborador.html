@@ -881,8 +881,19 @@ async function registrarPonto(tipo){
  $('pontoDetalhe').textContent='Registrando '+(etiquetasPonto[tipo]||tipo)+'...';
  try{
   // A selfie e a localização são recolhidas antes do envio. A data/hora é definida exclusivamente pelo servidor.
-  const arquivo=colaborador.selfie_ponto_obrigatoria?await capturarSelfiePonto():null;
-  const geo=await obterLocalizacao();
+  let arquivo=null;
+  if(colaborador.selfie_ponto_obrigatoria){
+    try{arquivo=await capturarSelfiePonto()}
+    catch(e){
+      if(navigator.onLine||!confirm('A selfie não foi capturada. Registrar o ponto EXCEPCIONALMENTE sem foto e enviar para conferência do gestor?'))throw e;
+    }
+  }
+  let geo;
+  try{geo=await obterLocalizacao()}
+  catch(e){
+    if(navigator.onLine||!confirm('O GPS está indisponível. Registrar o ponto EXCEPCIONALMENTE sem localização e enviar para conferência do gestor?'))throw e;
+    geo={latitude:null,longitude:null,precisao_metros:null};
+  }
   if(arquivo){
    const ext=arquivo.type==='image/png'?'png':arquivo.type==='image/webp'?'webp':'jpg';
    selfiePath=`${colaborador.condominio_id}/${colaborador.id}/${crypto.randomUUID()}.${ext}`;
