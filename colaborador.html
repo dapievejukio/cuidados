@@ -202,7 +202,7 @@ body:has(.modal.visible) #oraquiAlertaUrgente{bottom:calc(10px + env(safe-area-i
 <div class="user-card"><a class="user-icon oraqui-avatar-link" id="userIcon" href="perfil-foto.html" aria-label="Toque para escolher ou alterar sua foto" title="Alterar foto">👤<span class="oraqui-avatar-edit">✎</span></a><div class="user-info"><div style="display:flex;align-items:center;gap:8px"><strong id="userName">Carregando...</strong><button type="button" id="notificationBell" aria-label="Configurar notificações" title="Notificações" style="border:0;background:transparent;font-size:21px;cursor:pointer;padding:4px">🔔</button></div><span id="userDescription">Validando acesso</span></div><span class="user-tag">ATIVO</span></div>
 <nav class="oraqui-bottom-nav colaborador-menu" aria-label="Acessos do colaborador"><button type="button" class="oraqui-nav-item" id="navDemandas" aria-label="Minhas tarefas" title="Minhas tarefas" ><span class="nav-icon"><svg class="colaborador-icone" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="18" rx="2"/><rect x="9" y="2" width="6" height="4" rx="1"/><path d="m8 13 3 3 5-6"/></svg></span><span class="oraqui-nav-badge" id="navDemandasBadge" hidden></span><span class="colaborador-menu-nome">Minhas tarefas</span></button><button type="button" class="oraqui-nav-item" id="navCronograma" aria-label="Cronograma" title="Cronograma" ><span class="nav-icon"><svg class="colaborador-icone" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 11h18M7 15h2M12 15h2M7 18h2"/></svg></span><span class="oraqui-nav-badge" id="navCronogramaBadge" hidden></span><span class="colaborador-menu-nome">Cronograma</span></button><button type="button" class="oraqui-nav-item" id="navDocumentos" aria-label="Meus documentos" title="Meus documentos" ><span class="nav-icon"><svg class="colaborador-icone" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H5v20h14V7Z M14 2v6h5M8 12h8M8 16h8"/></svg></span><span class="oraqui-nav-badge" id="navDocsBadge" hidden></span><span class="colaborador-menu-nome">Meus documentos</span></button><button type="button" class="oraqui-nav-item" id="navChat" aria-label="Conversas" title="Conversas" ><span class="nav-icon"><svg class="colaborador-icone" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11a8 8 0 0 1-8 9 9 9 0 0 1-4-1l-6 2 2-6a9 9 0 0 1-1-4 8 8 0 0 1 17 0ZM8 11h8M8 15h5"/></svg></span><span class="oraqui-nav-badge" id="navChatBadge" hidden></span><span class="colaborador-menu-nome">Conversas</span></button><button type="button" class="oraqui-nav-item" id="navRegistrar" aria-label="Registrar atividade" title="Registrar atividade" ><span class="nav-icon"><svg class="colaborador-icone" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></span><span class="colaborador-menu-nome">Registrar atividade</span></button><button type="button" class="oraqui-nav-item" id="navPonto" aria-label="Bater ponto" title="Bater ponto" hidden><span class="nav-icon"><svg class="colaborador-icone" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span class="colaborador-menu-nome">Bater ponto</span></button></nav><aside id="urgenciasDestaque" class="urgencias-destaque" aria-label="Demandas urgentes para iniciar" aria-live="polite" hidden></aside><button type="button" id="colaboradorInicio" class="colaborador-voltar" aria-label="Recolher conteúdo e voltar aos ícones" title="Voltar aos ícones" hidden><svg class="colaborador-icone" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7M5 9v12h14V9M9 21v-6h6v6"/></svg></button><span id="navCalendarMonth" hidden></span><span id="navCalendarDay" hidden></span><div id="oraquiQuickCounts" hidden aria-hidden="true"><span id="oraquiChatCount" hidden></span><span id="oraquiDocsCount" hidden></span></div>
 <div class="demo-mode-banner" id="demoModeBanner"><div class="demo-mode-icon">🧪</div><div class="demo-mode-info"><strong>MODO DEMONSTRAÇÃO</strong><span id="demoModeText">Você está testando a visão operacional de um colaborador.</span></div><button class="demo-back" id="demoBack" type="button">VOLTAR À GESTÃO</button></div>
-<div class="message error" id="error"></div><div class="offline-card" id="offlineCard" role="status"><strong id="offlineTitle">📶 Verificando conexão...</strong><span id="offlineDescription">Os registros pendentes permanecem neste aparelho até a sincronização.</span><br><button type="button" id="syncBtn">SINCRONIZAR AGORA</button></div>
+<div class="message error" id="error"></div><div class="offline-card" id="offlineCard" role="status"><strong id="offlineTitle">📶 Verificando conexão...</strong><span id="offlineDescription">Os registros pendentes permanecem neste aparelho até a sincronização.</span><br><button type="button" id="syncBtn">SINCRONIZAR AGORA</button><br><button type="button" id="ativarOfflineBtn" style="background:#0f5132;margin-top:8px">🔐 ATIVAR ACESSO OFFLINE</button></div>
 <div class="notification-card hidden" id="notificationCard" style="display:none"><strong id="notificationTitle"></strong><span id="notificationText"></span><button id="notificationBtn" type="button">ATIVAR</button></div>
 <div id="oraquiInstallCard" hidden style="margin:12px 0;padding:14px 16px;background:#edf5ff;border:1px solid #c7ddf5;border-radius:15px;color:#193c5e">
   <div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><strong>📲 Adicionar ORAQUI ao celular</strong><button id="oraquiInstallClose" type="button" aria-label="Fechar" style="border:0;background:transparent;font-size:21px;cursor:pointer">×</button></div>
@@ -257,6 +257,7 @@ body:has(.modal.visible) #oraquiAlertaUrgente{bottom:calc(10px + env(safe-area-i
  <div class="field"><label>OBSERVAÇÕES (OPCIONAL)</label><textarea id="posteriorObs" rows="2" placeholder="Informações complementares"></textarea></div>
  <button type="button" class="posterior-enviar" id="enviarPosterior">📝 ENVIAR PARA APROVAÇÃO</button>
  </div></div>
+<script src="oraqui-offline.js?v=20261022v1"></script>
 <script>
 const SUPABASE_URL="https://rhiosvsohvqqrxzwohqu.supabase.co";
 const SUPABASE_KEY="sb_publishable_vcjiMMCTxQJ7ArTGsQ-PuQ_5gaAfoIt";
@@ -264,7 +265,7 @@ const BUCKET="fotos-atividades";
 const VAPID_PUBLIC_KEY="BNOm_tsvH-uo-hfquzYmf_XxgiGAciYKyia_FdI1PVfBISDELIqnvSUArIIuUW3hpmHt-UynVot3YCb7krs25Bk";
 const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const $=id=>document.getElementById(id);
-let authUser=null,colaborador=null,condominio=null,MODO_DEMO=false,DEMO_SESSAO=null,areas=[],pontos=[],atividades=[],programacoes=[],demandas=[],escalaHoje=null,pontosHoje=[],execucoesHoje=[];
+let authUser=null,colaborador=null,condominio=null,MODO_DEMO=false,DEMO_SESSAO=null,MODO_OFFLINE=false,areas=[],pontos=[],atividades=[],programacoes=[],demandas=[],escalaHoje=null,pontosHoje=[],execucoesHoje=[];
 let execAtual=null,fotoArquivo=null,previewURL=null,processando=false,sincronizando=false;
 let demandaEmConclusao=null;
 let inicioAtual=null; // início persistido no Supabase, separado da conclusão
@@ -427,7 +428,77 @@ async function acaoNotificacao(){
   await ativarNotificacoes();
 }
 
+
+function snapshotColaboradorOffline(){
+ return {
+   user:{id:authUser.id}, colaborador:{...colaborador}, condominio:{...condominio},
+   areas:areas.map(x=>({...x})),pontos:pontos.map(x=>({...x})),atividades:atividades.map(x=>({...x})),
+   programacoes:programacoes.map(x=>({...x})),demandas:demandas.map(x=>({...x})),
+   escalaHoje:escalaHoje?{...escalaHoje}:null,pontosHoje:pontosHoje.map(x=>({...x})),
+   execucoesHoje:execucoesHoje.map(x=>({...x}))
+ };
+}
+async function ativarOuAtualizarOffline(){
+ if(!navigator.onLine||!colaborador||MODO_DEMO){
+  alert('Faça login com internet em uma conta de colaborador real antes de ativar este aparelho.');
+  return;
+ }
+ try{
+  const snapshot=snapshotColaboradorOffline();
+  const registros=await window.OraquiOffline.allProfiles();
+  const id=snapshot.user.id+':'+snapshot.colaborador.condominio_id+':'+snapshot.colaborador.id;
+  if(registros.some(x=>x.key===id)){
+   if(!window.OraquiOffline.unlocked()){
+    const perfil=await window.OraquiOffline.unlock(snapshot.user.id);
+    if(!perfil)return;
+   }
+   if(!await window.OraquiOffline.refresh(snapshot))throw Error('O perfil desbloqueado não é o condomínio selecionado. Selecione o perfil correto.');
+  }else{
+   if(!await window.OraquiOffline.activate(snapshot))return;
+  }
+  alert('✓ Acesso offline ativado e atualizado. Este aparelho poderá abrir o OraQui sem internet por até 72 horas desde a última validação online. Guarde seu PIN.');
+  atualizarEstadoOffline();
+ }catch(e){alert('Não foi possível ativar o acesso offline: '+(e.message||e));}
+}
+async function entrarOffline(){
+ try{
+  if(!window.OraquiOffline)throw Error('Os arquivos offline não estão instalados. Conecte à internet e abra o OraQui antes da primeira utilização offline.');
+  const s=await window.OraquiOffline.unlock();
+  if(!s)return;
+  MODO_OFFLINE=true;
+  authUser=s.user;colaborador=s.colaborador;condominio=s.condominio;
+  areas=s.areas||[];pontos=s.pontos||[];atividades=s.atividades||[];
+  programacoes=s.programacoes||[];demandas=s.demandas||[];
+  escalaHoje=s.escalaHoje||null;pontosHoje=s.pontosHoje||[];execucoesHoje=s.execucoesHoje||[];
+  $('userName').textContent=colaborador.nome;
+  $('userDescription').textContent=(colaborador.funcao||'Colaborador')+' • #'+(colaborador.matricula||'');
+  $('userIcon').textContent='👤';
+  $('condominioNome').textContent=condominio.nome.toUpperCase();
+  $('offlineTitle').textContent='🔴 OraQui Offline ativado';
+  $('ativarOfflineBtn').style.display='none';
+  const pendentes=await filaTodos();
+  for(const item of pendentes){
+   if(item.kind==='ponto'&&item.auth_user_id===authUser.id&&Number(item.condominio_id)===Number(colaborador.condominio_id)
+    &&Number(item.colaborador_id)===Number(colaborador.id)&&!pontosHoje.some(x=>x.offline_client_id===item.client_id)){
+    pontosHoje.push({id:item.client_id,offline_client_id:item.client_id,tipo:item.tipo,registrado_em:item.capturado_em,escala_id:item.escala_id});
+   }
+  }
+  pontosHoje.sort((a,b)=>new Date(a.registrado_em)-new Date(b.registrado_em));
+  aplicarModulos();renderEscala();renderPonto();renderDemandas();renderProgramacoes();renderHistorico();
+  await carregarAvulsaPendente();
+  await atualizarEstadoOffline();
+  toast('📴 Operação offline liberada. Registros serão enviados ao reconectar.');
+ }catch(e){
+  console.warn('Login offline:',e);
+  alert('Acesso offline indisponível: '+(e.message||e));
+ }
+}
+
 async function iniciar(){
+  if(!navigator.onLine){
+    await entrarOffline();
+    return;
+  }
   const {data:{session}}=await db.auth.getSession();
   if(!session){location.href="index.html";return}
   authUser=session.user;
@@ -482,6 +553,9 @@ async function iniciar(){
 
     aplicarModulos();
     await carregarTudo();
+    if(window.OraquiOffline?.unlocked()&&!MODO_DEMO){
+      window.OraquiOffline.refresh(snapshotColaboradorOffline()).catch(console.warn);
+    }
     await carregarAvulsaPendente();
     if (typeof window.oraquiAtualizarIndicadores === "function") {
       window.oraquiAtualizarIndicadores().catch(e => console.warn("Indicadores:", e));
@@ -1657,6 +1731,8 @@ function voltarGestaoDemo(){
   location.href="gestor.html";
 }
 async function sair(){
+  window.OraquiOffline?.lock();
+  if(MODO_OFFLINE){location.href="index.html";return;}
   if(authUser?.id)localStorage.removeItem('oraqui_colaborador_condominio_'+authUser.id);
   localStorage.removeItem("usuarioLogado");
   localStorage.removeItem("tipoAtividadeAtual");
@@ -1692,6 +1768,7 @@ $("confirmExec").onclick=confirmarExecucao;
 $("iniciarExec").onclick=()=>iniciarComFoto(execAtual?"programacao":"avulsa");
 $("iniciarDemanda").onclick=()=>iniciarComFoto("demanda");
 $("syncBtn").onclick=sincronizarFilaOffline;
+$("ativarOfflineBtn").onclick=ativarOuAtualizarOffline;
 $("photoButton").onclick=()=>$("photoInput").click();
 $("photoInput").onchange=e=>{
   const f=e.target.files?.[0];
