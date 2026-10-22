@@ -444,6 +444,15 @@ async function ativarOuAtualizarOffline(){
   return;
  }
  try{
+  if(!('serviceWorker' in navigator)||!('caches' in window))
+    throw Error('Este navegador não oferece o armazenamento necessário para abrir o aplicativo offline.');
+  await navigator.serviceWorker.register('./service-worker.js',{scope:'./'});
+  await navigator.serviceWorker.ready;
+  const essenciais=['/index.html','/colaborador.html','/oraqui-offline.js','https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2'];
+  for(const resource of essenciais){
+    if(!await caches.match(resource,{ignoreSearch:true}))
+      throw Error('Arquivo offline ainda não foi armazenado: '+resource+'. Atualize o OraQui com internet e tente novamente.');
+  }
   const snapshot=snapshotColaboradorOffline();
   const registros=await window.OraquiOffline.allProfiles();
   const id=snapshot.user.id+':'+snapshot.colaborador.condominio_id+':'+snapshot.colaborador.id;
