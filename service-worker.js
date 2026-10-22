@@ -2,8 +2,9 @@
  * Cache do aplicativo e recebimento de notificações Web Push.
  * Registros e fotografias offline são gerenciados pelo colaborador.html (IndexedDB).
  */
-const CACHE_NAME = 'oraqui-shell-v2-20261022-modulos';
-const APP_SHELL = ['/', '/index.html', '/colaborador.html', '/gestor.html'];
+const CACHE_NAME = 'oraqui-shell-v3-20261022-offline';
+const SUPABASE_CDN = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+const APP_SHELL = ['/', '/index.html', '/colaborador.html', '/gestor.html', '/oraqui-offline.js', '/manifest.webmanifest', SUPABASE_CDN];
 const SAME_ORIGIN = self.location.origin;
 
 self.addEventListener('install', (event) => {
@@ -12,7 +13,7 @@ self.addEventListener('install', (event) => {
     // Uma página temporariamente indisponível não deve impedir a instalação.
     await Promise.allSettled(APP_SHELL.map(async (path) => {
       const response = await fetch(new Request(path, { cache: 'reload' }));
-      if (response.ok && response.type === 'basic') await cache.put(path, response);
+      if (response.ok || response.type === 'opaque') await cache.put(path, response);
     }));
     await self.skipWaiting();
   })());
@@ -30,7 +31,21 @@ self.addEventListener('fetch', (event) => {
   const request = event.request;
   if (request.method !== 'GET') return;
   const url = new URL(request.url);
-  if (url.origin !== SAME_ORIGIN) return;
+  if (url.origin !== SAME_ORIGIN) {
+    if (url.href === SUPABASE_CDN) {
+      event.respondWith((async () => {
+        const cached=await caches.match(request);
+        if(cached)return cached;
+        const fresh=await fetch(request);
+        if(fresh.ok||fresh.type==='opaque'){
+          const cache=await caches.open(CACHE_NAME);
+          await cache.put(request,fresh.clone());
+        }
+        return fresh;
+      })());
+    }
+    return;
+  }
   if (url.pathname.startsWith('/api/') || url.pathname.startsWith('/auth/')) return;
 
   if (request.mode === 'navigate') {
