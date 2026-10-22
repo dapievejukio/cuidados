@@ -431,13 +431,13 @@ async function iniciar(){
       if(!aut?.ok)throw new Error(aut?.error||"Modo demonstração não autorizado.");
       if(Number(aut.condominio_id)!==Number(DEMO_SESSAO.condominio_id))throw new Error("Ambiente de demonstração inválido.");
       const {data:demoCol,error:demoColError}=await db.from("colaboradores")
-        .select("id,condominio_id,condominio,nome,email,matricula,funcao,ativo,ponto_ativo,selfie_ponto_obrigatoria,geolocalizacao_ponto_obrigatoria,intervalo_ativo,intervalo_minutos")
+        .select("id,condominio_id,condominio,nome,email,matricula,funcao,ativo,chat_ativo,demandas_ativo,cronograma_ativo,atividades_ativo,registros_posteriores_ativo,documentos_ativo,ponto_ativo,selfie_ponto_obrigatoria,geolocalizacao_ponto_obrigatoria,intervalo_ativo,intervalo_minutos")
         .eq("id",Number(aut.colaborador_id)).eq("condominio_id",Number(aut.condominio_id)).eq("ativo",true).single();
       if(demoColError)throw demoColError;
       c=demoCol;MODO_DEMO=true;
     }else{
       const {data:normalCol,error:normalColError}=await db.from("colaboradores")
-        .select("id,condominio_id,condominio,nome,email,matricula,funcao,ativo,ponto_ativo,selfie_ponto_obrigatoria,geolocalizacao_ponto_obrigatoria,intervalo_ativo,intervalo_minutos")
+        .select("id,condominio_id,condominio,nome,email,matricula,funcao,ativo,chat_ativo,demandas_ativo,cronograma_ativo,atividades_ativo,registros_posteriores_ativo,documentos_ativo,ponto_ativo,selfie_ponto_obrigatoria,geolocalizacao_ponto_obrigatoria,intervalo_ativo,intervalo_minutos")
         .eq("auth_user_id",authUser.id).eq("ativo",true).order("id",{ascending:true}).limit(100);
       if(normalColError)throw normalColError;
       const vinculos=normalCol||[];
@@ -468,6 +468,7 @@ async function iniciar(){
     if(MODO_DEMO){$("demoModeBanner").classList.add("visible");$("demoModeText").textContent=`Você está operando como ${c.nome} • ${c.funcao||"Colaborador"}. Tudo que registrar aparecerá na Gestão deste ambiente.`;$("logout").textContent="SAIR";$("notificationCard").classList.add("hidden")}
     if(c.ponto_ativo){$("pontoSection").classList.remove("hidden");$("navPonto").hidden=false;}
 
+    aplicarModulos();
     await carregarTudo();
     await carregarAvulsaPendente();
     if (typeof window.oraquiAtualizarIndicadores === "function") {
@@ -479,10 +480,32 @@ async function iniciar(){
   }catch(e){console.error(e);erro(e.message||"Não foi possível carregar seu acesso.")}
 }
 
+/* MODULOS_COLABORADOR_INICIO */
+function moduloLiberado(modulo){return !!colaborador&&(modulo==='ponto'?colaborador.ponto_ativo===true:colaborador[modulo+'_ativo']!==false)}
+function exigirModulo(modulo){if(!moduloLiberado(modulo))throw new Error('Módulo desativado pela gestão neste condomínio.');}
+const moduloSecao={pontoSection:'ponto',atividadesProgramadasSection:'cronograma',registroAvulsoSection:'atividades',secaoDemandas:'demandas',diasAnterioresSection:'demandas',registroPosteriorFinalSection:'registros_posteriores',registrosPosterioresSection:'registros_posteriores'};
+function aplicarModulos(){
+ const navegacao={navPonto:'ponto',navChat:'chat',navDemandas:'demandas',navCronograma:'cronograma',navRegistrar:'atividades',navDocumentos:'documentos',oraquiQuickChat:'chat'};
+ for(const [id,m] of Object.entries(navegacao)){const el=$(id);if(el){el.hidden=!moduloLiberado(m);el.style.display=el.hidden?'none':'';}}
+ for(const [id,m] of Object.entries(moduloSecao)){const el=$(id);if(el){el.dataset.moduloBloqueado=String(!moduloLiberado(m));if(!moduloLiberado(m)){el.classList.remove('colaborador-secao-ativa');el.classList.add('hidden');}}}
+ const historico=$('execucoesHojeSection');if(historico){historico.hidden=!moduloLiberado('cronograma')&&!moduloLiberado('atividades');historico.dataset.moduloBloqueado=String(historico.hidden);}
+ if(!moduloLiberado('demandas')){$('urgenciasDestaque').hidden=true;}
+ if(!moduloLiberado('cronograma')&&!moduloLiberado('atividades')&&!moduloLiberado('demandas'))fecharModal();
+ if(!moduloLiberado('demandas'))fecharConclusaoDemanda();
+ if(!moduloLiberado('registros_posteriores'))$('posteriorModal').classList.remove('visible');
+}
+/* MODULOS_COLABORADOR_FIM */
+
 async function carregarTudo(){
   const versao=++versaoCarregamento;
   limparErro();
   try{
+    // Refresh permissions on every online reload. Server policies remain authoritative.
+    if(navigator.onLine){
+      const {data:perfil,error}=await db.from('colaboradores').select('ponto_ativo,chat_ativo,demandas_ativo,cronograma_ativo,atividades_ativo,registros_posteriores_ativo,documentos_ativo').eq('id',colaborador.id).eq('condominio_id',colaborador.condominio_id).eq('ativo',true).single();
+      if(error)throw error;
+      Object.assign(colaborador,perfil);aplicarModulos();
+    }
     const [ar,po,at,pr,es,de,rp,ex]=await Promise.all([
       db.from("areas").select("id,nome,descricao,ordem").eq("condominio_id",colaborador.condominio_id).eq("ativo",true).eq("visivel_colaborador",true).order("ordem",{ascending:true}).order("nome",{ascending:true}),
       db.from("pontos").select("id,area_id,nome,descricao,ordem").eq("condominio_id",colaborador.condominio_id).eq("ativo",true).eq("visivel_colaborador",true).order("ordem",{ascending:true}).order("nome",{ascending:true}),
@@ -514,6 +537,7 @@ async function carregarTudo(){
     renderDemandas();
     renderProgramacoes();
     renderHistorico();
+    aplicarModulos();
     carregarRegistrosPosteriores().catch(console.warn);
   }catch(e){
     if(versao!==versaoCarregamento)return;
@@ -645,6 +669,7 @@ function escolherCondominioVisual(vinculos){
   });
 }
 async function registrarPonto(tipo){
+  if(!moduloLiberado('ponto'))return alert('Ponto desativado pela gestão.');
   if(pontoEmRegistro)return;
   pontoEmRegistro=true;
   let selfiePath=null;
@@ -846,6 +871,7 @@ for(const id of ['demandaConclusaoFoto','demandaConclusaoCamera']){
  $(id).onchange=e=>{adicionarFotosDepoisDemanda(e.target.files||[]);e.target.value=''};
 }
 function abrirConclusaoDemanda(id){
+  if(!moduloLiberado('demandas'))return alert('Demandas desativadas pela gestão.');
   const d=demandas.find(x=>mesmoId(x.id,id));
   if(!d||d.status==='concluida'||!demandaParaColaborador(d))return;
   demandaEmConclusao=d;
@@ -860,6 +886,7 @@ function abrirConclusaoDemanda(id){
 }
 function fecharConclusaoDemanda(){$('demandaConclusaoModal').classList.remove('visible');demandaEmConclusao=null}
 async function salvarConclusaoDemanda(){
+  if(!moduloLiberado('demandas'))return alert('Demandas desativadas pela gestão.');
   const d=demandaEmConclusao;if(!d||!colaborador||!authUser)return;
   const obs=$('demandaConclusaoObs').value.trim();
   const fotos=[...fotosDepoisDemanda];
@@ -897,6 +924,7 @@ async function salvarConclusaoDemanda(){
   }finally{btn.disabled=false;btn.textContent='✓ CONFIRMAR CONCLUSÃO'}
 }
 async function mudarDemanda(id,status){
+  if(!moduloLiberado('demandas'))return;
   if(!colaborador||!authUser)return;
   const demanda=demandas.find(d=>mesmoId(d.id,id));
   if(!demanda||!demandaParaColaborador(demanda)){
@@ -1074,6 +1102,7 @@ async function obterInicio(tipo, id){
   return data?.[0]||null;
 }
 async function iniciarComFoto(tipo){
+  if(!moduloLiberado(tipo==='demanda'?'demandas':tipo==='programacao'?'cronograma':'atividades'))return alert('Módulo desativado pela gestão.');
   if(!colaborador||!authUser)return;
   const demanda=tipo==='demanda'?demandaEmConclusao:null;
   const refId=tipo==='demanda'?demanda?.id:tipo==='avulsa'?avulsaAtualId:execAtual?.id;
@@ -1238,6 +1267,7 @@ async function atualizarBlocoInicio(tipo,id){
   }
 }
 async function abrirExecucao(id=null,manterAvulsa=false){
+  if(!moduloLiberado(id?'cronograma':'atividades'))return alert('Módulo desativado pela gestão.');
   execAtual=id?programacoes.find(p=>mesmoId(p.id,id)):null;
   if(execAtual)avulsaAtualId=null;
   fotoArquivo=null;
@@ -1388,6 +1418,7 @@ async function enviarFotoPendente(path,arquivo,rotulo){
   throw new Error('Falha no envio da foto '+rotulo+': '+error.message);
 }
 async function enviarInicioPendente(item){
+  exigirModulo(item.inicio_tipo==='demanda'?'demandas':item.inicio_tipo==='programacao'?'cronograma':'atividades');
   if(!navigator.onLine)throw new Error('Sem conexão.');
   const r=item.registro;
   if(!r||item.auth_user_id!==authUser?.id||Number(item.condominio_id)!==Number(colaborador?.condominio_id)||Number(item.colaborador_id)!==Number(colaborador?.id))throw new Error('Início offline pertence a outra conta ou condomínio.');
@@ -1407,6 +1438,7 @@ async function enviarInicioPendente(item){
   await filaExcluir(item.id);
 }
 async function enviarRegistroPendente(item){
+  exigirModulo(item.payload.programacao_id?'cronograma':'atividades');
   if(!navigator.onLine)throw new Error('Sem conexão.');
   if(!colaborador||item.auth_user_id!==authUser?.id||Number(item.condominio_id)!==Number(colaborador.condominio_id)||Number(item.colaborador_id)!==Number(colaborador.id)||Number(item.payload?.colaborador_id)!==Number(colaborador.id)||Number(item.payload?.condominio_id)!==Number(colaborador.condominio_id))throw new Error('Este registro pertence a outra conta ou condomínio.');
   // iniciada_em identifica unicamente a tentativa; evita reenvio duplicado após
@@ -1452,6 +1484,7 @@ async function sincronizarFilaOffline(){
 
 
 async function confirmarExecucao(){
+  if(!moduloLiberado(execAtual?'cronograma':'atividades'))return alert('Módulo desativado pela gestão.');
   if(processando)return;
   const at=execAtual?atividades.find(a=>mesmoId(a.id,execAtual.atividade_id)):null;
   const exigeFoto=execAtual?(execAtual.exige_foto??at?.exige_foto??false):false;
@@ -1557,6 +1590,7 @@ $("execModal").onclick=e=>{if(e.target===$("execModal"))fecharModal()};
 
 // REGISTROS POSTERIORES: declaração, nunca conclusão automática.
 function abrirRegistroPosterior(){
+  if(!moduloLiberado('registros_posteriores'))return alert('Registros posteriores desativados pela gestão.');
  if(!colaborador)return alert('Aguarde carregar seu cadastro.');
  $('posteriorData').value=hoje();$('posteriorInicio').value='';$('posteriorFim').value='';
  $('posteriorDescricao').value='';$('posteriorObs').value='';
@@ -1574,6 +1608,7 @@ function atualizarLocaisPosterior(){
  document.querySelectorAll('.posteriorPonto').forEach(x=>x.addEventListener('change',()=>{if(x.checked&&$('posteriorAreaToda'))$('posteriorAreaToda').checked=false}));
 }
 async function enviarRegistroPosterior(){
+  if(!moduloLiberado('registros_posteriores'))return alert('Registros posteriores desativados pela gestão.');
  if(!colaborador)return;
  const botao=$('enviarPosterior');if(botao.disabled)return;
  const data=$('posteriorData').value,areaId=Number($('posteriorArea').value),descricao=$('posteriorDescricao').value.trim();
@@ -1648,10 +1683,11 @@ function recolherColaborador(){
  $('colaboradorInicio').hidden=true;
 }
 function mostrarSecaoColaborador(id){
+ if($(id)?.dataset.moduloBloqueado==='true')return;
  if(id==='pontoSection'&&$('navPonto').hidden)return;
  recolherColaborador();
  const ids=id==='atividadesProgramadasSection'?[id,'execucoesHojeSection','registroPosteriorFinalSection']:id==='secaoDemandas'?[id,'diasAnterioresSection']:[id];
- ids.forEach(chave=>{const el=$(chave);if(el){el.classList.add('colaborador-secao-ativa');if(chave===id)el.classList.remove('hidden')}});
+ ids.forEach(chave=>{const el=$(chave);if(el&&el.dataset.moduloBloqueado!=='true'){el.classList.add('colaborador-secao-ativa');if(chave===id)el.classList.remove('hidden')}});
  const nav={secaoDemandas:'navDemandas',atividadesProgramadasSection:'navCronograma',pontoSection:'navPonto'}[id];
  if(nav)$(nav).classList.add('active');
  $('colaboradorInicio').hidden=false;
@@ -1666,8 +1702,8 @@ recolherColaborador();
  const ir=mostrarSecaoColaborador;
  $('navDemandas').addEventListener('click',()=>ir('secaoDemandas'));
  $('navCronograma').addEventListener('click',()=>ir('atividadesProgramadasSection'));
- $('navChat').addEventListener('click',()=>{if(colaborador)location.href='chat.html?condominio_id='+encodeURIComponent(colaborador.condominio_id);});
- $('navDocumentos').addEventListener('click',()=>{location.href='documentos-colaborador.html';});
+ $('navChat').addEventListener('click',()=>{if(moduloLiberado('chat'))location.href='chat.html?voltar=colaborador.html&condominio_id='+encodeURIComponent(colaborador.condominio_id);});
+ $('navDocumentos').addEventListener('click',()=>{if(moduloLiberado('documentos'))location.href='documentos-colaborador.html?condominio_id='+encodeURIComponent(colaborador.condominio_id);});
  $('navRegistrar').addEventListener('click',()=>abrirExecucao());
  $('oraquiAlertaUrgente')?.addEventListener('click',()=>{
    document.querySelectorAll('.modal.visible').forEach(m=>m.classList.remove('visible'));
