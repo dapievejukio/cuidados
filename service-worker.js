@@ -2,14 +2,15 @@
  * iOS Safari: respostas obtidas por redirect HTTP não podem ser devolvidas
  * sem normalização pelo Service Worker. NÃO apagar IndexedDB (fila offline).
  */
-const CACHE_NAME = 'oraqui-shell-v5-20261022-ios-redirect-fix';
+const CACHE_NAME = 'oraqui-shell-v6-20261022-offline-css-ponto';
 const SUPABASE_CDN = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
 const SAME_ORIGIN = self.location.origin;
 const OFFLINE_ASSETS = new Set([
-  '/oraqui-offline.js', '/manifest.webmanifest', '/login-3.css',
+  '/oraqui-offline.js', '/manifest.webmanifest', '/login-3.css', '/colaborador-3.css',
+  '/assets/gestor-3/simbolo.svg', '/icon-192.png', '/icon-512.png', '/apple-touch-icon.png',
   '/assets/marca/oraqui-transparente.webp'
 ]);
-const NAVIGATION_SHELL = new Set(['/', '/index.html', '/colaborador.html', '/gestor.html']);
+const NAVIGATION_SHELL = new Set(['/', '/index.html', '/colaborador', '/colaborador.html', '/gestor.html']);
 const APP_SHELL = [...NAVIGATION_SHELL, ...OFFLINE_ASSETS, SUPABASE_CDN];
 
 function allowedCacheResponse(response, isLocal) {
@@ -68,14 +69,15 @@ function unavailable() {
 self.addEventListener('install', (event) => {
   event.waitUntil((async () => {
     await caches.open(CACHE_NAME);
-    await Promise.allSettled(APP_SHELL.map(async path => {
+    await Promise.all(APP_SHELL.map(async path => {
       const cdn = path === SUPABASE_CDN;
       // Fetch com CORS para não gravar o redirect opaco da CDN.
       const request = cdn
         ? new Request(path, { mode: 'cors', redirect: 'follow', cache: 'reload' })
         : new Request(path, { redirect: 'follow', cache: 'reload' });
       const response = await fetch(request);
-      await cacheGood(path, response, !cdn);
+      const good = await cacheGood(path, response, !cdn);
+      if (!good) throw new Error('Recurso offline indisponível: '+path);
     }));
     await self.skipWaiting();
   })());
@@ -148,6 +150,8 @@ self.addEventListener('fetch', (event) => {
         // Em modo avião, tentar somente HTML do app já armazenado.
       }
       return await cachedGood(request, true)
+        || (['/colaborador','/colaborador.html'].includes(url.pathname)
+          ? await cachedGood('/colaborador.html', true) || await cachedGood('/colaborador', true) : null)
         || (url.pathname === '/' ? await cachedGood('/index.html', true) : null)
         || unavailable();
     })());
