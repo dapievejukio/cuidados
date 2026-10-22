@@ -513,7 +513,7 @@ async function carregarTudo(){
       db.from("programacoes").select("id,atividade_id,area_id,ponto_id,colaborador_id,funcao,tipo,dias_semana,data_inicio,data_fim,horario_limite,prioridade,exige_foto,exige_foto_antes,exige_observacao,instrucoes").eq("condominio_id",colaborador.condominio_id).eq("ativo",true),
       db.from("escalas").select("*").eq("condominio_id",colaborador.condominio_id).eq("colaborador_id",colaborador.id).eq("data",hoje()),
       db.from("demandas").select("*").eq("condominio_id",colaborador.condominio_id).neq("status","cancelada").order("created_at",{ascending:false}),
-      db.from("registros_ponto").select("*").eq("condominio_id",colaborador.condominio_id).eq("colaborador_id",colaborador.id).gte("registrado_em",inicioHojeISO()).lte("registrado_em",fimHojeISO()).order("registrado_em"),
+      db.from("registros_ponto").select("id,condominio_id,colaborador_id,escala_id,tipo,registrado_em").eq("condominio_id",colaborador.condominio_id).eq("colaborador_id",colaborador.id).gte("registrado_em",new Date(Date.now()-36*3600000).toISOString()).order("registrado_em",{ascending:true}).limit(200),
       db.from("execucoes").select("*").eq("condominio_id",colaborador.condominio_id).eq("colaborador_id",colaborador.id).gte("created_at",inicioHojeISO()).lte("created_at",fimHojeISO()).order("created_at",{ascending:false})
     ]);
 
@@ -587,25 +587,34 @@ function renderEscala(){
   $("escalaBox").outerHTML=`<div id="escalaBox" class="card status-card"><div class="status-icon">📅</div><div class="status-info"><strong>${esc(txt)}</strong><span>${esc(escalaHoje.observacao||"Escala publicada pela gestão.")}</span></div><span class="badge ${tipo==="trabalho"?"green":"yellow"}">${esc(tipo.toUpperCase())}</span></div>`;
 }
 
+
+const etiquetasPonto={entrada:'Entrada',inicio_intervalo:'Início do intervalo',fim_intervalo:'Retorno do intervalo',saida:'Saída'};
+function horaPontoBrasilia(v){
+ const d=new Date(v);return Number.isNaN(d.getTime())?'—':d.toLocaleString('pt-BR',{timeZone:'America/Sao_Paulo',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false});
+}
+function proximaBatidaPonto(){
+ const ultima=pontosHoje.at(-1);
+ if(!ultima || ultima.tipo==='saida')return 'entrada';
+ if(ultima.tipo==='entrada' || ultima.tipo==='fim_intervalo')return colaborador.intervalo_ativo?'inicio_intervalo':'saida';
+ if(ultima.tipo==='inicio_intervalo')return 'fim_intervalo';
+ return 'entrada';
+}
 function renderPonto(){
-  if(!colaborador.ponto_ativo)return;
-  const ultimo=pontosHoje.at(-1);
-  let status="Jornada não iniciada",det="Nenhum registro hoje";
-  if(ultimo){
-    status=ultimo.tipo==="entrada"?"Em trabalho":ultimo.tipo==="inicio_intervalo"?"Em intervalo":ultimo.tipo==="fim_intervalo"?"Em trabalho":"Jornada encerrada";
-    det=`Último registro: ${hora(ultimo.registrado_em)}`;
-  }
-  $("pontoStatus").textContent=status;
-  $("pontoDetalhe").textContent=det;
-  const tipos=pontosHoje.map(x=>x.tipo),encerrada=tipos.includes("saida"),emIntervalo=ultimo?.tipo==="inicio_intervalo";
-  $("btnEntrada").disabled=tipos.includes("entrada");
-  $("btnIniIntervalo").disabled=!tipos.includes("entrada")||emIntervalo||encerrada||!colaborador.intervalo_ativo;
-  $("btnFimIntervalo").disabled=!emIntervalo||encerrada;
-  $("btnSaida").disabled=!tipos.includes("entrada")||emIntervalo||encerrada;
-  const req=[];
-  if(colaborador.geolocalizacao_ponto_obrigatoria)req.push("localização");
-  if(colaborador.selfie_ponto_obrigatoria)req.push("selfie");
-  $("geoNote").textContent=req.length?`Este colaborador exige ${req.join(" e ")} no registro de ponto.`:"Registro de ponto sem localização/selfie obrigatória.";
+ if(!colaborador?.ponto_ativo)return;
+ const ultima=pontosHoje.at(-1);
+ const trabalho=ultima?.tipo==='entrada'||ultima?.tipo==='fim_intervalo';
+ const emIntervalo=ultima?.tipo==='inicio_intervalo';
+ const estados={entrada:'Em trabalho',inicio_intervalo:'Em intervalo',fim_intervalo:'Em trabalho',saida:'Jornada encerrada'};
+ $('pontoStatus').textContent=ultima?(estados[ultima.tipo]||'Ponto registrado'):'Jornada não iniciada';
+ $('pontoDetalhe').textContent=ultima?'Última marcação: '+(etiquetasPonto[ultima.tipo]||ultima.tipo)+' • '+horaPontoBrasilia(ultima.registrado_em):'Nenhum registro recente. Horários oficiais de Brasília.';
+ $('btnEntrada').disabled=!!ultima&&ultima.tipo!=='saida';
+ $('btnIniIntervalo').disabled=!trabalho||!colaborador.intervalo_ativo;
+ $('btnFimIntervalo').disabled=!emIntervalo;
+ $('btnSaida').disabled=!trabalho;
+ const req=[];
+ if(colaborador.geolocalizacao_ponto_obrigatoria)req.push('localização GPS');
+ if(colaborador.selfie_ponto_obrigatoria)req.push('selfie');
+ $('geoNote').textContent=req.length?'Exigências do posto: '+req.join(' e ')+'. Confirme as permissões no celular antes de registrar.':'Registro com horário do servidor; selfie e GPS não são exigidos neste posto.';
 }
 
 async function obterLocalizacao(){
@@ -618,28 +627,35 @@ async function obterLocalizacao(){
   ));
 }
 
+
 function capturarSelfiePonto(){
-  return new Promise((resolve,reject)=>{
-    const input=document.createElement("input");
-    input.type="file";input.accept="image/*";input.capture="user";
-    input.style.display="none";
-    document.body.appendChild(input);
-    let concluido=false;
-    const finalizar=(arquivo,erro)=>{
-      if(concluido)return;
-      concluido=true;input.remove();
-      if(erro)reject(erro);else resolve(arquivo);
-    };
-    input.addEventListener("change",()=>{
-      const arquivo=input.files?.[0];
-      if(!arquivo)return finalizar(null,new Error("Selfie não capturada. O ponto não foi registrado."));
-      if(!arquivo.type.startsWith("image/"))return finalizar(null,new Error("Selecione uma fotografia válida."));
-      if(arquivo.size>5*1024*1024)return finalizar(null,new Error("Foto acima de 5 MB. Tire outra selfie."));
-      finalizar(arquivo);
-    },{once:true});
-    input.click();
-  });
+ return new Promise((resolve,reject)=>{
+  const input=document.createElement('input');
+  input.type='file';input.accept='image/*';input.capture='user';
+  input.style.display='none';document.body.appendChild(input);
+  let terminado=false;
+  function terminar(file,err){
+   if(terminado)return;terminado=true;
+   window.removeEventListener('focus',aoRetornar);
+   input.remove();
+   if(err)reject(err);else resolve(file);
+  }
+  function aoRetornar(){
+   // Alguns navegadores móveis não emitem "change" quando a câmera é cancelada.
+   setTimeout(()=>{if(!terminado&&!input.files?.length)terminar(null,new Error('Selfie cancelada. O ponto não foi registrado.'));},1200);
+  }
+  window.addEventListener('focus',aoRetornar);
+  input.addEventListener('change',()=>{
+   const f=input.files?.[0];
+   if(!f)return terminar(null,new Error('Selfie não capturada. Ponto não registrado.'));
+   if(!['image/jpeg','image/png','image/webp'].includes(f.type))return terminar(null,new Error('Use uma selfie em JPG, PNG ou WebP.'));
+   if(f.size>5*1024*1024)return terminar(null,new Error('Foto acima de 5 MB. Tire outra selfie.'));
+   terminar(f);
+  },{once:true});
+  input.click();
+ });
 }
+
 let pontoEmRegistro=false;
 function escolherCondominioVisual(vinculos){
   return new Promise((resolve,reject)=>{
@@ -668,33 +684,43 @@ function escolherCondominioVisual(vinculos){
     card.appendChild(cancelar);overlay.appendChild(card);document.body.appendChild(overlay);
   });
 }
+
 async function registrarPonto(tipo){
-  if(!moduloLiberado('ponto'))return alert('Ponto desativado pela gestão.');
-  if(pontoEmRegistro)return;
-  pontoEmRegistro=true;
-  let selfiePath=null;
-  try{
-    const arquivo=colaborador.selfie_ponto_obrigatoria?await capturarSelfiePonto():null;
-    const geo=await obterLocalizacao();
-    if(arquivo){
-      const extensao=arquivo.type==="image/png"?"png":arquivo.type==="image/webp"?"webp":"jpg";
-      selfiePath=`${colaborador.condominio_id}/${colaborador.id}/${crypto.randomUUID()}.${extensao}`;
-      const {error:erroFoto}=await db.storage.from("selfies-ponto-privadas").upload(selfiePath,arquivo,{contentType:arquivo.type,upsert:false});
-      if(erroFoto)throw new Error("Não foi possível salvar a selfie de forma privada. Ponto não registrado: "+erroFoto.message);
-    }
-    const {error}=await db.from("registros_ponto").insert({
-      condominio_id:colaborador.condominio_id,
-      colaborador_id:colaborador.id,
-      escala_id:escalaHoje?.id||null,
-      tipo,
-      ...geo,
-      selfie_path:selfiePath
-    });
-    if(error)throw error;
-    toast("✓ Ponto registrado com "+(arquivo?"selfie e ":"")+"localização.");
-    await carregarTudo();
-  }catch(e){alert(e.message||"Não foi possível registrar o ponto.");}
-  finally{pontoEmRegistro=false;}
+ if(!moduloLiberado('ponto'))return alert('Ponto desativado pela gestão.');
+ if(pontoEmRegistro)return;
+ if(!navigator.onLine)return alert('O registro de ponto necessita de conexão com a internet para obter a hora oficial do servidor. Nenhuma batida foi registrada.');
+ const ultima=pontosHoje.at(-1);
+ const permitidos=!ultima||ultima.tipo==='saida'?['entrada']:ultima.tipo==='inicio_intervalo'?['fim_intervalo']:colaborador.intervalo_ativo?['inicio_intervalo','saida']:['saida'];
+ if(!permitidos.includes(tipo))return alert('A sequência do ponto mudou. Atualize a página antes de registrar uma nova batida.');
+ pontoEmRegistro=true;let selfiePath=null;
+ const botoes=['btnEntrada','btnIniIntervalo','btnFimIntervalo','btnSaida'].map(id=>$(id));
+ botoes.forEach(b=>b.disabled=true);
+ $('pontoDetalhe').textContent='Registrando '+(etiquetasPonto[tipo]||tipo)+'...';
+ try{
+  // A selfie e a localização são recolhidas antes do envio. A data/hora é definida exclusivamente pelo servidor.
+  const arquivo=colaborador.selfie_ponto_obrigatoria?await capturarSelfiePonto():null;
+  const geo=await obterLocalizacao();
+  if(arquivo){
+   const ext=arquivo.type==='image/png'?'png':arquivo.type==='image/webp'?'webp':'jpg';
+   selfiePath=`${colaborador.condominio_id}/${colaborador.id}/${crypto.randomUUID()}.${ext}`;
+   const {error:upError}=await db.storage.from('selfies-ponto-privadas').upload(selfiePath,arquivo,{contentType:arquivo.type,upsert:false});
+   if(upError)throw new Error('Não foi possível salvar a selfie: '+upError.message);
+  }
+  const ultimo=pontosHoje.at(-1);
+  const escalaId=tipo==='entrada'?(escalaHoje?.id||null):(ultimo?.escala_id||escalaHoje?.id||null);
+  const {data,error}=await db.from('registros_ponto').insert({
+   condominio_id:colaborador.condominio_id,colaborador_id:colaborador.id,escala_id:escalaId,
+   tipo,...geo,selfie_path:selfiePath
+  }).select('id,registrado_em,tipo').single();
+  if(error)throw error;
+  toast('✓ '+(etiquetasPonto[data.tipo]||data.tipo)+' registrada às '+horaPontoBrasilia(data.registrado_em));
+  await carregarTudo();
+ }catch(e){
+  console.error('Ponto:',e);
+  alert('O ponto não foi registrado: '+(e.message||e));
+ }finally{
+  pontoEmRegistro=false;renderPonto();
+ }
 }
 
 function dataLocalRegistro(valor){
