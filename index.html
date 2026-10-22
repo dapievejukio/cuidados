@@ -166,6 +166,8 @@
             </form>
 
             <button class="forgot" id="forgotButton" type="button">ESQUECI MINHA SENHA</button>
+            <a id="acessoOfflineColaborador" href="./colaborador.html" style="display:block;margin-top:18px;padding:13px 15px;border:1px solid #9cc4b5;border-radius:12px;color:#0f5132;background:#eef7f1;font-weight:800;font-size:12px;text-decoration:none">🔐 ACESSAR ORAQUI OFFLINE</a>
+            <p style="font-size:11px;color:#657987;line-height:1.4;margin-top:7px">Disponível após ativação do PIN no aplicativo do colaborador, com internet.</p>
 
             <div class="login-message" id="loginMessage"></div>
             <div class="access-status" id="accessStatus">Verificando seus acessos...</div>
@@ -330,6 +332,10 @@ $("forgotButton").addEventListener("click", async () => {
 });
 
 async function iniciar(){
+    if(!navigator.onLine){
+        mensagem("Sem internet. Se este aparelho já foi ativado, toque em ACESSAR ORAQUI OFFLINE.");
+        return;
+    }
     try{
         const {data:{session}, error} = await db.auth.getSession();
         if(error) throw error;
