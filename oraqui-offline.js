@@ -76,7 +76,9 @@ async function activate(snapshot){
  return true;
 }
 async function unlock(uid){
- const candidates=(await all()).filter(v=>(!uid||v.uid===uid)&&v.valid_until>Date.now());
+ // Após expirar a licença local, bloquear uso offline, mas permitir desbloquear
+ // conectado e reenviar fotos/registros criptografados sem perder a chave antiga.
+ const candidates=(await all()).filter(v=>(!uid||v.uid===uid)&&(navigator.onLine||v.valid_until>Date.now()));
  if(!candidates.length)throw Error('Nenhum acesso offline válido neste aparelho. Entre com internet e ative o acesso offline.');
  let record=candidates[0];
  if(candidates.length>1){
