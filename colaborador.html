@@ -1108,7 +1108,30 @@ async function salvarConclusaoDemanda(){
   if(d.exige_foto_antes&&!inicio.foto_antes_path)return alert('Esta demanda exige foto ANTES no início.');
   if(d.exige_foto&&!fotos.length)return alert('Esta demanda exige fotografia.');
   if(d.exige_observacao&&!obs)return alert('Esta demanda exige observação.');
-  if(!navigator.onLine)return alert('Para concluir demandas, conecte-se à internet.');
+  if(!navigator.onLine){
+    if(!window.OraquiOffline?.unlocked())return alert('Ative o aparelho com internet e PIN antes de concluir demandas offline.');
+    const anteriores=await filaTodos();
+    if(anteriores.some(x=>x.kind==='demanda_conclusao'&&x.auth_user_id===authUser.id&&Number(x.condominio_id)===Number(colaborador.condominio_id)&&Number(x.demanda_id)===Number(d.id)))
+      return alert('Esta demanda já tem uma conclusão aguardando sincronização.');
+    const btn=$('salvarDemandaConclusao');btn.disabled=true;
+    try{
+      const agora=new Date().toISOString(),id=crypto.randomUUID(),arquivos=[],paths=[];
+      for(const foto of fotos){
+        const blob=await fotoComCarimbo(foto,agora,contextoFoto(d.area_id,d.ponto_id));
+        const path='demandas/'+colaborador.condominio_id+'/'+colaborador.id+'/'+d.id+'/'+crypto.randomUUID()+'.jpg';
+        arquivos.push({path,blob});paths.push(path);
+      }
+      const payload={status:'concluida',concluida_em:agora,updated_at:agora,observacao_execucao:obs||null,
+        foto_execucao_path:paths[0]||null,fotos_execucao_paths:paths,foto_antes_path:inicio.foto_antes_path||null};
+      await filaSalvar({id:'demanda-'+id,kind:'demanda_conclusao',demanda_id:d.id,client_id:id,
+        auth_user_id:authUser.id,condominio_id:colaborador.condominio_id,colaborador_id:colaborador.id,
+        criado_em:agora,payload,arquivos,inicio_id:inicio.id});
+      d.offline_pendente=true;fecharConclusaoDemanda();await atualizarEstadoOffline();renderDemandas();
+      toast('📴 Conclusão salva no aparelho; gestor verá após o envio.');
+    }catch(e){alert('Falha ao salvar: '+(e.message||e))}
+    finally{btn.disabled=false}
+    return;
+  }
   const btn=$('salvarDemandaConclusao');btn.disabled=true;btn.textContent='ENVIANDO FOTOS...';
   const paths=[];let salva=false;
   try{
@@ -1570,7 +1593,9 @@ async function atualizarEstadoOffline(){
     const fila=await filaTodos();
     const minhas=fila.filter(x=>x.auth_user_id===authUser?.id&&Number(x.condominio_id)===Number(colaborador?.condominio_id));
     title.textContent=(navigator.onLine?'🟢 Conectado':'🔴 Sem internet')+' • '+minhas.length+' pendente(s)';
-    desc.textContent=minhas.length?'Registros e fotos salvos neste aparelho. Não limpe os dados do navegador até sincronizar.':'Nenhum registro pendente neste condomínio.';
+    const counts={ponto:0,demanda_conclusao:0,atividade:0};
+    for(const x of minhas){if(x.kind==='ponto')counts.ponto++;else if(x.kind==='demanda_conclusao')counts.demanda_conclusao++;else counts.atividade++;}
+    desc.textContent=minhas.length?'Ponto: '+counts.ponto+' · Demandas: '+counts.demanda_conclusao+' · Atividades: '+counts.atividade+'. Não limpe os dados até confirmar a sincronização.':'Nenhum registro pendente neste condomínio.';
     $('syncBtn').disabled=!navigator.onLine||!minhas.length||sincronizando;
   }catch(e){title.textContent='⚠ Armazenamento offline indisponível';desc.textContent=e.message;$('syncBtn').disabled=true}
 }
@@ -1681,6 +1706,28 @@ async function enviarRegistroPendente(item){
     if(e)console.warn('Início avulso ainda aberto:',e.message);
   }
   await filaExcluir(item.id);
+}
+
+async function enviarDemandaPendente(item){
+ exigirModulo('demandas');
+ if(item.auth_user_id!==authUser.id||Number(item.condominio_id)!==Number(colaborador.condominio_id)||Number(item.colaborador_id)!==Number(colaborador.id))
+  throw Error('Demanda de outra conta ou condomínio.');
+ const {data:d,error}=await db.from('demandas').select('id,status,colaborador_id,funcao,fotos_execucao_paths')
+   .eq('id',item.demanda_id).eq('condominio_id',item.condominio_id).maybeSingle();
+ if(error)throw error;if(!d)throw Error('Demanda inacessível ou excluída. Fila preservada.');
+ if(d.colaborador_id&&Number(d.colaborador_id)!==Number(colaborador.id))throw Error('Demanda reatribuída. Pendente preservada.');
+ if(d.status==='cancelada')throw Error('Demanda cancelada. Pendente preservada.');
+ if(d.status==='concluida'){
+  if(JSON.stringify(d.fotos_execucao_paths||[])!==JSON.stringify(item.payload.fotos_execucao_paths||[]))
+   throw Error('Demanda já concluída por outro registro. Revisão necessária.');
+  await filaExcluir(item.id);return;
+ }
+ for(const foto of item.arquivos||[])await enviarFotoPendente(foto.path,foto.blob,'DEMANDA');
+ const {data,error:err}=await db.from('demandas').update(item.payload).eq('id',item.demanda_id)
+    .eq('condominio_id',item.condominio_id).neq('status','cancelada').neq('status','concluida').select('id');
+ if(err)throw err;if(!data?.length)throw Error('Demanda mudou de status. Fila preservada.');
+ if(item.inicio_id)await db.from('inicios_execucao').delete().eq('id',item.inicio_id).eq('condominio_id',item.condominio_id);
+ await filaExcluir(item.id);
 }
 
 async function enviarPontoPendente(item){
