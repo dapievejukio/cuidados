@@ -113,5 +113,54 @@ function unlocked(){return !!active}
 function currentId(){return active?.key||null}
 function lock(){active=null}
 async function removeCurrent(){const id=active?.key;if(id)await remove(id);active=null}
-window.OraquiOffline={activate,unlock,refresh,unlocked,currentId,lock,removeCurrent,allProfiles:all};
+async function base64Blob(blob){
+ if(blob.size>12*1024*1024)throw Error('Arquivo offline maior que 12 MB. Reduza a foto.');
+ const data=await new Promise((resolve,reject)=>{
+  const reader=new FileReader();reader.onload=()=>resolve(String(reader.result||''));reader.onerror=()=>reject(reader.error);reader.readAsDataURL(blob);
+ });
+ return{__oraqui_blob:true,mime:blob.type||'application/octet-stream',data:String(data).split(',')[1]};
+}
+function restoreBlob(x){
+ const binary=atob(x.data),bytes=new Uint8Array(binary.length);
+ for(let i=0;i<binary.length;i++)bytes[i]=binary.charCodeAt(i);
+ return new Blob([bytes],{type:x.mime||'application/octet-stream'});
+}
+async function serialize(v){
+ if(v instanceof Blob)return base64Blob(v);
+ if(Array.isArray(v))return Promise.all(v.map(serialize));
+ if(v&&typeof v==='object'){
+  const obj={};
+  for(const [key,value] of Object.entries(v))obj[key]=await serialize(value);
+  return obj;
+ }
+ return v;
+}
+function restore(v){
+ if(!v||typeof v!=='object')return v;
+ if(v.__oraqui_blob===true)return restoreBlob(v);
+ if(Array.isArray(v))return v.map(restore);
+ const x={};for(const [k,value] of Object.entries(v))x[k]=restore(value);
+ return x;
+}
+async function seal(item){
+ if(!active)return item; // Registros legados/sem ativação continuam preservados.
+ const id=item.auth_user_id+':'+item.condominio_id+':'+item.colaborador_id;
+ if(id!==active.key)throw Error('Colaborador/condomínio não coincide com o aparelho autorizado.');
+ const payload=await serialize(item),encrypted=await encrypt(active.crypt,payload);
+ return{id:item.id,auth_user_id:item.auth_user_id,condominio_id:item.condominio_id,
+    colaborador_id:item.colaborador_id,kind:item.kind,criado_em:item.criado_em,
+    protected:true,...encrypted};
+}
+async function openQueue(record){
+ if(!record.protected)return record;
+ if(!active||active.key!==record.auth_user_id+':'+record.condominio_id+':'+record.colaborador_id)
+  return{id:record.id,auth_user_id:record.auth_user_id,condominio_id:record.condominio_id,
+    colaborador_id:record.colaborador_id,kind:record.kind,criado_em:record.criado_em,trancado:true};
+ try{return restore(await decrypt(active.crypt,record))}catch(e){
+  console.error('Registro offline criptografado indisponível:',record.id);
+  return{id:record.id,auth_user_id:record.auth_user_id,condominio_id:record.condominio_id,
+   colaborador_id:record.colaborador_id,kind:record.kind,criado_em:record.criado_em,trancado:true};
+ }
+}
+window.OraquiOffline={activate,unlock,refresh,unlocked,currentId,lock,removeCurrent,allProfiles:all,seal,openQueue};
 })();
