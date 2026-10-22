@@ -1578,7 +1578,7 @@ async function consultarPontoGestor(){
   const inicio=dia+"T00:00:00-03:00";
   const fim=new Date(new Date(inicio).getTime()+86400000).toISOString();
   const [reg,col]=await Promise.all([
-   (alvo?db.from("registros_ponto").select("id,colaborador_id,tipo,registrado_em,latitude,longitude,precisao_metros,selfie_path").eq("condominio_id",idConsulta).eq("colaborador_id",alvo):db.from("registros_ponto").select("id,colaborador_id,tipo,registrado_em,latitude,longitude,precisao_metros,selfie_path").eq("condominio_id",idConsulta)).gte("registrado_em",inicio).lt("registrado_em",fim).order("registrado_em",{ascending:false}),
+   (alvo?db.from("registros_ponto").select("id,colaborador_id,tipo,registrado_em,latitude,longitude,precisao_metros,selfie_path,origem,recebido_em,confianca_horario").eq("condominio_id",idConsulta).eq("colaborador_id",alvo):db.from("registros_ponto").select("id,colaborador_id,tipo,registrado_em,latitude,longitude,precisao_metros,selfie_path,origem,recebido_em,confianca_horario").eq("condominio_id",idConsulta)).gte("registrado_em",inicio).lt("registrado_em",fim).order("registrado_em",{ascending:false}),
    db.from("colaboradores").select("id,nome,matricula").eq("condominio_id",idConsulta)
   ]);
   if(reg.error)throw reg.error;if(col.error)throw col.error;
@@ -1592,7 +1592,8 @@ async function consultarPontoGestor(){
    const div=document.createElement("div");
    div.style.cssText="border:1px solid #e0e5ef;border-radius:15px;padding:14px;margin:10px 0;background:#fafbfe";
    const data=new Date(item.registrado_em).toLocaleString("pt-BR",{timeZone:"America/Sao_Paulo",dateStyle:"short",timeStyle:"medium"});
-   div.innerHTML='<strong>'+esc(pessoa?.nome||"Colaborador #"+item.colaborador_id)+'</strong> <span style="color:#6c7283">• '+esc(pessoa?.matricula||"")+'</span><br><b>'+esc(item.tipo)+'</b> — '+esc(data);
+   div.innerHTML='<strong>'+esc(pessoa?.nome||"Colaborador #"+item.colaborador_id)+'</strong> <span style="color:#6c7283">• '+esc(pessoa?.matricula||"")+'</span><br><b>'+esc(item.tipo)+'</b> — '+esc(data)+
+    (item.origem==='offline'?'<div style="margin-top:6px;color:#a85c20;font-size:12px">📴 Offline · Recebida pelo servidor: '+esc(new Date(item.recebido_em).toLocaleString('pt-BR',{timeZone:'America/Sao_Paulo'}))+' · Horário sujeito a conferência</div>':'');
    const botoes=document.createElement("div");botoes.style.cssText="display:flex;flex-wrap:wrap;gap:9px;margin-top:10px";
    if(item.latitude!=null&&item.longitude!=null){
     const link=document.createElement("a");link.textContent="📍 Ver localização";
@@ -1650,7 +1651,7 @@ async function gerarEspelhoPontoMensal(){
   };
   const h=v=>v?fmtHora.format(new Date(v)):"—";
   const htmlEsc=v=>String(v??"").replace(/[&<>"']/g,x=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[x]));
-  const sqlReg=()=>{let r=db.from("registros_ponto").select("id,colaborador_id,tipo,registrado_em,latitude,longitude,precisao_metros,selfie_path").eq("condominio_id",cid).gte("registrado_em",inicio).lt("registrado_em",fim).order("registrado_em",{ascending:true}).order("id",{ascending:true});if(alvo)r=r.eq("colaborador_id",alvo);return r;};
+  const sqlReg=()=>{let r=db.from("registros_ponto").select("id,colaborador_id,tipo,registrado_em,latitude,longitude,precisao_metros,selfie_path,origem,recebido_em,confianca_horario").eq("condominio_id",cid).gte("registrado_em",inicio).lt("registrado_em",fim).order("registrado_em",{ascending:true}).order("id",{ascending:true});if(alvo)r=r.eq("colaborador_id",alvo);return r;};
   const registros=[];
   for(let offset=0;offset<50000;offset+=900){
    const {data,error}=await sqlReg().range(offset,offset+899);
@@ -1724,7 +1725,8 @@ async function gerarEspelhoPontoMensal(){
       if(dur!==null&&pausa!==null&&pausa<=dur&&dur<=36*60)tempo=dur-pausa;
      }
      if(tempo!==null)horasValidas+=tempo;
-     const situacao=inconsistencias?"Conferir":!saida?"Em aberto":"Concluída";
+     const temOffline=eventos.some(v=>v.origem==='offline');
+     const situacao=inconsistencias?"Conferir":!saida?"Em aberto":temOffline?"Conferir ponto offline":"Concluída";
      if(situacao!=="Concluída")pendentes++;
      const td=x=>'<td>'+(x?h(x.registrado_em):'—')+'</td>';
      linhas+='<tr'+(situacao!=="Concluída"?' class="alerta"':'')+'><td>'+dia.slice(8)+'/'+dia.slice(5,7)+(idx?' <small>('+String(idx+1)+')</small>':'')+'</td><td>'+semana+'</td>'+td(entrada)+td(ini)+td(ret)+td(saida)+'<td class="num">'+horas(tempo)+'</td><td>'+situacao+'</td></tr>';
@@ -1736,14 +1738,14 @@ async function gerarEspelhoPontoMensal(){
    for(const m of eventosDoMes){
     const local= m.latitude!=null&&m.longitude!=null?Number(m.latitude).toFixed(5)+", "+Number(m.longitude).toFixed(5)+" (±"+Number(m.precisao_metros??0).toFixed(0)+" m)":"Não registrada";
     const t=new Date(m.registrado_em);
-    anexos+='<tr><td>'+htmlEsc(formatoLocal(t).split("-").reverse().join("/"))+'</td><td>'+htmlEsc(h(t))+'</td><td>'+htmlEsc(rotulo[m.tipo]||m.tipo)+'</td><td>'+htmlEsc(String(m.id))+'</td><td>'+(m.selfie_path?"Sim":"Não")+'</td><td>'+htmlEsc(local)+'</td></tr>';
+    anexos+='<tr><td>'+htmlEsc(formatoLocal(t).split("-").reverse().join("/"))+'</td><td>'+htmlEsc(h(t))+'</td><td>'+htmlEsc(rotulo[m.tipo]||m.tipo)+'</td><td>'+htmlEsc(String(m.id))+'</td><td>'+htmlEsc(m.origem==='offline'?'Offline • conferir':'Online')+'</td><td>'+htmlEsc(m.recebido_em?new Date(m.recebido_em).toLocaleString('pt-BR',{timeZone:'America/Sao_Paulo'}):'—')+'</td><td>'+(m.selfie_path?"Sim":"Não")+'</td><td>'+htmlEsc(local)+'</td></tr>';
    }
    const temRegistros=eventosDoMes.length>0;
    const cabecalho='<header class="cabecalho"><div class="logo-marca" aria-label="OraQui"><svg viewBox="0 0 64 76" aria-hidden="true" focusable="false"><path fill="#0F5132" d="M32 2C15.4 2 2 15.4 2 32c0 13 8.5 22.4 30 42 21.5-19.6 30-29 30-42C62 15.4 48.6 2 32 2Zm0 14a16 16 0 1 1 0 32 16 16 0 0 1 0-32Z"/><path fill="#FF8A3D" d="M32 74V49c0-8 14-23 29-20 2 15-7 26-29 45Z"/></svg><strong><span class="logo-ora">Ora</span><span class="logo-qui">Qui</span></strong></div><span class="doclabel">CONTROLE DE JORNADA</span></header>';
    const destaque='<div class="sumarios"><div><b>'+eventosDoMes.length+'</b><span>Marcações</span></div><div><b>'+diasComMarcacao+'</b><span>Dias com registro</span></div><div><b>'+horas(horasValidas)+'</b><span>Horas apuráveis*</span></div><div><b>'+pendentes+'</b><span>Jornadas a conferir</span></div></div>';
    const dados='<div class="identificacao"><div><label>CONDOMÍNIO</label><b>'+htmlEsc(nomeCondo)+'</b></div><div><label>COMPETÊNCIA</label><b>'+meses[numMes-1]+' / '+ano+'</b></div><div><label>COLABORADOR</label><b>'+htmlEsc(pessoa.nome)+'</b></div><div><label>MATRÍCULA / FUNÇÃO</label><b>'+htmlEsc(pessoa.matricula)+' • '+htmlEsc(pessoa.funcao)+'</b></div></div>';
    folhas.push('<article class="folha">'+cabecalho+'<h1>Espelho mensal de ponto</h1><p class="subtitulo">Relatório operacional de marcações — não substitui AFD, AEJ ou comprovante REP-P</p>'+dados+destaque+'<table class="jornadas"><thead><tr><th>Data</th><th>Dia</th><th>Entrada</th><th>Início int.</th><th>Retorno</th><th>Saída</th><th>Horas*</th><th>Situação</th></tr></thead><tbody>'+linhas+'</tbody></table><p class="nota">* Horas preliminares calculadas apenas em jornadas completas e cronologicamente coerentes. Dias sem registro não representam falta ou folga; escalas, feriados, adicionais e ajustes precisam ser conferidos. Turnos que atravessam a meia-noite permanecem vinculados à data da entrada.</p><div class="assinaturas"><span>Conferência do colaborador</span><span>Responsável pela gestão</span></div><div class="rodape">Emitido em '+htmlEsc(new Date().toLocaleString("pt-BR",{timeZone:"America/Sao_Paulo"}))+' · ORAQUI · Uso operacional</div></article>');
-   if(temRegistros)folhas.push('<article class="folha anexo">'+cabecalho+'<h2>Trilha de registros e evidências</h2><p class="subtitulo">'+htmlEsc(pessoa.nome)+' · '+meses[numMes-1]+' / '+ano+'</p><table><thead><tr><th>Data</th><th>Hora</th><th>Marcação</th><th>ID original</th><th>Selfie</th><th>Localização GPS</th></tr></thead><tbody>'+anexos+'</tbody></table><p class="nota">Fotografias privadas são visualizadas somente pelo gestor autenticado na consulta de ponto. Dados originais de marcação não foram alterados para gerar este relatório.</p></article>');
+   if(temRegistros)folhas.push('<article class="folha anexo">'+cabecalho+'<h2>Trilha de registros e evidências</h2><p class="subtitulo">'+htmlEsc(pessoa.nome)+' · '+meses[numMes-1]+' / '+ano+'</p><table><thead><tr><th>Data</th><th>Hora</th><th>Marcação</th><th>ID original</th><th>Origem</th><th>Recebido no servidor</th><th>Selfie</th><th>Localização GPS</th></tr></thead><tbody>'+anexos+'</tbody></table><p class="nota">Fotografias privadas são visualizadas somente pelo gestor autenticado na consulta de ponto. Dados originais de marcação não foram alterados para gerar este relatório.</p></article>');
   }
   const style=`
   @page{size:A4 portrait;margin:12mm 11mm}
