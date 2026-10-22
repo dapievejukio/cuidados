@@ -614,6 +614,12 @@ async function carregarTudo(){
     demandas=(de.data||[]).filter(demandaParaColaborador);
     await enriquecerDemandasComOcorrencias();
     pontosHoje=rp.data||[];
+    const filaPonto=await filaTodos();
+    for(const item of filaPonto){
+      if(item.kind==='ponto'&&item.auth_user_id===authUser?.id&&Number(item.colaborador_id)===Number(colaborador.id)&&Number(item.condominio_id)===Number(colaborador.condominio_id))
+        pontosHoje.push({id:item.client_id,offline_client_id:item.client_id,tipo:item.tipo,registrado_em:item.capturado_em,escala_id:item.escala_id});
+    }
+    pontosHoje.sort((a,b)=>new Date(a.registrado_em)-new Date(b.registrado_em));
     execucoesHoje=ex.data||[];
 
     renderEscala();
@@ -846,13 +852,14 @@ function escolherCondominioVisual(vinculos){
 async function registrarPonto(tipo){
  if(!moduloLiberado('ponto'))return alert('Ponto desativado pela gestão.');
  if(pontoEmRegistro)return;
- if(!navigator.onLine)return alert('O registro de ponto necessita de conexão com a internet para obter a hora oficial do servidor. Nenhuma batida foi registrada.');
+ if(!navigator.onLine&&!window.OraquiOffline?.unlocked())return alert('Ative o acesso offline com PIN enquanto estiver conectado. Nenhuma marcação foi realizada.');
  const proxima=proximaBatidaPonto();
  const foraDaOrdem=proxima!==tipo;
  const aviso=foraDaOrdem
   ?'ATENÇÃO: esta marcação é diferente da sequência esperada. Confirma que deseja registrar o evento real de '
   :'Confirma o registro de ';
- if(!confirm(aviso+(etiquetasPonto[tipo]||tipo).toUpperCase()+'? O horário será definido pelo servidor e não poderá ser apagado pelo colaborador.'))return;
+ if(!confirm(aviso+(etiquetasPonto[tipo]||tipo).toUpperCase()+'? '+(navigator.onLine?'O horário será definido pelo servidor.':'O horário do aparelho será salvo localmente e conferido na sincronização.')))return;
+ const capturadoEm=new Date().toISOString();
  pontoEmRegistro=true;let selfiePath=null;
  const botoes=['btnPontoPrincipal','btnPontoExtra','btnEntrada','btnIniIntervalo','btnFimIntervalo','btnSaida'].map(id=>$(id));
  botoes.forEach(b=>b.disabled=true);
@@ -864,11 +871,29 @@ async function registrarPonto(tipo){
   if(arquivo){
    const ext=arquivo.type==='image/png'?'png':arquivo.type==='image/webp'?'webp':'jpg';
    selfiePath=`${colaborador.condominio_id}/${colaborador.id}/${crypto.randomUUID()}.${ext}`;
-   const {error:upError}=await db.storage.from('selfies-ponto-privadas').upload(selfiePath,arquivo,{contentType:arquivo.type,upsert:false});
-   if(upError)throw new Error('Não foi possível salvar a selfie: '+upError.message);
   }
   const ultimo=pontosHoje.at(-1);
   const escalaId=tipo==='entrada'?(escalaHoje?.id||null):(ultimo?.escala_id||escalaHoje?.id||null);
+  if(!navigator.onLine){
+   const clienteId=crypto.randomUUID();
+   await filaSalvar({
+    id:'ponto-'+clienteId,kind:'ponto',client_id:clienteId,
+    auth_user_id:authUser.id,condominio_id:colaborador.condominio_id,colaborador_id:colaborador.id,
+    tipo,escala_id:escalaId,capturado_em:capturadoEm,criado_em:capturadoEm,
+    latitude:geo.latitude,longitude:geo.longitude,precisao_metros:geo.precisao_metros,
+    selfie_path:selfiePath,foto:arquivo
+   });
+   pontosHoje.push({id:clienteId,offline_client_id:clienteId,tipo,registrado_em:capturadoEm,escala_id:escalaId});
+   pontosHoje.sort((a,b)=>new Date(a.registrado_em)-new Date(b.registrado_em));
+   toast('📴 '+(etiquetasPonto[tipo]||tipo)+' salva neste aparelho. Aguardando sincronização.');
+   $('pontoAcoesExcepcionais').style.display='none';
+   await atualizarEstadoOffline();
+   return;
+  }
+  if(arquivo){
+   const {error:upError}=await db.storage.from('selfies-ponto-privadas').upload(selfiePath,arquivo,{contentType:arquivo.type,upsert:false});
+   if(upError)throw new Error('Não foi possível salvar a selfie: '+upError.message);
+  }
   const {data,error}=await db.from('registros_ponto').insert({
    condominio_id:colaborador.condominio_id,colaborador_id:colaborador.id,escala_id:escalaId,
    tipo,...geo,selfie_path:selfiePath
@@ -1657,13 +1682,52 @@ async function enviarRegistroPendente(item){
   }
   await filaExcluir(item.id);
 }
+
+async function enviarPontoPendente(item){
+ exigirModulo('ponto');
+ if(!navigator.onLine)throw Error('Sem internet.');
+ if(item.auth_user_id!==authUser?.id||Number(item.condominio_id)!==Number(colaborador?.condominio_id)||Number(item.colaborador_id)!==Number(colaborador?.id))throw Error('Ponto vinculado a outra conta ou condomínio.');
+ if(item.foto&&item.selfie_path){
+  const storage=db.storage.from('selfies-ponto-privadas');
+  const {error:uploadError}=await storage.upload(item.selfie_path,item.foto,{contentType:item.foto.type||'image/jpeg',upsert:false});
+  if(uploadError){
+   const isDuplicate=String(uploadError.statusCode||uploadError.status)==='409'||/already exists|duplicate/i.test(uploadError.message||'');
+   if(!isDuplicate)throw uploadError;
+   const {data:file,error:readError}=await storage.download(item.selfie_path);
+   if(readError||!file?.size)throw Error('Não foi possível verificar a selfie existente.');
+  }
+ }
+ const payload={
+  condominio_id:item.condominio_id,colaborador_id:item.colaborador_id,
+  offline_client_id:item.client_id,tipo:item.tipo,escala_id:item.escala_id,
+  horario_capturado_em:item.capturado_em,
+  selfie_path:item.selfie_path,
+  latitude:item.latitude,longitude:item.longitude,precisao_metros:item.precisao_metros
+ };
+ const {data,error}=await db.functions.invoke('sincronizar-ponto-offline',{body:payload});
+ if(error)throw new Error('Sincronização do ponto: '+error.message);
+ if(!data?.ok)throw Error(data?.error||'Servidor não confirmou o ponto.');
+ await filaExcluir(item.id);
+}
+
 async function sincronizarFilaOffline(){
   if(sincronizando||!navigator.onLine||!colaborador||!authUser)return;
+  // Sem sessão remota válida, manter toda a fila; login local não autoriza envio ao servidor.
+  try{
+    const {data:{user},error}=await db.auth.getUser();
+    if(error||!user||user.id!==authUser.id)throw Error('Entre novamente com sua conta online para sincronizar.');
+  }catch(e){erro(e.message||'Autenticação online necessária para sincronização.');return}
   sincronizando=true;await atualizarEstadoOffline();let sucesso=0,errosSync=[];
   try{
     const todos=await filaTodos();
     for(const item of todos.filter(x=>x.auth_user_id===authUser.id&&Number(x.condominio_id)===Number(colaborador.condominio_id)).sort((a,b)=>a.criado_em.localeCompare(b.criado_em))){
-      try{if(item.kind==='inicio')await enviarInicioPendente(item);else await enviarRegistroPendente(item);sucesso++}catch(e){errosSync.push({id:item.id,motivo:e.message||String(e)});console.error('ORAQUI: registro pendente não sincronizado',item.id,e);continue}
+      try{
+        if(item.kind==='inicio')await enviarInicioPendente(item);
+        else if(item.kind==='ponto')await enviarPontoPendente(item);
+        else if(item.kind==='demanda_conclusao')await enviarDemandaPendente(item);
+        else await enviarRegistroPendente(item);
+        sucesso++;
+      }catch(e){errosSync.push({id:item.id,motivo:e.message||String(e)});console.error('ORAQUI: registro pendente não sincronizado',item.id,e);continue}
     }
     if(sucesso){toast(`✓ ${sucesso} registro(s) sincronizado(s).`);await carregarTudo()}
     if(errosSync.length&&navigator.onLine)erro('Sincronização: '+sucesso+' enviado(s), '+errosSync.length+' pendente(s) com erro. Primeiro erro: '+errosSync[0].motivo+'. Os registros permanecem salvos neste aparelho.');
