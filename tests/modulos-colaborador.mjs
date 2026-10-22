@@ -26,7 +26,7 @@ await assert.rejects(ctx.enviarRegistroPendente({payload:{}}),/desativado/);
 ctx.colaborador={id:8,condominio_id:2,ponto_ativo:false,chat_ativo:true};ctx.aplicarModulos();
 assert(!ctx.$('navChat').hidden);assert(ctx.$('navPonto').hidden);
 const gestor=fs.readFileSync(new URL('../gestor.html',import.meta.url),'utf8');
-assert(gestor.includes('body:{nome,email,condominio_id:CONDOMINIO_ID}'));
+assert(gestor.includes('body:{nome,email,condominio_id:condominioId}'));
 const {document:gd}=parseHTML(gestor);const g={document:gd,colaboradorEditandoId:null,colaboradoresCarregados:[],dependencias(){},alert(){}};
 g.$=id=>gd.getElementById(id);vm.createContext(g);
 for(const name of ['novoCol','editarCol']){const start=gestor.indexOf('function '+name+'('),end=gestor.indexOf('\n}',start)+2;vm.runInContext(gestor.slice(start,end),g)}
@@ -34,3 +34,12 @@ g.novoCol();assert(g.$('modulo_chat').checked);assert(!g.$('colPontoAtivo').chec
 g.colaboradoresCarregados=[{id:7,chat_ativo:false,demandas_ativo:false,ponto_ativo:true}];g.editarCol(7);
 assert(!g.$('modulo_chat').checked);assert(!g.$('modulo_demandas').checked);assert(g.$('modulo_documentos').checked);assert(g.$('colPontoAtivo').checked);
 console.log('PASS: defaults, cadastro, edição, Ponto-only, condomínio independente, bloqueio da fila offline e convite de gestor.');
+
+const start=gestor.indexOf('function aplicarPerfilColaborador('),end=gestor.indexOf('\n}',start)+2;
+vm.runInContext(gestor.slice(start,end),g);
+g.aplicarPerfilColaborador(false);
+for(const m of ['chat','demandas','cronograma','atividades','registros_posteriores','documentos'])assert(!g.$('modulo_'+m).checked);
+for(const id of ['colPontoAtivo','colSelfie','colGeo'])assert(g.$(id).checked);
+g.aplicarPerfilColaborador(true);
+for(const m of ['chat','demandas','cronograma','atividades','registros_posteriores','documentos'])assert(g.$('modulo_'+m).checked);
+console.log('PASS: perfis somente ponto e completo, com foto e GPS.');
