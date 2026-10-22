@@ -655,29 +655,88 @@ async function obterLocalizacao(){
 
 function capturarSelfiePonto(){
  return new Promise((resolve,reject)=>{
-  const input=document.createElement('input');
-  input.type='file';input.accept='image/*';input.capture='user';
-  input.style.display='none';document.body.appendChild(input);
-  let terminado=false;
-  function terminar(file,err){
-   if(terminado)return;terminado=true;
-   window.removeEventListener('focus',aoRetornar);
-   input.remove();
-   if(err)reject(err);else resolve(file);
+  // iOS Safari: voltar da câmera dispara "focus" antes do evento "change".
+  // O fluxo antigo cancelava a captura prematuramente em 1,2 s.
+  // Manter confirmação visual: cancelamento acontece somente pelo botão.
+  const overlay=document.createElement('div');
+  overlay.id='oraquiSelfiePontoDialog';
+  overlay.setAttribute('role','dialog');
+  overlay.setAttribute('aria-modal','true');
+  overlay.setAttribute('aria-label','Capturar selfie para o ponto');
+  overlay.style.cssText='position:fixed;inset:0;z-index:999999;background:rgba(15,25,35,.83);display:flex;align-items:center;justify-content:center;padding:14px;overflow:auto';
+  const card=document.createElement('section');
+  card.style.cssText='width:min(430px,100%);max-height:95dvh;overflow:auto;background:white;border-radius:19px;padding:23px 18px;box-shadow:0 22px 80px rgba(0,0,0,.3);color:#1d3040';
+  const title=document.createElement('h2');title.textContent='📷 Selfie do ponto';
+  title.style.cssText='font-size:19px;margin:0 0 9px;color:#164d39';
+  const instrucao=document.createElement('p');
+  instrucao.textContent='Tire uma selfie com o rosto visível. Confira a imagem antes de confirmar. Se fechar a câmera sem tirar a foto, você pode tentar novamente.';
+  instrucao.style.cssText='font-size:13px;line-height:1.5;color:#566777;margin:0 0 15px';
+  const input=document.createElement('input');input.type='file';
+  input.accept='image/*';input.setAttribute('capture','user');
+  input.setAttribute('aria-label','Tirar selfie com a câmera frontal');
+  input.style.cssText='position:absolute;width:1px;height:1px;opacity:0;pointer-events:none';
+  const preview=document.createElement('img');
+  preview.alt='Prévia da selfie';preview.style.cssText='display:none;width:100%;max-height:45dvh;object-fit:contain;background:#eef4f1;border-radius:12px;margin:0 0 13px';
+  const mensagem=document.createElement('p');
+  mensagem.setAttribute('role','status');
+  mensagem.style.cssText='font-size:12px;line-height:1.5;color:#a23f30;min-height:18px;margin:8px 0';
+  const botoes=document.createElement('div');botoes.style.cssText='display:grid;gap:10px';
+  const tirar=document.createElement('button');
+  tirar.type='button';tirar.textContent='📷 TIRAR SELFIE';
+  tirar.style.cssText='border:0;border-radius:11px;padding:15px;background:#0f6547;color:white;font-size:14px;font-weight:800';
+  const confirmar=document.createElement('button');
+  confirmar.type='button';confirmar.textContent='✓ USAR ESTA SELFIE';confirmar.disabled=true;
+  confirmar.style.cssText='border:0;border-radius:11px;padding:15px;background:#d9eee4;color:#0b5b40;font-size:14px;font-weight:800';
+  const cancelar=document.createElement('button');
+  cancelar.type='button';cancelar.textContent='CANCELAR REGISTRO';
+  cancelar.style.cssText='border:1px solid #d4dde5;border-radius:11px;padding:12px;background:white;color:#4a5e6d;font-size:12px;font-weight:750';
+  botoes.append(tirar,confirmar,cancelar);
+  card.append(title,instrucao,input,preview,mensagem,botoes);overlay.append(card);
+  let arquivo=null,previewUrl=null,finalizado=false;
+  const overflowAnterior=document.body.style.overflow;
+  function finalizar(erro){
+   if(finalizado)return;
+   finalizado=true;
+   document.removeEventListener('keydown',teclaEsc);
+   overlay.remove();document.body.style.overflow=overflowAnterior;
+   if(previewUrl)URL.revokeObjectURL(previewUrl);
+   if(erro)reject(erro);else resolve(arquivo);
   }
-  function aoRetornar(){
-   // Alguns navegadores móveis não emitem "change" quando a câmera é cancelada.
-   setTimeout(()=>{if(!terminado&&!input.files?.length)terminar(null,new Error('Selfie cancelada. O ponto não foi registrado.'));},1200);
-  }
-  window.addEventListener('focus',aoRetornar);
+  function teclaEsc(e){if(e.key==='Escape'){e.preventDefault();finalizar(new Error('Captura cancelada pelo colaborador. Ponto não registrado.'));}}
   input.addEventListener('change',()=>{
    const f=input.files?.[0];
-   if(!f)return terminar(null,new Error('Selfie não capturada. Ponto não registrado.'));
-   if(!['image/jpeg','image/png','image/webp'].includes(f.type))return terminar(null,new Error('Use uma selfie em JPG, PNG ou WebP.'));
-   if(f.size>5*1024*1024)return terminar(null,new Error('Foto acima de 5 MB. Tire outra selfie.'));
-   terminar(f);
-  },{once:true});
-  input.click();
+   input.value='';
+   if(!f){
+    // O cancelamento nativo do seletor não é uma desistência do registro.
+    mensagem.textContent='Nenhuma foto selecionada. Toque em TIRAR SELFIE para tentar novamente.';
+    return;
+   }
+   if(!['image/jpeg','image/png','image/webp'].includes(f.type)){
+    mensagem.textContent='Formato não suportado. Tire a selfie em JPG, PNG ou WebP.';
+    return;
+   }
+   if(f.size>5*1024*1024){
+    mensagem.textContent='A imagem supera 5 MB. Tire uma nova selfie com tamanho menor.';
+    return;
+   }
+   arquivo=f;
+   if(previewUrl)URL.revokeObjectURL(previewUrl);
+   previewUrl=URL.createObjectURL(f);
+   preview.src=previewUrl;preview.style.display='block';
+   confirmar.disabled=false;mensagem.textContent='';
+   tirar.textContent='↻ REFAZER SELFIE';
+  });
+  tirar.onclick=()=>{
+   mensagem.textContent='';
+   try{input.click();}catch(err){
+    mensagem.textContent='Não foi possível abrir a câmera. Verifique a permissão de acesso no navegador.';
+   }
+  };
+  confirmar.onclick=()=>{if(arquivo)finalizar(null);};
+  cancelar.onclick=()=>finalizar(new Error('Captura cancelada pelo colaborador. Ponto não registrado.'));
+  document.addEventListener('keydown',teclaEsc);
+  document.body.appendChild(overlay);document.body.style.overflow='hidden';
+  tirar.focus();
  });
 }
 
