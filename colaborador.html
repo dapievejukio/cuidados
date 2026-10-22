@@ -875,6 +875,7 @@ async function registrarPonto(tipo){
   :'Confirma o registro de ';
  if(!confirm(aviso+(etiquetasPonto[tipo]||tipo).toUpperCase()+'? '+(navigator.onLine?'O horário será definido pelo servidor.':'O horário do aparelho será salvo localmente e conferido na sincronização.')))return;
  const capturadoEm=new Date().toISOString();
+ const offlineNaConfirmacao=!navigator.onLine;
  pontoEmRegistro=true;let selfiePath=null;
  const botoes=['btnPontoPrincipal','btnPontoExtra','btnEntrada','btnIniIntervalo','btnFimIntervalo','btnSaida'].map(id=>$(id));
  botoes.forEach(b=>b.disabled=true);
@@ -885,13 +886,13 @@ async function registrarPonto(tipo){
   if(colaborador.selfie_ponto_obrigatoria){
     try{arquivo=await capturarSelfiePonto()}
     catch(e){
-      if(navigator.onLine||!confirm('A selfie não foi capturada. Registrar o ponto EXCEPCIONALMENTE sem foto e enviar para conferência do gestor?'))throw e;
+      if((!offlineNaConfirmacao&&navigator.onLine)||!confirm('A selfie não foi capturada. Registrar o ponto EXCEPCIONALMENTE sem foto e enviar para conferência do gestor?'))throw e;
     }
   }
   let geo;
   try{geo=await obterLocalizacao()}
   catch(e){
-    if(navigator.onLine||!confirm('O GPS está indisponível. Registrar o ponto EXCEPCIONALMENTE sem localização e enviar para conferência do gestor?'))throw e;
+    if((!offlineNaConfirmacao&&navigator.onLine)||!confirm('O GPS está indisponível. Registrar o ponto EXCEPCIONALMENTE sem localização e enviar para conferência do gestor?'))throw e;
     geo={latitude:null,longitude:null,precisao_metros:null};
   }
   if(arquivo){
@@ -900,7 +901,7 @@ async function registrarPonto(tipo){
   }
   const ultimo=pontosHoje.at(-1);
   const escalaId=tipo==='entrada'?(escalaHoje?.id||null):(ultimo?.escala_id||escalaHoje?.id||null);
-  if(!navigator.onLine){
+  if(offlineNaConfirmacao||!navigator.onLine){
    const clienteId=crypto.randomUUID();
    await filaSalvar({
     id:'ponto-'+clienteId,kind:'ponto',client_id:clienteId,
