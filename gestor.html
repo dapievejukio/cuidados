@@ -732,6 +732,7 @@ async function salvarOcorrencia(id){
       local:atualizado.local_completo||[atualizado.area,atualizado.detalhe].filter(Boolean).join(" • "),
       mensagem:msg,
       foto_execucao_path:fotoExecucaoPath,
+      fotos_execucao_paths:ultimaExecucao?.fotos_execucao_paths?.length?ultimaExecucao.fotos_execucao_paths:(fotoExecucaoPath?[fotoExecucaoPath]:[]),
       foto_antes_path:ultimaExecucao?.foto_antes_path||null
     }});
     if(emailError||emailData?.success===false){console.error("Falha no envio de retorno:",emailError);alert("Ocorrência resolvida, mas o e-mail NÃO foi enviado. Verifique o serviço de e-mail.");}else{toast("✓ Resposta enviada por e-mail.");}
