@@ -2,7 +2,7 @@
  * iOS Safari: respostas obtidas por redirect HTTP não podem ser devolvidas
  * sem normalização pelo Service Worker. NÃO apagar IndexedDB (fila offline).
  */
-const CACHE_NAME = 'oraqui-shell-v6-20261022-offline-css-ponto';
+const CACHE_NAME = 'oraqui-shell-v7-20261022-online-auth';
 const SUPABASE_CDN = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
 const SAME_ORIGIN = self.location.origin;
 const OFFLINE_ASSETS = new Set([

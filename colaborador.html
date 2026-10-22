@@ -513,14 +513,24 @@ async function entrarOffline(){
 }
 
 async function iniciar(){
-  if(!navigator.onLine){
+  const modo=new URLSearchParams(location.search).get('modo');
+  if(modo==='offline'||(!navigator.onLine&&modo!=='online')){
     await entrarOffline();
     return;
   }
-  const {data:{session}}=await db.auth.getSession();
-  if(!session){location.href="index.html";return}
-  authUser=session.user;
+  if(!navigator.onLine){
+    erro('O acesso online precisa de internet. Volte à tela inicial para acessar com PIN offline.');
+    return;
+  }
   try{
+    const {data:{session},error:sessionError}=await db.auth.getSession();
+    if(sessionError)throw sessionError;
+    if(!session){location.replace("index.html");return}
+    const {data:{user},error:userError}=await db.auth.getUser();
+    if(userError)throw userError;
+    if(!user){location.replace("index.html");return}
+    authUser=user;
+    MODO_OFFLINE=false;
     let c=null;
     const demoRaw=sessionStorage.getItem("oraqui_demo_colaborador");
     if(demoRaw){

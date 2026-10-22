@@ -162,11 +162,11 @@
                     <input id="password" type="password" autocomplete="current-password" required>
                 </div>
 
-                <button class="login-button" id="loginButton" type="submit">ENTRAR</button>
+                <button class="login-button" id="loginButton" type="submit">ENTRAR ONLINE</button>
             </form>
 
             <button class="forgot" id="forgotButton" type="button">ESQUECI MINHA SENHA</button>
-            <a id="acessoOfflineColaborador" href="./colaborador.html" style="display:block;margin-top:18px;padding:13px 15px;border:1px solid #9cc4b5;border-radius:12px;color:#0f5132;background:#eef7f1;font-weight:800;font-size:12px;text-decoration:none">🔐 ACESSAR ORAQUI OFFLINE</a>
+            <a id="acessoOfflineColaborador" href="./colaborador.html?modo=offline" style="display:block;margin-top:18px;padding:13px 15px;border:1px solid #9cc4b5;border-radius:12px;color:#0f5132;background:#eef7f1;font-weight:800;font-size:12px;text-decoration:none">🔐 ACESSAR ORAQUI OFFLINE</a>
             <p style="font-size:11px;color:#657987;line-height:1.4;margin-top:7px">Disponível após ativação do PIN no aplicativo do colaborador, com internet.</p>
 
             <div class="login-message" id="loginMessage"></div>
@@ -201,7 +201,7 @@ function carregando(ativo, texto="Verificando seus acessos..."){
 
 function traduzErroLogin(msg){
     const m = String(msg || "").toLowerCase();
-    if(m.includes("invalid login credentials")) return "E-mail ou senha incorretos.";
+    if(m.includes("invalid login credentials")) return "E-mail ou senha da conta online não conferem. O PIN do aparelho é usado somente em ACESSAR ORAQUI OFFLINE.";
     if(m.includes("email not confirmed")) return "Este e-mail ainda não foi confirmado.";
     if(m.includes("too many requests")) return "Muitas tentativas. Aguarde alguns minutos e tente novamente.";
     return msg || "Não foi possível entrar.";
@@ -232,7 +232,12 @@ async function detectarAcessos(user){
           .limit(1)
     ]);
 
-    // Se uma tabela não for visível por RLS, não derrubamos o login inteiro.
+    // Uma falha de consulta não equivale a ausência de autorização.
+    if(![adminResult, gestaoResult, colaboradorResult].some(r => !r.error && r.data?.length)
+       && [adminResult, gestaoResult, colaboradorResult].some(r => r.error)){
+        throw new Error("Sua conta foi autenticada, mas não foi possível consultar os acessos. Verifique a conexão e tente novamente.");
+    }
+    // Um vínculo autorizado basta mesmo quando outra tabela não é visível.
     const admin = !adminResult.error && (adminResult.data || []).length > 0;
     const gestao = !gestaoResult.error && (gestaoResult.data || []).length > 0;
     const colaborador = !colaboradorResult.error && (colaboradorResult.data || []).length > 0;
@@ -259,7 +264,7 @@ async function encaminharUsuario(user){
     }
 
     if(acessos.colaborador){
-        location.replace("./colaborador.html");
+        location.replace("./colaborador.html?modo=online");
         return;
     }
 
@@ -268,7 +273,7 @@ async function encaminharUsuario(user){
         return;
     }
 
-    await db.auth.signOut();
+    await db.auth.signOut({scope:"local"});
     carregando(false);
     mensagem("Sua conta foi autenticada, mas não possui um acesso ativo no ORAQUI.");
 }
@@ -285,6 +290,10 @@ $("loginForm").addEventListener("submit", async event => {
         return;
     }
 
+    if(!navigator.onLine){
+        mensagem("O login com e-mail e senha precisa de internet. Para este aparelho ativado, use ACESSAR ORAQUI OFFLINE.");
+        return;
+    }
     carregando(true, "Entrando...");
 
     try{
@@ -336,20 +345,28 @@ async function iniciar(){
         mensagem("Sem internet. Se este aparelho já foi ativado, toque em ACESSAR ORAQUI OFFLINE.");
         return;
     }
+    carregando(true, "Verificando sessão online...");
     try{
         const {data:{session}, error} = await db.auth.getSession();
         if(error) throw error;
 
         if(session?.user){
-            await encaminharUsuario(session.user);
+            const {data:{user}, error: userError} = await db.auth.getUser();
+            if(userError) throw userError;
+            if(user) await encaminharUsuario(user);
         }
+        carregando(false);
     }catch(error){
         console.error(error);
         carregando(false);
-        mensagem("Não foi possível verificar a sessão. Recarregue a página.");
+        mensagem("Não foi possível verificar a sessão online. Você pode tentar entrar com seu e-mail e senha. O acesso offline permanece disponível.");
     }
 }
 
+if("serviceWorker" in navigator && navigator.onLine){
+    navigator.serviceWorker.register("./service-worker.js",{scope:"./"})
+        .then(reg => reg.update()).catch(console.warn);
+}
 iniciar();
 </script>
 
