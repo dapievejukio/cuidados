@@ -1739,7 +1739,7 @@ async function gerarEspelhoPontoMensal(){
     anexos+='<tr><td>'+htmlEsc(formatoLocal(t).split("-").reverse().join("/"))+'</td><td>'+htmlEsc(h(t))+'</td><td>'+htmlEsc(rotulo[m.tipo]||m.tipo)+'</td><td>'+htmlEsc(String(m.id))+'</td><td>'+(m.selfie_path?"Sim":"Não")+'</td><td>'+htmlEsc(local)+'</td></tr>';
    }
    const temRegistros=eventosDoMes.length>0;
-   const cabecalho='<header class="cabecalho"><img class="logo" src="https://oraqui.app/oraqui-brand/logo-horizontal-transparente-480.png" alt="ORAQUI"><span>CONTROLE DE JORNADA</span></header>';
+   const cabecalho='<header class="cabecalho"><div class="logo-marca" aria-label="OraQui"><svg viewBox="0 0 64 76" aria-hidden="true" focusable="false"><path fill="#0F5132" d="M32 2C15.4 2 2 15.4 2 32c0 13 8.5 22.4 30 42 21.5-19.6 30-29 30-42C62 15.4 48.6 2 32 2Zm0 14a16 16 0 1 1 0 32 16 16 0 0 1 0-32Z"/><path fill="#FF8A3D" d="M32 74V49c0-8 14-23 29-20 2 15-7 26-29 45Z"/></svg><strong><span class="logo-ora">Ora</span><span class="logo-qui">Qui</span></strong></div><span class="doclabel">CONTROLE DE JORNADA</span></header>';
    const destaque='<div class="sumarios"><div><b>'+eventosDoMes.length+'</b><span>Marcações</span></div><div><b>'+diasComMarcacao+'</b><span>Dias com registro</span></div><div><b>'+horas(horasValidas)+'</b><span>Horas apuráveis*</span></div><div><b>'+pendentes+'</b><span>Jornadas a conferir</span></div></div>';
    const dados='<div class="identificacao"><div><label>CONDOMÍNIO</label><b>'+htmlEsc(nomeCondo)+'</b></div><div><label>COMPETÊNCIA</label><b>'+meses[numMes-1]+' / '+ano+'</b></div><div><label>COLABORADOR</label><b>'+htmlEsc(pessoa.nome)+'</b></div><div><label>MATRÍCULA / FUNÇÃO</label><b>'+htmlEsc(pessoa.matricula)+' • '+htmlEsc(pessoa.funcao)+'</b></div></div>';
    folhas.push('<article class="folha">'+cabecalho+'<h1>Espelho mensal de ponto</h1><p class="subtitulo">Relatório operacional de marcações — não substitui AFD, AEJ ou comprovante REP-P</p>'+dados+destaque+'<table class="jornadas"><thead><tr><th>Data</th><th>Dia</th><th>Entrada</th><th>Início int.</th><th>Retorno</th><th>Saída</th><th>Horas*</th><th>Situação</th></tr></thead><tbody>'+linhas+'</tbody></table><p class="nota">* Horas preliminares calculadas apenas em jornadas completas e cronologicamente coerentes. Dias sem registro não representam falta ou folga; escalas, feriados, adicionais e ajustes precisam ser conferidos. Turnos que atravessam a meia-noite permanecem vinculados à data da entrada.</p><div class="assinaturas"><span>Conferência do colaborador</span><span>Responsável pela gestão</span></div><div class="rodape">Emitido em '+htmlEsc(new Date().toLocaleString("pt-BR",{timeZone:"America/Sao_Paulo"}))+' · ORAQUI · Uso operacional</div></article>');
@@ -1750,9 +1750,14 @@ async function gerarEspelhoPontoMensal(){
   *{box-sizing:border-box}
   body{font-family:Arial,Helvetica,sans-serif;color:#213148;font-size:10px;margin:0;background:#e8ebf0}
   .folha{width:100%;background:#fff;break-after:page;page-break-after:always}
-  .cabecalho{display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid #f28d42;padding-bottom:9px;margin-bottom:18px;min-height:55px}
-  .logo{width:178px;max-height:50px;object-fit:contain;object-position:left center}
-  .cabecalho span{letter-spacing:1.9px;font-weight:800;font-size:10px;color:#5b6980}
+  .cabecalho{display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:3px solid #FF8A3D;padding-bottom:13px;margin-bottom:19px;min-height:70px}
+  .logo-marca{display:flex;align-items:center;gap:10px;white-space:nowrap;min-width:0}
+  .logo-marca svg{width:43px;height:52px;display:block;flex:0 0 auto}
+  .logo-marca strong{font-family:Arial,Helvetica,sans-serif;font-size:36px;line-height:1;letter-spacing:-1.6px;font-weight:900}
+  .logo-marca .logo-ora{color:#0F5132}
+  .logo-marca .logo-qui{color:#FF8A3D}
+  .doclabel{letter-spacing:1.4px;font-weight:800;font-size:10px;color:#5b6980;text-align:right;white-space:nowrap}
+  @media(max-width:500px){.cabecalho{gap:10px}.logo-marca svg{width:32px;height:39px}.logo-marca strong{font-size:28px}.doclabel{font-size:8px;white-space:normal;max-width:120px}}
   h1{font-size:22px;color:#1d2c43;margin:0 0 5px}h2{font-size:18px;color:#1d2c43}
   .subtitulo{color:#9c5a3a;font-size:10px;margin:0 0 15px;font-weight:700}
   .identificacao{display:grid;grid-template-columns:1fr 1fr;gap:12px;background:#f3f5f9;padding:12px;border-radius:12px;margin-bottom:12px}
