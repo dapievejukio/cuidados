@@ -211,7 +211,19 @@ body:has(.modal.visible) #oraquiAlertaUrgente{bottom:calc(10px + env(safe-area-i
 </div>
 
 <section class="section hidden" id="escalaSection" aria-hidden="true"><div id="escalaBox" hidden></div></section>
-<section class="section hidden" data-colaborador-secao id="pontoSection"><div class="section-title"><div><h2>Ponto</h2><p>Registre os eventos da sua jornada.</p></div></div><div class="card"><div class="status-card"><div class="status-icon">🕒</div><div class="status-info"><strong id="pontoStatus">Carregando...</strong><span id="pontoDetalhe"></span></div><span class="badge purple" id="pontoBadge">PONTO</span></div><div class="point-actions"><button class="point-btn primary" id="btnEntrada">ENTRADA</button><button class="point-btn" id="btnIniIntervalo">INICIAR INTERVALO</button><button class="point-btn" id="btnFimIntervalo">RETORNAR</button><button class="point-btn" id="btnSaida">SAÍDA</button></div><div class="geo-note" id="geoNote"></div></div></section>
+<section class="section hidden" data-colaborador-secao id="pontoSection"><div class="section-title"><div><h2>Ponto</h2><p>Registre os eventos da sua jornada.</p></div></div><div class="card"><div class="status-card"><div class="status-icon">🕒</div><div class="status-info"><strong id="pontoStatus">Carregando...</strong><span id="pontoDetalhe"></span></div><span class="badge purple" id="pontoBadge">PONTO</span></div><div class="point-actions" style="display:flex;flex-direction:column;gap:9px;margin-top:14px">
+ <button type="button" class="point-btn primary" id="btnPontoPrincipal" style="width:100%;min-height:58px;font-size:16px;font-weight:850">CARREGANDO PONTO...</button>
+ <button type="button" class="point-btn" id="btnPontoExtra" style="width:100%;min-height:38px;background:#f3f5fa;color:#52627b;border:1px solid #dae1ee;font-size:12px">OUTRA MARCAÇÃO / EXCEÇÃO</button>
+</div>
+<div id="pontoAcoesExcepcionais" style="display:none;margin-top:12px;padding:12px;border:1px solid #e5e8f0;border-radius:12px;background:#f8f9fc">
+ <p style="font-size:12px;color:#5c687b;margin:0 0 10px">Use apenas quando a sequência automática não corresponder ao registro real. A marcação será registrada com a hora do servidor e ficará disponível para conferência.</p>
+ <div class="point-actions" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
+  <button type="button" class="point-btn" id="btnEntrada">ENTRADA</button>
+  <button type="button" class="point-btn" id="btnIniIntervalo">INICIAR INTERVALO</button>
+  <button type="button" class="point-btn" id="btnFimIntervalo">RETORNAR</button>
+  <button type="button" class="point-btn" id="btnSaida">SAÍDA</button>
+ </div>
+</div><div class="geo-note" id="geoNote"></div></div></section>
 <section class="section" data-colaborador-secao id="atividadesProgramadasSection"><div class="section-title"><div><h2>Atividades programadas</h2><p>Seu roteiro de trabalho e próximas execuções.</p></div></div><div id="programacoes" class="loading">Carregando...</div></section>
 <section class="section" data-colaborador-secao id="registroAvulsoSection"><div class="section-title"><div><h2>Registrar atividade</h2><p>Registre uma atividade que não esteja na programação.</p></div></div><div class="card"><button class="action" id="avulso" style="min-height:56px;font-size:12px;width:100%">＋ REGISTRAR ATIVIDADE</button></div></section>
 
@@ -592,31 +604,42 @@ const etiquetasPonto={entrada:'Entrada',inicio_intervalo:'Início do intervalo',
 function horaPontoBrasilia(v){
  const d=new Date(v);return Number.isNaN(d.getTime())?'—':d.toLocaleString('pt-BR',{timeZone:'America/Sao_Paulo',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false});
 }
+
+function dataPontoBrasilia(v){
+ const d=new Date(v);if(Number.isNaN(d.getTime()))return '';
+ const partes=new Intl.DateTimeFormat('en-US',{timeZone:'America/Sao_Paulo',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(d);
+ const valor=k=>partes.find(x=>x.type===k)?.value||'';
+ return valor('year')+'-'+valor('month')+'-'+valor('day');
+}
 function proximaBatidaPonto(){
  const ultima=pontosHoje.at(-1);
- if(!ultima || ultima.tipo==='saida')return 'entrada';
- if(ultima.tipo==='entrada' || ultima.tipo==='fim_intervalo')return colaborador.intervalo_ativo?'inicio_intervalo':'saida';
+ if(!ultima)return 'entrada';
+ if(ultima.tipo==='saida'){
+   return dataPontoBrasilia(ultima.registrado_em)===dataPontoBrasilia(new Date())?null:'entrada';
+ }
  if(ultima.tipo==='inicio_intervalo')return 'fim_intervalo';
+ if(ultima.tipo==='entrada')return colaborador.intervalo_ativo?'inicio_intervalo':'saida';
+ if(ultima.tipo==='fim_intervalo')return 'saida';
  return 'entrada';
 }
 function renderPonto(){
  if(!colaborador?.ponto_ativo)return;
- const ultima=pontosHoje.at(-1);
- const trabalho=ultima?.tipo==='entrada'||ultima?.tipo==='fim_intervalo';
- const emIntervalo=ultima?.tipo==='inicio_intervalo';
+ const ultima=pontosHoje.at(-1),proxima=proximaBatidaPonto();
  const estados={entrada:'Em trabalho',inicio_intervalo:'Em intervalo',fim_intervalo:'Em trabalho',saida:'Jornada encerrada'};
  $('pontoStatus').textContent=ultima?(estados[ultima.tipo]||'Ponto registrado'):'Jornada não iniciada';
- $('pontoDetalhe').textContent=ultima?'Última marcação: '+(etiquetasPonto[ultima.tipo]||ultima.tipo)+' • '+horaPontoBrasilia(ultima.registrado_em):'Nenhum registro recente. Horários oficiais de Brasília.';
- // Marcações não podem ser bloqueadas por sequência, horário ou turno (Portaria 671/2021, art. 74).
- // O status ajuda a escolher a próxima marcação, mas não impede registrar a realidade.
- $('btnEntrada').disabled=false;
- $('btnIniIntervalo').disabled=false;
- $('btnFimIntervalo').disabled=false;
- $('btnSaida').disabled=false;
+ $('pontoDetalhe').textContent=ultima?'Última marcação: '+(etiquetasPonto[ultima.tipo]||ultima.tipo)+' • '+horaPontoBrasilia(ultima.registrado_em):'Nenhum registro recente. Horários de Brasília.';
+ const principal=$('btnPontoPrincipal');
+ principal.dataset.tipo=proxima||'';
+ principal.disabled=pontoEmRegistro||!proxima;
+ const rotulos={entrada:'REGISTRAR ENTRADA',inicio_intervalo:'INICIAR INTERVALO',fim_intervalo:'RETORNAR DO INTERVALO',saida:'REGISTRAR SAÍDA'};
+ principal.textContent=pontoEmRegistro?'REGISTRANDO...':proxima?(rotulos[proxima]||'REGISTRAR PONTO'):'✓ JORNADA ENCERRADA';
+ // O menu excepcional mantém a possibilidade de registrar a marcação realmente realizada.
+ $('btnPontoExtra').disabled=pontoEmRegistro;
+ for(const id of ['btnEntrada','btnIniIntervalo','btnFimIntervalo','btnSaida'])$(id).disabled=pontoEmRegistro;
  const req=[];
  if(colaborador.geolocalizacao_ponto_obrigatoria)req.push('localização GPS');
  if(colaborador.selfie_ponto_obrigatoria)req.push('selfie');
- $('geoNote').textContent=req.length?'Exigências do posto: '+req.join(' e ')+'. Confirme as permissões no celular antes de registrar.':'Registro com horário do servidor; selfie e GPS não são exigidos neste posto.';
+ $('geoNote').textContent=(req.length?'Exigências: '+req.join(' e ')+'. ':'')+'A próxima marcação é sugerida automaticamente. A opção de exceção permite registrar eventos reais fora da ordem usual.';
 }
 
 async function obterLocalizacao(){
@@ -691,12 +714,14 @@ async function registrarPonto(tipo){
  if(!moduloLiberado('ponto'))return alert('Ponto desativado pela gestão.');
  if(pontoEmRegistro)return;
  if(!navigator.onLine)return alert('O registro de ponto necessita de conexão com a internet para obter a hora oficial do servidor. Nenhuma batida foi registrada.');
- const ultima=pontosHoje.at(-1);
- const esperado=!ultima||ultima.tipo==='saida'?['entrada']:ultima.tipo==='inicio_intervalo'?['fim_intervalo']:colaborador.intervalo_ativo?['inicio_intervalo','saida']:['saida'];
- // Sinalizar sequência atípica, sem bloquear a marcação real.
- if(!esperado.includes(tipo)&&!confirm('Esta marcação difere da sequência usual. Se é o evento que realmente ocorreu, confirme para registrar o horário real.'))return;
+ const proxima=proximaBatidaPonto();
+ const foraDaOrdem=proxima!==tipo;
+ const aviso=foraDaOrdem
+  ?'ATENÇÃO: esta marcação é diferente da sequência esperada. Confirma que deseja registrar o evento real de '
+  :'Confirma o registro de ';
+ if(!confirm(aviso+(etiquetasPonto[tipo]||tipo).toUpperCase()+'? O horário será definido pelo servidor e não poderá ser apagado pelo colaborador.'))return;
  pontoEmRegistro=true;let selfiePath=null;
- const botoes=['btnEntrada','btnIniIntervalo','btnFimIntervalo','btnSaida'].map(id=>$(id));
+ const botoes=['btnPontoPrincipal','btnPontoExtra','btnEntrada','btnIniIntervalo','btnFimIntervalo','btnSaida'].map(id=>$(id));
  botoes.forEach(b=>b.disabled=true);
  $('pontoDetalhe').textContent='Registrando '+(etiquetasPonto[tipo]||tipo)+'...';
  try{
@@ -717,6 +742,7 @@ async function registrarPonto(tipo){
   }).select('id,registrado_em,tipo').single();
   if(error)throw error;
   toast('✓ '+(etiquetasPonto[data.tipo]||data.tipo)+' registrada às '+horaPontoBrasilia(data.registrado_em));
+  $('pontoAcoesExcepcionais').style.display='none';
   await carregarTudo();
  }catch(e){
   console.error('Ponto:',e);
@@ -1586,6 +1612,12 @@ $('salvarDemandaConclusao').onclick=salvarConclusaoDemanda;
 $("logout").onclick=sair;
 $("demoBack").onclick=voltarGestaoDemo;
 $("notificationBtn").onclick=acaoNotificacao;
+$("btnPontoPrincipal").onclick=()=>{const tipo=$('btnPontoPrincipal').dataset.tipo;if(tipo)registrarPonto(tipo);};
+$("btnPontoExtra").onclick=()=>{
+ const caixa=$('pontoAcoesExcepcionais'),abrir=caixa.style.display==='none';
+ caixa.style.display=abrir?'block':'none';
+ $('btnPontoExtra').textContent=abrir?'FECHAR OUTRAS MARCAÇÕES':'OUTRA MARCAÇÃO / EXCEÇÃO';
+};
 $("btnEntrada").onclick=()=>registrarPonto("entrada");
 $("btnIniIntervalo").onclick=()=>registrarPonto("inicio_intervalo");
 $("btnFimIntervalo").onclick=()=>registrarPonto("fim_intervalo");
