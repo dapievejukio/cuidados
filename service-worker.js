@@ -2,9 +2,10 @@
  * Cache do aplicativo e recebimento de notificações Web Push.
  * Registros e fotografias offline são gerenciados pelo colaborador.html (IndexedDB).
  */
-const CACHE_NAME = 'oraqui-shell-v3-20261022-offline';
+const CACHE_NAME = 'oraqui-shell-v4-20261022-offline-assets';
 const SUPABASE_CDN = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
-const APP_SHELL = ['/', '/index.html', '/colaborador.html', '/gestor.html', '/oraqui-offline.js', '/manifest.webmanifest', SUPABASE_CDN];
+const OFFLINE_ASSETS = new Set(['/oraqui-offline.js','/manifest.webmanifest','/login-3.css','/assets/marca/oraqui-transparente.webp']);
+const APP_SHELL = ['/', '/index.html', '/colaborador.html', '/gestor.html', ...OFFLINE_ASSETS, SUPABASE_CDN];
 const SAME_ORIGIN = self.location.origin;
 
 self.addEventListener('install', (event) => {
@@ -47,6 +48,20 @@ self.addEventListener('fetch', (event) => {
     return;
   }
   if (url.pathname.startsWith('/api/') || url.pathname.startsWith('/auth/')) return;
+
+  if (OFFLINE_ASSETS.has(url.pathname)) {
+    event.respondWith((async () => {
+      const saved=await caches.match(request,{ignoreSearch:true});
+      if(saved)return saved;
+      const response=await fetch(request);
+      if(response.ok){
+        const cache=await caches.open(CACHE_NAME);
+        await cache.put(request,response.clone());
+      }
+      return response;
+    })());
+    return;
+  }
 
   if (request.mode === 'navigate') {
     event.respondWith((async () => {
