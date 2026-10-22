@@ -518,10 +518,15 @@ async function abrirFotoStorage(valor,tipo="atividade"){
   }
   alert("A foto está registrada, mas o Storage não liberou a visualização para este usuário.");
 }
+function caminhosFotosOcorrencia(o){
+ const lista=Array.isArray(o.fotos_paths)?o.fotos_paths.filter(Boolean):[];
+ return lista.length?[...new Set(lista)]:o.foto_path?[o.foto_path]:[];
+}
 function botoesFotoOcorrencia(o){
-  return o.foto_path
-    ?`<div class="photo-actions"><button class="photo-action occ-photo" type="button">📷 VER FOTO DA OCORRÊNCIA</button></div>`
-    :"";
+ const fotos=caminhosFotosOcorrencia(o);
+ return fotos.length
+  ?`<div class="photo-actions" style="display:flex;flex-wrap:wrap;gap:7px">${fotos.map((path,i)=>`<button class="photo-action occ-photo" data-foto-indice="${i}" type="button">📷 FOTO ${i+1}</button>`).join("")}</div>`
+  :"";
 }
 
 // Registro de ocorrências pela gestão. Usa as mesmas tabelas e o mesmo painel existente.
@@ -708,8 +713,14 @@ function renderOcorrencias(){
     const create=card.querySelector(".create-demand");
     if(create)create.onclick=()=>abrirDemandaOcorrencia(id);
 
-    const occPhoto=card.querySelector(".occ-photo");
-    if(occPhoto&&o?.foto_path)occPhoto.onclick=e=>{e.stopPropagation();abrirFotoStorage(o.foto_path,"ocorrencia")};
+    card.querySelectorAll(".occ-photo").forEach(btn=>{
+      btn.onclick=e=>{
+        e.stopPropagation();
+        const caminhos=caminhosFotosOcorrencia(o||{});
+        const caminho=caminhos[Number(btn.dataset.fotoIndice)];
+        if(caminho)abrirFotoStorage(caminho,"ocorrencia");
+      };
+    });
 
     card.querySelectorAll(".demand-photo").forEach(btn=>{
       const d=demandasOcorrencias.find(x=>Number(x.id)===Number(btn.dataset.demand));
