@@ -229,7 +229,7 @@ body:has(.modal.visible) #oraquiAlertaUrgente{bottom:calc(10px + env(safe-area-i
 
 
 <div class="modal" id="execModal"><div class="modal-card"><div class="modal-head"><h2 id="modalTitle">Registrar execução</h2><button class="close" id="closeModal">×</button></div><p class="registro-passos">Local → Foto antes → Iniciar → Foto depois → Concluir</p><div class="selection" id="modalSelection"></div><div class="field hidden" id="areaField"><label for="areaSelect">ESCOLHA A ÁREA</label><select id="areaSelect"></select></div><div class="field hidden" id="pontoField"><label for="pontoSelect">ESCOLHA O LOCAL</label><select id="pontoSelect"></select></div><div class="field" id="blocoInicioExec"><label>📷 ANTES — REGISTRE A SITUAÇÃO</label><input id="fotoAntesExec" type="file" accept="image/*" capture="environment"><button type="button" class="oraqui-antes-botao" id="fotoAntesExecBtn">📷 TIRAR FOTO DO ANTES</button><img id="fotoAntesExecPreview" class="oraqui-antes-previa" alt="Prévia da foto antes"><small id="inicioExecInfo">Fotografe o local antes de começar. Depois, toque em INICIAR.</small><button class="photo-button" type="button" id="iniciarExec">▶ INICIAR ATIVIDADE</button></div><div id="depoisExecArea" class="oraqui-depois-area bloqueada"><div class="oraqui-etapa-label">📷 DEPOIS — REGISTRE O RESULTADO</div><button class="photo-button" id="photoButton">📷 TIRAR FOTO DO DEPOIS</button><small class="oraqui-etapa-ajuda">Fotografe o serviço concluído.</small></div><input class="photo-input" id="photoInput" type="file" accept="image/*" capture="environment"><img class="preview" id="preview" alt="Prévia"><div class="field"><label>OBSERVAÇÃO</label><textarea id="observacao" maxlength="600" placeholder="Observação sobre a execução..."></textarea></div><button class="confirm" id="confirmExec">✓ REGISTRAR CONCLUSÃO</button></div></div>
-<div class="modal" id="demandaConclusaoModal"><div class="modal-card"><div class="modal-head"><h2>Concluir demanda</h2><button class="close" id="fecharDemandaConclusao" type="button">×</button></div><div class="selection" id="demandaConclusaoTitulo"></div><div id="demandaDetalhesModal" style="padding:14px;margin:10px 0;background:#f0f7fb;border-radius:14px;font-size:14px;line-height:1.6"></div><div class="field"><label>OBSERVAÇÃO DA EXECUÇÃO</label><textarea id="demandaConclusaoObs" maxlength="600" placeholder="Descreva o serviço realizado..."></textarea></div><div class="field" id="blocoInicioDemanda"><label>📷 ANTES — REGISTRE A SITUAÇÃO</label><input id="demandaFotoAntes" type="file" accept="image/*" capture="environment"><button type="button" class="oraqui-antes-botao" id="demandaFotoAntesBtn">📷 TIRAR FOTO DO ANTES</button><img id="demandaFotoAntesPreview" class="oraqui-antes-previa" alt="Prévia da foto antes"><small id="inicioDemandaInfo">Fotografe o local antes de iniciar a demanda.</small><button class="photo-button" type="button" id="iniciarDemanda">▶ INICIAR DEMANDA</button></div><div id="depoisDemandaArea" class="oraqui-depois-area bloqueada"><div class="oraqui-etapa-label">📷 DEPOIS — REGISTRE O RESULTADO</div><button class="photo-button" id="demandaConclusaoFotoBtn" type="button">📷 TIRAR FOTO DO DEPOIS</button><small class="oraqui-etapa-ajuda">Fotografe o serviço concluído.</small></div><input class="photo-input" id="demandaConclusaoFoto" type="file" accept="image/*" capture="environment"><img class="preview" id="demandaConclusaoPreview" alt="Foto da execução"><button class="confirm" id="salvarDemandaConclusao" type="button">✓ CONFIRMAR CONCLUSÃO</button></div></div><div class="toast" id="toast"></div>
+<div class="modal" id="demandaConclusaoModal"><div class="modal-card"><div class="modal-head"><h2>Concluir demanda</h2><button class="close" id="fecharDemandaConclusao" type="button">×</button></div><div class="selection" id="demandaConclusaoTitulo"></div><div id="demandaDetalhesModal" style="padding:14px;margin:10px 0;background:#f0f7fb;border-radius:14px;font-size:14px;line-height:1.6"></div><div class="field"><label>OBSERVAÇÃO DA EXECUÇÃO</label><textarea id="demandaConclusaoObs" maxlength="600" placeholder="Descreva o serviço realizado..."></textarea></div><div class="field" id="blocoInicioDemanda"><label>📷 ANTES — REGISTRE A SITUAÇÃO</label><input id="demandaFotoAntes" type="file" accept="image/*" capture="environment"><button type="button" class="oraqui-antes-botao" id="demandaFotoAntesBtn">📷 TIRAR FOTO DO ANTES</button><img id="demandaFotoAntesPreview" class="oraqui-antes-previa" alt="Prévia da foto antes"><small id="inicioDemandaInfo">Fotografe o local antes de iniciar a demanda.</small><button class="photo-button" type="button" id="iniciarDemanda">▶ INICIAR DEMANDA</button></div><div id="depoisDemandaArea" class="oraqui-depois-area bloqueada"><div class="oraqui-etapa-label">📷 DEPOIS — REGISTRE O RESULTADO (ATÉ 8 FOTOS)</div><div style="display:flex;flex-wrap:wrap;gap:8px"><button class="photo-button" id="demandaConclusaoFotoBtn" type="button">📸 TIRAR FOTO</button><button class="photo-button" id="demandaConclusaoGaleriaBtn" type="button">🖼️ ESCOLHER FOTOS</button></div><small class="oraqui-etapa-ajuda">Fotografe todos os serviços feitos no mesmo local. Você pode acrescentar fotos e removê-las antes de concluir.</small></div><input class="photo-input" id="demandaConclusaoFoto" type="file" accept="image/*" multiple><input class="photo-input" id="demandaConclusaoCamera" type="file" accept="image/*" capture="environment"><div id="demandaConclusaoFotosPreview" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;margin-top:10px"></div><button class="confirm" id="salvarDemandaConclusao" type="button">✓ CONFIRMAR CONCLUSÃO</button></div></div><div class="toast" id="toast"></div>
 
 
 <div class="modal" id="posteriorModal"><div class="modal-card">
@@ -692,15 +692,26 @@ function detalheDemanda(d){
     '<div><strong>📍 LOCAL:</strong> '+esc(local)+'</div>'+
     '<div style="margin-top:8px"><strong>📝 O QUE FAZER:</strong> '+esc(instrucao)+'</div>'+
     (d.ocorrencia_descricao&&d.ocorrencia_descricao!==instrucao?'<div style="margin-top:8px"><strong>Relato do morador:</strong> '+esc(d.ocorrencia_descricao)+'</div>':'')+
-    (d.foto_gestor_path?'<div style="margin-top:10px"><button type="button" onclick="abrirFotoGestorDemanda('+Number(d.id)+')" style="background:#e5defb;color:#493c93;padding:10px 14px;border:0;border-radius:10px;font-weight:800">📷 VER FOTO ENVIADA PELO GESTOR</button></div>':'')+
+    htmlFotosRecebidasGestor(d)+
     (d.ocorrencia_id?'<div style="margin-top:8px"><strong>📷 Foto original:</strong> <span id="demandaFotoStatus'+Number(d.id)+'">ver detalhes ao iniciar</span></div>':'')+
     '</div>';
 }
-async function abrirFotoGestorDemanda(id){
- const d=demandas.find(x=>Number(x.id)===Number(id));if(!d?.foto_gestor_path)return;
+function fotosRecebidasDoGestor(d){
+ const lista=Array.isArray(d.fotos_gestor_paths)?d.fotos_gestor_paths.filter(Boolean):[];
+ return lista.length?[...new Set(lista)]:d.foto_gestor_path?[d.foto_gestor_path]:[];
+}
+function htmlFotosRecebidasGestor(d){
+ const paths=fotosRecebidasDoGestor(d);
+ if(!paths.length)return "";
+ return '<div style="margin-top:10px"><strong>📷 FOTOS DA SOLICITAÇÃO ('+paths.length+')</strong><div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">'+
+ paths.map((_,i)=>'<button type="button" onclick="abrirFotoGestorDemanda('+Number(d.id)+','+i+')" style="background:#fff0e7;color:#753b14;padding:9px 12px;border:1px solid #ffd9c2;border-radius:10px;font-weight:750">📷 VER FOTO '+(i+1)+'</button>').join('')+'</div></div>';
+}
+async function abrirFotoGestorDemanda(id,indice=0){
+ const d=demandas.find(x=>Number(x.id)===Number(id));
+ const path=d&&fotosRecebidasDoGestor(d)[Number(indice)];if(!path)return;
  try{
-  const {data,error}=await db.storage.from("fotos-demandas-gestor").createSignedUrl(d.foto_gestor_path,300);
-  if(error)throw error;
+  const {data,error}=await db.storage.from("fotos-demandas-gestor").createSignedUrl(path,600);
+  if(error)throw error;if(!data?.signedUrl)throw Error("Foto indisponível");
   window.open(data.signedUrl,"_blank","noopener,noreferrer");
  }catch(e){alert("Não foi possível abrir a foto do gestor: "+e.message)}
 }
@@ -804,6 +815,36 @@ function renderDemandas(){
   // Urgências destacam o ícone sem abrir conteúdo automaticamente.
 }
 
+const LIMITE_FOTOS_DEPOIS=8;
+let fotosDepoisDemanda=[],previasDepoisUrls=[];
+function limparFotosDepoisDemanda(){
+ previasDepoisUrls.forEach(u=>URL.revokeObjectURL(u));previasDepoisUrls=[];
+ fotosDepoisDemanda=[];
+ $('demandaConclusaoFoto').value='';$('demandaConclusaoCamera').value='';
+ $('demandaConclusaoFotosPreview').innerHTML='';
+}
+function renderFotosDepoisDemanda(){
+ previasDepoisUrls.forEach(u=>URL.revokeObjectURL(u));previasDepoisUrls=[];
+ $('demandaConclusaoFotosPreview').innerHTML=fotosDepoisDemanda.map((f,i)=>{
+  const url=URL.createObjectURL(f);previasDepoisUrls.push(url);
+  return `<div style="border:1px solid #d9e6dc;border-radius:10px;padding:5px;text-align:center"><img src="${url}" style="width:100%;height:85px;object-fit:cover;border-radius:7px" alt="Resultado ${i+1}"><button type="button" data-remover-foto-depois="${i}" style="margin-top:5px;padding:5px;border:0;border-radius:6px;background:#fff0ed;color:#8e392a">REMOVER</button></div>`;
+ }).join('');
+}
+function adicionarFotosDepoisDemanda(files){
+ const novos=[...files];if(!novos.length)return;
+ for(const f of novos){if(!f.type.startsWith('image/')||f.size>10*1024*1024){alert('Selecione fotos de até 10 MB cada.');return}}
+ if(fotosDepoisDemanda.length+novos.length>LIMITE_FOTOS_DEPOIS){alert('Máximo de 8 fotos na conclusão.');return}
+ fotosDepoisDemanda.push(...novos);renderFotosDepoisDemanda();
+}
+$('demandaConclusaoFotosPreview').onclick=e=>{
+ const b=e.target.closest('[data-remover-foto-depois]');if(!b)return;
+ fotosDepoisDemanda.splice(Number(b.dataset.removerFotoDepois),1);renderFotosDepoisDemanda();
+};
+$('demandaConclusaoGaleriaBtn').onclick=()=>$('demandaConclusaoFoto').click();
+$('demandaConclusaoFotoBtn').onclick=()=>$('demandaConclusaoCamera').click();
+for(const id of ['demandaConclusaoFoto','demandaConclusaoCamera']){
+ $(id).onchange=e=>{adicionarFotosDepoisDemanda(e.target.files||[]);e.target.value=''};
+}
 function abrirConclusaoDemanda(id){
   const d=demandas.find(x=>mesmoId(x.id,id));
   if(!d||d.status==='concluida'||!demandaParaColaborador(d))return;
@@ -812,9 +853,7 @@ function abrirConclusaoDemanda(id){
   $('demandaDetalhesModal').innerHTML=detalheDemanda(d)+'<div id="demandaFotoOriginal"></div>';
   mostrarFotoOriginalDemanda(d);
 
-  $('demandaConclusaoObs').value='';$('demandaConclusaoFoto').value='';$('demandaFotoAntes').value='';
-  $('demandaConclusaoPreview').classList.remove('visible');
-  $('demandaConclusaoFotoBtn').textContent='📷 TIRAR FOTO DO DEPOIS';
+  $('demandaConclusaoObs').value='';limparFotosDepoisDemanda();$('demandaFotoAntes').value='';
    limparPreviaAntes('demandaFotoAntes');
   $('demandaConclusaoModal').classList.add('visible');
   atualizarBlocoInicio('demanda',d.id);
@@ -822,33 +861,40 @@ function abrirConclusaoDemanda(id){
 function fecharConclusaoDemanda(){$('demandaConclusaoModal').classList.remove('visible');demandaEmConclusao=null}
 async function salvarConclusaoDemanda(){
   const d=demandaEmConclusao;if(!d||!colaborador||!authUser)return;
-  const obs=$('demandaConclusaoObs').value.trim(),foto=$('demandaConclusaoFoto').files?.[0],fotoAntes=$('demandaFotoAntes').files?.[0];
+  const obs=$('demandaConclusaoObs').value.trim();
+  const fotos=[...fotosDepoisDemanda];
   const inicio=await obterInicioDisponivel('demanda',d.id);
   if(!inicio)return alert('Inicie a demanda antes de concluir.');
   if(d.exige_foto_antes&&!inicio.foto_antes_path)return alert('Esta demanda exige foto ANTES no início.');
-  if(d.exige_foto&&!foto)return alert('Esta demanda exige fotografia.');
+  if(d.exige_foto&&!fotos.length)return alert('Esta demanda exige fotografia.');
   if(d.exige_observacao&&!obs)return alert('Esta demanda exige observação.');
   if(!navigator.onLine)return alert('Para concluir demandas, conecte-se à internet.');
-  const btn=$('salvarDemandaConclusao');btn.disabled=true;
+  const btn=$('salvarDemandaConclusao');btn.disabled=true;btn.textContent='ENVIANDO FOTOS...';
+  const paths=[];let salva=false;
   try{
-    const agora=new Date().toISOString();let path=null,pathAntes=null;
-    pathAntes=inicio.foto_antes_path||null;
-    if(foto){
+    const agora=new Date().toISOString();
+    const pathAntes=inicio.foto_antes_path||null;
+    for(const foto of fotos){
       const blob=await fotoComCarimbo(foto,agora,contextoFoto(d.area_id,d.ponto_id));
-      path=`demandas/${colaborador.condominio_id}/${colaborador.id}/${d.id}/${crypto.randomUUID()}.jpg`;
+      const path=`demandas/${colaborador.condominio_id}/${colaborador.id}/${d.id}/${crypto.randomUUID()}.jpg`;
       const {error:uploadErro}=await db.storage.from(BUCKET).upload(path,blob,{contentType:'image/jpeg'});
       if(uploadErro)throw uploadErro;
+      paths.push(path);
     }
-    const payload={status:'concluida',concluida_em:agora,updated_at:agora,observacao_execucao:obs||null,foto_execucao_path:path,foto_antes_path:pathAntes};
+    const payload={status:'concluida',concluida_em:agora,updated_at:agora,observacao_execucao:obs||null,
+      foto_execucao_path:paths[0]||null,fotos_execucao_paths:paths,foto_antes_path:pathAntes};
     const {data,error}=await db.from('demandas').update(payload)
       .eq('id',d.id).eq('condominio_id',colaborador.condominio_id)
       .neq('status','cancelada').neq('status','concluida').select('id');
     if(error)throw error;
     if(!data?.length)throw new Error('Demanda alterada ou sem permissão para concluir.');
+    salva=true;
     await db.from('inicios_execucao').delete().eq('id',inicio.id).eq('condominio_id',colaborador.condominio_id);
-    fecharConclusaoDemanda();toast('✓ Demanda concluída.');await carregarTudo();
-  }catch(e){console.error(e);alert('Não foi possível concluir a demanda: '+(e.message||e))}
-  finally{btn.disabled=false}
+    fecharConclusaoDemanda();limparFotosDepoisDemanda();toast('✓ Demanda concluída com '+paths.length+' foto(s).');await carregarTudo();
+  }catch(e){
+    if(!salva&&paths.length)try{await db.storage.from(BUCKET).remove(paths)}catch(f){console.warn('Fotos não removidas após falha:',f)}
+    console.error(e);alert('Não foi possível concluir a demanda: '+(e.message||e))
+  }finally{btn.disabled=false;btn.textContent='✓ CONFIRMAR CONCLUSÃO'}
 }
 async function mudarDemanda(id,status){
   if(!colaborador||!authUser)return;
@@ -1474,8 +1520,7 @@ async function sair(){
 
 $('fecharDemandaConclusao').onclick=fecharConclusaoDemanda;
 $('salvarDemandaConclusao').onclick=salvarConclusaoDemanda;
-$('demandaConclusaoFotoBtn').onclick=()=>$('demandaConclusaoFoto').click();
-$('demandaConclusaoFoto').onchange=e=>{const f=e.target.files?.[0];if(!f)return;if(!f.type.startsWith('image/')||f.size>10*1024*1024){alert('Selecione imagem de até 10 MB.');e.target.value='';return}const img=$('demandaConclusaoPreview');img.src=URL.createObjectURL(f);img.classList.add('visible');$('demandaConclusaoFotoBtn').textContent='✓ FOTO DO DEPOIS SELECIONADA · TROCAR'};
+
 $("logout").onclick=sair;
 $("demoBack").onclick=voltarGestaoDemo;
 $("notificationBtn").onclick=acaoNotificacao;
