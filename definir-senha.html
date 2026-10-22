@@ -1408,9 +1408,10 @@
           // normal do ORAQUI.
           // ==================================================
 
-          window.location.replace(
-            "./index.html"
-          );
+          const destino = new URLSearchParams(window.location.search).get("tipo") === "sindico"
+            ? "./sindico.html"
+            : "./index.html";
+          window.location.replace(destino);
 
 
         } catch (erro) {
