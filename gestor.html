@@ -961,9 +961,26 @@ function abrirConviteGestor(){if(!podeAdministrarGestao())return alert("Somente 
 function fecharConviteGestor(){$("managerModal").classList.remove("visible")}
 async function convidarGestor(){
  if(!podeAdministrarGestao())return alert("Somente o administrador pode convidar gestores.");
- const nome=$("managerInviteName").value.trim(),email=$("managerInviteEmail").value.trim().toLowerCase();if(!nome||!email)return alert("Informe nome e e-mail do gestor.");
- const b=$("saveManager");b.disabled=true;b.textContent="ENVIANDO...";
- try{const {data,error}=await db.functions.invoke("convidar-gestor",{body:{nome,email}});if(error)throw error;if(data?.ok===false||data?.success===false)throw new Error(data?.error||"Não foi possível convidar o gestor.");fecharConviteGestor();toast("✓ Convite de gestor enviado.");await carregarGestores()}catch(e){console.error(e);alert(e.message||"Não foi possível convidar o gestor.")}finally{b.disabled=false;b.textContent="ENVIAR CONVITE"}
+ const condominioId=Number(CONDOMINIO_ID),versaoConvite=versaoCondominio;
+ if(!Number.isInteger(condominioId)||condominioId<=0||Number(perfilGestor?.condominio_id)!==condominioId)return alert("Selecione um condomínio válido antes de convidar o gestor.");
+ const nome=$("managerInviteName").value.trim(),email=$("managerInviteEmail").value.trim().toLowerCase();
+ if(nome.length<2||!email)return alert("Informe nome e e-mail do gestor.");
+ if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))return alert("Informe um e-mail válido.");
+ const b=$("saveManager");if(b.disabled)return;b.disabled=true;b.textContent="ENVIANDO...";
+ try{
+  const {data,error}=await db.functions.invoke("convidar-gestor",{body:{nome,email,condominio_id:condominioId}});
+  if(error||data?.error||data?.ok!==true){
+   throw new Error(await mensagemFunction(error,data,"Não foi possível convidar o gestor."));
+  }
+  if(versaoConvite!==versaoCondominio)return;
+  fecharConviteGestor();
+  toast(data.aviso||data.mensagem||"Gestor vinculado ao condomínio.");
+  if(data.aviso)alert(data.aviso);
+  await carregarGestores();
+ }catch(e){
+  console.error("Erro ao convidar gestor:",e);
+  if(versaoConvite===versaoCondominio)alert(e.message||"Não foi possível convidar o gestor.");
+ }finally{b.disabled=false;b.textContent="ENVIAR CONVITE"}
 }
 
 async function reenviarConviteGestor(id,btn){
