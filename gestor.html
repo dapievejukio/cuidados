@@ -135,7 +135,7 @@ body{padding-bottom:88px!important}.oraqui-bottom{position:fixed;bottom:0;left:0
 
 <div class="modal" id="demoCollaboratorModal"><div class="modal-card"><div class="modal-head"><div><h2>Testar como colaborador</h2><p style="margin-top:5px;color:var(--muted);font-size:9px">Escolha um colaborador fictício deste ambiente. Você poderá executar tarefas e depois voltar à Gestão.</p></div><button class="modal-close" id="closeDemoCollaborator">×</button></div><div class="demo-person-list" id="demoCollaboratorList"></div></div></div>
 
-<div class="modal" id="collaboratorModal"><div class="modal-card"><div class="modal-head"><h2 id="collaboratorModalTitle">Cadastrar colaborador</h2><button class="modal-close" id="closeCollaborator">×</button></div><div class="form-grid"><div class="field full"><label>NOME</label><input id="colNome"></div><div class="field full"><label>E-MAIL</label><input id="colEmail" type="email"></div><div class="field"><label>MATRÍCULA</label><input id="colMatricula"></div><div class="field"><label>EMPRESA DA FOLHA</label><select id="colEmpresaFolha"><option value="">Não vinculada</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="6">6</option></select></div><div class="field"><label>REGISTRO NA FOLHA</label><input id="colRegistroFolha" inputmode="numeric" placeholder="Ex.: 68"></div><div class="field"><label>FUNÇÃO</label><select id="colFuncao"><option>Limpeza</option><option>Zeladoria</option><option>Portaria</option><option>Manutenção</option><option>Supervisor</option><option>Outro</option></select></div><div class="switch-card full"><span>Ponto</span><label class="switch"><input id="colPontoAtivo" type="checkbox"><span class="slider"></span></label></div><div class="switch-card"><span>Selfie</span><label class="switch"><input id="colSelfie" type="checkbox"><span class="slider"></span></label></div><div class="switch-card"><span>Geolocalização</span><label class="switch"><input id="colGeo" type="checkbox"><span class="slider"></span></label></div><div class="switch-card"><span>Intervalo</span><label class="switch"><input id="colIntervalo" type="checkbox"><span class="slider"></span></label></div><div class="field"><label>INTERVALO MIN.</label><input id="colIntervaloMinutos" type="number" value="60"></div></div><div class="modal-actions"><button class="cancel-button" id="cancelCollaborator">CANCELAR</button><button class="confirm-button" id="saveCollaborator">SALVAR</button></div></div></div>
+<div class="modal" id="collaboratorModal"><div class="modal-card"><div class="modal-head"><h2 id="collaboratorModalTitle">Cadastrar colaborador</h2><button class="modal-close" id="closeCollaborator">×</button></div><div class="form-grid"><div class="field full"><label>NOME</label><input id="colNome"></div><div class="field full"><label>E-MAIL</label><input id="colEmail" type="email"></div><div class="field"><label>MATRÍCULA</label><input id="colMatricula"></div><div class="field"><label>EMPRESA DA FOLHA</label><select id="colEmpresaFolha"><option value="">Não vinculada</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="6">6</option></select></div><div class="field"><label>REGISTRO NA FOLHA</label><input id="colRegistroFolha" inputmode="numeric" placeholder="Ex.: 68"></div><div class="field"><label>FUNÇÃO</label><select id="colFuncao"><option>Limpeza</option><option>Zeladoria</option><option>Portaria</option><option>Manutenção</option><option>Supervisor</option><option>Outro</option></select></div><div class="field full"><label>MÓDULOS LIBERADOS</label><small>As permissões valem somente neste condomínio. Desativar bloqueia também o acesso direto. Histórico acompanha os módulos de atividades. Demandas inclui as ocorrências encaminhadas.</small><div style="display:flex;gap:8px;margin-top:10px"><button type="button" class="cancel-button" id="perfilSomentePonto">SOMENTE PONTO</button><button type="button" class="cancel-button" id="perfilCompleto">COMPLETO</button></div></div><div class="switch-card full"><span>Chat</span><label class="switch"><input id="modulo_chat" type="checkbox" checked><span class="slider"></span></label></div><div class="switch-card full"><span>Demandas e ocorrências encaminhadas</span><label class="switch"><input id="modulo_demandas" type="checkbox" checked><span class="slider"></span></label></div><div class="switch-card full"><span>Cronograma</span><label class="switch"><input id="modulo_cronograma" type="checkbox" checked><span class="slider"></span></label></div><div class="switch-card full"><span>Registrar atividades</span><label class="switch"><input id="modulo_atividades" type="checkbox" checked><span class="slider"></span></label></div><div class="switch-card full"><span>Registros posteriores</span><label class="switch"><input id="modulo_registros_posteriores" type="checkbox" checked><span class="slider"></span></label></div><div class="switch-card full"><span>Documentos</span><label class="switch"><input id="modulo_documentos" type="checkbox" checked><span class="slider"></span></label></div><div class="switch-card full"><span>Ponto</span><label class="switch"><input id="colPontoAtivo" type="checkbox"><span class="slider"></span></label></div><div class="switch-card"><span>Selfie</span><label class="switch"><input id="colSelfie" type="checkbox"><span class="slider"></span></label></div><div class="switch-card"><span>Geolocalização</span><label class="switch"><input id="colGeo" type="checkbox"><span class="slider"></span></label></div><div class="switch-card"><span>Intervalo</span><label class="switch"><input id="colIntervalo" type="checkbox"><span class="slider"></span></label></div><div class="field"><label>INTERVALO MIN.</label><input id="colIntervaloMinutos" type="number" value="60"></div></div><div class="modal-actions"><button class="cancel-button" id="cancelCollaborator">CANCELAR</button><button class="confirm-button" id="saveCollaborator">SALVAR</button></div></div></div>
 
 <div class="modal" id="managerModal"><div class="modal-card"><div class="modal-head"><div><h2>Convidar gestor</h2><p style="margin-top:5px;color:var(--muted);font-size:9px">O novo gestor receberá um convite por e-mail para criar a própria senha.</p></div><button class="modal-close" id="closeManager">×</button></div><div class="form-grid"><div class="field full"><label>NOME</label><input id="managerInviteName" autocomplete="name" placeholder="Nome do gestor"></div><div class="field full"><label>E-MAIL</label><input id="managerInviteEmail" type="email" autocomplete="email" placeholder="email@exemplo.com"></div></div><div class="modal-actions"><button class="cancel-button" id="cancelManager">CANCELAR</button><button class="confirm-button" id="saveManager">ENVIAR CONVITE</button></div></div></div>
 <div class="modal" id="areaModal"><div class="modal-card"><div class="modal-head"><h2 id="areaModalTitle">Nova área</h2><button class="modal-close" id="closeArea">×</button></div><div class="form-grid"><div class="field full"><label>NOME</label><input id="areaNome"></div><div class="field full"><label>DESCRIÇÃO</label><textarea id="areaDescricao"></textarea></div><div class="field"><label>ORDEM</label><input id="areaOrdem" type="number"></div><div class="switch-card"><span>Colaborador</span><label class="switch"><input id="areaColaborador" type="checkbox" checked><span class="slider"></span></label></div><div class="switch-card"><span>Ocorrências</span><label class="switch"><input id="areaOcorrencia" type="checkbox" checked><span class="slider"></span></label></div></div><div class="modal-actions"><button class="cancel-button" id="cancelArea">CANCELAR</button><button class="confirm-button" id="saveArea">SALVAR</button></div></div></div>
@@ -1051,7 +1051,7 @@ async function carregarColaboradores(){
 
   const {data,error}=await db
     .from("colaboradores")
-    .select("id,condominio,condominio_id,nome,matricula,funcao,ativo,email,auth_user_id,ponto_ativo,selfie_ponto_obrigatoria,geolocalizacao_ponto_obrigatoria,intervalo_ativo,intervalo_minutos,empresa_folha,registro_folha,foto_perfil_path,created_at,updated_at")
+    .select("id,condominio,condominio_id,nome,matricula,funcao,ativo,email,auth_user_id,chat_ativo,demandas_ativo,cronograma_ativo,atividades_ativo,registros_posteriores_ativo,documentos_ativo,ponto_ativo,selfie_ponto_obrigatoria,geolocalizacao_ponto_obrigatoria,intervalo_ativo,intervalo_minutos,empresa_folha,registro_folha,foto_perfil_path,created_at,updated_at")
     .eq("condominio_id",CONDOMINIO_ID)
     .order("ativo",{ascending:false})
     .order("nome");
@@ -1129,6 +1129,13 @@ function dependencias(){
   $("colIntervaloMinutos").disabled=!p||!$("colIntervalo").checked;
 }
 
+function aplicarPerfilColaborador(completo){
+  ["chat","demandas","cronograma","atividades","registros_posteriores","documentos"].forEach(k=>$("modulo_"+k).checked=completo);
+  $("colPontoAtivo").checked=true;
+  $("colSelfie").checked=true;
+  $("colGeo").checked=true;
+  dependencias();
+}
 function novoCol(){
   colaboradorEditandoId=null;
   $("collaboratorModalTitle").textContent="Cadastrar colaborador";
@@ -1136,6 +1143,7 @@ function novoCol(){
   $("colEmpresaFolha").value="";
   $("colRegistroFolha").value="";
   $("colFuncao").value="Limpeza";
+  ["chat", "demandas", "cronograma", "atividades", "registros_posteriores", "documentos"].forEach(k=>$("modulo_"+k).checked=true);
   $("colPontoAtivo").checked=false;
   $("colSelfie").checked=false;
   $("colGeo").checked=false;
@@ -1156,6 +1164,7 @@ function editarCol(id){
   $("colEmpresaFolha").value=c.empresa_folha||"";
   $("colRegistroFolha").value=c.registro_folha||"";
   $("colFuncao").value=c.funcao||"Limpeza";
+  ["chat", "demandas", "cronograma", "atividades", "registros_posteriores", "documentos"].forEach(k=>$("modulo_"+k).checked=c[k+"_ativo"]!==false);
   $("colPontoAtivo").checked=!!c.ponto_ativo;
   $("colSelfie").checked=!!c.selfie_ponto_obrigatoria;
   $("colGeo").checked=!!c.geolocalizacao_ponto_obrigatoria;
@@ -1192,6 +1201,7 @@ async function salvarCol(){
   const payload={
     condominio_id:CONDOMINIO_ID,
     nome,email,matricula,funcao,
+    ...Object.fromEntries(["chat", "demandas", "cronograma", "atividades", "registros_posteriores", "documentos"].map(k=>[k+"_ativo",$("modulo_"+k).checked])),
     ponto_ativo:ponto,
     selfie_ponto_obrigatoria:ponto&&$("colSelfie").checked,
     geolocalizacao_ponto_obrigatoria:ponto&&$("colGeo").checked,
@@ -1209,9 +1219,14 @@ async function salvarCol(){
     if(error)return alert(error.message);
   }else{
     const {data,error}=await db.functions.invoke("convidar-colaborador",{body:payload});
-    if(error||data?.success===false){
+    if(error||data?.error||data?.ok===false||data?.success===false){
       const msg=await mensagemFunction(error,data,"Não foi possível convidar o colaborador.");
       return alert(msg);
+    }
+    if(data?.reenviado){
+      alert("Este colaborador já está cadastrado. O convite foi reenviado e os acessos foram preservados. Para alterar os módulos, use EDITAR no cadastro existente.");
+      $("collaboratorModal").classList.remove("visible");
+      await carregarColaboradores();return;
     }
     // A Edge Function existente cria o colaborador. Os campos de folha são
     // gravados em seguida para não depender de alterações nessa função.
@@ -1494,7 +1509,7 @@ $("demoSwitchButton").onclick=abrirDemoColaborador;$("closeDemoCollaborator").on
 $("tabOperacao").onclick=()=>painel("operacao");$("tabOcorrencias").onclick=()=>painel("ocorrencias");$("tabRegistrosPosteriores").onclick=()=>painel("registrosposteriores");$("rpAtualizar").onclick=carregarRegistrosPosteriores;document.querySelectorAll("[data-rp-filter]").forEach(b=>b.onclick=()=>{rpFiltro=b.dataset.rpFilter;document.querySelectorAll("[data-rp-filter]").forEach(x=>x.classList.toggle("active",x===b));renderRegistrosPosteriores()});$("tabColaboradores").onclick=()=>painel("colaboradores");$("tabConfig").onclick=()=>painel("config");
 $("novaOcorrencia").onclick=abrirNovaOcorrencia;$("novaOcArea").onchange=atualizarPontosNovaOcorrencia;$("fecharNovaOcorrencia").onclick=$("cancelarNovaOcorrencia").onclick=fecharNovaOcorrencia;$("salvarNovaOcorrencia").onclick=salvarNovaOcorrencia;$("novaDemandaUrgente").onclick=abrirUrgente;$("urgFotoAntes").addEventListener("change",()=>{if($("urgFotoAntes").checked)$("urgFoto").checked=true});$("urgFoto").addEventListener("change",()=>{if(!$("urgFoto").checked)$("urgFotoAntes").checked=false});$("urgArea").onchange=atualizarPontosUrgentes;$("urgTrocarCondominio").onclick=trocarCondominioUrgente;$("fecharUrgente").onclick=$("cancelarUrgente").onclick=fecharUrgente;$("salvarUrgente").onclick=salvarUrgente;$("refreshDados").onclick=carregarDados;$("refreshOcorrencias").onclick=carregarOcorrencias;
 $("closeDemanda").onclick=$("cancelDemanda").onclick=fecharDemanda;$("saveDemanda").onclick=salvarDemandaOcorrencia;$("demandaDestino").onchange=destinoDemanda;
-$("addCollaborator").onclick=novoCol;$("closeCollaborator").onclick=$("cancelCollaborator").onclick=()=>$("collaboratorModal").classList.remove("visible");$("saveCollaborator").onclick=salvarCol;$("colPontoAtivo").onchange=dependencias;$("colIntervalo").onchange=dependencias;$("addManager").onclick=abrirConviteGestor;$("closeManager").onclick=$("cancelManager").onclick=fecharConviteGestor;$("saveManager").onclick=convidarGestor;
+$("perfilSomentePonto").onclick=()=>aplicarPerfilColaborador(false);$("perfilCompleto").onclick=()=>aplicarPerfilColaborador(true);$("addCollaborator").onclick=novoCol;$("closeCollaborator").onclick=$("cancelCollaborator").onclick=()=>$("collaboratorModal").classList.remove("visible");$("saveCollaborator").onclick=salvarCol;$("colPontoAtivo").onchange=dependencias;$("colIntervalo").onchange=dependencias;$("addManager").onclick=abrirConviteGestor;$("closeManager").onclick=$("cancelManager").onclick=fecharConviteGestor;$("saveManager").onclick=convidarGestor;
 $("addArea").onclick=novaArea;$("closeArea").onclick=$("cancelArea").onclick=()=>$("areaModal").classList.remove("visible");$("saveArea").onclick=salvarArea;
 $("closePoint").onclick=$("cancelPoint").onclick=()=>$("pointModal").classList.remove("visible");$("savePoint").onclick=salvarPonto;
 $("subAreas").onclick=()=>subConfig("a");$("subAtividades").onclick=()=>subConfig("t");$("subProgramacoes").onclick=()=>subConfig("p");$("addAtividade").onclick=openAt;$("closeAtividade").onclick=$("cancelAtividade").onclick=closeAt;$("saveAtividade").onclick=saveAt;$("addProgramacao").onclick=openPr;$("closeProgramacao").onclick=$("cancelProgramacao").onclick=closePr;$("saveProgramacao").onclick=savePr;$("progArea").onchange=()=>fillPoints();$("progDestino").onchange=dest;document.querySelectorAll(".filter").forEach(b=>b.onclick=()=>{filtroOcorrencias=b.dataset.filter;document.querySelectorAll(".filter").forEach(x=>x.classList.remove("active"));b.classList.add("active");renderOcorrencias()});

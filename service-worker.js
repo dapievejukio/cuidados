@@ -2,7 +2,7 @@
  * Cache do aplicativo e recebimento de notificações Web Push.
  * Registros e fotografias offline são gerenciados pelo colaborador.html (IndexedDB).
  */
-const CACHE_NAME = 'oraqui-shell-v1-20261008';
+const CACHE_NAME = 'oraqui-shell-v2-20261022-modulos';
 const APP_SHELL = ['/', '/index.html', '/colaborador.html', '/gestor.html'];
 const SAME_ORIGIN = self.location.origin;
 
