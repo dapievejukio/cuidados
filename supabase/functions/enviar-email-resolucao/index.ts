@@ -42,6 +42,7 @@ Deno.serve(async (req) => {
       local,
       mensagem,
       foto_execucao_path,
+      fotos_execucao_paths,
       foto_antes_path,
     } = await req.json();
 
@@ -64,31 +65,16 @@ Deno.serve(async (req) => {
       );
     }
 
-    let fotoUrl: string | null = null;
-
-    /*
-      A foto de conclusão é armazenada em fotos-atividades.
-      Geramos uma URL assinada temporária para não depender
-      de o bucket permanecer público.
-    */
-    if (foto_execucao_path) {
-
-      const { data, error } =
-        await supabase.storage
-          .from("fotos-atividades")
-          .createSignedUrl(
-            foto_execucao_path,
-            60 * 60 * 24 * 7
-          );
-
-      if (error) {
-        console.warn(
-          "Não foi possível gerar URL da foto:",
-          error.message
-        );
-      } else {
-        fotoUrl = data?.signedUrl || null;
-      }
+    // Compatibilidade com foto legada, permitindo ate oito fotos por atendimento.
+    const recebidas = Array.isArray(fotos_execucao_paths)
+      ? fotos_execucao_paths.filter((p: unknown): p is string => typeof p === "string" && p.length > 0).slice(0,8)
+      : [];
+    const pathsFotos: string[] = [...new Set(recebidas.length ? recebidas : (foto_execucao_path ? [foto_execucao_path] : []))];
+    const fotosUrls: string[] = [];
+    for (const path of pathsFotos) {
+      const {data, error} = await supabase.storage.from("fotos-atividades").createSignedUrl(path,60*60*24*7);
+      if(error)console.warn("Foto da conclusão indisponível:",error.message);
+      else if(data?.signedUrl)fotosUrls.push(data.signedUrl);
     }
 
     let fotoAntesUrl: string | null = null;
@@ -98,62 +84,21 @@ Deno.serve(async (req) => {
       else fotoAntesUrl = antes?.signedUrl || null;
     }
     const fotoAntesHtml = fotoAntesUrl ? '<div style="margin-top:20px;font-size:12px;font-weight:bold">📸 ANTES DO ATENDIMENTO</div><p><img src="'+esc(fotoAntesUrl)+'" alt="Antes do atendimento" style="max-width:100%;border-radius:10px"></p>' : "";
-    const fotoHtml = fotoUrl
-      ? `
-        <div
-          style="
-            margin-top:24px;
-          "
-        >
-
-          <div
-            style="
-              font-size:12px;
-              font-weight:bold;
-              margin-bottom:9px;
-            "
-          >
-            📸 DEPOIS DO ATENDIMENTO
-          </div>
-
-          <div
-            style="
-              background:#f4f6f8;
-              border-radius:14px;
-              padding:10px;
-            "
-          >
-
-            <img
-              src="${esc(fotoUrl)}"
-              alt="Foto da execução"
-              style="
-                display:block;
-                width:100%;
-                max-width:500px;
-                height:auto;
-                margin:0 auto;
-                border-radius:10px;
-              "
-            >
-
-          </div>
-
-          <div
-            style="
-              margin-top:7px;
-              color:#8a949e;
-              font-size:10px;
-              line-height:1.5;
-            "
-          >
-            Registro fotográfico realizado pela equipe
-            durante a conclusão do atendimento.
-          </div>
-
+    const fotoHtml = fotosUrls.length ? `
+      <div style="margin-top:24px">
+        <div style="font-size:12px;font-weight:bold;margin-bottom:9px">
+          📸 DEPOIS DO ATENDIMENTO (${fotosUrls.length} ${fotosUrls.length === 1 ? "FOTO" : "FOTOS"})
         </div>
-      `
-      : "";
+        ${fotosUrls.map((url,i)=>`
+          <div style="background:#f4f6f8;border-radius:14px;padding:10px;margin-bottom:10px">
+            <div style="font-size:11px;color:#586775;font-weight:700;padding:3px 4px 8px">FOTO ${i+1}</div>
+            <img src="${esc(url)}" alt="Resultado do atendimento ${i+1}" style="display:block;width:100%;max-width:500px;height:auto;margin:0 auto;border-radius:10px">
+          </div>
+        `).join("")}
+        <div style="color:#8a949e;font-size:10px;line-height:1.5">
+          Registros fotográficos realizados pela equipe durante a conclusão do atendimento.
+        </div>
+      </div>` : "";
 
     const { data, error } =
       await resend.emails.send({
@@ -406,7 +351,8 @@ Deno.serve(async (req) => {
       JSON.stringify({
         success: true,
         id: data?.id,
-        foto_incluida: Boolean(fotoUrl),
+        foto_incluida: fotosUrls.length > 0,
+        fotos_incluidas: fotosUrls.length,
       }),
       {
         status: 200,
