@@ -36,7 +36,7 @@ async function carregarPortalAcompanhamento(){
  $s('sindicosCadastrados').textContent=isAdmin()?'Consultando acessos...':'Acesso reservado ao administrador.';
  $s('sindicoConvidar').classList.toggle('hidden',!isAdmin());
  const mensagens=db.from('oraqui_portal_mensagens')
-  .select('id,condominio_id,autor_auth_id,tipo,titulo,mensagem,area_id,ponto_id,foto_path,status,resposta_cliente,demanda_id,criado_em,respondido_em')
+  .select('id,condominio_id,autor_auth_id,tipo,titulo,mensagem,area_id,ponto_id,foto_path,fotos_paths,status,resposta_cliente,demanda_id,criado_em,respondido_em')
   .eq('condominio_id',cid).order('criado_em',{ascending:false}).limit(80);
  const socios=isAdmin()?db.from('oraqui_portal_usuarios').select('id,nome,ativo,auth_user_id').eq('condominio_id',cid).order('nome'):Promise.resolve({data:[],error:null});
  const [m,u]=await Promise.all([mensagens,socios]);
@@ -45,6 +45,7 @@ async function carregarPortalAcompanhamento(){
  else{
   portalPagina=m.data||[];
   $s('portalSolicitacoesLista').innerHTML=portalPagina.length?portalPagina.map(item=>{
+    const fotos=Array.isArray(item.fotos_paths)&&item.fotos_paths.length?item.fotos_paths:item.foto_path?[item.foto_path]:[];
     const pendente=!!item.demanda_id;
     const resolvida=['respondida','encerrada'].includes(item.status);
     return '<article style="background:#fff;border:1px solid #e1e7eb;border-radius:14px;padding:15px;margin:9px 0">'+
@@ -54,7 +55,7 @@ async function carregarPortalAcompanhamento(){
     (item.demanda_id?'<p style="color:#45616a;font-size:12px">Demanda operacional #'+Number(item.demanda_id)+' vinculada — resposta final exige conferência do gestor.</p>':'')+
     (item.resposta_cliente?'<p style="font-size:12px;background:#f0f7f5;padding:10px;border-radius:8px"><strong>Resposta enviada:</strong> '+safe(item.resposta_cliente)+'</p>':'')+
     '<div style="display:flex;gap:7px;flex-wrap:wrap">'+
-    (item.foto_path?'<button class="action-button" data-portal-acao="foto" data-portal-id="'+item.id+'">📷 FOTO</button>':'')+
+    (fotos.length?fotos.map((_,i)=>'<button class="action-button" data-portal-acao="foto" data-portal-id="'+item.id+'" data-portal-indice="'+i+'">📷 FOTO '+(i+1)+'</button>').join(''):'')+
     (!resolvida?'<button class="action-button" data-portal-acao="analise" data-portal-id="'+item.id+'">EM ANÁLISE</button>':'')+
     (!pendente&&!resolvida?'<button class="action-button" data-portal-acao="demanda" data-portal-id="'+item.id+'">CRIAR DEMANDA</button>':'')+
     (!resolvida?'<button class="action-button" data-portal-acao="responder" data-portal-id="'+item.id+'">RESPONDER / FINALIZAR</button>':'')+
@@ -85,9 +86,10 @@ async function acaoPortal(e){
  const msg=portalPagina.find(x=>Number(x.id)===id);
  if(!msg||Number(msg.condominio_id)!==Number(CONDOMINIO_ID))return;
  if(acao==='foto'){
-  if(!msg.foto_path)return;
+  const paths=Array.isArray(msg.fotos_paths)&&msg.fotos_paths.length?msg.fotos_paths:msg.foto_path?[msg.foto_path]:[];
+  const path=paths[Number(btn.dataset.portalIndice)||0];if(!path)return;
   try{
-   const {data,error}=await db.storage.from('fotos-portal-sindico').createSignedUrl(msg.foto_path,600);
+   const {data,error}=await db.storage.from('fotos-portal-sindico').createSignedUrl(path,600);
    if(error)throw error;
    window.open(data.signedUrl,'_blank','noopener,noreferrer');
   }catch(ex){alert('Não foi possível abrir a foto: '+ex.message)}
