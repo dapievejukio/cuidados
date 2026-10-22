@@ -620,7 +620,7 @@ async function carregarTudo(){
     pontosHoje=rp.data||[];
     const filaPonto=await filaTodos();
     for(const item of filaPonto){
-      if(item.kind==='ponto'&&item.auth_user_id===authUser?.id&&Number(item.colaborador_id)===Number(colaborador.id)&&Number(item.condominio_id)===Number(colaborador.condominio_id))
+      if(item.kind==='ponto'&&!item.trancado&&item.client_id&&item.auth_user_id===authUser?.id&&Number(item.colaborador_id)===Number(colaborador.id)&&Number(item.condominio_id)===Number(colaborador.condominio_id))
         pontosHoje.push({id:item.client_id,offline_client_id:item.client_id,tipo:item.tipo,registrado_em:item.capturado_em,escala_id:item.escala_id});
     }
     pontosHoje.sort((a,b)=>new Date(a.registrado_em)-new Date(b.registrado_em));
