@@ -461,7 +461,8 @@ async function ativarOuAtualizarOffline(){
     await filaSalvar(item); // Migração idempotente dos registros locais anteriores à ativação para dados criptografados.
   }
   alert('✓ Acesso offline ativado. Perfil e registros pendentes protegidos por PIN. Autorização local válida por 72 horas desde a última conexão validada.');
-  atualizarEstadoOffline();
+  await atualizarEstadoOffline();
+  if(navigator.onLine)sincronizarFilaOffline().catch(console.warn);
  }catch(e){alert('Não foi possível ativar o acesso offline: '+(e.message||e));}
 }
 async function entrarOffline(){
@@ -1894,7 +1895,8 @@ $("confirmExec").onclick=confirmarExecucao;
 $("iniciarExec").onclick=()=>iniciarComFoto(execAtual?"programacao":"avulsa");
 $("iniciarDemanda").onclick=()=>iniciarComFoto("demanda");
 $("syncBtn").onclick=sincronizarFilaOffline;
-$("ativarOfflineBtn").onclick=ativarOuAtualizarOffline;
+$("ativarOfflineBtn").onclick=()=>navigator.onLine?ativarOuAtualizarOffline():entrarOffline();
+if(!navigator.onLine)$("ativarOfflineBtn").textContent='🔓 DESBLOQUEAR ACESSO OFFLINE';
 $("photoButton").onclick=()=>$("photoInput").click();
 $("photoInput").onchange=e=>{
   const f=e.target.files?.[0];
