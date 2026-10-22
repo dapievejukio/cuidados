@@ -456,7 +456,11 @@ async function ativarOuAtualizarOffline(){
   }else{
    if(!await window.OraquiOffline.activate(snapshot))return;
   }
-  alert('✓ Acesso offline ativado e atualizado. Este aparelho poderá abrir o OraQui sem internet por até 72 horas desde a última validação online. Guarde seu PIN.');
+  const itens=await filaTodos();
+  for(const item of itens.filter(x=>!x.trancado&&x.auth_user_id===authUser.id&&Number(x.condominio_id)===Number(colaborador.condominio_id))){
+    await filaSalvar(item); // Migração idempotente dos registros locais anteriores à ativação para dados criptografados.
+  }
+  alert('✓ Acesso offline ativado. Perfil e registros pendentes protegidos por PIN. Autorização local válida por 72 horas desde a última conexão validada.');
   atualizarEstadoOffline();
  }catch(e){alert('Não foi possível ativar o acesso offline: '+(e.message||e));}
 }
@@ -1583,8 +1587,14 @@ async function filaOperacao(modo,operacao){
     try{const req=operacao(store);req.onsuccess=()=>{resultado=req.result};req.onerror=()=>{falhou=true}}catch(e){tx.abort();reject(e)}
   });
 }
-const filaTodos=()=>filaOperacao('readonly',s=>s.getAll());
-const filaSalvar=item=>filaOperacao('readwrite',s=>s.put(item));
+const filaTodos=async()=>{
+  const originals=await filaOperacao('readonly',store=>store.getAll());
+  return Promise.all(originals.map(item=>window.OraquiOffline?.openQueue(item)||item));
+};
+const filaSalvar=async item=>{
+  const secured=window.OraquiOffline?.seal?await window.OraquiOffline.seal(item):item;
+  return filaOperacao('readwrite',store=>store.put(secured));
+};
 const filaExcluir=id=>filaOperacao('readwrite',s=>s.delete(id));
 async function atualizarEstadoOffline(){
   const title=$('offlineTitle'),desc=$('offlineDescription');
@@ -1769,6 +1779,7 @@ async function sincronizarFilaOffline(){
     const todos=await filaTodos();
     for(const item of todos.filter(x=>x.auth_user_id===authUser.id&&Number(x.condominio_id)===Number(colaborador.condominio_id)).sort((a,b)=>a.criado_em.localeCompare(b.criado_em))){
       try{
+        if(item.trancado)throw Error('Desbloqueie o OraQui Offline com seu PIN antes de sincronizar os registros protegidos.');
         if(item.kind==='inicio')await enviarInicioPendente(item);
         else if(item.kind==='ponto')await enviarPontoPendente(item);
         else if(item.kind==='demanda_conclusao')await enviarDemandaPendente(item);
@@ -1776,7 +1787,11 @@ async function sincronizarFilaOffline(){
         sucesso++;
       }catch(e){errosSync.push({id:item.id,motivo:e.message||String(e)});console.error('ORAQUI: registro pendente não sincronizado',item.id,e);continue}
     }
-    if(sucesso){toast(`✓ ${sucesso} registro(s) sincronizado(s).`);await carregarTudo()}
+    if(sucesso){
+      toast(`✓ ${sucesso} registro(s) sincronizado(s).`);
+      await carregarTudo();
+      if(window.OraquiOffline?.unlocked())window.OraquiOffline.refresh(snapshotColaboradorOffline()).catch(console.warn);
+    }
     if(errosSync.length&&navigator.onLine)erro('Sincronização: '+sucesso+' enviado(s), '+errosSync.length+' pendente(s) com erro. Primeiro erro: '+errosSync[0].motivo+'. Os registros permanecem salvos neste aparelho.');
   }catch(e){console.error(e);erro('Fila offline: '+e.message)}finally{sincronizando=false;await atualizarEstadoOffline();await carregarAvulsaPendente()}
 }
