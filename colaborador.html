@@ -744,12 +744,12 @@ function renderPonto(){
  $('pontoDetalhe').textContent=ultima?'Última marcação: '+(etiquetasPonto[ultima.tipo]||ultima.tipo)+' • '+horaPontoBrasilia(ultima.registrado_em):'Nenhum registro recente. Horários de Brasília.';
  const principal=$('btnPontoPrincipal');
  principal.dataset.tipo=proxima||'';
- principal.disabled=pontoEmRegistro||!proxima;
+ principal.disabled=pontoEmRegistro||(!proxima&&!pontoTentativa);
  const rotulos={entrada:'REGISTRAR ENTRADA',inicio_intervalo:'INICIAR INTERVALO',fim_intervalo:'RETORNAR DO INTERVALO',saida:'REGISTRAR SAÍDA'};
- principal.textContent=pontoEmRegistro?'REGISTRANDO...':proxima?(rotulos[proxima]||'REGISTRAR PONTO'):'✓ JORNADA ENCERRADA';
+ principal.textContent=pontoEmRegistro?'SALVANDO...':pontoTentativa?'TENTAR NOVAMENTE':proxima?(colaborador.selfie_ponto_obrigatoria?'📷 SELFIE · '+etiquetasPonto[proxima].toUpperCase():rotulos[proxima]||'REGISTRAR PONTO'):'✓ JORNADA ENCERRADA';
  // O menu excepcional mantém a possibilidade de registrar a marcação realmente realizada.
- $('btnPontoExtra').disabled=pontoEmRegistro;
- for(const id of ['btnEntrada','btnIniIntervalo','btnFimIntervalo','btnSaida'])$(id).disabled=pontoEmRegistro;
+ $('btnPontoExtra').disabled=pontoEmRegistro||!!pontoTentativa;
+ for(const id of ['btnEntrada','btnIniIntervalo','btnFimIntervalo','btnSaida'])$(id).disabled=pontoEmRegistro||!!pontoTentativa;
  const req=[];
  if(colaborador.geolocalizacao_ponto_obrigatoria)req.push('localização GPS');
  if(colaborador.selfie_ponto_obrigatoria)req.push('selfie');
@@ -767,90 +767,52 @@ async function obterLocalizacao(){
 }
 
 
-function capturarSelfiePonto(){
+function capturarSelfiePonto(tipo){
  return new Promise((resolve,reject)=>{
-  // iOS Safari: voltar da câmera dispara "focus" antes do evento "change".
-  // O fluxo antigo cancelava a captura prematuramente em 1,2 s.
-  // Manter confirmação visual: cancelamento acontece somente pelo botão.
   const overlay=document.createElement('div');
-  overlay.id='oraquiSelfiePontoDialog';
-  overlay.setAttribute('role','dialog');
-  overlay.setAttribute('aria-modal','true');
-  overlay.setAttribute('aria-label','Capturar selfie para o ponto');
-  overlay.style.cssText='position:fixed;inset:0;z-index:999999;background:rgba(15,25,35,.83);display:flex;align-items:center;justify-content:center;padding:14px;overflow:auto';
-  const card=document.createElement('section');
-  card.style.cssText='width:min(430px,100%);max-height:95dvh;overflow:auto;background:white;border-radius:19px;padding:23px 18px;box-shadow:0 22px 80px rgba(0,0,0,.3);color:#1d3040';
-  const title=document.createElement('h2');title.textContent='📷 Selfie do ponto';
-  title.style.cssText='font-size:19px;margin:0 0 9px;color:#164d39';
-  const instrucao=document.createElement('p');
-  instrucao.textContent='Tire uma selfie com o rosto visível. Confira a imagem antes de confirmar. Se fechar a câmera sem tirar a foto, você pode tentar novamente.';
-  instrucao.style.cssText='font-size:13px;line-height:1.5;color:#566777;margin:0 0 15px';
-  const input=document.createElement('input');input.type='file';
-  input.accept='image/*';input.setAttribute('capture','user');
-  input.setAttribute('aria-label','Tirar selfie com a câmera frontal');
-  input.style.cssText='position:absolute;width:1px;height:1px;opacity:0;pointer-events:none';
-  const preview=document.createElement('img');
-  preview.alt='Prévia da selfie';preview.style.cssText='display:none;width:100%;max-height:45dvh;object-fit:contain;background:#eef4f1;border-radius:12px;margin:0 0 13px';
-  const mensagem=document.createElement('p');
-  mensagem.setAttribute('role','status');
-  mensagem.style.cssText='font-size:12px;line-height:1.5;color:#a23f30;min-height:18px;margin:8px 0';
-  const botoes=document.createElement('div');botoes.style.cssText='display:grid;gap:10px';
-  const tirar=document.createElement('button');
-  tirar.type='button';tirar.textContent='📷 TIRAR SELFIE';
-  tirar.style.cssText='border:0;border-radius:11px;padding:15px;background:#0f6547;color:white;font-size:14px;font-weight:800';
-  const confirmar=document.createElement('button');
-  confirmar.type='button';confirmar.textContent='✓ USAR ESTA SELFIE';confirmar.disabled=true;
-  confirmar.style.cssText='border:0;border-radius:11px;padding:15px;background:#d9eee4;color:#0b5b40;font-size:14px;font-weight:800';
-  const cancelar=document.createElement('button');
-  cancelar.type='button';cancelar.textContent='CANCELAR REGISTRO';
-  cancelar.style.cssText='border:1px solid #d4dde5;border-radius:11px;padding:12px;background:white;color:#4a5e6d;font-size:12px;font-weight:750';
-  botoes.append(tirar,confirmar,cancelar);
-  card.append(title,instrucao,input,preview,mensagem,botoes);overlay.append(card);
-  let arquivo=null,previewUrl=null,finalizado=false;
-  const overflowAnterior=document.body.style.overflow;
-  function finalizar(erro){
-   if(finalizado)return;
-   finalizado=true;
-   document.removeEventListener('keydown',teclaEsc);
-   overlay.remove();document.body.style.overflow=overflowAnterior;
-   if(previewUrl)URL.revokeObjectURL(previewUrl);
-   if(erro)reject(erro);else resolve(arquivo);
+  overlay.id='oraquiSelfiePontoDialog';overlay.setAttribute('role','dialog');overlay.setAttribute('aria-modal','true');overlay.setAttribute('aria-label','Selfie para '+(etiquetasPonto[tipo]||tipo));
+  overlay.style.cssText='position:fixed;inset:0;z-index:999999;background:#132330dd;display:flex;align-items:center;justify-content:center;padding:18px;overflow:auto';
+  const card=document.createElement('section');card.style.cssText='background:white;color:#203040;border-radius:18px;padding:24px;width:min(430px,100%);max-height:95dvh;overflow:auto';
+  const title=document.createElement('h2');title.textContent=etiquetasPonto[tipo]||tipo;
+  const note=document.createElement('p');note.textContent='Ao confirmar a foto na câmera, o ponto será salvo automaticamente. Cancelar a câmera não registra ponto.';
+  const status=document.createElement('p');status.setAttribute('role','status');
+  const input=document.createElement('input');input.type='file';input.accept='image/jpeg,image/png,image/webp';input.setAttribute('capture','user');input.hidden=true;
+  const photo=document.createElement('button');photo.type='button';photo.textContent='📷 TIRAR SELFIE';photo.className='confirm';
+  const cancel=document.createElement('button');cancel.type='button';cancel.textContent='CANCELAR';cancel.className='photo-button';
+  let finished=false,version=0;
+  const overflow=document.body.style.overflow;
+  function finish(error,result){
+   if(finished)return;finished=true;version++;
+   document.removeEventListener('keydown',escape);overlay.remove();document.body.style.overflow=overflow;
+   if(error)reject(error);else resolve(result);
   }
-  function teclaEsc(e){if(e.key==='Escape'){e.preventDefault();finalizar(new Error('Captura cancelada pelo colaborador. Ponto não registrado.'));}}
-  input.addEventListener('change',()=>{
-   const f=input.files?.[0];
+  function escape(e){if(e.key==='Escape')finish(Error('Captura cancelada. Nenhum ponto registrado.'));}
+  input.addEventListener('change',async()=>{
+   if(finished)return;
+   const file=input.files?.[0],confirmedAt=new Date().toISOString(),current=++version;
    input.value='';
-   if(!f){
-    // O cancelamento nativo do seletor não é uma desistência do registro.
-    mensagem.textContent='Nenhuma foto selecionada. Toque em TIRAR SELFIE para tentar novamente.';
-    return;
+   if(!file){status.textContent='Nenhuma foto confirmada. Tente novamente.';return;}
+   if(!['image/jpeg','image/png','image/webp'].includes(file.type)||!file.size||file.size>5*1024*1024){
+    status.textContent='Use uma foto válida JPG, PNG ou WebP de até 5 MB.';return;
    }
-   if(!['image/jpeg','image/png','image/webp'].includes(f.type)){
-    mensagem.textContent='Formato não suportado. Tire a selfie em JPG, PNG ou WebP.';
-    return;
-   }
-   if(f.size>5*1024*1024){
-    mensagem.textContent='A imagem supera 5 MB. Tire uma nova selfie com tamanho menor.';
-    return;
-   }
-   arquivo=f;
-   if(previewUrl)URL.revokeObjectURL(previewUrl);
-   previewUrl=URL.createObjectURL(f);
-   preview.src=previewUrl;preview.style.display='block';
-   confirmar.disabled=false;mensagem.textContent='';
-   tirar.textContent='↻ REFAZER SELFIE';
+   photo.disabled=true;status.textContent='VALIDANDO FOTO...';
+   const url=URL.createObjectURL(file);
+   try{
+    const image=new Image();
+    await new Promise((ok,fail)=>{image.onload=()=>image.naturalWidth&&image.naturalHeight?ok():fail(Error('Foto inválida.'));image.onerror=()=>fail(Error('Não foi possível ler a foto. Tire outra selfie.'));image.src=url;});
+    if(!finished&&current===version)finish(null,{arquivo:file,capturadoEm:confirmedAt});
+   }catch(e){if(!finished&&current===version){status.textContent=e.message;photo.disabled=false;}}
+   finally{URL.revokeObjectURL(url);}
   });
-  tirar.onclick=()=>{
-   mensagem.textContent='';
-   try{input.click();}catch(err){
-    mensagem.textContent='Não foi possível abrir a câmera. Verifique a permissão de acesso no navegador.';
-   }
-  };
-  confirmar.onclick=()=>{if(arquivo)finalizar(null);};
-  cancelar.onclick=()=>finalizar(new Error('Captura cancelada pelo colaborador. Ponto não registrado.'));
-  document.addEventListener('keydown',teclaEsc);
-  document.body.appendChild(overlay);document.body.style.overflow='hidden';
-  tirar.focus();
+  input.addEventListener('cancel',()=>{if(!finished){version++;status.textContent='Câmera cancelada. Nenhum ponto registrado.';photo.disabled=false;}});
+  photo.onclick=()=>{if(finished)return;version++;status.textContent='';try{input.click();}catch(e){status.textContent='Não foi possível abrir a câmera.';}};
+  cancel.onclick=()=>finish(Error('Captura cancelada. Nenhum ponto registrado.'));
+  card.append(title,note,input,status,photo);
+  if(!colaborador.selfie_ponto_obrigatoria){
+   const skip=document.createElement('button');skip.type='button';skip.className='photo-button';skip.textContent='REGISTRAR SEM SELFIE (OPCIONAL)';
+   skip.onclick=()=>finish(null,{arquivo:null,capturadoEm:new Date().toISOString()});card.append(skip);
+  }
+  card.append(cancel);overlay.append(card);document.body.appendChild(overlay);document.body.style.overflow='hidden';document.addEventListener('keydown',escape);photo.focus();
  });
 }
 
@@ -883,77 +845,48 @@ function escolherCondominioVisual(vinculos){
   });
 }
 
+let pontoTentativa=null;
+function mesmoVinculoPonto(item){return item.auth_user_id===authUser?.id&&Number(item.condominio_id)===Number(colaborador?.condominio_id)&&Number(item.colaborador_id)===Number(colaborador?.id);}
 async function registrarPonto(tipo){
  if(!moduloLiberado('ponto'))return alert('Ponto desativado pela gestão.');
  if(pontoEmRegistro)return;
+ if(!Object.hasOwn(etiquetasPonto,tipo))return;
  if(!navigator.onLine&&!window.OraquiOffline?.unlocked())return alert('Ative o acesso offline com PIN enquanto estiver conectado. Nenhuma marcação foi realizada.');
- const proxima=proximaBatidaPonto();
- const foraDaOrdem=proxima!==tipo;
- const aviso=foraDaOrdem
-  ?'ATENÇÃO: esta marcação é diferente da sequência esperada. Confirma que deseja registrar o evento real de '
-  :'Confirma o registro de ';
- if(!confirm(aviso+(etiquetasPonto[tipo]||tipo).toUpperCase()+'? '+(navigator.onLine?'O horário será definido pelo servidor.':'O horário do aparelho será salvo localmente e conferido na sincronização.')))return;
- const capturadoEm=new Date().toISOString();
- const offlineNaConfirmacao=!navigator.onLine;
- pontoEmRegistro=true;let selfiePath=null;
- const botoes=['btnPontoPrincipal','btnPontoExtra','btnEntrada','btnIniIntervalo','btnFimIntervalo','btnSaida'].map(id=>$(id));
- botoes.forEach(b=>b.disabled=true);
- $('pontoDetalhe').textContent='Registrando '+(etiquetasPonto[tipo]||tipo)+'...';
+ if(pontoTentativa&&!mesmoVinculoPonto(pontoTentativa))return alert('Volte ao condomínio da marcação pendente para tentar novamente.');
+ if(!pontoTentativa&&proximaBatidaPonto()!==tipo&&!confirm('Marcação fora da sequência: '+etiquetasPonto[tipo]+'. Confirma o evento real?'))return;
+ pontoEmRegistro=true;renderPonto();
  try{
-  // A selfie e a localização são recolhidas antes do envio. A data/hora é definida exclusivamente pelo servidor.
-  let arquivo=null;
-  if(colaborador.selfie_ponto_obrigatoria){
-    try{arquivo=await capturarSelfiePonto()}
-    catch(e){
-      if((!offlineNaConfirmacao&&navigator.onLine)||!confirm('A selfie não foi capturada. Registrar o ponto EXCEPCIONALMENTE sem foto e enviar para conferência do gestor?'))throw e;
-    }
-  }
-  let geo;
-  try{geo=await obterLocalizacao()}
-  catch(e){
-    if((!offlineNaConfirmacao&&navigator.onLine)||!confirm('O GPS está indisponível. Registrar o ponto EXCEPCIONALMENTE sem localização e enviar para conferência do gestor?'))throw e;
-    geo={latitude:null,longitude:null,precisao_metros:null};
-  }
-  if(arquivo){
-   const ext=arquivo.type==='image/png'?'png':arquivo.type==='image/webp'?'webp':'jpg';
-   selfiePath=`${colaborador.condominio_id}/${colaborador.id}/${crypto.randomUUID()}.${ext}`;
-  }
-  const ultimo=pontosHoje.at(-1);
-  const escalaId=tipo==='entrada'?(escalaHoje?.id||null):(ultimo?.escala_id||escalaHoje?.id||null);
-  if(offlineNaConfirmacao||!navigator.onLine){
-   const clienteId=crypto.randomUUID();
-   await filaSalvar({
-    id:'ponto-'+clienteId,kind:'ponto',client_id:clienteId,
+  if(!pontoTentativa){
+   const {arquivo,capturadoEm}=await capturarSelfiePonto(tipo);
+   const clientId=crypto.randomUUID(),ultimo=pontosHoje.at(-1);
+   pontoTentativa={id:'ponto-'+clientId,kind:'ponto',client_id:clientId,
     auth_user_id:authUser.id,condominio_id:colaborador.condominio_id,colaborador_id:colaborador.id,
-    tipo,escala_id:escalaId,capturado_em:capturadoEm,criado_em:capturadoEm,
-    latitude:geo.latitude,longitude:geo.longitude,precisao_metros:geo.precisao_metros,
-    selfie_path:selfiePath,foto:arquivo
-   });
-   pontosHoje.push({id:clienteId,offline_client_id:clienteId,tipo,registrado_em:capturadoEm,escala_id:escalaId});
+    tipo,escala_id:tipo==='entrada'?(escalaHoje?.id||null):(ultimo?.escala_id||escalaHoje?.id||null),
+    capturado_em:capturadoEm,criado_em:capturadoEm,online_confirmado:navigator.onLine,
+    selfie_path:arquivo?`${colaborador.condominio_id}/${colaborador.id}/${clientId}.${arquivo.type==='image/png'?'png':arquivo.type==='image/webp'?'webp':'jpg'}`:null,foto:arquivo};
+  }
+  const item=pontoTentativa;
+  $('error').classList.remove('visible');
+  $('pontoDetalhe').textContent='SALVANDO '+etiquetasPonto[item.tipo]+'...';
+  // GPS negado nunca libera envio sem a evidência obrigatória. Retentativa mantém foto, ID e instante.
+  if(!item.geoConfirmado){Object.assign(item,await obterLocalizacao());item.geoConfirmado=true;}
+  if(!navigator.onLine){
+   if(!window.OraquiOffline?.unlocked())throw Error('Sem conexão. Reconecte para tentar novamente ou desbloqueie o acesso offline com PIN.');
+   await filaSalvar(item);
+   if(!pontosHoje.some(x=>x.offline_client_id===item.client_id))pontosHoje.push({id:item.client_id,offline_client_id:item.client_id,tipo:item.tipo,registrado_em:item.capturado_em,escala_id:item.escala_id});
    pontosHoje.sort((a,b)=>new Date(a.registrado_em)-new Date(b.registrado_em));
-   toast('📴 '+(etiquetasPonto[tipo]||tipo)+' salva neste aparelho. Aguardando sincronização.');
-   $('pontoAcoesExcepcionais').style.display='none';
-   await atualizarEstadoOffline();
-   return;
+   pontoTentativa=null;
+   toast('📴 '+etiquetasPonto[item.tipo]+' salva neste aparelho às '+horaPontoBrasilia(item.capturado_em)+'. Aguardando sincronização.');
+  }else{
+   const data=await enviarPontoPendente(item);
+   pontoTentativa=null;
+   toast('✓ '+etiquetasPonto[item.tipo]+' registrada às '+horaPontoBrasilia(data.registrado_em));
+   // A confirmação do servidor já ocorreu: falha de atualização não autoriza outro envio.
+   try{await carregarTudo();}catch(e){erro('Ponto registrado. Não foi possível atualizar a tela: '+e.message);}
   }
-  if(arquivo){
-   const {error:upError}=await db.storage.from('selfies-ponto-privadas').upload(selfiePath,arquivo,{contentType:arquivo.type,upsert:false});
-   if(upError)throw new Error('Não foi possível salvar a selfie: '+upError.message);
-  }
-  const {data,error}=await db.from('registros_ponto').insert({
-   condominio_id:colaborador.condominio_id,colaborador_id:colaborador.id,escala_id:escalaId,
-   tipo,...geo,selfie_path:selfiePath
-  }).select('id,registrado_em,tipo').single();
-  if(error)throw error;
-  toast('✓ '+(etiquetasPonto[data.tipo]||data.tipo)+' registrada às '+horaPontoBrasilia(data.registrado_em));
-  $('pontoAcoesExcepcionais').style.display='none';
-  await carregarTudo();
- }catch(e){
-  console.error('Ponto:',e);
-  alert('O ponto não foi registrado: '+(e.message||e));
- }finally{
-  pontoEmRegistro=false;renderPonto();
- }
+  $('pontoAcoesExcepcionais').style.display='none';await atualizarEstadoOffline();
+ }catch(e){console.error('Ponto:',e);erro((pontoTentativa?'Marcação ainda não confirmada. Use TENTAR NOVAMENTE. ':'')+(e.message||e));}
+ finally{pontoEmRegistro=false;renderPonto();}
 }
 
 function dataLocalRegistro(valor){
@@ -1788,10 +1721,22 @@ async function enviarDemandaPendente(item){
  await filaExcluir(item.id);
 }
 
-async function enviarPontoPendente(item){
+// Mesma promessa por ID durante envio manual e reconexão. O índice único protege entre abas.
+const pontosEmEnvio=new Map();
+function enviarPontoPendente(item){
+ if(pontosEmEnvio.has(item.client_id))return pontosEmEnvio.get(item.client_id);
+ const envio=enviarPontoPendenteInterno(item).finally(()=>pontosEmEnvio.delete(item.client_id));
+ pontosEmEnvio.set(item.client_id,envio);return envio;
+}
+async function enviarPontoPendenteInterno(item){
  exigirModulo('ponto');
  if(!navigator.onLine)throw Error('Sem internet.');
  if(item.auth_user_id!==authUser?.id||Number(item.condominio_id)!==Number(colaborador?.condominio_id)||Number(item.colaborador_id)!==Number(colaborador?.id))throw Error('Ponto vinculado a outra conta ou condomínio.');
+ // Consultar antes do upload recupera resposta perdida sem repetir o evento.
+ const {data:existing,error:readError}=await db.from('registros_ponto').select('id,registrado_em,tipo')
+  .eq('offline_client_id',item.client_id).eq('condominio_id',item.condominio_id).eq('colaborador_id',item.colaborador_id).maybeSingle();
+ if(readError)throw readError;
+ if(existing){await filaExcluir(item.id);return existing;}
  if(item.foto&&item.selfie_path){
   const storage=db.storage.from('selfies-ponto-privadas');
   const {error:uploadError}=await storage.upload(item.selfie_path,item.foto,{contentType:item.foto.type||'image/jpeg',upsert:false});
@@ -1801,6 +1746,18 @@ async function enviarPontoPendente(item){
    const {data:file,error:readError}=await storage.download(item.selfie_path);
    if(readError||!file?.size)throw Error('Não foi possível verificar a selfie existente.');
   }
+ }
+ // Online sem PIN: persistir somente o caminho privado depois do upload; a foto fica na memória.
+ if(item.online_confirmado){
+  await filaSalvar({...item,foto:window.OraquiOffline?.unlocked()?item.foto:null});
+  const {data,error}=await db.from('registros_ponto').insert({
+   condominio_id:item.condominio_id,colaborador_id:item.colaborador_id,escala_id:item.escala_id,tipo:item.tipo,
+   offline_client_id:item.client_id,horario_capturado_em:item.capturado_em,selfie_path:item.selfie_path,
+   latitude:item.latitude,longitude:item.longitude,precisao_metros:item.precisao_metros
+  }).select('id,registrado_em,tipo,offline_client_id').single();
+  if(error)throw error;
+  if(data?.offline_client_id!==item.client_id)throw Error('Servidor desatualizado: identificador da marcação não confirmado.');
+  await filaExcluir(item.id);return data;
  }
  const payload={
   condominio_id:item.condominio_id,colaborador_id:item.colaborador_id,
@@ -1812,7 +1769,7 @@ async function enviarPontoPendente(item){
  const {data,error}=await db.functions.invoke('sincronizar-ponto-offline',{body:payload});
  if(error)throw new Error('Sincronização do ponto: '+error.message);
  if(!data?.ok)throw Error(data?.error||'Servidor não confirmou o ponto.');
- await filaExcluir(item.id);
+ await filaExcluir(item.id);return data;
 }
 
 async function sincronizarFilaOffline(){
@@ -1828,6 +1785,7 @@ async function sincronizarFilaOffline(){
     for(const item of todos.filter(x=>x.auth_user_id===authUser.id&&Number(x.condominio_id)===Number(colaborador.condominio_id)).sort((a,b)=>a.criado_em.localeCompare(b.criado_em))){
       try{
         if(item.trancado)throw Error('Desbloqueie o OraQui Offline com seu PIN antes de sincronizar os registros protegidos.');
+        if(item.kind==='ponto'&&pontoEmRegistro)continue;
         if(item.kind==='inicio')await enviarInicioPendente(item);
         else if(item.kind==='ponto')await enviarPontoPendente(item);
         else if(item.kind==='demanda_conclusao')await enviarDemandaPendente(item);
@@ -1921,7 +1879,7 @@ $('salvarDemandaConclusao').onclick=salvarConclusaoDemanda;
 $("logout").onclick=sair;
 $("demoBack").onclick=voltarGestaoDemo;
 $("notificationBtn").onclick=acaoNotificacao;
-$("btnPontoPrincipal").onclick=()=>{const tipo=$('btnPontoPrincipal').dataset.tipo;if(tipo)registrarPonto(tipo);};
+$("btnPontoPrincipal").onclick=()=>{const tipo=pontoTentativa?.tipo||$('btnPontoPrincipal').dataset.tipo;if(tipo)registrarPonto(tipo);};
 $("btnPontoExtra").onclick=()=>{
  const caixa=$('pontoAcoesExcepcionais'),abrir=caixa.style.display==='none';
  caixa.style.display=abrir?'block':'none';
@@ -2121,6 +2079,7 @@ recolherColaborador();
 iniciar();
 window.addEventListener("online",()=>{atualizarEstadoOffline();sincronizarFilaOffline()});
 window.addEventListener("offline",atualizarEstadoOffline);
+window.addEventListener("beforeunload",e=>{if(pontoTentativa){e.preventDefault();e.returnValue="";}});
 setInterval(()=>{if(navigator.onLine&&colaborador)sincronizarFilaOffline()},120000);
 // Novas demandas devem aparecer sem recarregar a página; evita fechar modais em uso.
 setInterval(()=>{if(!document.hidden&&navigator.onLine&&colaborador&&!$('demandaConclusaoModal').classList.contains('visible')&&!$('execModal').classList.contains('visible'))carregarTudo().catch(console.warn)},60000);

@@ -35,13 +35,13 @@ await ui.entrarOffline();assert.equal(el('navPonto').hidden,false);assert.equal(
 await ui.entrarOffline();assert.equal(vm.runInContext('pontosHoje.length',ui),1);snapshot.colaborador.ponto_ativo=false;await ui.entrarOffline();assert.equal(el('navPonto').hidden,true);assert(el('pontoSection').classList.contains('hidden'));
 console.log('PASS offline entry, Ponto visibility, forbidden modules, single render, repeated entry, permission revocation');
 // Exercise the real point handler: selfie/GPS are preserved in the queued record.
-Object.assign(ui,{navigator:{onLine:false},crypto:globalThis.crypto,confirm:()=>true,pontoEmRegistro:false,etiquetasPonto:{entrada:'Entrada',inicio_intervalo:'Intervalo',fim_intervalo:'Retorno',saida:'Saída'},dataPontoBrasilia:v=>new Date(v).toISOString().slice(0,10),horaPontoBrasilia:()=> '12:00',capturarSelfiePonto:async()=>new Blob(['selfie'],{type:'image/jpeg'}),obterLocalizacao:async()=>({latitude:-30,longitude:-51,precisao_metros:10})});
+Object.assign(ui,{navigator:{onLine:false},crypto:globalThis.crypto,confirm:()=>true,pontoEmRegistro:false,etiquetasPonto:{entrada:'Entrada',inicio_intervalo:'Intervalo',fim_intervalo:'Retorno',saida:'Saída'},dataPontoBrasilia:v=>new Date(v).toISOString().slice(0,10),horaPontoBrasilia:()=> '12:00',capturarSelfiePonto:async()=>({arquivo:new Blob(['selfie'],{type:'image/jpeg'}),capturadoEm:new Date().toISOString()}),obterLocalizacao:async()=>({latitude:-30,longitude:-51,precisao_metros:10})});
 ui.window.OraquiOffline.unlocked=()=>true;
 const queued=[];ui.filaSalvar=async item=>queued.push(item);
 snapshot.colaborador.ponto_ativo=true;snapshot.colaborador.selfie_ponto_obrigatoria=true;snapshot.colaborador.geolocalizacao_ponto_obrigatoria=true;snapshot.colaborador.intervalo_ativo=true;
 await ui.entrarOffline();vm.runInContext('pontosHoje=[]',ui);
 vm.runInContext(html.slice(html.indexOf('function proximaBatidaPonto(){'),html.indexOf('\nasync function obterLocalizacao')),ui);
-vm.runInContext(html.slice(html.indexOf('async function registrarPonto(tipo){'),html.indexOf('\nfunction dataLocalRegistro')),ui);
+vm.runInContext(html.slice(html.indexOf('let pontoTentativa=null;'),html.indexOf('\nfunction dataLocalRegistro')),ui);
 ui.renderPonto();assert.equal(el('btnPontoPrincipal').dataset.tipo,'entrada');
 for(const tipo of ['entrada','inicio_intervalo','fim_intervalo','saida']){await ui.registrarPonto(tipo);assert.equal(queued.at(-1).tipo,tipo);assert.equal(queued.at(-1).foto.type,'image/jpeg');assert.equal(queued.at(-1).latitude,-30);assert.equal(queued.at(-1).auth_user_id,'u');}
 assert.equal(queued.length,4);assert.equal(el('btnPontoPrincipal').disabled,true);assert.equal(ui.pontoEmRegistro,false);
