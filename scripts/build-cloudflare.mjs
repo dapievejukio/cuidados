@@ -4,7 +4,7 @@ const root=resolve(import.meta.dirname,'..'),dest=join(root,'.cloudflare-public'
 const allowed=new Set(['.html','.css','.js','.mjs','.webmanifest','.png','.jpg','.jpeg','.svg','.webp','.ico','.gif','.woff','.woff2']);
 const roots=['assets','oraqui-icons','oraqui-brand','reservaigara'];
 const required=['index.html','gestor.html','colaborador.html','reportar.html','service-worker.js','oraqui-offline.js','manifest.webmanifest','icon-192.png','icon-512.png','sindico.html','sindico-gestao.js'];
-const ok=p=>allowed.has(extname(p).toLowerCase())&&!p.split(/[\\/]/).some(n=>n.startsWith('.'));
+const ok=p=>allowed.has(extname(p).toLowerCase())&&!p.split(/[\\/]/).some(n=>n.startsWith('.'))&&p.split(/[\\/]/).join('/')!=='reservaigara/ponto-teste.html';
 rmSync(dest,{recursive:true,force:true});mkdirSync(dest,{recursive:true});
 let count=0;
 function copy(folder,base=''){
