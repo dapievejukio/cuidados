@@ -6,7 +6,7 @@
   "assets": {
     "directory": "./.cloudflare-public",
     "binding": "ASSETS",
-    "run_worker_first": ["/colaborador"],
+    "run_worker_first": ["/", "/colaborador", "/colaborador/"],
     "not_found_handling": "404-page",
     "html_handling": "none"
   },
