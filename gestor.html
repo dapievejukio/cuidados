@@ -219,8 +219,7 @@ function toast(m){$("toast").textContent=m;$("toast").classList.add("visible");s
 function foto(path,cls){if(!path)return `<div class="${cls}"></div>`;const seguro=encodeURIComponent(String(path));return `<button type="button" class="${cls} foto-clicavel" title="Abrir foto" aria-label="Abrir foto" onclick="event.stopPropagation();abrirFotoStorage(decodeURIComponent(\'${seguro}\'),\'atividade\')"><span>📷</span><small>VER</small></button>`}
 
 
-// Resumo de ponto da página inicial. A previsão diária é específica do Gravataí.
-const PONTO_HOME_CONFIG={slug:'reserva-clube-gravatai',previstos:6,inicio:'2026-10-23'};
+// Resumo de ponto da página inicial. Base: colaboradores ativos do condomínio selecionado.
 let pontoHomeCondominio=null,pontoHomeVersao=0,pontoHomeConsulta=null;
 function diaPontoHome(agora=new Date()){
  const partes=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Sao_Paulo',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(agora);
@@ -242,7 +241,7 @@ function iniciarResumoPontoGestor(c){
  ++pontoHomeVersao;pontoHomeConsulta=null;pontoHomeCondominio=null;
  const box=$('gestorPontoHoje');box.hidden=true;box.setAttribute('aria-busy','false');
  $('pontoHojePessoas').replaceChildren();$('pontoHojeContagem').textContent='Consultando ponto de hoje…';$('pontoHojeNota').textContent='';
- if(c.slug!==PONTO_HOME_CONFIG.slug||c.ambiente_demo)return;
+ if(!Number(c.id))return;
  pontoHomeCondominio=Number(c.id);box.hidden=false;
  atualizarResumoPontoGestor();
 }
@@ -250,7 +249,6 @@ async function atualizarResumoPontoGestor(){
  const cid=pontoHomeCondominio,versao=pontoHomeVersao,dia=diaPontoHome();
  if(!perfilGestor||!cid||cid!==Number(CONDOMINIO_ID)||document.hidden||pontoHomeConsulta)return;
  const box=$('gestorPontoHoje'),contagem=$('pontoHojeContagem'),lista=$('pontoHojePessoas'),nota=$('pontoHojeNota');
- if(dia<PONTO_HOME_CONFIG.inicio){lista.replaceChildren();contagem.textContent='Ponto diário a partir de 23/10';nota.textContent='Previsão: 6 pessoas por dia.';return}
  const consulta={};pontoHomeConsulta=consulta;box.setAttribute('aria-busy','true');
  const vigente=()=>versao===pontoHomeVersao&&cid===Number(CONDOMINIO_ID)&&cid===pontoHomeCondominio&&dia===diaPontoHome();
  try{
@@ -262,10 +260,15 @@ async function atualizarResumoPontoGestor(){
    if(!vigente())return;if(error)throw error;
    registros.push(...(data||[]));if((data||[]).length<500)break;
   }
-  const {data:pessoas,error}=await db.from('colaboradores').select('id,nome').eq('condominio_id',cid);
-  if(!vigente())return;if(error)throw error;
-  const equipe=agruparPontoHome(registros,pessoas||[]),total=equipe.length;
-  contagem.textContent=`${total} de ${PONTO_HOME_CONFIG.previstos} pessoas com ponto hoje`;
+  const pessoas=[];
+  for(let pagina=0;;pagina++){
+   const {data,error}=await db.from('colaboradores').select('id,nome').eq('condominio_id',cid).eq('ativo',true).order('id',{ascending:true}).range(pagina*500,pagina*500+499);
+   if(!vigente())return;if(error)throw error;
+   pessoas.push(...(data||[]));if((data||[]).length<500)break;
+  }
+  const ativos=new Set(pessoas.map(p=>String(p.id)));
+  const equipe=agruparPontoHome(registros.filter(r=>ativos.has(String(r.colaborador_id))),pessoas),total=equipe.length;
+  contagem.textContent=pessoas.length?`${total} de ${pessoas.length} colaboradores ativos com ponto hoje`:'Nenhum colaborador ativo cadastrado';
   const tipos={entrada:'Entrada',inicio_intervalo:'Início do intervalo',fim_intervalo:'Retorno do intervalo',saida:'Saída'};
   lista.innerHTML=equipe.map(p=>{
    const formatarHora=valor=>new Date(valor).toLocaleTimeString('pt-BR',{timeZone:'America/Sao_Paulo',hour:'2-digit',minute:'2-digit'});
@@ -274,7 +277,7 @@ async function atualizarResumoPontoGestor(){
    return `<li><span class="ponto-home-check" aria-hidden="true">✓</span><div><strong>${esc(p.nome)}</strong><span class="ponto-home-chegada">${esc(chegada)}</span>${ultima}</div></li>`;
   }).join('');
   const horario=new Date().toLocaleTimeString('pt-BR',{timeZone:'America/Sao_Paulo',hour:'2-digit',minute:'2-digit'});
-  nota.textContent=(total?'Primeira entrada do dia e última marcação por pessoa.':'Nenhum ponto sincronizado hoje.')+' Atualizado às '+horario+'. Previsão diária: 6 pessoas; confira a escala.';
+  nota.textContent=(total?'Primeira entrada do dia e última marcação por pessoa.':'Nenhum ponto sincronizado da equipe ativa hoje.')+' Atualizado às '+horario+'. Base: colaboradores ativos; confira a escala do dia.';
  }catch(e){
   if(!vigente())return;
   contagem.textContent='Ponto de hoje indisponível';lista.replaceChildren();
