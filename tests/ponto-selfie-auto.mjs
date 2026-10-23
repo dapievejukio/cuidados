@@ -29,9 +29,11 @@ d.input.files=[];await d.input.events.change();assert(!settled);
 d.input.files=[{type:'text/plain',size:10}];await d.input.events.change();assert(!settled);
 d.input.files=[{type:'image/jpeg',size:0}];await d.input.events.change();assert(!settled);
 imageMode='bad';d.input.files=[file];await d.input.events.change();assert(!settled,'invalid image bytes do not submit');
-imageMode='delay';d.input.files=[file];const first=d.input.events.change();now='2026-10-23T13:00:02.000Z';d.input.files=[file];const second=d.input.events.change();
+imageMode='delay';d.input.files=[file];const first=d.input.events.change();now='2026-10-23T13:00:02.000Z';const secondFile={...file,size:124};d.input.files=[secondFile];const second=d.input.events.change();
 imageResolvers.splice(0).forEach(f=>f());await Promise.all([first,second]);const captured=await p;
-assert.equal(captured.capturadoEm,now);assert.equal(captured.arquivo,file);assert(d.overlay.removed);
+assert.equal(captured.capturadoEm,now);assert.equal(captured.arquivo,secondFile);assert(d.overlay.removed);
+// Duplicate native notifications cannot cancel or retimestamp a confirmed image during decoding.
+p=ctx.capturarSelfiePonto('entrada');d=dialog();imageMode='delay';d.input.files=[file];const decoding=d.input.events.change();const firstTime=now;now='2026-10-23T13:00:04.000Z';d.input.files=[file];await d.input.events.change();d.input.files=[];await d.input.events.change();imageResolvers.splice(0).forEach(f=>f());await decoding;assert.equal((await p).capturadoEm,firstTime);
 p=ctx.capturarSelfiePonto('entrada');d=dialog();d.buttons.at(-1).onclick();await assert.rejects(p,/cancelada/);
 ctx.colaborador.selfie_ponto_obrigatoria=false;p=ctx.capturarSelfiePonto('saida');d=dialog();assert.match(d.buttons[1].textContent,/SEM SELFIE/);d.buttons[1].onclick();assert.equal((await p).arquivo,null);
 ctx.colaborador.selfie_ponto_obrigatoria=true;

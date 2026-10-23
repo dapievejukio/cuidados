@@ -779,7 +779,7 @@ function capturarSelfiePonto(tipo){
   const input=document.createElement('input');input.type='file';input.accept='image/jpeg,image/png,image/webp';input.setAttribute('capture','user');input.hidden=true;
   const photo=document.createElement('button');photo.type='button';photo.textContent='📷 TIRAR SELFIE';photo.className='confirm';
   const cancel=document.createElement('button');cancel.type='button';cancel.textContent='CANCELAR';cancel.className='photo-button';
-  let finished=false,version=0;
+  let finished=false,version=0,pendingFile=null;
   const overflow=document.body.style.overflow;
   function finish(error,result){
    if(finished)return;finished=true;version++;
@@ -789,19 +789,22 @@ function capturarSelfiePonto(tipo){
   function escape(e){if(e.key==='Escape')finish(Error('Captura cancelada. Nenhum ponto registrado.'));}
   input.addEventListener('change',async()=>{
    if(finished)return;
-   const file=input.files?.[0],confirmedAt=new Date().toISOString(),current=++version;
+   const file=input.files?.[0];
    input.value='';
-   if(!file){status.textContent='Nenhuma foto confirmada. Tente novamente.';return;}
+   // Alguns navegadores repetem change depois de limpar o input. Não invalidar a foto em validação.
+   if(!file){if(!photo.disabled)status.textContent='Nenhuma foto confirmada. Tente novamente.';return;}
+   if(photo.disabled&&pendingFile===file)return;
+   const confirmedAt=new Date().toISOString(),current=++version;
    if(!['image/jpeg','image/png','image/webp'].includes(file.type)||!file.size||file.size>5*1024*1024){
-    status.textContent='Use uma foto válida JPG, PNG ou WebP de até 5 MB.';return;
+    pendingFile=null;photo.disabled=false;status.textContent='Use uma foto válida JPG, PNG ou WebP de até 5 MB.';return;
    }
-   photo.disabled=true;status.textContent='VALIDANDO FOTO...';
+   pendingFile=file;photo.disabled=true;status.textContent='VALIDANDO FOTO...';
    const url=URL.createObjectURL(file);
    try{
     const image=new Image();
     await new Promise((ok,fail)=>{image.onload=()=>image.naturalWidth&&image.naturalHeight?ok():fail(Error('Foto inválida.'));image.onerror=()=>fail(Error('Não foi possível ler a foto. Tire outra selfie.'));image.src=url;});
     if(!finished&&current===version)finish(null,{arquivo:file,capturadoEm:confirmedAt});
-   }catch(e){if(!finished&&current===version){status.textContent=e.message;photo.disabled=false;}}
+   }catch(e){if(!finished&&current===version){status.textContent=e.message;photo.disabled=false;pendingFile=null;}}
    finally{URL.revokeObjectURL(url);}
   });
   input.addEventListener('cancel',()=>{if(!finished){version++;status.textContent='Câmera cancelada. Nenhum ponto registrado.';photo.disabled=false;}});
