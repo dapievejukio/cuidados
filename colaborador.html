@@ -242,8 +242,8 @@ body:has(.modal.visible) #oraquiAlertaUrgente{bottom:calc(10px + env(safe-area-i
 <button type="button" id="oraquiAlertaUrgente" aria-label="Abrir demandas urgentes" hidden>🚨 <span id="oraquiAlertaUrgenteNumero">0</span> URGENTE — ABRIR</button>
 
 
-<div class="modal" id="execModal"><div class="modal-card"><div class="modal-head"><h2 id="modalTitle">Registrar execução</h2><button class="close" id="closeModal">×</button></div><p class="registro-passos">Local → Foto antes → Iniciar → Foto depois → Concluir</p><div class="selection" id="modalSelection"></div><div class="field hidden" id="areaField"><label for="areaSelect">ESCOLHA A ÁREA</label><select id="areaSelect"></select></div><div class="field hidden" id="pontoField"><label for="pontoSelect">ESCOLHA O LOCAL</label><select id="pontoSelect"></select></div><div class="field" id="blocoInicioExec"><label>📷 ANTES — REGISTRE A SITUAÇÃO</label><input id="fotoAntesExec" type="file" accept="image/*" capture="environment"><button type="button" class="oraqui-antes-botao" id="fotoAntesExecBtn">📷 TIRAR FOTO DO ANTES</button><img id="fotoAntesExecPreview" class="oraqui-antes-previa" alt="Prévia da foto antes"><small id="inicioExecInfo">Fotografe o local antes de começar. Depois, toque em INICIAR.</small><button class="photo-button" type="button" id="iniciarExec">▶ INICIAR ATIVIDADE</button></div><div id="depoisExecArea" class="oraqui-depois-area bloqueada"><div class="oraqui-etapa-label">📷 DEPOIS — REGISTRE O RESULTADO</div><button class="photo-button" id="photoButton">📷 TIRAR FOTO DO DEPOIS</button><small class="oraqui-etapa-ajuda">Fotografe o serviço concluído.</small></div><input class="photo-input" id="photoInput" type="file" accept="image/*" capture="environment"><img class="preview" id="preview" alt="Prévia"><div class="field"><label>OBSERVAÇÃO</label><textarea id="observacao" maxlength="600" placeholder="Observação sobre a execução..."></textarea></div><button class="confirm" id="confirmExec">✓ REGISTRAR CONCLUSÃO</button></div></div>
-<div class="modal" id="demandaConclusaoModal"><div class="modal-card"><div class="modal-head"><h2>Concluir demanda</h2><button class="close" id="fecharDemandaConclusao" type="button">×</button></div><div class="selection" id="demandaConclusaoTitulo"></div><div id="demandaDetalhesModal" style="padding:14px;margin:10px 0;background:#f0f7fb;border-radius:14px;font-size:14px;line-height:1.6"></div><div class="field"><label>OBSERVAÇÃO DA EXECUÇÃO</label><textarea id="demandaConclusaoObs" maxlength="600" placeholder="Descreva o serviço realizado..."></textarea></div><div class="field" id="blocoInicioDemanda"><label>📷 ANTES — REGISTRE A SITUAÇÃO</label><input id="demandaFotoAntes" type="file" accept="image/*" capture="environment"><button type="button" class="oraqui-antes-botao" id="demandaFotoAntesBtn">📷 TIRAR FOTO DO ANTES</button><img id="demandaFotoAntesPreview" class="oraqui-antes-previa" alt="Prévia da foto antes"><small id="inicioDemandaInfo">Fotografe o local antes de iniciar a demanda.</small><button class="photo-button" type="button" id="iniciarDemanda">▶ INICIAR DEMANDA</button></div><div id="depoisDemandaArea" class="oraqui-depois-area bloqueada"><div class="oraqui-etapa-label">📷 DEPOIS — REGISTRE O RESULTADO (ATÉ 8 FOTOS)</div><div style="display:flex;flex-wrap:wrap;gap:8px"><button class="photo-button" id="demandaConclusaoFotoBtn" type="button">📸 TIRAR FOTO</button><button class="photo-button" id="demandaConclusaoGaleriaBtn" type="button">🖼️ ESCOLHER FOTOS</button></div><small class="oraqui-etapa-ajuda">Fotografe todos os serviços feitos no mesmo local. Você pode acrescentar fotos e removê-las antes de concluir.</small></div><input class="photo-input" id="demandaConclusaoFoto" type="file" accept="image/*" multiple><input class="photo-input" id="demandaConclusaoCamera" type="file" accept="image/*" capture="environment"><div id="demandaConclusaoFotosPreview" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;margin-top:10px"></div><button class="confirm" id="salvarDemandaConclusao" type="button">✓ CONFIRMAR CONCLUSÃO</button></div></div><div class="toast" id="toast"></div>
+<div class="modal" id="execModal"><div class="modal-card"><div class="modal-head"><h2 id="modalTitle">Registrar execução</h2><button class="close" id="closeModal">×</button></div><p class="registro-passos">Local → Foto antes (início automático) → Foto depois → Concluir</p><div class="selection" id="modalSelection"></div><div class="field hidden" id="areaField"><label for="areaSelect">ESCOLHA A ÁREA</label><select id="areaSelect"></select></div><div class="field hidden" id="pontoField"><label for="pontoSelect">ESCOLHA O LOCAL</label><select id="pontoSelect"></select></div><div class="field" id="blocoInicioExec"><label>📷 ANTES — REGISTRE A SITUAÇÃO</label><input id="fotoAntesExec" type="file" accept="image/*" capture="environment"><button type="button" class="oraqui-antes-botao" id="fotoAntesExecBtn">📷 TIRAR FOTO DO ANTES</button><img id="fotoAntesExecPreview" class="oraqui-antes-previa" alt="Prévia da foto antes"><small id="inicioExecInfo">Ao confirmar a foto do ANTES, a atividade começa automaticamente.</small><button class="photo-button" type="button" id="iniciarExec">▶ INICIAR ATIVIDADE</button></div><div id="depoisExecArea" class="oraqui-depois-area bloqueada"><div class="oraqui-etapa-label">📷 DEPOIS — REGISTRE O RESULTADO</div><button class="photo-button" id="photoButton">📷 TIRAR FOTO DO DEPOIS</button><small class="oraqui-etapa-ajuda">Fotografe o serviço concluído.</small></div><input class="photo-input" id="photoInput" type="file" accept="image/*" capture="environment"><img class="preview" id="preview" alt="Prévia"><div class="field"><label>OBSERVAÇÃO</label><textarea id="observacao" maxlength="600" placeholder="Observação sobre a execução..."></textarea></div><button class="confirm" id="confirmExec">✓ REGISTRAR CONCLUSÃO</button></div></div>
+<div class="modal" id="demandaConclusaoModal"><div class="modal-card"><div class="modal-head"><h2>Concluir demanda</h2><button class="close" id="fecharDemandaConclusao" type="button">×</button></div><div class="selection" id="demandaConclusaoTitulo"></div><div id="demandaDetalhesModal" style="padding:14px;margin:10px 0;background:#f0f7fb;border-radius:14px;font-size:14px;line-height:1.6"></div><div class="field"><label>OBSERVAÇÃO DA EXECUÇÃO</label><textarea id="demandaConclusaoObs" maxlength="600" placeholder="Descreva o serviço realizado..."></textarea></div><div class="field" id="blocoInicioDemanda"><label>📷 ANTES — REGISTRE A SITUAÇÃO</label><input id="demandaFotoAntes" type="file" accept="image/*" capture="environment"><button type="button" class="oraqui-antes-botao" id="demandaFotoAntesBtn">📷 TIRAR FOTO DO ANTES</button><img id="demandaFotoAntesPreview" class="oraqui-antes-previa" alt="Prévia da foto antes"><small id="inicioDemandaInfo">Ao confirmar a foto do ANTES, a demanda começa automaticamente.</small><button class="photo-button" type="button" id="iniciarDemanda">▶ INICIAR DEMANDA</button></div><div id="depoisDemandaArea" class="oraqui-depois-area bloqueada"><div class="oraqui-etapa-label">📷 DEPOIS — REGISTRE O RESULTADO (ATÉ 8 FOTOS)</div><div style="display:flex;flex-wrap:wrap;gap:8px"><button class="photo-button" id="demandaConclusaoFotoBtn" type="button">📸 TIRAR FOTO</button><button class="photo-button" id="demandaConclusaoGaleriaBtn" type="button">🖼️ ESCOLHER FOTOS</button></div><small class="oraqui-etapa-ajuda">Fotografe todos os serviços feitos no mesmo local. Você pode acrescentar fotos e removê-las antes de concluir.</small></div><input class="photo-input" id="demandaConclusaoFoto" type="file" accept="image/*" multiple><input class="photo-input" id="demandaConclusaoCamera" type="file" accept="image/*" capture="environment"><div id="demandaConclusaoFotosPreview" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;margin-top:10px"></div><button class="confirm" id="salvarDemandaConclusao" type="button">✓ CONFIRMAR CONCLUSÃO</button></div></div><div class="toast" id="toast"></div>
 
 
 <div class="modal" id="posteriorModal"><div class="modal-card">
@@ -271,6 +271,7 @@ let authUser=null,colaborador=null,condominio=null,MODO_DEMO=false,DEMO_SESSAO=n
 let execAtual=null,fotoArquivo=null,previewURL=null,processando=false,sincronizando=false;
 let demandaEmConclusao=null;
 let inicioAtual=null; // início persistido no Supabase, separado da conclusão
+const iniciosSendoSalvos={programacao:false,avulsa:false,demanda:false}; // evita início automático e manual simultâneos
 let avulsaAtualId=null; // UUID do início avulso aberto, preservado ao fechar a janela
 let versaoCarregamento=0; // Ignora respostas antigas quando há atualizações concorrentes.
 const FILA_DB="oraqui_fila_v3",FILA_STORE="registros",FILA_VERSION=1;
@@ -1382,7 +1383,8 @@ async function obterInicio(tipo, id){
   const {data,error}=await q;if(error)throw error;
   return data?.[0]||null;
 }
-async function iniciarComFoto(tipo){
+async function iniciarComFoto(tipo, momentoConfirmacao=null){
+  if(iniciosSendoSalvos[tipo])return false;
   if(!moduloLiberado(tipo==='demanda'?'demandas':tipo==='programacao'?'cronograma':'atividades'))return alert('Módulo desativado pela gestão.');
   if(!colaborador||!authUser)return;
   const demanda=tipo==='demanda'?demandaEmConclusao:null;
@@ -1398,6 +1400,7 @@ async function iniciarComFoto(tipo){
   if(obrigatoria&&!arquivo)return alert('Esta atividade exige uma fotografia ANTES.');
 
   const btn=$(tipo==='demanda'?'iniciarDemanda':'iniciarExec');
+  iniciosSendoSalvos[tipo]=true;
   btn.disabled=true;btn.textContent='SALVANDO INÍCIO...';
   try{
     let existente=null;
@@ -1409,10 +1412,11 @@ async function iniciarComFoto(tipo){
       if(tipo==='avulsa')avulsaAtualId=existente.id;
       toast('Atividade já iniciada.');
       await atualizarBlocoInicio(tipo,tipo==='avulsa'?existente.id:refId);
-      return;
+      return true;
     }
 
-    const agora=new Date().toISOString();
+    // O início é o instante da confirmação da foto, não o final da consulta/upload.
+    const agora=momentoConfirmacao||new Date().toISOString();
     const inicioId=crypto.randomUUID();
     let areaId=null,pontoId=null;
     if(tipo==='avulsa'){
@@ -1452,10 +1456,13 @@ async function iniciarComFoto(tipo){
     await atualizarEstadoOffline();
     await atualizarBlocoInicio(tipo,tipo==='avulsa'?inicioId:refId);
     if(navigator.onLine)sincronizarFilaOffline().catch(e=>console.warn('Sincronização do início:',e));
+    return true;
   }catch(e){
     console.error(e);
     alert('Não foi possível salvar o início neste aparelho: '+(e.message||e));
+    return false;
   }finally{
+    iniciosSendoSalvos[tipo]=false;
     btn.disabled=false;btn.textContent=tipo==='demanda'?'▶ INICIAR DEMANDA':'▶ INICIAR ATIVIDADE';
   }
 }
@@ -1534,7 +1541,7 @@ async function atualizarBlocoInicio(tipo,id){
     if(tipo==='demanda'&&inicioAtual)marcarDemandaIniciada(demandas.find(d=>mesmoId(d.id,id)),inicioAtual);
     info.textContent=iniciada
       ?`✓ Iniciada às ${hora(inicioAtual.iniciada_em)}${inicioAtual.foto_antes_path?' • Foto ANTES preservada':''}. Agora registre o DEPOIS.`
-      :(navigator.onLine?'Registre a situação ANTES e toque em INICIAR. O início ficará salvo no ORAQUI.':'📴 Sem internet. Você pode registrar o início: a foto ficará salva neste aparelho até sincronizar.');
+      :(navigator.onLine?'Confirme a foto do ANTES para iniciar automaticamente. Sem foto, use INICIAR.':'📴 Confirme a foto do ANTES para iniciar e salvar no aparelho; a sincronização será feita depois.');
     btn.style.display=iniciada?'none':'';
     input.style.display='none';
     $(tipo==='demanda'?'demandaFotoAntesBtn':'fotoAntesExecBtn').style.display=iniciada?'none':'';
@@ -2026,13 +2033,38 @@ function limparPreviaAntes(id){
 function configurarFotoAntes(id){
  const input=$(id),btn=$(id+'Btn'),img=$(id+'Preview');
  if(!input||!btn||!img)return;
- btn.addEventListener('click',()=>input.click());
- input.addEventListener('change',()=>{
+ btn.addEventListener('click',()=>{
+  // Na atividade avulsa, o local deve ser escolhido antes da fotografia.
+  if(id==='fotoAntesExec'&&!execAtual){
+   const aid=Number($('areaSelect').value),pid=Number($('pontoSelect').value);
+   if(!aid)return alert('Selecione a área antes de tirar a foto.');
+   if(pontos.some(p=>mesmoId(p.area_id,aid))&&!pid)return alert('Selecione o ponto/local antes de tirar a foto.');
+  }
+  input.click();
+ });
+ input.addEventListener('change',async()=>{
    const file=input.files?.[0];if(!file)return;
    if(!file.type.startsWith('image/')||file.size>10*1024*1024){alert('Selecione uma fotografia de até 10 MB.');limparPreviaAntes(id);return}
    if(oraquiAntesUrls[id])URL.revokeObjectURL(oraquiAntesUrls[id]);
    oraquiAntesUrls[id]=URL.createObjectURL(file);img.src=oraquiAntesUrls[id];img.classList.add('visible');
-   btn.textContent='✓ FOTO DO ANTES SELECIONADA · TROCAR';btn.classList.add('tem-foto');
+   btn.textContent='⏳ FOTO CONFIRMADA · SALVANDO INÍCIO';btn.classList.add('tem-foto');
+   btn.disabled=true;
+   const tipo=id==='demandaFotoAntes'?'demanda':execAtual?'programacao':'avulsa';
+   const info=$(tipo==='demanda'?'inicioDemandaInfo':'inicioExecInfo');
+   if(info)info.textContent='⏳ Registrando automaticamente o início com a foto do ANTES...';
+   // Grava o horário da confirmação, mesmo que a compressão e o upload demorem.
+   const momentoConfirmacao=new Date().toISOString();
+   try{
+    const salvo=await iniciarComFoto(tipo,momentoConfirmacao);
+    btn.textContent=salvo?'✓ FOTO DO ANTES REGISTRADA':'✓ FOTO SELECIONADA · TENTAR NOVAMENTE';
+    if(!salvo&&info)info.textContent='Início não confirmado. Toque em INICIAR para tentar novamente.';
+   }catch(e){
+    console.error('Início automático:',e);
+    btn.textContent='✓ FOTO SELECIONADA · TENTAR NOVAMENTE';
+    if(info)info.textContent='Não foi possível confirmar o início. Toque em INICIAR para tentar novamente.';
+   }finally{
+    btn.disabled=false;
+   }
  });
 }
 configurarFotoAntes('fotoAntesExec');
