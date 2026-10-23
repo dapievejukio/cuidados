@@ -1,0 +1,13 @@
+{
+  "name": "oraqui-migracao",
+  "compatibility_date": "2026-10-22",
+  "main": "./cloudflare/worker.mjs",
+  "workers_dev": true,
+  "assets": {
+    "directory": "./.cloudflare-public",
+    "binding": "ASSETS",
+    "run_worker_first": ["/colaborador"],
+    "not_found_handling": "404-page",
+    "html_handling": "none"
+  }
+}

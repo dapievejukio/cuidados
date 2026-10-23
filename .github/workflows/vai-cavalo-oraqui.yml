@@ -1,0 +1,149 @@
+name: "🐎 VAI CAVALO — Migração OraQui"
+run-name: "🐎 ${{ inputs.fase }} · OraQui · ${{ github.actor }}"
+
+on:
+  workflow_dispatch:
+    inputs:
+      fase:
+        description: "PREPARAR = prévia sem corte; VAI CAVALO = domínio + GitHub privado"
+        required: true
+        type: choice
+        options:
+          - PREPARAR
+          - VAI CAVALO
+        default: PREPARAR
+      confirmacao:
+        description: "Para o corte definitivo, digite: VAI CAVALO"
+        required: false
+        type: string
+      qa_ios:
+        description: "Confirme testes manuais de login, fotos, ponto e modo offline iOS"
+        required: true
+        type: boolean
+        default: false
+
+concurrency:
+  group: oraqui-migracao-controle
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  preparar:
+    name: "🧪 Testar, empacotar e preparar Cloudflare"
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    outputs:
+      preview_url: ${{ steps.preflight.outputs.preview_url }}
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      ORAQUI_REPO_ADMIN_TOKEN: ${{ secrets.ORAQUI_REPO_ADMIN_TOKEN }}
+    steps:
+      - name: "Verificar confirmação antes de qualquer mudança"
+        env:
+          FASE: ${{ inputs.fase }}
+          CONFIRMACAO: ${{ inputs.confirmacao }}
+          QA_IOS: ${{ inputs.qa_ios }}
+        run: |
+          if [ "$FASE" = "VAI CAVALO" ] && { [ "$CONFIRMACAO" != "VAI CAVALO" ] || [ "$QA_IOS" != "true" ]; }; then
+            echo "::error::Confirmação ou QA iOS faltando. Sem mudança efetuada."
+            exit 1
+          fi
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: "Sintaxe e regressões de PWA e login"
+        run: |
+          node --check scripts/build-cloudflare.mjs
+          node --check scripts/check-migracao.mjs
+          node --check scripts/smoke-cloudflare.mjs
+          node --check scripts/privatizar-apos-corte.mjs
+          node --check cloudflare/worker.mjs
+          node --check service-worker.js
+          node --check oraqui-offline.js
+          node --test tests/offline-shell.mjs tests/online-auth.mjs
+      - name: "Gerar apenas arquivos estáticos públicos"
+        run: node scripts/build-cloudflare.mjs
+      - name: "Identificar credenciais para publicar prévia"
+        id: creds
+        run: |
+          if [ -n "$CLOUDFLARE_API_TOKEN" ] && [ -n "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "⚠️ Credenciais Cloudflare ainda não cadastradas. Arquivos locais preparados." >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ "${{ inputs.fase }}" = "VAI CAVALO" ] && [ -z "$ORAQUI_REPO_ADMIN_TOKEN" ]; then
+            echo "::error::Falta ORAQUI_REPO_ADMIN_TOKEN para privatizar ao final."
+            exit 1
+          fi
+      - name: "Verificar pré-requisitos com acesso somente leitura"
+        id: preflight
+        env:
+          FASE: ${{ inputs.fase }}
+        run: |
+          if [ "$FASE" = "VAI CAVALO" ]; then
+            node scripts/check-migracao.mjs vai-cavalo
+          else
+            node scripts/check-migracao.mjs preparar
+          fi
+      - name: "Implantar SOMENTE Worker temporário"
+        if: steps.creds.outputs.available == 'true'
+        run: npx --yes wrangler@4 deploy --config wrangler.preview.jsonc
+      - name: "Validar prévia (sem dados privados)"
+        if: steps.creds.outputs.available == 'true'
+        env:
+          PREVIEW_URL: ${{ steps.preflight.outputs.preview_url }}
+        run: node scripts/smoke-cloudflare.mjs "$PREVIEW_URL" "$GITHUB_SHA"
+      - name: "Exibir status e URL da prévia"
+        if: always()
+        env:
+          PREVIEW_URL: ${{ steps.preflight.outputs.preview_url }}
+          FASE: ${{ inputs.fase }}
+        run: |
+          echo "## 🐎 OraQui — $FASE" >> "$GITHUB_STEP_SUMMARY"
+          echo "Consulte as etapas acima para verificação dos resultados." >> "$GITHUB_STEP_SUMMARY"
+          if [ -n "$PREVIEW_URL" ]; then
+            echo "- Prévia Cloudflare: $PREVIEW_URL" >> "$GITHUB_STEP_SUMMARY"
+          fi
+          echo "- GitHub ainda permanece público até a validação do domínio de produção." >> "$GITHUB_STEP_SUMMARY"
+
+  vai_cavalo:
+    name: "🐎 Cortar domínio, testar e privatizar repositório"
+    needs: preparar
+    if: inputs.fase == 'VAI CAVALO'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: oraqui-producao
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      ORAQUI_REPO_ADMIN_TOKEN: ${{ secrets.ORAQUI_REPO_ADMIN_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: "Última verificação antes do domínio"
+        run: node scripts/check-migracao.mjs vai-cavalo
+      - name: "Empacotar versão aprovada"
+        run: node scripts/build-cloudflare.mjs
+      - name: "Publicar em oraqui.app (mesma origem iOS)"
+        run: npx --yes wrangler@4 deploy --config wrangler.production.jsonc
+      - name: "Verificar se oraqui.app realmente serve ESTE commit"
+        run: node scripts/smoke-cloudflare.mjs https://oraqui.app "$GITHUB_SHA"
+      - name: "Privatizar GitHub APÓS teste do domínio"
+        run: node scripts/privatizar-apos-corte.mjs
+      - name: "Resumo da migração"
+        if: always()
+        run: |
+          echo "## 🏁 OraQui — Migração" >> "$GITHUB_STEP_SUMMARY"
+          echo "Consulte os resultados. Se a produção falhar, o GitHub não será privatizado automaticamente." >> "$GITHUB_STEP_SUMMARY"
+          echo "Não apague dados offline nem remova atalhos dos iPhones." >> "$GITHUB_STEP_SUMMARY"
