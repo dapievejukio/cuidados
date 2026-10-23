@@ -3,6 +3,26 @@
 const css='.oraqui-pdf-modal{position:fixed;inset:0;z-index:17000;overflow:auto;background:rgba(15,26,45,.76);padding:14px}.oraqui-pdf-box{max-width:800px;background:white;color:#26384a;margin:auto;padding:18px;border-radius:16px}.oraqui-pdf-menu{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;padding-bottom:12px;border-bottom:1px solid #d8e1e8;margin-bottom:15px}.oraqui-pdf-menu strong{font-size:16px}.oraqui-pdf-menu button{border:0;border-radius:9px;padding:12px;background:#e9eef3;color:#304c61;font-weight:700}.oraqui-pdf-menu #oraquiPdfImprimir{background:#5d50a6;color:white}.oraqui-pdf-cab{background:#fff;color:#26384a;padding:0 0 12px;border-bottom:2px solid #0f5132;margin:0 0 13px;break-inside:avoid}.oraqui-pdf-marcas{display:flex;justify-content:space-between;align-items:center;gap:24px;margin-bottom:18px}.oraqui-pdf-marcas img{display:block;object-fit:contain;max-width:55%;width:250px;height:90px}.oraqui-pdf-marcas img.oraqui-pdf-condominio{width:130px;height:110px;max-width:32%}.oraqui-pdf-cab h1{font-size:21px;margin:0 0 7px}.oraqui-pdf-cab h2{font-size:14px;margin:0 0 12px}.oraqui-pdf-filtros{display:grid;grid-template-columns:1fr 1fr;gap:8px}.oraqui-pdf-filtros div{border:1px solid #dce4eb;padding:9px;font-size:11px;border-radius:7px;overflow-wrap:anywhere}.oraqui-pdf-filtros b{display:block;font-size:9px;color:#60768a;margin-bottom:5px}.oraqui-pdf-item{border:1px solid #dce4eb;border-radius:8px;padding:12px;margin:12px 0;break-inside:avoid;page-break-inside:avoid}.oraqui-pdf-item h3{font-size:13px;margin-bottom:8px}.oraqui-pdf-item p{font-size:11px;line-height:1.5;margin:4px 0}.oraqui-pdf-fotos{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:8px}.oraqui-pdf-foto{border:1px solid #dce4eb;padding:7px;border-radius:7px;min-width:0}.oraqui-pdf-foto b{display:block;font-size:10px;margin-bottom:6px}.oraqui-pdf-foto img{display:block;width:100%;height:210px;object-fit:contain;background:#f4f5f6}.oraqui-pdf-erro{font-size:11px;color:#a33c34;background:#fff1ef;padding:9px;margin-top:10px;border-radius:6px}.oraqui-pdf-rodape{padding-top:12px;margin-top:12px;border-top:1px solid #dce4eb;font-size:10px;color:#627485}@media(max-width:520px){.oraqui-pdf-box{padding:12px}.oraqui-pdf-filtros,.oraqui-pdf-fotos{grid-template-columns:1fr}}@page{size:A4 portrait;margin:12mm}@media print{body>*:not(#oraquiPdfModal){display:none!important}#oraquiPdfModal,#oraquiPdfModal *{visibility:visible!important}#oraquiPdfModal{position:static!important;inset:auto!important;display:block!important;background:white!important;padding:0!important;overflow:visible!important}.oraqui-pdf-box{max-width:none!important;padding:0!important;border-radius:0!important}.oraqui-pdf-menu{display:none!important}.oraqui-pdf-fotos,.oraqui-pdf-filtros{grid-template-columns:1fr 1fr}.oraqui-pdf-foto img{height:170px}}';
 const estilo=document.createElement('style');estilo.textContent=css;document.head.appendChild(estilo);
 let ocupado=false;
+// O título da página é a sugestão de nome ao usar "Salvar como PDF" do navegador.
+const tituloPaginaAnterior=document.title;
+let tituloRelatorioAtivo='';
+function nomeSeguroRelatorio(v){
+ return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+  .replace(/[^a-zA-Z0-9]+/g,'_').replace(/_+/g,'_').replace(/^_+|_+$/g,'')
+  .slice(0,64)||'Condominio';
+}
+function nomeRelatorioServicos(inicio,fim,nomeCondominio,colaborador){
+ const valida=/^\d{4}-\d{2}-\d{2}$/;
+ if(!valida.test(inicio)||!valida.test(fim)||inicio>fim)throw Error('Período do relatório inválido.');
+ const periodo=inicio===fim?inicio:inicio+'_a_'+fim;
+ const pessoa=colaborador&&colaborador!=='Todos'?'_'+nomeSeguroRelatorio(colaborador):'';
+ return periodo+'_Relatorio_Servicos_'+nomeSeguroRelatorio(nomeCondominio)+pessoa;
+}
+function fecharPreviaRelatorio(){
+ document.getElementById('oraquiPdfModal')?.classList.add('hidden');
+ document.title=tituloPaginaAnterior;
+ tituloRelatorioAtivo='';
+}
 function modal(){
  let el=document.getElementById('oraquiPdfModal');
  if(el)return el;
@@ -10,10 +30,14 @@ function modal(){
  el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');
  el.innerHTML='<div class="oraqui-pdf-box"><div class="oraqui-pdf-menu"><strong>Relatório de serviços • Pré-visualização</strong><div><button type="button" id="oraquiPdfFechar">FECHAR</button> <button type="button" id="oraquiPdfImprimir">🖨️ IMPRIMIR / SALVAR PDF</button></div></div><div id="oraquiPdfConteudo"></div></div>';
  document.body.appendChild(el);
- document.getElementById('oraquiPdfFechar').onclick=()=>el.classList.add('hidden');
+ document.getElementById('oraquiPdfFechar').onclick=fecharPreviaRelatorio;
  document.getElementById('oraquiPdfImprimir').onclick=async()=>{
   const imagens=[...el.querySelectorAll('img')];
-  try{await Promise.all(imagens.map(img=>img.decode()));window.print()}
+  try{
+   await Promise.all(imagens.map(img=>img.decode()));
+   if(tituloRelatorioAtivo)document.title=tituloRelatorioAtivo;
+   window.print();
+  }
   catch(e){alert('Uma imagem não pôde ser carregada. Reabra o relatório antes de imprimir.')}
  };
  return el;
@@ -71,7 +95,7 @@ async function prepararMarcas(idCondo){
  }catch(e){avisos.push('Logo do condomínio indisponível.');console.warn(e)}
  return {logoOraqui,logoCondo,avisos};
 }
-window.fecharRelatorioOraqui=()=>document.getElementById('oraquiPdfModal')?.classList.add('hidden');
+window.fecharRelatorioOraqui=fecharPreviaRelatorio;
 window.abrirPreviaRelatorioOraqui=async function(){
  if(ocupado)return;
  if(typeof oraquiRegConsultaEmAndamento!=='undefined'&&oraquiRegConsultaEmAndamento){alert('Aguarde a conclusão da consulta do período.');return}
@@ -101,6 +125,8 @@ window.abrirPreviaRelatorioOraqui=async function(){
   const aviso=falhas?'<div class="oraqui-pdf-erro">ATENÇÃO: '+falhas+' fotografia(s) não puderam ser incorporadas. Verifique o armazenamento antes de emitir a versão definitiva.</div>':'';
   document.getElementById('oraquiPdfConteudo')?.replaceChildren();
   const previa=modal();document.getElementById('oraquiPdfConteudo').innerHTML=cab+itens+aviso+marcas.avisos.map(a=>'<div class="oraqui-pdf-erro">'+esc(a)+'</div>').join('')+'<footer class="oraqui-pdf-rodape">'+esc(nomeCondo)+' • Emitido em '+esc(new Date().toLocaleString('pt-BR',{timeZone:'America/Sao_Paulo'}))+' • ORAQUI</footer>';
+  tituloRelatorioAtivo=nomeRelatorioServicos(dataInicial,dataFinal,nomeCondo,colaborador);
+  document.title=tituloRelatorioAtivo;
   previa.classList.remove('hidden');
   if(falhas)alert(falhas+' fotografia(s) não foram incorporadas; confira o aviso na prévia.');
  }catch(e){console.error(e);alert('Não foi possível preparar o relatório: '+(e?.message||e))}
