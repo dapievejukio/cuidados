@@ -31,7 +31,7 @@ const point=document.getElementById('oraquiPontoRelatorio').querySelector('.sect
 ctx.abrirDestinoGestor('operacao','oraquiPontoRelatorio');point.click();assert.equal(point.getAttribute('aria-expanded'),'false');point.click();assert.equal(point.getAttribute('aria-expanded'),'true');
 document.getElementById('gestorRecolherTudo').click();assert.equal(document.querySelectorAll('.panel.active,.hub-card[open],.gestor-resumo[open]').length,0);
 // Reset is applied by the condominium-selection flow as well as initial startup.
-assert.match(html,/aplicarPermissoesGestao\(\);\s*recolherTudoGestor\(\);/);
+assert.match(html,/aplicarPermissoesGestao\(\);\s*(?:carregarFiltroPontoGestor\(\)\.catch\(console.warn\);\s*)?recolherTudoGestor\(\);/);
 assert(document.getElementById('pushGestaoButton').closest('.hub-card'));
 assert(document.getElementById('demoSwitchCard').closest('.hub-card'));
 // Resident calls highlight the closed Communication card and its own action.

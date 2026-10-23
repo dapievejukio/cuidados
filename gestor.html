@@ -100,6 +100,28 @@ body{padding-bottom:88px!important}.oraqui-bottom{position:fixed;bottom:0;left:0
 </style><style></style>
 <link rel="icon" type="image/svg+xml" href="assets/gestor-3/simbolo.svg">
 <link rel="stylesheet" href="gestor-3.css?v=20261021-3">
+<style>
+/* Ponto visível na entrada, com a mesma paleta dos cartões da gestão. */
+#gestorPontoHoje[hidden]{display:none}
+.ponto-home{margin:14px 0 22px;padding:18px 20px;border:1px solid #d9e7de;border-left:4px solid #0f5132;border-radius:18px;background:#fffdf9;color:#204c3b}
+.ponto-home-head{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.ponto-home-label{display:block;font-size:11px;font-weight:750;letter-spacing:.08em;color:#60796d;text-transform:uppercase}
+.ponto-home h2{font-size:20px;line-height:1.35;margin:4px 0 0;color:#0f5132}
+.ponto-home-actions{display:flex;gap:8px;flex-wrap:wrap}
+.ponto-home button{min-height:42px;padding:9px 12px;border:1px solid #d9e7de;border-radius:11px;background:#edf5ef;color:#0f5132;font:inherit;font-size:12px;font-weight:650;cursor:pointer}
+.ponto-home button:hover{background:#e0eee4}
+.ponto-home button:focus-visible{outline:3px solid #ce7430;outline-offset:3px}
+.ponto-home ul{list-style:none;padding:0;margin:12px 0 0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.ponto-home ul:empty{display:none}
+.ponto-home li{display:flex;align-items:center;gap:9px;padding:10px;border:1px solid #e6eee8;border-radius:11px;background:#f6faf7;min-width:0}
+.ponto-home li div{min-width:0}.ponto-home li strong,.ponto-home li div>span{display:block;overflow-wrap:anywhere}
+.ponto-home li strong{font-size:13px;line-height:1.4}.ponto-home li div>span{font-size:11px;color:#587265;line-height:1.5;margin-top:2px}
+.ponto-home-check{display:grid;place-items:center;flex:0 0 25px;height:25px;border-radius:50%;background:#e1f0e5;color:#0f5132;font-weight:750}
+.ponto-home-note{font-size:11px;line-height:1.6;color:#60796d;margin:10px 0 0}
+@media(max-width:700px){.ponto-home ul{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:430px){.ponto-home{padding:15px}.ponto-home h2{font-size:18px}}
+@media(max-width:350px){.ponto-home ul{grid-template-columns:minmax(0,1fr)}}
+</style>
 </head>
 <body>
 <div class="auth-screen" id="authScreen"><div class="auth-card"><div class="auth-logo"><img src="assets/marca/oraqui-transparente.webp" alt="OraQui — Condomínios e equipes em ação."></div><h1>Bem-vindo à gestão</h1><p>Acompanhe sua equipe, organize as rotinas e cuide de cada detalhe do condomínio.</p><div class="auth-field"><label for="loginEmail">E-MAIL</label><input autocomplete="username" id="loginEmail" type="email" value="atendimento@oraqui.app"></div><div class="auth-field"><label for="loginPassword">SENHA</label><input autocomplete="current-password" id="loginPassword" type="password"></div><button class="auth-button" id="loginButton">ENTRAR</button><div class="auth-error" id="authError" role="alert"></div><div class="gestor-auth-note">GESTOR 3.0 · Organiza. Acompanha. Resolve.</div></div></div>
@@ -108,6 +130,10 @@ body{padding-bottom:88px!important}.oraqui-bottom{position:fixed;bottom:0;left:0
 <header><div class="header-content"><div class="topbar"><div class="brand"><img class="gestor-brand-image" src="assets/marca/oraqui-transparente.webp" alt="OraQui — Condomínios e equipes em ação."><div class="gestor-brand-promise" aria-hidden="true"><span>Organiza</span><span>Acompanha</span><span>Resolve</span></div></div><div class="gestor-session-actions"><button class="condo-switch hidden" id="changeCondoButton" type="button">TROCAR</button> <button class="logout" id="logoutButton">SAIR</button></div></div><div class="header-title"><div class="gestor-heading"><small id="headerCondominio">CONDOMÍNIO</small><h1>Seu condomínio em boas mãos.</h1><p>Organize as rotinas, acompanhe a equipe e transforme registros em cuidado.</p></div><span class="gestor-version">GESTOR 3.0</span></div></div></header>
 <main>
 <div class="manager-card"><div class="manager-icon"><svg class="g3-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M6 17V9h3v8ZM12 17V5h3v12ZM18 17V2h3v15Z"/></svg></div><div class="manager-info"><strong id="managerName">Gestão</strong><span id="managerProfile">Gestor autenticado</span></div><span class="online">● ONLINE</span></div>
+<section class="ponto-home" id="gestorPontoHoje" aria-labelledby="pontoHojeContagem" hidden>
+<div class="ponto-home-head"><div><span class="ponto-home-label">◷ Ponto da equipe · hoje</span><h2 id="pontoHojeContagem" role="status" aria-live="polite">Consultando ponto de hoje…</h2></div><div class="ponto-home-actions"><button type="button" id="pontoHojeAtualizar">Atualizar</button><button type="button" id="pontoHojeRelatorio">Ver marcações →</button></div></div>
+<ul id="pontoHojePessoas" aria-label="Pessoas com ponto registrado hoje"></ul><p class="ponto-home-note" id="pontoHojeNota"></p>
+</section>
 <div class="error-box" id="errorBox"></div>
 <div class="gestor-menu-tools"><h2>O que você quer acompanhar?</h2><button type="button" id="gestorRecolherTudo">Recolher tudo</button></div><div class="oraqui-quick oraqui-hub" aria-label="Áreas principais da gestão">
 <details class="hub-card" id="gestorComunicacao"><summary><span class="quick-icon"><svg class="g3-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8A8.5 8.5 0 0 1 13 3a8.5 8.5 0 0 1 8 8.5Z"/><path d="M8 11h8M8 15h5"/></svg></span><strong>Comunicação</strong><span class="gestor-chamados-badge" id="gestorComunicacaoBadge" aria-live="polite" hidden></span><span class="hub-chevron">⌄</span></summary><div class="hub-sub"><a id="oraquiQuickChatGestor" href="chat.html"><svg class="g3-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8A8.5 8.5 0 0 1 13 3a8.5 8.5 0 0 1 8 8.5Z"/><path d="M8 11h8M8 15h5"/></svg> Abrir chat</a><button type="button" id="gestorChamadosMoradores" class="gestor-chamados" data-oraqui-action="ocorrencias"><svg class="g3-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7M5 9v12h14V9M9 21v-6h6v6"/></svg><span>Chamados dos moradores</span></button><a id="oraquiQuickChatConfig" href="chat-config.html"><svg class="g3-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m9 3-1 3-3 1-2 4 2 3v4l4 2 3-1 3 1 4-2v-4l2-3-2-4-3-1-1-3Z"/><circle cx="12" cy="12" r="3"/></svg> Configurar chat</a></div></details>
@@ -191,6 +217,69 @@ function erro(m){errorBox.textContent=m;errorBox.style.display="block"}function 
 function toast(m){$("toast").textContent=m;$("toast").classList.add("visible");setTimeout(()=>$("toast").classList.remove("visible"),2500)}
 function foto(path,cls){if(!path)return `<div class="${cls}"></div>`;const seguro=encodeURIComponent(String(path));return `<button type="button" class="${cls} foto-clicavel" title="Abrir foto" aria-label="Abrir foto" onclick="event.stopPropagation();abrirFotoStorage(decodeURIComponent(\'${seguro}\'),\'atividade\')"><span>📷</span><small>VER</small></button>`}
 
+
+// Resumo de ponto da página inicial. A previsão diária é específica do Gravataí.
+const PONTO_HOME_CONFIG={slug:'reserva-clube-gravatai',previstos:6,inicio:'2026-10-23'};
+let pontoHomeCondominio=null,pontoHomeVersao=0,pontoHomeConsulta=null;
+function diaPontoHome(agora=new Date()){
+ const partes=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Sao_Paulo',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(agora);
+ const valor=t=>partes.find(p=>p.type===t).value;
+ return `${valor('year')}-${valor('month')}-${valor('day')}`;
+}
+function agruparPontoHome(registros,pessoas){
+ const nomes=new Map(pessoas.map(p=>[String(p.id),p.nome]));
+ const ultimos=new Map();
+ for(const r of registros){
+  const chave=String(r.colaborador_id),anterior=ultimos.get(chave);
+  if(!anterior||new Date(r.registrado_em)>new Date(anterior.registrado_em)||(r.registrado_em===anterior.registrado_em&&Number(r.id)>Number(anterior.id)))ultimos.set(chave,r);
+ }
+ return [...ultimos.values()].map(r=>({...r,nome:nomes.get(String(r.colaborador_id))||'Colaborador #'+r.colaborador_id})).sort((a,b)=>a.nome.localeCompare(b.nome,'pt-BR'));
+}
+function iniciarResumoPontoGestor(c){
+ ++pontoHomeVersao;pontoHomeConsulta=null;pontoHomeCondominio=null;
+ const box=$('gestorPontoHoje');box.hidden=true;box.setAttribute('aria-busy','false');
+ $('pontoHojePessoas').replaceChildren();$('pontoHojeContagem').textContent='Consultando ponto de hoje…';$('pontoHojeNota').textContent='';
+ if(c.slug!==PONTO_HOME_CONFIG.slug||c.ambiente_demo)return;
+ pontoHomeCondominio=Number(c.id);box.hidden=false;
+ atualizarResumoPontoGestor();
+}
+async function atualizarResumoPontoGestor(){
+ const cid=pontoHomeCondominio,versao=pontoHomeVersao,dia=diaPontoHome();
+ if(!perfilGestor||!cid||cid!==Number(CONDOMINIO_ID)||document.hidden||pontoHomeConsulta)return;
+ const box=$('gestorPontoHoje'),contagem=$('pontoHojeContagem'),lista=$('pontoHojePessoas'),nota=$('pontoHojeNota');
+ if(dia<PONTO_HOME_CONFIG.inicio){lista.replaceChildren();contagem.textContent='Ponto diário a partir de 23/10';nota.textContent='Previsão: 6 pessoas por dia.';return}
+ const consulta={};pontoHomeConsulta=consulta;box.setAttribute('aria-busy','true');
+ const vigente=()=>versao===pontoHomeVersao&&cid===Number(CONDOMINIO_ID)&&cid===pontoHomeCondominio&&dia===diaPontoHome();
+ try{
+  const inicio=dia+'T00:00:00-03:00',fim=new Date(new Date(inicio).getTime()+86400000).toISOString();
+  const registros=[];
+  // Paginar evita que o limite padrão da API produza uma contagem incompleta.
+  for(let pagina=0;;pagina++){
+   const {data,error}=await db.from('registros_ponto').select('id,colaborador_id,tipo,registrado_em,origem').eq('condominio_id',cid).gte('registrado_em',inicio).lt('registrado_em',fim).order('id',{ascending:true}).range(pagina*500,pagina*500+499);
+   if(!vigente())return;if(error)throw error;
+   registros.push(...(data||[]));if((data||[]).length<500)break;
+  }
+  const {data:pessoas,error}=await db.from('colaboradores').select('id,nome').eq('condominio_id',cid);
+  if(!vigente())return;if(error)throw error;
+  const equipe=agruparPontoHome(registros,pessoas||[]),total=equipe.length;
+  contagem.textContent=`${total} de ${PONTO_HOME_CONFIG.previstos} pessoas com ponto hoje`;
+  const tipos={entrada:'Entrada',inicio_intervalo:'Início do intervalo',fim_intervalo:'Retorno do intervalo',saida:'Saída'};
+  lista.innerHTML=equipe.map(p=>{
+   const horario=new Date(p.registrado_em).toLocaleTimeString('pt-BR',{timeZone:'America/Sao_Paulo',hour:'2-digit',minute:'2-digit'});
+   return `<li><span class="ponto-home-check" aria-hidden="true">✓</span><div><strong>${esc(p.nome)}</strong><span>${esc(tipos[p.tipo]||p.tipo)} às ${esc(horario)}${p.origem==='offline'?' · Offline, conferir horário':''}</span></div></li>`;
+  }).join('');
+  const horario=new Date().toLocaleTimeString('pt-BR',{timeZone:'America/Sao_Paulo',hour:'2-digit',minute:'2-digit'});
+  nota.textContent=(total?'Última marcação por pessoa.':'Nenhum ponto sincronizado hoje.')+' Atualizado às '+horario+'. Previsão diária: 6 pessoas; confira a escala.';
+ }catch(e){
+  if(!vigente())return;
+  contagem.textContent='Ponto de hoje indisponível';lista.replaceChildren();
+  nota.textContent='Não foi possível consultar. Tente atualizar; isso não significa ausência de registros.';
+  console.warn('Resumo de ponto:',e);
+ }finally{
+  if(pontoHomeConsulta===consulta){pontoHomeConsulta=null;box.setAttribute('aria-busy','false')}
+ }
+}
+// Fim do resumo de ponto da página inicial.
 
 function base64UrlToUint8Array(base64String){
   const padding="=".repeat((4-base64String.length%4)%4),base64=(base64String+padding).replace(/-/g,"+").replace(/_/g,"/");
@@ -294,6 +383,7 @@ async function selecionarCondominioGestao({p,c}){
   $("changeCondoButton").classList.toggle("hidden",vinculosGestaoValidos.length<2);
   $("condoChoice").classList.remove("visible");
   $("authScreen").classList.add("hidden");$("app").classList.remove("hidden");
+  iniciarResumoPontoGestor(c);
   aplicarPermissoesGestao();
   carregarFiltroPontoGestor().catch(console.warn);
   recolherTudoGestor();
@@ -331,7 +421,7 @@ async function assumirDemoColaborador(id,btn){
 }
 function fecharDemoColaborador(){$("demoCollaboratorModal").classList.remove("visible")}
 
-async function sair(){sessionStorage.removeItem("oraqui_gestao_condominio_id");const destino=perfilGestor?.perfil==="admin_oraqui"?"admin.html":"index.html";await db.auth.signOut();location.href=destino}
+async function sair(){++pontoHomeVersao;pontoHomeCondominio=null;$('gestorPontoHoje').hidden=true;sessionStorage.removeItem("oraqui_gestao_condominio_id");const destino=perfilGestor?.perfil==="admin_oraqui"?"admin.html":"index.html";await db.auth.signOut();location.href=destino}
 
 async function carregarDados(){
   if(!CONDOMINIO_ID)return;
@@ -1553,6 +1643,10 @@ function configurarNavegacaoGestor(){
   });
 }
 function eventos(){
+$('pontoHojeAtualizar').onclick=atualizarResumoPontoGestor;
+$('pontoHojeRelatorio').onclick=()=>{abrirDestinoGestor('operacao','oraquiPontoRelatorio');$('oraquiPontoData').value=diaPontoHome();$('oraquiPontoColaborador').value='';consultarPontoGestor()};
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)atualizarResumoPontoGestor()});
+
 $("changeCondoButton").onclick=mostrarEscolhaCondominio;$("loginButton").onclick=login;$("pushGestaoButton").onclick=ativarPushGestao;$("loginPassword").onkeydown=e=>{if(e.key==="Enter")login()};$("logoutButton").onclick=sair;
 $("demoSwitchButton").onclick=abrirDemoColaborador;$("closeDemoCollaborator").onclick=fecharDemoColaborador;$("demoCollaboratorModal").onclick=e=>{if(e.target===$("demoCollaboratorModal"))fecharDemoColaborador()};
 $("tabOperacao").onclick=()=>painel("operacao");$("tabOcorrencias").onclick=()=>painel("ocorrencias");$("tabRegistrosPosteriores").onclick=()=>painel("registrosposteriores");$("rpAtualizar").onclick=carregarRegistrosPosteriores;document.querySelectorAll("[data-rp-filter]").forEach(b=>b.onclick=()=>{rpFiltro=b.dataset.rpFilter;document.querySelectorAll("[data-rp-filter]").forEach(x=>x.classList.toggle("active",x===b));renderRegistrosPosteriores()});$("tabColaboradores").onclick=()=>painel("colaboradores");$("tabConfig").onclick=()=>painel("config");
@@ -1816,6 +1910,7 @@ setInterval(async()=>{
   const versaoConsulta=versaoCondominio;
   atualizacaoAutomaticaEmAndamento=true;
   try{
+    atualizarResumoPontoGestor();
     // Atualizar o alerta de chamados mesmo com todos os painéis recolhidos.
     await carregarOcorrencias();
     if($("panelOperacao").classList.contains("active"))await carregarDados();
