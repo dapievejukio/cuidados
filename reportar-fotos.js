@@ -16,7 +16,7 @@ modal.setAttribute('aria-modal','true');
 modal.setAttribute('aria-labelledby','oraquiFotoTitulo');
 modal.innerHTML='<section class="oraqui-foto-dialog"><div class="oraqui-foto-header"><div><h2 id="oraquiFotoTitulo">Fotos da última atividade</h2><p id="oraquiFotoInfo"></p></div><button type="button" class="oraqui-foto-close" id="oraquiFotoFechar" aria-label="Fechar">×</button></div><div class="oraqui-foto-grid" id="oraquiFotoGrid"></div><p class="oraqui-foto-footer">Fotografias operacionais do espaço selecionado.</p></section>';
 document.body.appendChild(modal);
-let fotoAtual=null,versao=0,focoAnterior=null;
+let fotoAtual=null,versao=0,focoAnterior=null,urlsAutorizadas=new Map();
 function fechar(){
  if(modal.hidden)return;
  modal.hidden=true;
@@ -24,7 +24,7 @@ function fechar(){
  if(focoAnterior?.isConnected)focoAnterior.focus();
 }
 function limpar(){
- fotoAtual=null;btn.disabled=true;btn.style.display='none';
+ fotoAtual=null;urlsAutorizadas.clear();btn.disabled=true;btn.style.display='none';
  card.classList.remove('oraqui-com-foto');
  card.removeAttribute('tabindex');card.removeAttribute('role');card.removeAttribute('aria-label');
  fechar();
@@ -33,7 +33,7 @@ function urlFoto(path){
  const s=typeof path==='string'?path.trim().replace(/^\/+/,''):'';
  // Esta página é exclusiva do Reserva Igara. Não abrir paths de outros condomínios.
  if(!/^v2\/1\//.test(s))return '';
- return db.storage.from('fotos-atividades').getPublicUrl(s).data?.publicUrl||'';
+ return urlsAutorizadas.get(s)||'';
 }
 function abrir(){
  if(!fotoAtual)return;
@@ -79,6 +79,17 @@ window.carregarHistoricoLocal=async function(){
   const foto=data?.[0];
   if(!foto?.ultima_quando)return;
   if(document.getElementById('ultimaQuando').textContent!==fmtDataHora(foto.ultima_quando))return;
+  // Fotos privadas: buscar apenas links temporários da última execução pública
+  // validada no servidor. Nunca gerar diretamente URLs públicas do bucket.
+  const {data:autorizado,error:erroFotos}=await db.functions.invoke('oraqui-foto-publica',{
+    body:{condominio_id:CONDOMINIO_ID,area_id:areaId,ponto_id:pontoId}
+  });
+  if(erroFotos||!autorizado?.ok)throw erroFotos||Error('Fotos temporariamente indisponíveis.');
+  if(v!==versao||!okLocal())return;
+  if(autorizado.foto_path!==foto.foto_path||autorizado.foto_antes_path!==foto.foto_antes_path)return;
+  urlsAutorizadas.clear();
+  if(autorizado.urls?.foto_antes_path&&foto.foto_antes_path)urlsAutorizadas.set(foto.foto_antes_path,autorizado.urls.foto_antes_path);
+  if(autorizado.urls?.foto_path&&foto.foto_path)urlsAutorizadas.set(foto.foto_path,autorizado.urls.foto_path);
   if(!urlFoto(foto.foto_path)&&!urlFoto(foto.foto_antes_path))return;
   fotoAtual={...foto,areaId,pontoId};
   btn.textContent='📷 VER REGISTRO';
