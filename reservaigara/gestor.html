@@ -640,6 +640,7 @@ async function salvarCol(){
   const funcao=$("colFuncao").value;
   const ponto=$("colPontoAtivo").checked;
   const payload={
+    condominio_id:CONDOMINIO_ID,
     nome,email,matricula,funcao,
     ponto_ativo:ponto,
     selfie_ponto_obrigatoria:ponto&&$("colSelfie").checked,
@@ -658,10 +659,12 @@ async function salvarCol(){
     if(error)return alert(error.message);
   }else{
     const {data,error}=await db.functions.invoke("convidar-colaborador",{body:payload});
-    if(error||data?.success===false){
+    if(error||data?.error||data?.ok===false||data?.success===false){
       const msg=await mensagemFunction(error,data,"Não foi possível convidar o colaborador.");
       return alert(msg);
     }
+    if(data?.aviso)alert(data.aviso);
+    if(data?.reenviado)alert("Cadastro existente: link reenviado, sem alterar as permissões. Use EDITAR para alterar o cadastro.");
   }
 
   $("collaboratorModal").classList.remove("visible");
@@ -676,7 +679,7 @@ async function reenviarConviteColaborador(id,btn){
   const original=btn?.textContent||"REENVIAR CONVITE";
   if(btn){btn.disabled=true;btn.textContent="ENVIANDO...";}
   try{
-    const {data,error}=await db.functions.invoke("reenviar-convite-colaborador",{body:{colaborador_id:c.id}});
+    const {data,error}=await db.functions.invoke("reenviar-convite-colaborador",{body:{colaborador_id:c.id,condominio_id:CONDOMINIO_ID}});
     if(error||data?.ok===false){
       const msg=await mensagemFunction(error,data,"Não foi possível reenviar o convite.");
       throw new Error(msg);

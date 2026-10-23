@@ -981,7 +981,7 @@
         if (
           !perfisPermitidos.includes(
             perfil
-          )
+          ) && !await possuiVinculoColaborador(user.id)
         ) {
 
           await db.auth.signOut();
@@ -1263,7 +1263,7 @@
           if (
             !perfisPermitidos.includes(
               perfil
-            )
+            ) && !await possuiVinculoColaborador(user.id)
           ) {
 
             await db.auth.signOut();
@@ -1444,6 +1444,13 @@
     // ========================================================
     // NORMALIZAR TIPO OTP
     // ========================================================
+
+    async function possuiVinculoColaborador(authId) {
+      const {data,error}=await db.from("colaboradores").select("id")
+        .eq("auth_user_id",authId).eq("ativo",true).limit(1);
+      if(error) throw error;
+      return !!data?.length;
+    }
 
     function normalizarTipoOtp(
       tipo

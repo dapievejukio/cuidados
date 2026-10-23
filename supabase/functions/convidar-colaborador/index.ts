@@ -121,7 +121,7 @@ Deno.serve(async (req) => {
       .from("colaboradores")
       .select("id,nome,email,matricula,funcao,ativo,condominio_id,auth_user_id")
       .eq("condominio_id", condominioId)
-      .ilike("email", email)
+      .ilike("email", email.replace(/[\\%_]/g, "\\$&"))
       .limit(2);
     if (emailError) throw emailError;
     if ((emailRows ?? []).length > 1) return resposta({ error: "Há cadastros duplicados com este e-mail no condomínio. Solicite revisão administrativa." }, 409);
@@ -142,7 +142,7 @@ Deno.serve(async (req) => {
     const { data: outrosVinculos, error: outrosError } = await admin
       .from("colaboradores")
       .select("id,auth_user_id")
-      .ilike("email", email)
+      .ilike("email", email.replace(/[\\%_]/g, "\\$&"))
       .not("auth_user_id", "is", null)
       .limit(100);
     if (outrosError) throw outrosError;
@@ -150,7 +150,7 @@ Deno.serve(async (req) => {
     if (ids.length > 1) return resposta({ error: "Este e-mail está vinculado a mais de uma conta de autenticação. Solicite revisão administrativa." }, 409);
 
     let authUserId: string | null = existenteNoCondominio?.auth_user_id ?? ids[0] ?? null;
-    let authUser: { id: string; email_confirmed_at?: string | null } | null = null;
+    let authUser: { id: string; email?: string | null; email_confirmed_at?: string | null } | null = null;
     let authCriadoAgora = false;
 
     if (authUserId) {
@@ -176,6 +176,8 @@ Deno.serve(async (req) => {
     }
 
     if (existenteNoCondominio) {
+      if (!existenteNoCondominio.ativo) return resposta({ error: "Colaborador inativo. Reative o cadastro antes de reenviar o acesso." }, 409);
+      if (!existenteNoCondominio.auth_user_id) return resposta({ error: "Cadastro existente sem vínculo Auth. É necessária regularização administrativa." }, 409);
       if (!authUserId) return resposta({ error: "Cadastro existente sem conta de acesso. É necessária regularização administrativa." }, 409);
       const authPublico = createClient(supabaseUrl, anonKey, {
         auth: { autoRefreshToken: false, persistSession: false },
@@ -220,10 +222,10 @@ Deno.serve(async (req) => {
       .single();
     if (criarError) {
       erroLog("inserir colaborador", criarError);
-      if (authCriadoAgora && authUserId) {
-        const { error: excluirError } = await admin.auth.admin.deleteUser(authUserId);
-        if (excluirError) erroLog("reverter convite", excluirError);
-      }
+      // Auth é compartilhado entre condomínios. Em uma corrida de cadastros,
+      // outra requisição pode já ter vinculado esta identidade. Nunca excluir
+      // a conta como compensação de uma falha no cadastro local; uma nova
+      // tentativa a encontra por e-mail e reaproveita a mesma identidade.
       return resposta({ error: "Não foi possível salvar o colaborador.", detalhe: criarError.message }, 400);
     }
 

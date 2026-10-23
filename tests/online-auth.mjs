@@ -21,6 +21,6 @@ for(const m of collaborator.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g
 // Execute the actual initialization branches; an explicit PIN path cannot call Auth.
 const init=collaborator.slice(collaborator.indexOf('async function iniciar(){'),collaborator.indexOf('/* MODULOS_COLABORADOR_INICIO */'));
 for(const [mode,online,expected] of [['offline',true,'pin'],['offline',false,'pin'],['online',false,'internet'],['online',true,'redirect'],['',false,'pin']]){
- let outcome;const context={URLSearchParams,location:{search:'?modo='+mode,replace:()=>outcome='redirect'},navigator:{onLine:online},entrarOffline:async()=>outcome='pin',erro:()=>outcome='internet',console,db:{auth:{getSession:async()=>({data:{session:null}})}}};vm.createContext(context);vm.runInContext(init,context);await context.iniciar();assert.equal(outcome,expected);
+ let outcome;const context={setTimeout,clearTimeout,URLSearchParams,location:{search:'?modo='+mode,replace:()=>outcome='redirect'},navigator:{onLine:online},entrarOffline:async()=>outcome='pin',erro:()=>outcome='internet',console,db:{auth:{getSession:async()=>({data:{session:null}})}}};vm.createContext(context);vm.runInContext(init,context);await context.iniciar();assert.equal(outcome,expected);
 }
 console.log('PASS password unchanged, email trimmed, online redirect, invalid credentials, query failures, authorization denied, no password request offline, explicit PIN online/offline, online without network, missing session redirect');

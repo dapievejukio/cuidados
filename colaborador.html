@@ -516,6 +516,12 @@ async function entrarOffline(){
 }
 
 async function iniciar(){
+  const aguardarAcesso=async promessa=>{
+    let timer;
+    try{return await Promise.race([promessa,new Promise((_,reject)=>{
+      timer=setTimeout(()=>reject(new Error('A validação demorou demais. Verifique a internet e recarregue a página. Seus registros locais foram preservados.')),15000);
+    })]);}finally{clearTimeout(timer)}
+  };
   const modo=new URLSearchParams(location.search).get('modo');
   if(modo==='offline'||(!navigator.onLine&&modo!=='online')){
     await entrarOffline();
@@ -526,10 +532,10 @@ async function iniciar(){
     return;
   }
   try{
-    const {data:{session},error:sessionError}=await db.auth.getSession();
+    const {data:{session},error:sessionError}=await aguardarAcesso(db.auth.getSession());
     if(sessionError)throw sessionError;
     if(!session){location.replace("index.html");return}
-    const {data:{user},error:userError}=await db.auth.getUser();
+    const {data:{user},error:userError}=await aguardarAcesso(db.auth.getUser());
     if(userError)throw userError;
     if(!user){location.replace("index.html");return}
     authUser=user;
@@ -550,9 +556,9 @@ async function iniciar(){
       if(demoColError)throw demoColError;
       c=demoCol;MODO_DEMO=true;
     }else{
-      const {data:normalCol,error:normalColError}=await db.from("colaboradores")
+      const {data:normalCol,error:normalColError}=await aguardarAcesso(db.from("colaboradores")
         .select("id,condominio_id,condominio,nome,email,matricula,funcao,ativo,chat_ativo,demandas_ativo,cronograma_ativo,atividades_ativo,registros_posteriores_ativo,documentos_ativo,ponto_ativo,selfie_ponto_obrigatoria,geolocalizacao_ponto_obrigatoria,intervalo_ativo,intervalo_minutos")
-        .eq("auth_user_id",authUser.id).eq("ativo",true).order("id",{ascending:true}).limit(100);
+        .eq("auth_user_id",authUser.id).eq("ativo",true).order("id",{ascending:true}).limit(100));
       if(normalColError)throw normalColError;
       const vinculos=normalCol||[];
       if(vinculos.length===0)throw new Error("Seu cadastro não está ativo.");
@@ -570,8 +576,8 @@ async function iniciar(){
     if(!c)throw new Error("Seu cadastro não está ativo.");
     colaborador=c;document.getElementById("oraquiQuickChat")?.setAttribute("href",`chat.html?condominio_id=${c.condominio_id}`);
 
-    const {data:co,error:ce}=await db.from("condominios")
-      .select("id,nome,slug,ativo").eq("id",c.condominio_id).eq("ativo",true).single();
+    const {data:co,error:ce}=await aguardarAcesso(db.from("condominios")
+      .select("id,nome,slug,ativo").eq("id",c.condominio_id).eq("ativo",true).single());
     if(ce)throw ce;
     condominio=co;
 
@@ -593,7 +599,11 @@ async function iniciar(){
     await atualizarEstadoOffline();
     if(navigator.onLine)await sincronizarFilaOffline();
     if(!MODO_DEMO){try{await registrarServiceWorker();await atualizarEstadoNotificacao()}catch(pushError){console.warn(pushError)}}
-  }catch(e){console.error(e);erro(e.message||"Não foi possível carregar seu acesso.")}
+  }catch(e){
+    console.error(e);
+    if(!colaborador){$('userName').textContent='Acesso não carregado';$('userDescription').textContent='Verifique a conexão ou entre novamente';}
+    erro(e.message||"Não foi possível carregar seu acesso.");
+  }
 }
 
 /* MODULOS_COLABORADOR_INICIO */
