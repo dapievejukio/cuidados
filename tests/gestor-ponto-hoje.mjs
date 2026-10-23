@@ -37,9 +37,20 @@ ctx.iniciarResumoPontoGestor(condo);await settle();
 assert.equal($('gestorPontoHoje').hidden,false);
 assert.match($('pontoHojeContagem').textContent,/5 de 6/);
 assert.equal($('pontoHojePessoas').querySelectorAll('li').length,5);
+assert.match($('pontoHojePessoas').textContent,/Chegada às 07:00/);
 assert.match($('pontoHojePessoas').textContent,/Início do intervalo às 09:00/);
 assert.match($('pontoHojePessoas').textContent,/Offline, conferir horário/);
 assert.equal($('pontoHojePessoas').querySelector('ana'),null,'names are escaped');
+// A second entry after lunch must not replace the arrival time; no entry must not invent one.
+registros.push({id:20,colaborador_id:1,condominio_id:6,tipo:'entrada',registrado_em:'2026-10-23T12:30:00Z'},
+ {id:21,colaborador_id:2,condominio_id:6,tipo:'saida',registrado_em:'2026-10-23T13:00:00Z'});
+registros=registros.filter(r=>r.colaborador_id!==2||r.tipo!=='entrada');
+await ctx.atualizarResumoPontoGestor();
+const itens=$('pontoHojePessoas').querySelectorAll('li');
+assert.match(itens[0].textContent,/Chegada às 07:00/);
+assert.match(itens[0].textContent,/Última: Entrada às 09:30/);
+assert.match(itens[1].textContent,/Entrada não registrada hoje/);
+assert.match(itens[1].textContent,/Última: Saída às 10:00/);
 assert.equal(ctx.diaPontoHome(new Date('2026-10-24T02:59:59Z')),'2026-10-23');
 assert.equal(ctx.diaPontoHome(new Date('2026-10-24T03:00:00Z')),'2026-10-24');
 assert(consultas.every(c=>c.filtros.some(f=>f[1]==='condominio_id'&&f[2]===6)));

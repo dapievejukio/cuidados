@@ -116,6 +116,7 @@ body{padding-bottom:88px!important}.oraqui-bottom{position:fixed;bottom:0;left:0
 .ponto-home li{display:flex;align-items:center;gap:9px;padding:10px;border:1px solid #e6eee8;border-radius:11px;background:#f6faf7;min-width:0}
 .ponto-home li div{min-width:0}.ponto-home li strong,.ponto-home li div>span{display:block;overflow-wrap:anywhere}
 .ponto-home li strong{font-size:13px;line-height:1.4}.ponto-home li div>span{font-size:11px;color:#587265;line-height:1.5;margin-top:2px}
+.ponto-home li div>.ponto-home-chegada{font-weight:700;color:#204c3b}
 .ponto-home-check{display:grid;place-items:center;flex:0 0 25px;height:25px;border-radius:50%;background:#e1f0e5;color:#0f5132;font-weight:750}
 .ponto-home-note{font-size:11px;line-height:1.6;color:#60796d;margin:10px 0 0}
 @media(max-width:700px){.ponto-home ul{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -228,12 +229,14 @@ function diaPontoHome(agora=new Date()){
 }
 function agruparPontoHome(registros,pessoas){
  const nomes=new Map(pessoas.map(p=>[String(p.id),p.nome]));
- const ultimos=new Map();
+ const ultimos=new Map(),chegadas=new Map();
  for(const r of registros){
   const chave=String(r.colaborador_id),anterior=ultimos.get(chave);
+  const chegada=chegadas.get(chave);
+  if(r.tipo==='entrada'&&(!chegada||new Date(r.registrado_em)<new Date(chegada.registrado_em)))chegadas.set(chave,r);
   if(!anterior||new Date(r.registrado_em)>new Date(anterior.registrado_em)||(r.registrado_em===anterior.registrado_em&&Number(r.id)>Number(anterior.id)))ultimos.set(chave,r);
  }
- return [...ultimos.values()].map(r=>({...r,nome:nomes.get(String(r.colaborador_id))||'Colaborador #'+r.colaborador_id})).sort((a,b)=>a.nome.localeCompare(b.nome,'pt-BR'));
+ return [...ultimos.values()].map(r=>({...r,chegada:chegadas.get(String(r.colaborador_id))||null,nome:nomes.get(String(r.colaborador_id))||'Colaborador #'+r.colaborador_id})).sort((a,b)=>a.nome.localeCompare(b.nome,'pt-BR'));
 }
 function iniciarResumoPontoGestor(c){
  ++pontoHomeVersao;pontoHomeConsulta=null;pontoHomeCondominio=null;
@@ -265,11 +268,13 @@ async function atualizarResumoPontoGestor(){
   contagem.textContent=`${total} de ${PONTO_HOME_CONFIG.previstos} pessoas com ponto hoje`;
   const tipos={entrada:'Entrada',inicio_intervalo:'Início do intervalo',fim_intervalo:'Retorno do intervalo',saida:'Saída'};
   lista.innerHTML=equipe.map(p=>{
-   const horario=new Date(p.registrado_em).toLocaleTimeString('pt-BR',{timeZone:'America/Sao_Paulo',hour:'2-digit',minute:'2-digit'});
-   return `<li><span class="ponto-home-check" aria-hidden="true">✓</span><div><strong>${esc(p.nome)}</strong><span>${esc(tipos[p.tipo]||p.tipo)} às ${esc(horario)}${p.origem==='offline'?' · Offline, conferir horário':''}</span></div></li>`;
+   const formatarHora=valor=>new Date(valor).toLocaleTimeString('pt-BR',{timeZone:'America/Sao_Paulo',hour:'2-digit',minute:'2-digit'});
+   const chegada=p.chegada?'Chegada às '+formatarHora(p.chegada.registrado_em)+(p.chegada.origem==='offline'?' · Offline, conferir horário':''):'Entrada não registrada hoje';
+   const ultima=!p.chegada||String(p.id)!==String(p.chegada.id)?`<span>Última: ${esc(tipos[p.tipo]||p.tipo)} às ${esc(formatarHora(p.registrado_em))}${p.origem==='offline'?' · Offline, conferir horário':''}</span>`:'';
+   return `<li><span class="ponto-home-check" aria-hidden="true">✓</span><div><strong>${esc(p.nome)}</strong><span class="ponto-home-chegada">${esc(chegada)}</span>${ultima}</div></li>`;
   }).join('');
   const horario=new Date().toLocaleTimeString('pt-BR',{timeZone:'America/Sao_Paulo',hour:'2-digit',minute:'2-digit'});
-  nota.textContent=(total?'Última marcação por pessoa.':'Nenhum ponto sincronizado hoje.')+' Atualizado às '+horario+'. Previsão diária: 6 pessoas; confira a escala.';
+  nota.textContent=(total?'Primeira entrada do dia e última marcação por pessoa.':'Nenhum ponto sincronizado hoje.')+' Atualizado às '+horario+'. Previsão diária: 6 pessoas; confira a escala.';
  }catch(e){
   if(!vigente())return;
   contagem.textContent='Ponto de hoje indisponível';lista.replaceChildren();
