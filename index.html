@@ -134,6 +134,10 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <link rel="icon" href="assets/gestor-3/simbolo.svg" type="image/svg+xml"><link rel="stylesheet" href="login-3.css?v=20261021-1">
+<link rel="stylesheet" href="assets/i18n/i18n.css">
+<script src="assets/i18n/pt-BR.js"></script>
+<script src="assets/i18n/it-IT.js"></script>
+<script src="assets/i18n/i18n.js"></script>
 </head>
 
 
@@ -153,30 +157,30 @@
         </div>
 
         <section class="login-card" id="loginCard">
-            <div class="login-title">Bem-vindo ao OraQui</div>
-            <div class="login-subtitle">Entre com o e-mail e a senha vinculados ao seu acesso.</div>
+            <div class="login-title" data-i18n="Bem-vindo ao OraQui">Bem-vindo ao OraQui</div>
+            <div class="login-subtitle" data-i18n="Entre com o e-mail e a senha vinculados ao seu acesso.">Entre com o e-mail e a senha vinculados ao seu acesso.</div>
 
             <form id="loginForm">
                 <div class="field">
-                    <label for="email">E-mail</label>
+                    <label for="email" data-i18n="E-mail">E-mail</label>
                     <input id="email" type="email" autocomplete="username" inputmode="email" required>
                 </div>
 
                 <div class="field">
-                    <label for="password">Senha</label>
+                    <label for="password" data-i18n="Senha">Senha</label>
                     <input id="password" type="password" autocomplete="current-password" required>
                 </div>
 
-                <button class="login-button" id="loginButton" type="submit">ENTRAR ONLINE</button>
+                <button class="login-button" id="loginButton" type="submit" data-i18n="ENTRAR ONLINE">ENTRAR ONLINE</button>
             </form>
 
-            <button class="forgot" id="forgotButton" type="button">ESQUECI MINHA SENHA</button>
-            <a id="acessoOfflineColaborador" href="./colaborador.html?modo=offline" style="display:block;margin-top:18px;padding:13px 15px;border:1px solid #9cc4b5;border-radius:12px;color:#0f5132;background:#eef7f1;font-weight:800;font-size:12px;text-decoration:none">🔐 ACESSAR ORAQUI OFFLINE</a>
-            <p style="font-size:11px;color:#657987;line-height:1.4;margin-top:7px">Disponível após ativação do PIN no aplicativo do colaborador, com internet.</p>
+            <button class="forgot" id="forgotButton" type="button" data-i18n="ESQUECI MINHA SENHA">ESQUECI MINHA SENHA</button>
+            <a id="acessoOfflineColaborador" href="./colaborador.html?modo=offline" style="display:block;margin-top:18px;padding:13px 15px;border:1px solid #9cc4b5;border-radius:12px;color:#0f5132;background:#eef7f1;font-weight:800;font-size:12px;text-decoration:none" data-i18n="🔐 ACESSAR ORAQUI OFFLINE">🔐 ACESSAR ORAQUI OFFLINE</a>
+            <p style="font-size:11px;color:#657987;line-height:1.4;margin-top:7px" data-i18n="Disponível após ativação do PIN no aplicativo do colaborador, com internet.">Disponível após ativação do PIN no aplicativo do colaborador, com internet.</p>
 
             <div class="login-message" id="loginMessage"></div>
-            <div class="access-status" id="accessStatus">Verificando seus acessos...</div>
-            <div class="login-footer">ACESSO SEGURO • ORAQUI.APP</div>
+            <div class="access-status" id="accessStatus" data-i18n="Verificando seus acessos...">Verificando seus acessos...</div>
+            <div class="login-footer" data-i18n="ACESSO SEGURO • ORAQUI.APP">ACESSO SEGURO • ORAQUI.APP</div>
         </section>
 
     </main>
@@ -192,24 +196,21 @@ const $ = id => document.getElementById(id);
 
 function mensagem(texto){
     const el = $("loginMessage");
-    el.textContent = texto || "";
+    I18n.bindText(el, texto || "");
     el.classList.toggle("visible", !!texto);
 }
 
-function carregando(ativo, texto="Verificando seus acessos..."){
+function carregando(ativo, texto=I18n.ui("Verificando seus acessos...")){
     $("loginButton").disabled = ativo;
     $("email").disabled = ativo;
     $("password").disabled = ativo;
-    $("accessStatus").textContent = texto;
+    I18n.bindText($("accessStatus"), texto);
     $("accessStatus").classList.toggle("visible", ativo);
 }
 
-function traduzErroLogin(msg){
-    const m = String(msg || "").toLowerCase();
-    if(m.includes("invalid login credentials")) return "E-mail ou senha da conta online não conferem. O PIN do aparelho é usado somente em ACESSAR ORAQUI OFFLINE.";
-    if(m.includes("email not confirmed")) return "Este e-mail ainda não foi confirmado.";
-    if(m.includes("too many requests")) return "Muitas tentativas. Aguarde alguns minutos e tente novamente.";
-    return msg || "Não foi possível entrar.";
+function traduzErroLogin(error){
+    if (error?.i18nKey) return I18n.ui(error.i18nKey);
+    return I18n.serverError(error, "Não foi possível entrar.");
 }
 
 async function detectarAcessos(user){
@@ -240,7 +241,7 @@ async function detectarAcessos(user){
     // Uma falha de consulta não equivale a ausência de autorização.
     if(![adminResult, gestaoResult, colaboradorResult].some(r => !r.error && r.data?.length)
        && [adminResult, gestaoResult, colaboradorResult].some(r => r.error)){
-        throw new Error("Sua conta foi autenticada, mas não foi possível consultar os acessos. Verifique a conexão e tente novamente.");
+        throw I18n.error("Sua conta foi autenticada, mas não foi possível consultar os acessos. Verifique a conexão e tente novamente.");
     }
     // Um vínculo autorizado basta mesmo quando outra tabela não é visível.
     const admin = !adminResult.error && (adminResult.data || []).length > 0;
@@ -251,7 +252,8 @@ async function detectarAcessos(user){
 }
 
 async function encaminharUsuario(user){
-    carregando(true, "Identificando seu perfil...");
+    I18n.setUser(user.id);
+    carregando(true, I18n.ui("Identificando seu perfil..."));
 
     const acessos = await detectarAcessos(user);
 
@@ -280,7 +282,7 @@ async function encaminharUsuario(user){
 
     await db.auth.signOut({scope:"local"});
     carregando(false);
-    mensagem("Sua conta foi autenticada, mas não possui um acesso ativo no ORAQUI.");
+    mensagem(I18n.ui("Sua conta foi autenticada, mas não possui um acesso ativo no ORAQUI."));
 }
 
 $("loginForm").addEventListener("submit", async event => {
@@ -291,26 +293,26 @@ $("loginForm").addEventListener("submit", async event => {
     const password = $("password").value;
 
     if(!email || !password){
-        mensagem("Informe e-mail e senha.");
+        mensagem(I18n.ui("Informe e-mail e senha."));
         return;
     }
 
     if(!navigator.onLine){
-        mensagem("O login com e-mail e senha precisa de internet. Para este aparelho ativado, use ACESSAR ORAQUI OFFLINE.");
+        mensagem(I18n.ui("O login com e-mail e senha precisa de internet. Para este aparelho ativado, use ACESSAR ORAQUI OFFLINE."));
         return;
     }
-    carregando(true, "Entrando...");
+    carregando(true, I18n.ui("Entrando..."));
 
     try{
         const {data, error} = await db.auth.signInWithPassword({email, password});
         if(error) throw error;
-        if(!data?.user) throw new Error("Não foi possível identificar o usuário autenticado.");
+        if(!data?.user) throw I18n.error("Não foi possível identificar o usuário autenticado.");
 
         await encaminharUsuario(data.user);
     }catch(error){
         console.error(error);
         carregando(false);
-        mensagem(traduzErroLogin(error.message));
+        mensagem(traduzErroLogin(error));
     }
 });
 
@@ -320,7 +322,7 @@ $("forgotButton").addEventListener("click", async () => {
     const email = $("email").value.trim();
 
     if(!email){
-        mensagem("Informe seu e-mail acima para recuperar a senha.");
+        mensagem(I18n.ui("Informe seu e-mail acima para recuperar a senha."));
         $("email").focus();
         return;
     }
@@ -336,10 +338,10 @@ $("forgotButton").addEventListener("click", async () => {
         const el = $("loginMessage");
         el.style.background = "#edf8f0";
         el.style.color = "#477a59";
-        mensagem("Enviamos as instruções de recuperação para o e-mail informado.");
+        mensagem(I18n.ui("Enviamos as instruções de recuperação para o e-mail informado."));
     }catch(error){
         console.error(error);
-        mensagem(error.message || "Não foi possível enviar a recuperação de senha.");
+        mensagem(I18n.serverError(error, "Não foi possível enviar a recuperação de senha."));
     }finally{
         $("forgotButton").disabled = false;
     }
@@ -347,10 +349,10 @@ $("forgotButton").addEventListener("click", async () => {
 
 async function iniciar(){
     if(!navigator.onLine){
-        mensagem("Sem internet. Se este aparelho já foi ativado, toque em ACESSAR ORAQUI OFFLINE.");
+        mensagem(I18n.ui("Sem internet. Se este aparelho já foi ativado, toque em ACESSAR ORAQUI OFFLINE."));
         return;
     }
-    carregando(true, "Verificando sessão online...");
+    carregando(true, I18n.ui("Verificando sessão online..."));
     try{
         const {data:{session}, error} = await db.auth.getSession();
         if(error) throw error;
@@ -364,7 +366,7 @@ async function iniciar(){
     }catch(error){
         console.error(error);
         carregando(false);
-        mensagem("Não foi possível verificar a sessão online. Você pode tentar entrar com seu e-mail e senha. O acesso offline permanece disponível.");
+        mensagem(I18n.ui("Não foi possível verificar a sessão online. Você pode tentar entrar com seu e-mail e senha. O acesso offline permanece disponível."));
     }
 }
 

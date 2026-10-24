@@ -6,6 +6,7 @@ const CACHE_NAME = 'oraqui-shell-v9-20261023-selfie-ponto';
 const SUPABASE_CDN = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
 const SAME_ORIGIN = self.location.origin;
 const OFFLINE_ASSETS = new Set([
+  '/assets/i18n/pt-BR.js', '/assets/i18n/it-IT.js', '/assets/i18n/i18n.js', '/assets/i18n/i18n.css',
   '/oraqui-offline.js', '/manifest.webmanifest', '/login-3.css', '/colaborador-3.css',
   '/assets/gestor-3/simbolo.svg', '/icon-192.png', '/icon-512.png', '/apple-touch-icon.png',
   '/icon-192-v2.png', '/icon-512-v2.png', '/apple-touch-icon-v2.png', '/favicon-48-v2.png',
@@ -62,7 +63,7 @@ async function cachedGood(request, isLocal) {
 
 function unavailable() {
   return new Response(
-    '<!doctype html><html lang="pt-BR"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>OraQui Offline</title><body style="font:16px Arial,sans-serif;padding:24px;color:#173847"><h2>OraQui Offline</h2><p>Esta página ainda não está disponível neste aparelho sem conexão.</p><p>Conecte-se à internet, abra o OraQui e ative o acesso offline antes de testar novamente.</p></body></html>',
+    '<!doctype html><html lang="pt-BR"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>OraQui Offline</title><link rel="stylesheet" href="/assets/i18n/i18n.css"><script src="/assets/i18n/pt-BR.js"></script><script src="/assets/i18n/it-IT.js"></script><script src="/assets/i18n/i18n.js"></script><body style="font:16px Arial,sans-serif;padding:24px;color:#173847"><h2>OraQui Offline</h2><p data-i18n="Esta página ainda não está disponível neste aparelho sem conexão.">Esta página ainda não está disponível neste aparelho sem conexão.</p><p data-i18n="Conecte-se à internet, abra o OraQui e ative o acesso offline antes de testar novamente.">Conecte-se à internet, abra o OraQui e ative o acesso offline antes de testar novamente.</p></body></html>',
     {status:503, headers:{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'}}
   );
 }
