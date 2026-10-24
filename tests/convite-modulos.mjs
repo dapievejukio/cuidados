@@ -13,7 +13,7 @@ async function run(extra={},options={}){
    if(table==='usuarios_gestao')data=options.denied?[]:[{perfil:'gestor',acesso_temporario:false,acesso_expira_em:null}];
    if(table==='condominios')data={id:1,nome:'Teste',ativo:true};
    if(table==='colaboradores'&&insert)data={id:7,...inserted};
-   if(table==='colaboradores'&&!insert&&options.existing)data=[{id:7,auth_user_id:'conta-existente'}];
+   if(table==='colaboradores'&&!insert&&options.existing)data=[{id:7,auth_user_id:'conta-existente',ativo:true}];
    resolve({data,error:null});
   };return (...args)=>{if(key==='insert'){insert=true;inserted=args[0]}return q}}});return q;
  }};

@@ -1,0 +1,20 @@
+name: Auditoria de convites
+on:
+  pull_request:
+    paths:
+      - '*.html'
+      - 'reservaigara/*.html'
+      - 'supabase/functions/**'
+      - 'tests/**'
+      - '.github/workflows/convites-auditoria.yml'
+permissions:
+  contents: read
+jobs:
+  logica-sem-envio:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: node --test tests/convites-auditoria.mjs tests/onboarding-auditoria.mjs tests/convite-modulos.mjs tests/online-auth.mjs tests/offline-shell.mjs

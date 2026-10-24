@@ -1370,6 +1370,7 @@ async function salvarCol(){
       const msg=await mensagemFunction(error,data,"Não foi possível convidar o colaborador.");
       return alert(msg);
     }
+    if(data?.aviso)alert(data.aviso);
     if(data?.reenviado){
       alert("Este colaborador já está cadastrado. O convite foi reenviado e os acessos foram preservados. Para alterar os módulos, use EDITAR no cadastro existente.");
       $("collaboratorModal").classList.remove("visible");
